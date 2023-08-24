@@ -1,6 +1,5 @@
 package app.vcampus.server.net;
 
-import app.vcampus.server.controller.AuthController;
 import app.vcampus.server.utility.router.Router;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -20,13 +19,10 @@ public class NettyServer {
         this.port = port;
     }
 
-    public void run() throws Exception {
+    public void run(Router router) throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-            Router router = new Router();
-            router.addController(AuthController.class);
-
             ServerBootstrap b = new ServerBootstrap(); // (2)
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class) // (3)

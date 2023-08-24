@@ -3,7 +3,6 @@ package app.vcampus.server.net;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.Session;
-import app.vcampus.server.utility.Utility;
 import app.vcampus.server.utility.router.Router;
 import com.google.gson.Gson;
 import io.netty.buffer.ByteBuf;
@@ -46,11 +45,11 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
 
             if (!router.hasRoute(request.getUri())) {
                 log.info("[{}] Route not found: {}", ctx.channel().id(), request.getUri());
-                sendResponse(ctx, Utility.notFound());
+                sendResponse(ctx, Response.Common.notFound());
                 return;
             } else if (!session.permission(router.getRole(request.getUri()))) {
                 log.info("[{}] Permission denied: {}", ctx.channel().id(), request.getUri());
-                sendResponse(ctx, Utility.permissionDenied());
+                sendResponse(ctx, Response.Common.permissionDenied());
                 return;
             }
 

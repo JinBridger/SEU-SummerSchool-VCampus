@@ -16,6 +16,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("ch.qos.logback:logback-core:1.4.11")
     implementation("ch.qos.logback:logback-classic:1.4.11")
+    implementation("org.hibernate.orm:hibernate-core:6.2.7.Final")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

@@ -2,7 +2,6 @@ package app.vcampus.server.utility.router;
 
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
-import app.vcampus.server.utility.Utility;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
@@ -58,7 +57,7 @@ public class Router {
         if (action != null) {
             return (Response) action.call(request);
         } else {
-            return Utility.notFound();
+            return Response.Common.notFound();
         }
     }
 
@@ -73,7 +72,7 @@ public class Router {
                     log.error("Router: Action: call: InvocationTargetException: {}", e.getMessage());
                 }
 
-                return Utility.internalError();
+                return Response.Common.internalError();
             }
         }
 

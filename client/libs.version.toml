@@ -1,0 +1,14 @@
+[versions]
+# Check in gradle/libs.versions.toml
+
+[libraries]
+# For Compose Multiplatform
+decompose-router = { module = "io.github.xxfast:decompose-router", version.ref = "decompose-router" }
+
+# For Compose Wear
+decompose-router-wear = { module = "io.github.xxfast:decompose-router-wear", version.ref = "decompose-router" }
+
+# You will need to also bring in decompose and essenty
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decompose-compose-multiplatform = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose" }
+essenty-parcelable = { module = "com.arkivanov.essenty:parcelable", version.ref = "essenty" }
