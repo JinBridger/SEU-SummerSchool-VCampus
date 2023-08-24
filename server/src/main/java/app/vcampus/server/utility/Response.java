@@ -1,6 +1,5 @@
 package app.vcampus.server.utility;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

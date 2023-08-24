@@ -12,6 +12,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,18 +26,18 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         log.info("[{}] Client connected from {}", ctx.channel().id(), ctx.channel().remoteAddress());
         session = new Session();
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         log.info("[{}] Client disconnected", ctx.channel().id());
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
+    public void channelRead(@NonNull ChannelHandlerContext ctx, @NonNull Object msg) { // (2)
         ByteBuf in = (ByteBuf) msg;
         try {
             log.info("[{}] Received: {}", ctx.channel().id(), in.toString(CharsetUtil.UTF_8));
@@ -73,7 +74,8 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) { // (4)
         // Close the connection when an exception is raised.
-        cause.printStackTrace();
+//        cause.printStackTrace();
+        log.error("[{}] Exception: {}", ctx.channel().id(), cause.getMessage());
         ctx.close();
     }
 }

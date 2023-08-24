@@ -13,9 +13,9 @@ import java.util.Map;
 
 @Slf4j
 public class Router {
-    private Map<String, Object> controllerBeans = new HashMap<>();
-    private Map<String, Action> uri2Action = new HashMap<>();
-    private Map<String, String> uri2Role = new HashMap<>();
+    private final Map<String, Object> controllerBeans = new HashMap<>();
+    private final Map<String, Action> uri2Action = new HashMap<>();
+    private final Map<String, String> uri2Role = new HashMap<>();
 
     public void addController(Class<?> cls) {
         try {
@@ -62,36 +62,19 @@ public class Router {
         }
     }
 
-    public void testRoute(String uri) {
-        Action action = uri2Action.get(uri);
-        log.info("Router: testRoute: action: {}", action);
-//        if (action != null) {
-//            action.call();
-//        } else {
-//            System.out.println(uri + " is not found");
-//        }
-    }
-
-    private static class Action {
-        private final Object object;
-        private final Method method;
-
-        public Action(Object object, Method method) {
-            this.object = object;
-            this.method = method;
-        }
+    private record Action(Object object, Method method) {
 
         public Object call(Request request) {
-            try {
-                return method.invoke(object, request);
-            } catch (IllegalAccessException e) {
-                log.error("Router: Action: call: IllegalAccessException: {}", e.getMessage());
-            } catch (InvocationTargetException e) {
-                log.error("Router: Action: call: InvocationTargetException: {}", e.getMessage());
-            }
+                try {
+                    return method.invoke(object, request);
+                } catch (IllegalAccessException e) {
+                    log.error("Router: Action: call: IllegalAccessException: {}", e.getMessage());
+                } catch (InvocationTargetException e) {
+                    log.error("Router: Action: call: InvocationTargetException: {}", e.getMessage());
+                }
 
-            return Utility.internalError();
+                return Utility.internalError();
+            }
         }
-    }
 
 }
