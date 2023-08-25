@@ -4,9 +4,12 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @RequiredArgsConstructor
 public class Response {
+    UUID id;
     @NonNull String status;
     @NonNull String message;
 

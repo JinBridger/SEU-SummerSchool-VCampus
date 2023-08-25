@@ -45,21 +45,24 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
             Request request = gson.fromJson(in.toString(CharsetUtil.UTF_8), Request.class);
             request.setSession(session);
 
+            Response response = null;
+
             if (!router.hasRoute(request.getUri())) {
                 log.info("[{}] Route not found: {}", ctx.channel().id(), request.getUri());
-                sendResponse(ctx, Response.Common.notFound());
-                return;
+                response = Response.Common.notFound();
             } else if (!session.permission(router.getRole(request.getUri()))) {
                 log.info("[{}] Permission denied: {}", ctx.channel().id(), request.getUri());
-                sendResponse(ctx, Response.Common.permissionDenied());
-                return;
+                response = Response.Common.permissionDenied();
+            } else {
+                response = router.invoke(request, database);
             }
 
-            Response response = router.invoke(request, database);
             if (response.getSession() != null) {
                 log.info("[{}] Session updated: {}", ctx.channel().id(), response.getSession());
                 session = response.getSession();
             }
+
+            response.setId(request.getId());
             sendResponse(ctx, response);
         } catch (Exception e) {
             log.error("[{}] Exception: {}", ctx.channel().id(), e.getMessage());
