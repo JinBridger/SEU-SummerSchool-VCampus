@@ -19,9 +19,11 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
     private final Gson gson = new Gson();
     private final Router router;
     private Session session;
+    private org.hibernate.Session database;
 
-    public NettyHandler(Router router) {
+    public NettyHandler(Router router, org.hibernate.Session database) {
         this.router = router;
+        this.database = database;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(@NonNull ChannelHandlerContext ctx, @NonNull Object msg) { // (2)
+    public void channelRead(@NonNull ChannelHandlerContext ctx, @NonNull Object msg) {
         ByteBuf in = (ByteBuf) msg;
         try {
             log.info("[{}] Received: {}", ctx.channel().id(), in.toString(CharsetUtil.UTF_8));
@@ -53,7 +55,7 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
 
-            Response response = router.invoke(request);
+            Response response = router.invoke(request, database);
             if (response.getSession() != null) {
                 log.info("[{}] Session updated: {}", ctx.channel().id(), response.getSession());
                 session = response.getSession();
@@ -62,7 +64,7 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
         } catch (Exception e) {
             log.error("[{}] Exception: {}", ctx.channel().id(), e.getMessage());
         } finally {
-            ReferenceCountUtil.release(msg); // (2)
+            ReferenceCountUtil.release(msg);
         }
     }
 

@@ -3,6 +3,7 @@ package app.vcampus.server.utility.router;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -51,11 +52,11 @@ public class Router {
         return uri2Role.get(uri);
     }
 
-    public Response invoke(Request request) {
+    public Response invoke(Request request, Session database) {
         Action action = uri2Action.get(request.getUri());
         log.info("Router: invoke: action: {}", action);
         if (action != null) {
-            return (Response) action.call(request);
+            return (Response) action.call(request, database);
         } else {
             return Response.Common.notFound();
         }
@@ -63,9 +64,9 @@ public class Router {
 
     private record Action(Object object, Method method) {
 
-        public Object call(Request request) {
+        public Object call(Request request, Session database) {
                 try {
-                    return method.invoke(object, request);
+                    return method.invoke(object, request, database);
                 } catch (IllegalAccessException e) {
                     log.error("Router: Action: call: IllegalAccessException: {}", e.getMessage());
                 } catch (InvocationTargetException e) {

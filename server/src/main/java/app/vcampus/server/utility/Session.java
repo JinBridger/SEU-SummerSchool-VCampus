@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Session {
+    int cardNum;
     String[] roles;
 
     public boolean permission(String role) {

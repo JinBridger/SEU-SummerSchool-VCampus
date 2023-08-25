@@ -18,8 +18,16 @@ public class Response {
             return new Response("success", "OK");
         }
 
+        public static Response error(String message) {
+            return new Response("error", message);
+        }
+
         public static Response permissionDenied() {
             return new Response("error", "Permission denied");
+        }
+
+        public static Response badRequest() {
+            return new Response("error", "Bad request");
         }
 
         public static Response notFound() {
