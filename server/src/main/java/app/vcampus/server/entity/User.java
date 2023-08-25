@@ -10,20 +10,20 @@ import lombok.Data;
 public class User {
     @Id
     @Column(name = "card_number")
-    private Integer cardNum;
+    public Integer cardNum;
 
-    private String password;
+    public String password;
 
-    private String name;
+    public String name;
 
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    public Gender gender;
 
-    private String phone;
-    private String email;
+    public String phone;
+    public String email;
 
     @Column(name = "role")
-    private String roleStr;
+    public String roleStr;
 
     public String[] getRoles() {
         return roleStr.split(",");

@@ -1,6 +1,7 @@
 package app.vcampus.server;
 
 import app.vcampus.server.controller.AuthController;
+import app.vcampus.server.controller.IndexController;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.router.Router;
@@ -10,6 +11,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         // 初始化路由
         Router router = new Router();
+        router.addController(IndexController.class);
         router.addController(AuthController.class);
 
         // 初始化数据库 Session

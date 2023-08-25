@@ -1,6 +1,8 @@
 package app.vcampus.client;
 
 import app.vcampus.client.net.NettyClient;
+import app.vcampus.client.net.NettyHandler;
+import app.vcampus.client.utility.Request;
 import io.netty.channel.Channel;
 
 import java.util.concurrent.ExecutionException;
@@ -12,11 +14,15 @@ public class Application {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         NettyClient client = new NettyClient("127.0.0.1", 9090);
-        Future<Channel> future = executorService.submit(client);
-        Channel channel = future.get();
+        Future<NettyHandler> future = executorService.submit(client);
+        NettyHandler handler = future.get();
 
-//        System.out.println("Hello, world!");
+        Request request = new Request();
+        request.setUri("heartbeat");
+        handler.sendRequest(request, response -> {
+            System.out.println(response.toString());
+        });
+
         EntryKt.main();
-//        EntryKt.dialog();
     }
 }
