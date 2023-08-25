@@ -4,6 +4,8 @@ plugins {
     id("java")
     kotlin("jvm") version "1.9.0"
     id("org.jetbrains.compose") version "1.4.3"
+    id("io.freefair.lombok") version "8.2.2"
+    kotlin("plugin.lombok") version "1.9.0"
 }
 
 group = "app.vcampus"
@@ -21,7 +23,8 @@ dependencies {
     // (in a separate module for demo project and in testMain).
     // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
-    implementation("com.arkivanov.decompose:decompose:2.0.1")
+    implementation("io.netty:netty-all:4.1.97.Final")
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 compose.desktop {

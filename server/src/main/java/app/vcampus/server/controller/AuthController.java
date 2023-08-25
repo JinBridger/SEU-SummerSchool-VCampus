@@ -30,6 +30,14 @@ public class AuthController {
         return response;
     }
 
+    @RouteMapping(uri = "auth/logout")
+    public Response logout(Request request, org.hibernate.Session database) {
+        Response response = Response.Common.ok();
+        Session session = new Session();
+        response.setSession(session);
+        return response;
+    }
+
     @RouteMapping(uri = "auth/test", role = "admin")
     public Response test(Request request, org.hibernate.Session database) {
         return Response.Common.ok();

@@ -1,14 +1,10 @@
 package app.vcampus.server;
 
 import app.vcampus.server.controller.AuthController;
-import app.vcampus.server.entity.User;
-import app.vcampus.server.enums.Gender;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
-import app.vcampus.server.utility.Password;
 import app.vcampus.server.utility.router.Router;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class Main {
     public static void main(String[] args) throws Exception {

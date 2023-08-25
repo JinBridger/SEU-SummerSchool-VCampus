@@ -27,133 +27,114 @@ import androidx.compose.ui.window.application
 
 @Composable
 @Preview
-fun App() {
+fun loginWindow() {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     MaterialTheme {
-//        Button(onClick = {
-//            text = "Hello, Desktop!"
-//        }) {
-//            Text(text)
-//        }
+        Box(Modifier.size(1064.dp, 600.dp).background(Color.White)) {
+            Row {
+                Image(
+                    painterResource("seu-side.png"),
+                    contentDescription = "SEU Sidebar",
+                    modifier = Modifier.width(600.dp).height(600.dp)
+                )
 
-//        var text by remember { mutableStateOf("Hello") }
-//
-//        OutlinedTextField(
-//            value = text,
-//            onValueChange = { text = it },
-//            label = { Text("Label") }
-//        )
-
-
-
-        Row {
-            Image(
-                painterResource("seu-side.png"),
-                contentDescription = "SEU Sidebar",
-                modifier = Modifier.width(600.dp).height(600.dp)
-            )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Box(
+                Row(
                     modifier = Modifier
-                        .requiredWidth(328.dp)
-                        .fillMaxHeight()
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+                    Box(
+                        modifier = Modifier
+                            .requiredWidth(328.dp)
+                            .fillMaxHeight()
                     ) {
-                        Column {
-                            Text(
-                                text = "统一登录验证",
-                                style = TextStyle(
-                                    fontSize = 34.sp,
-                                    lineHeight = 36.sp,
-//                            fontFamily = FontFamily(),
-                                    fontWeight = FontWeight(700),
-                                    color = Color(0xDE000000),
-                                    textAlign = TextAlign.Start,
-                                )
-                            )
-
-                            Text(
-                                text = "VCampus",
-// Body 2
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                    lineHeight = 20.sp,
-//                        fontFamily = FontFamily(Font(R.font.roboto)),
-                                    fontWeight = FontWeight(400),
-                                    color = Color(0x99000000),
-                                    letterSpacing = 0.25.sp,
-                                )
-                            )
-                        }
-
-                        Column (
-//                            modifier = Modifier.fillMaxSize(),
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
                         ) {
-                            OutlinedTextField(
-                                value = username,
-                                onValueChange = {username = it},
-                                label = { Text("一卡通号") },
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                            Column {
+                                Text(
+                                    text = "统一登录验证",
+                                    style = TextStyle(
+                                        fontSize = 34.sp,
+                                        lineHeight = 36.sp,
+                                        fontWeight = FontWeight(700),
+                                        color = Color(0xDE000000),
+                                        textAlign = TextAlign.Start,
+                                    )
+//                                style = MaterialTheme.typography.h4
+                                )
 
-                            OutlinedTextField(
-                                value = password,
-                                onValueChange = {password = it},
-                                label = { Text("密码") },
-                                visualTransformation = PasswordVisualTransformation(),
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            TextButton(
-                                onClick = {
-                                    println("忘记密码")
-                                }
-                            ) {
-                                Text("忘记密码？")
+                                Text(
+                                    text = "VCampus",
+                                    style = TextStyle(
+                                        fontSize = 14.sp,
+                                        lineHeight = 20.sp,
+                                        fontWeight = FontWeight(400),
+                                        color = Color(0x99000000),
+                                        letterSpacing = 0.25.sp,
+                                    )
+//                                style = MaterialTheme.typography.subtitle1
+                                )
                             }
 
-                            Button(
-                                onClick = {
-                                    println("登录")
-                                }
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
                             ) {
-                                Text("登录")
+                                OutlinedTextField(
+                                    value = username,
+                                    onValueChange = { username = it },
+                                    label = { Text("一卡通号") },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+
+                                OutlinedTextField(
+                                    value = password,
+                                    onValueChange = { password = it },
+                                    label = { Text("密码") },
+                                    visualTransformation = PasswordVisualTransformation(),
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                TextButton(
+                                    onClick = {
+                                        println("忘记密码")
+                                    }
+                                ) {
+                                    Text("忘记密码？")
+                                }
+
+                                Button(
+                                    onClick = {
+                                        println("登录")
+                                    }
+                                ) {
+                                    Text("登录")
+                                }
                             }
                         }
                     }
                 }
-            }
 
+            }
         }
     }
 }
 
-fun mainWindow() = application {
+fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
         resizable = false,
-        state = WindowState(size = DpSize.Unspecified)
+        state = WindowState(size = DpSize.Unspecified),
+        title = "登录 - VCampus"
     ) {
-        Box(Modifier.size(1064.dp, 600.dp).background(Color.White)) {
-            App()
-        }
+            loginWindow()
     }
 }
