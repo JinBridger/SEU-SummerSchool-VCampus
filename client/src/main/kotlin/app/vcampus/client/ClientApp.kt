@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
@@ -93,7 +94,7 @@ private fun shortestColumn(colHeights: IntArray): Int {
 fun blankCard() {
     Card(
         Modifier
-//            .clickable{ }
+            .clickable{ }
             .width(350.dp)
             .height(145.dp),
         elevation = 5.dp,
@@ -158,14 +159,24 @@ fun mainPanel() {
                         }
                     }
                 )
-                LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Fixed(2),
-                    contentPadding = PaddingValues(horizontal = 300.dp, vertical = 100.dp),
-                    verticalItemSpacing = 10.dp,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+
+                Box(
+                    Modifier.width(600.dp)
+                        .align(Alignment.CenterHorizontally)
+//                        .padding(2.dp)
+//                        .fillMaxWidth()
+//                        .height(200.dp)
+//                        .background(Color.Cyan),
                 ) {
-                    itemsIndexed((0..50).toList()) { i, item ->
-                        blankCard()
+                    LazyVerticalStaggeredGrid (
+//                        columns = GridCells.Fixed(2),
+                        columns = StaggeredGridCells.Fixed(2),
+//                      contentPadding = PaddingValues(horizontal = 300.dp, vertical = 100.dp),
+                        verticalItemSpacing = 10.dp,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        itemsIndexed((0..50).toList()) { i, item ->
+                            blankCard()
 //                        Box(
 //                            Modifier
 //                                .padding(2.dp)
@@ -175,8 +186,11 @@ fun mainPanel() {
 //                        ) {
 ////                            blankCard()
 //                        }
+                        }
                     }
                 }
+
+
 
 
 //                StaggeredVerticalGrid(
