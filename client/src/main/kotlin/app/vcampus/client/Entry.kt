@@ -26,6 +26,8 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import io.netty.channel.Channel
 
+import app.vcampus.client.tempmodule.TempModule
+
 @Composable
 @Preview
 fun loginWindow() {
@@ -65,7 +67,6 @@ fun loginWindow() {
                                         color = Color(0xDE000000),
                                         textAlign = TextAlign.Start,
                                     )
-//                                style = MaterialTheme.typography.h4
                                 )
 
                                 Text(
@@ -77,7 +78,6 @@ fun loginWindow() {
                                         color = Color(0x99000000),
                                         letterSpacing = 0.25.sp,
                                     )
-//                                style = MaterialTheme.typography.subtitle1
                                 )
                             }
 
@@ -114,7 +114,9 @@ fun loginWindow() {
 
                                 Button(
                                     onClick = {
-                                        println("登录")
+                                        val t = TempModule()
+
+                                        println(t.testData)
                                     }
                                 ) {
                                     Text("登录")
