@@ -25,14 +25,14 @@ public class Main {
 
         Session database = Database.init();
 
-        Transaction tx = database.beginTransaction();
-        Student student = new Student();
-        String cardNumber = "2310";
-        student.setCardNumber(Integer.valueOf(cardNumber));
-        student.setMajor(1);
-        student.setSchool(901);
-        database.persist(student);
-        tx.commit();
+//        Transaction tx = database.beginTransaction();
+//        Student student = new Student();
+//        String cardNumber = "2310";
+//        student.setCardNumber(Integer.valueOf(cardNumber));
+//        student.setMajor(1);
+//        student.setSchool(901);
+//        database.persist(student);
+//        tx.commit();
 
         NettyServer server = new NettyServer(9090);
         server.run(router, database);

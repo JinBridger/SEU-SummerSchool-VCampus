@@ -9,11 +9,12 @@ import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.Session;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.router.RouteMapping;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 
+@Slf4j
 public class StudentStatusController {
-    @RouteMapping(uri = "auth/updateInfo")
-
+    @RouteMapping(uri = "student/updateInfo")
     public Response updateInfo(Request request, org.hibernate.Session database) {
         String cardNumber = request.getParams().get("cardNumber");
         String studentNumber = request.getParams().get("studentNumber");
@@ -38,13 +39,11 @@ public class StudentStatusController {
         student.setPolistat(polistat);
         tx.commit();
         Response response = Response.Common.ok();
-        Session session = new Session();
         return response;
     }
 
-    @RouteMapping(uri = "auth/addInfo")
+    @RouteMapping(uri = "student/addInfo")
     public Response addInfo(Request request, org.hibernate.Session database){
-
         String cardNumber = request.getParams().get("cardNumber");
         String studentNumber = request.getParams().get("studentNumber");
 //        Integer major = Integer.valueOf(request.getParams().get("major"));
@@ -53,11 +52,10 @@ public class StudentStatusController {
         String birthPlace = request.getParams().get("birthPlace");
 //        Polistat polistat = Polistat.valueOf(request.getParams().get("polistat"));
 
-
-
-        if(cardNumber == null || studentNumber == null){
+        if (cardNumber == null || studentNumber == null) {
             return Response.Common.badRequest();
         }
+
         System.out.println(Integer.valueOf(cardNumber));
         Student student = new Student();
         Transaction tx = database.beginTransaction();
@@ -68,13 +66,12 @@ public class StudentStatusController {
 //        student.setStatus(status);
         student.setBirthPlace(birthPlace);
 //        student.setPolistat(polistat);
+        database.persist(student);
         tx.commit();
-        Response response = Response.Common.ok();
-        Session session = new Session();
-        return response;
+        return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "auth/Student", role = "admin")
+    @RouteMapping(uri = "student/Student", role = "admin")
     public Response test(Request request, org.hibernate.Session database) {
         return Response.Common.ok();
     }
