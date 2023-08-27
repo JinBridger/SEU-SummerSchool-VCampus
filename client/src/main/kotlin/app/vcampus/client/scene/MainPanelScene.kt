@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
+import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.NavShape
 import app.vcampus.client.scene.components.navDrawer
 import app.vcampus.client.viewmodel.MainPanelViewModel
@@ -78,7 +79,7 @@ fun MainPanelScene(
                     item {
                         Spacer(Modifier.height(50.dp))
                         Text(
-                            text = "晚上好，测试用户！",
+                            text = "晚上好，${FakeRepository.user.name}",
                             style = TextStyle(
                                 fontSize = 34.sp,
                                 lineHeight = 36.sp,
