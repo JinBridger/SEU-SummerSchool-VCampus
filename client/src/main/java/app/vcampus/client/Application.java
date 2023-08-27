@@ -16,13 +16,13 @@ public class Application {
         NettyClient client = new NettyClient("127.0.0.1", 9090);
         Future<NettyHandler> future = executorService.submit(client);
         NettyHandler handler = future.get();
+//
+//        Request request = new Request();
+//        request.setUri("heartbeat");
+//        handler.sendRequest(request, response -> {
+//            System.out.println(response.toString());
+//        });
 
-        Request request = new Request();
-        request.setUri("heartbeat");
-        handler.sendRequest(request, response -> {
-            System.out.println(response.toString());
-        });
-
-//        EntryKt.main();
+        MainKt.main(handler);
     }
 }

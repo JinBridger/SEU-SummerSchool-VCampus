@@ -21,9 +21,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import app.vcampus.client.tempmodule.TempModule
 import app.vcampus.client.viewmodel.LoginViewModel
-import app.vcampus.client.viewmodel.MainPanelViewModel
 import moe.tlaster.precompose.viewmodel.viewModel
 
 
