@@ -27,7 +27,7 @@ public class Main {
 
 //        Transaction tx = database.beginTransaction();
 //        Student student = new Student();
-//        String cardNumber = "2310";
+//        String cardNumber = "250";
 //        student.setCardNumber(Integer.valueOf(cardNumber));
 //        student.setMajor(1);
 //        student.setSchool(901);

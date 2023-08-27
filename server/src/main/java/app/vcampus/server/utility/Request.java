@@ -11,5 +11,6 @@ public class Request {
 
     String uri;
     Map<String, String> params;
+    Map<String, Integer> params1;
     Session session;
 }
