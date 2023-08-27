@@ -23,6 +23,6 @@ public class Application {
             System.out.println(response.toString());
         });
 
-        EntryKt.main();
+//        EntryKt.main();
     }
 }

@@ -1,10 +1,13 @@
 package app.vcampus.client
 
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import moe.tlaster.precompose.PreComposeWindow
 
-@OptIn(ExperimentalMaterialApi::class)
+
 fun main() {
     application {
         PreComposeWindow(
@@ -12,6 +15,7 @@ fun main() {
             onCloseRequest = {
                 exitApplication()
             },
+            state = WindowState(size = DpSize(1400.dp, 800.dp))
         ) {
             App()
         }

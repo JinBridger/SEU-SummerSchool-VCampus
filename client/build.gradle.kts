@@ -30,6 +30,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
     val precompose_version = "1.4.3"
+    implementation("org.jetbrains.compose.material:material-icons-extended-desktop:1.4.3")
 
     api("moe.tlaster:precompose:$precompose_version")
 

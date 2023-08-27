@@ -1,41 +1,47 @@
-package app.vcampus.client
+package app.vcampus.client.scene
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowState
-import androidx.compose.ui.window.application
-import io.netty.channel.Channel
-
 import app.vcampus.client.tempmodule.TempModule
+import app.vcampus.client.viewmodel.LoginViewModel
+import app.vcampus.client.viewmodel.MainPanelViewModel
+import moe.tlaster.precompose.viewmodel.viewModel
 
+
+@ExperimentalMaterialApi
 @Composable
-@Preview
-fun loginWindow() {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginScene(
+    onLogin: () -> Unit,
+) {
+    val viewModel = viewModel(LoginViewModel::class, listOf()) {
+        LoginViewModel()
+    }
 
-    MaterialTheme {
-        Box(Modifier.size(1064.dp, 600.dp).background(Color.White)) {
+    var username by remember { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(Modifier.shadow(elevation = 10.dp).size(1064.dp, 600.dp).background(Color.White)) {
             Row {
                 Image(
                     painterResource("seu-side.png"),
@@ -95,8 +101,20 @@ fun loginWindow() {
                                     value = password,
                                     onValueChange = { password = it },
                                     label = { Text("密码") },
-                                    visualTransformation = PasswordVisualTransformation(),
-                                    modifier = Modifier.fillMaxWidth()
+                                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                                    modifier = Modifier.fillMaxWidth(),
+                                    trailingIcon = {
+                                        val image = if (passwordVisible)
+                                            Icons.Filled.Visibility
+                                        else Icons.Filled.VisibilityOff
+
+                                        // Please provide localized description for accessibility services
+                                        val description = if (passwordVisible) "隐藏密码" else "显示密码"
+
+                                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                            Icon(image, description)
+                                        }
+                                    }
                                 )
                             }
 
@@ -114,9 +132,12 @@ fun loginWindow() {
 
                                 Button(
                                     onClick = {
-                                        val t = TempModule()
-
-                                        println(t.testData)
+                                        if (viewModel.login(username, password)) {
+                                            println("successful!")
+                                            onLogin()
+                                        } else {
+                                            println("failed!")
+                                        }
                                     }
                                 ) {
                                     Text("登录")
@@ -125,19 +146,7 @@ fun loginWindow() {
                         }
                     }
                 }
-
             }
         }
-    }
-}
-
-fun main() = application {
-    Window(
-        onCloseRequest = ::exitApplication,
-        resizable = false,
-        state = WindowState(size = DpSize.Unspecified),
-        title = "登录 - VCampus"
-    ) {
-            loginWindow()
     }
 }

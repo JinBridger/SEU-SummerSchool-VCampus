@@ -8,6 +8,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import app.vcampus.client.scene.LoginScene
 import app.vcampus.client.scene.MainPanelScene
 import app.vcampus.client.viewmodel.MainPanelViewModel
 import moe.tlaster.precompose.navigation.NavHost
@@ -22,17 +23,28 @@ fun App() {
     MaterialTheme {
         NavHost(
             navigator = navigator,
-            initialRoute = "/home",
+            initialRoute = "/login",
         ) {
+            scene("/login") {
+//                MainPanelScene(
+//                    id = 1,
+//                    onEdit = {
+////                        navigator.navigate("/edit/$it")
+//                    },
+//                    onBack = {
+////                        navigator.goBack()
+//                    },
+//                )
+                LoginScene(onLogin = {
+                    navigator.navigate("/home")
+                })
+            }
+
             scene("/home") {
                 MainPanelScene(
                     id = 1,
-                    onEdit = {
-//                        navigator.navigate("/edit/$it")
-                    },
-                    onBack = {
-//                        navigator.goBack()
-                    },
+                    onEdit = {},
+                    onBack = {}
                 )
             }
         }

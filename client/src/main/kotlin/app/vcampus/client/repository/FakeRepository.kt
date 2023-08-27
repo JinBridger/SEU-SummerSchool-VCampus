@@ -24,6 +24,11 @@ object FakeRepository {
         return items.value.firstOrNull { it.id == id }
     }
 
+    fun login(username: String, password: String): Boolean {
+//        return username == "jinbridge" && password == "jinbridge"
+        return true
+    }
+
     fun add(title: String, content: String) {
         items.value.let {
             items.value = (it + Note(id = items.value.size, title = title, content = content)).toMutableList()
