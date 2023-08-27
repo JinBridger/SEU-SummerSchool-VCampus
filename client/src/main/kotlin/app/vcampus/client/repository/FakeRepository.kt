@@ -1,5 +1,6 @@
 package app.vcampus.client.repository
 
+import app.vcampus.client.entity.User
 import app.vcampus.client.gateway.AuthClient
 import app.vcampus.client.net.NettyHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,7 @@ object FakeRepository {
     private val watchers = hashMapOf<Int, MutableStateFlow<Note>>()
     val items = MutableStateFlow(fakeInitialNotes)
     private lateinit var handler: NettyHandler;
-    val roles = mutableListOf<String>()
+    lateinit var user: User;
 
     fun setHandler(handler: NettyHandler) {
         this.handler = handler
@@ -33,11 +34,11 @@ object FakeRepository {
     }
 
     fun login(username: String, password: String): Boolean {
-        val roles = AuthClient.login(handler, username, password)
+        val user = AuthClient.login(handler, username, password)
 
-        roles?.let {
-            this.roles.clear()
-            this.roles.addAll(it)
+        user?.let {
+            print(it)
+            this.user = it
             return true
         }
 

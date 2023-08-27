@@ -30,7 +30,18 @@ public class AuthController {
         session.setRoles(user.getRoles());
         response.setSession(session);
 
-        response.setData(Map.of("roles", user.getRoleStr()));
+        try {
+            response.setData(Map.of("user", Map.of(
+                    "cardNum", user.getCardNum().toString(),
+                    "gender", user.getGender().toString(),
+                    "name", user.getName(),
+                    "phone", user.getPhone(),
+                    "email", user.getEmail(),
+                    "roles", user.getRoleStr()
+            )));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return response;
     }
