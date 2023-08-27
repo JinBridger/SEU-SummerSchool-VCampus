@@ -25,12 +25,14 @@ public class Main {
         Session database = Database.init();
 
 //        Transaction tx = database.beginTransaction();
-//        Student student = new Student();
-//        String cardNumber = "250";
-//        student.setCardNumber(Integer.valueOf(cardNumber));
-//        student.setMajor(1);
-//        student.setSchool(901);
-//        database.persist(student);
+//        User user = new User();
+//        user.setCardNum(123456);
+//        user.setName("admin");
+//        user.setGender(Gender.unspecified);
+//        user.setPassword(Password.hash("123456"));
+//        user.setEmail("admin@seu.edu.cn");
+//        user.setRoles(new String[]{"admin"});
+//        database.persist(user);
 //        tx.commit();
 
         NettyServer server = new NettyServer(9090);

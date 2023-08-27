@@ -10,31 +10,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import app.vcampus.client.scene.components.NavShape
 import app.vcampus.client.scene.components.navDrawer
-import app.vcampus.client.viewmodel.MainPanelViewModel
+import app.vcampus.client.scene.components.navDrawerItem
+import app.vcampus.client.viewmodel.StudentStatusViewModel
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
-
 @ExperimentalMaterialApi
 @Composable
-fun MainPanelScene(
-    navi: Navigator,
+fun StudentStatusScene(
+    navi: Navigator
 ) {
-    val viewModel = viewModel(MainPanelViewModel::class, listOf()) {
-        MainPanelViewModel()
+    val viewModel = viewModel(StudentStatusViewModel::class, listOf()) {
+        StudentStatusViewModel()
     }
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -45,7 +41,7 @@ fun MainPanelScene(
             TopAppBar(
                 title = {
                     Text(
-                        text = "欢迎来到 VCampus 自助服务大厅！",
+                        text = "学籍管理",
                         style = TextStyle(
                             fontSize = 20.sp,
                             lineHeight = 24.sp,

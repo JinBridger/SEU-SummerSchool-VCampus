@@ -10,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import app.vcampus.client.scene.LoginScene
 import app.vcampus.client.scene.MainPanelScene
+import app.vcampus.client.scene.StudentStatusScene
 import app.vcampus.client.viewmodel.MainPanelViewModel
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.path
@@ -26,26 +27,17 @@ fun App() {
             initialRoute = "/login",
         ) {
             scene("/login") {
-//                MainPanelScene(
-//                    id = 1,
-//                    onEdit = {
-////                        navigator.navigate("/edit/$it")
-//                    },
-//                    onBack = {
-////                        navigator.goBack()
-//                    },
-//                )
                 LoginScene(onLogin = {
                     navigator.navigate("/home")
                 })
             }
 
             scene("/home") {
-                MainPanelScene(
-                    id = 1,
-                    onEdit = {},
-                    onBack = {}
-                )
+                MainPanelScene(navigator)
+            }
+
+            scene("/student_status") {
+                StudentStatusScene(navigator)
             }
         }
     }
