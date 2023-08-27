@@ -18,10 +18,9 @@ import org.hibernate.Transaction;
 public class Main {
     public static void main(String[] args) throws Exception {
         Router router = new Router();
-//        router.addController(AuthController.class);
+        router.addController(AuthController.class);
         router.addController(IndexController.class);
         router.addController(StudentStatusController.class);
-
 
         Session database = Database.init();
 

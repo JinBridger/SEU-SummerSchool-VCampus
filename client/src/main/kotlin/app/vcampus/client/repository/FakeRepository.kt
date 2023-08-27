@@ -22,6 +22,7 @@ object FakeRepository {
     private val watchers = hashMapOf<Int, MutableStateFlow<Note>>()
     val items = MutableStateFlow(fakeInitialNotes)
     private lateinit var handler: NettyHandler;
+    val roles = mutableListOf<String>()
 
     fun setHandler(handler: NettyHandler) {
         this.handler = handler
@@ -32,9 +33,15 @@ object FakeRepository {
     }
 
     fun login(username: String, password: String): Boolean {
-        return AuthClient.login(handler, username, password)
-//        return username == "jinbridge" && password == "jinbridge"
-//        return true
+        val roles = AuthClient.login(handler, username, password)
+
+        roles?.let {
+            this.roles.clear()
+            this.roles.addAll(it)
+            return true
+        }
+
+        return false
     }
 
     fun add(title: String, content: String) {
