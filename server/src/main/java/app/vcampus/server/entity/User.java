@@ -12,19 +12,19 @@ public class User {
     @Column(name = "card_number")
     public Integer cardNum;
 
-    @Column(nullable = false) 
+    @Column(nullable = false)
     public String password;
 
-    @Column(nullable = false) 
+    @Column(nullable = false)
     public String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false) 
+    @Column(nullable = false)
     public Gender gender;
 
-    @Column(nullable = false) 
+    @Column(nullable = false)
     public String phone;
-    @Column(nullable = false) 
+    @Column(nullable = false)
     public String email;
 
     @Column(name = "role")

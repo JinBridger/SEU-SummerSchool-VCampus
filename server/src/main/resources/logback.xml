@@ -2,10 +2,10 @@
 <configuration>
 
     <conversionRule conversionWord="truncatedThread"
-                    converterClass="io.reflectoring.logging.TruncatedThreadConverter" />
+                    converterClass="io.reflectoring.logging.TruncatedThreadConverter"/>
 
     <conversionRule conversionWord="truncatedLogger"
-                    converterClass="io.reflectoring.logging.TruncatedLoggerConverter" />
+                    converterClass="io.reflectoring.logging.TruncatedLoggerConverter"/>
 
     <!-- Appender to log to console -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

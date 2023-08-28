@@ -65,16 +65,16 @@ public class Router {
     private record Action(Object object, Method method) {
 
         public Object call(Request request, Session database) {
-                try {
-                    return method.invoke(object, request, database);
-                } catch (IllegalAccessException e) {
-                    log.error("Router: Action: call: IllegalAccessException: {}", e.getMessage());
-                } catch (InvocationTargetException e) {
-                    log.error("Router: Action: call: InvocationTargetException: {}", e.getMessage());
-                }
-
-                return Response.Common.internalError();
+            try {
+                return method.invoke(object, request, database);
+            } catch (IllegalAccessException e) {
+                log.error("Router: Action: call: IllegalAccessException: {}", e.getMessage());
+            } catch (InvocationTargetException e) {
+                log.error("Router: Action: call: InvocationTargetException: {}", e.getMessage());
             }
+
+            return Response.Common.internalError();
         }
+    }
 
 }
