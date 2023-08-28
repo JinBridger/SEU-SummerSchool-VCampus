@@ -18,7 +18,7 @@ public class StudentStatusController {
     */
     @RouteMapping(uri = "student/updateInfo")
     public Response updateInfo(Request request, org.hibernate.Session database) {
-        Student newStudent = Student.fromRequest(request);
+        Student newStudent = Student.fromMap(request.getParams());
 
         if (newStudent == null) {
             return Response.Common.badRequest();
@@ -49,7 +49,7 @@ public class StudentStatusController {
      */
     @RouteMapping(uri = "student/addInfo")
     public Response addInfo(Request request, org.hibernate.Session database) {
-        Student newStudent = Student.fromRequest(request);
+        Student newStudent = Student.fromMap(request.getParams());
         if (newStudent == null) {
             return Response.Common.badRequest();
         }
@@ -115,6 +115,6 @@ public class StudentStatusController {
 
         System.out.println(student);
 
-        return student.toResponse();
+        return Response.Common.ok(student.toMap());
     }
 }

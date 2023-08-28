@@ -36,42 +36,32 @@ public class Student {
     @Column(nullable = false)
     public PoliticalStatus politicalStatus;
 
-    public static Student fromRequest(Request request) {
+    public static Student fromMap(Map<String, String> data) {
         try {
-            String cardNumber = request.getParams().get("cardNumber");
-            String studentNumber = request.getParams().get("studentNumber");
-            String major = request.getParams().get("major");
-            String school = request.getParams().get("school");
-            String birthPlace = request.getParams().get("birthPlace");
-            Status status = Status.valueOf(request.getParams().get("status"));
-            PoliticalStatus politicalStatus = PoliticalStatus.valueOf(request.getParams().get("politicalStatus"));
-
             Student student = new Student();
-            student.setCardNumber(Integer.valueOf(cardNumber));
-            student.setStudentNumber(studentNumber);
-            student.setMajor(Integer.valueOf(major));
-            student.setSchool(Integer.valueOf(school));
-            student.setBirthPlace(birthPlace);
-            student.setStatus(status);
-            student.setPoliticalStatus(politicalStatus);
+            student.setCardNumber(Integer.parseInt(data.get("cardNumber")));
+            student.setStudentNumber(data.get("studentNumber"));
+            student.setMajor(Integer.parseInt(data.get("major")));
+            student.setSchool(Integer.parseInt(data.get("school")));
+            student.setBirthPlace(data.get("birthPlace"));
+            student.setStatus(Status.valueOf(data.get("status")));
+            student.setPoliticalStatus(PoliticalStatus.valueOf(data.get("politicalStatus")));
             return student;
         } catch (Exception e) {
-            log.warn("Failed to parse student from request", e);
+            log.warn("Failed to parse student from map: {}", data, e);
             return null;
         }
     }
 
-    public Response toResponse() {
-        Response response = Response.Common.ok();
-        response.setData(Map.of(
-            "cardNumber", cardNumber,
-            "studentNumber", studentNumber,
-            "major", major,
-            "school", school,
-            "birthPlace", birthPlace,
-            "status", status,
-            "politicalStatus", politicalStatus
-        ));
-        return response;
+    public Map<String, String> toMap() {
+        return Map.of(
+            "cardNumber", getCardNumber().toString(),
+            "studentNumber", getStudentNumber(),
+            "major", getMajor().toString(),
+            "school", getSchool().toString(),
+            "birthPlace", getBirthPlace(),
+            "status", getStatus().toString(),
+            "politicalStatus", getPoliticalStatus().toString()
+        );
     }
 }
