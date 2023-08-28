@@ -45,7 +45,7 @@ public class StudentStatusClient {
         CountDownLatch latch = new CountDownLatch(2);
         AtomicReference<Response> response = new AtomicReference<>();
         Request request = new Request();
-        request.setUri("student/searchInfo");
+        request.setUri("student/addInfo");
         request.setParams(Map.of(
                 "cardNumber", cardNumber,
                 "studentNumber", studentNumber,
@@ -76,7 +76,14 @@ public class StudentStatusClient {
             return null;
         }
     }
-        public static Student searchInfo(NettyHandler handler, String cardNumber){
+    public static Student searchInfo(NettyHandler handler,
+                                     String cardNumber,
+                                     String studentNumber,
+                                     String major,
+                                     String school,
+                                     String birthPlace,
+                                     String status,
+                                     String politicalStatus){
             CountDownLatch latch = new CountDownLatch(1);
             AtomicReference<Response> response = new AtomicReference<>();
             Request request = new Request();
@@ -104,5 +111,24 @@ public class StudentStatusClient {
                 return null;
             }
         }
+
+    public static Student getSelf(NettyHandler handler){
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicReference<Response> response = new AtomicReference<>();
+        Request request = new Request();
+        request.setUri("student/getSelf");
+        handler.sendRequest(request, res -> {
+            response.set(res);
+            System.out.println(res);
+            latch.countDown();
+        });
+
+        if(response.get().getStatus().equals("success")){
+            Map<String, String> data = (Map<String, String>) response.get().getData();
+            return Student.fromMap(data);
+        } else{
+            return null;
+        }
+    }
 
 }
