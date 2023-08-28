@@ -16,39 +16,30 @@ public class StudentStatusController {
     Test passed on 2023/08/27
     Test : {"uri":"student/updateInfo","params":{"cardNumber":"1000","studentNumber":"15","major":"2","school":"2"}}
     */
-//    @RouteMapping(uri = "student/updateInfo")
-//    public Response updateInfo(Request request, org.hibernate.Session database) {
-//        String cardNumber = request.getParams().get("cardNumber");
-//
-//        if (cardNumber == null) {
-//            return Response.Common.error("Incorrect card number");
-//        }
-//
-//        Student student = database.get(Student.class, Integer.parseInt(cardNumber));
-//
-//        String studentNumber = request.getParams().get("studentNumber");
-//        String major = request.getParams().get("major");
-//        String school = request.getParams().get("school");
-//        String birthPlace = request.getParams().get("birthPlace");
-////      Status  status = Status.valueOf(request.getParams().get("status"));
-////      Polistat polistat = Polistat.valueOf(request.getParams().get("polistat"));
-//
-//
-//
-//
-//        if (student == null) {
-//            return Response.Common.error("Incorrect card number");
-//        }
-//        Transaction tx = database.beginTransaction();
-//        student.setCardNumber(Integer.valueOf(cardNumber));
-//        student.setStudentNumber(studentNumber);
-//        student.setMajor(Integer.valueOf(major));
-//        student.setSchool(Integer.valueOf(school));
-//        student.setBirthPlace(birthPlace);
-//        database.persist(student);
-//        tx.commit();
-//        return Response.Common.ok();
-//    }
+    @RouteMapping(uri = "student/updateInfo")
+    public Response updateInfo(Request request, org.hibernate.Session database) {
+        Student newStudent = Student.fromRequest(request);
+
+        if (newStudent == null) {
+            return Response.Common.badRequest();
+        }
+
+        Student student = database.get(Student.class, newStudent.getCardNumber());
+        if (student == null) {
+            return Response.Common.error("Incorrect card number");
+        }
+
+        Transaction tx = database.beginTransaction();
+        student.setStudentNumber(newStudent.getStudentNumber());
+        student.setMajor(newStudent.getMajor());
+        student.setSchool(newStudent.getSchool());
+        student.setStatus(newStudent.getStatus());
+        student.setBirthPlace(newStudent.getBirthPlace());
+        student.setPoliticalStatus(newStudent.getPoliticalStatus());
+        database.persist(student);
+        tx.commit();
+        return Response.Common.ok();
+    }
 
     /*
     Solve client to add student status information and update to the database
@@ -58,18 +49,18 @@ public class StudentStatusController {
      */
     @RouteMapping(uri = "student/addInfo")
     public Response addInfo(Request request, org.hibernate.Session database) {
-        Student student = Student.fromRequest(request);
-        if (student == null) {
+        Student newStudent = Student.fromRequest(request);
+        if (newStudent == null) {
             return Response.Common.badRequest();
         }
 
-        User user = database.get(User.class, student.getCardNumber());
+        User user = database.get(User.class, newStudent.getCardNumber());
         if (user == null) {
             return Response.Common.error("User not found");
         }
 
         Transaction tx = database.beginTransaction();
-        database.persist(student);
+        database.persist(newStudent);
         tx.commit();
 
         return Response.Common.ok();
@@ -95,8 +86,9 @@ public class StudentStatusController {
         }
 
         Transaction tx = database.beginTransaction();
-        database.delete(student);
+        database.remove(student);
         tx.commit();
+
         return Response.Common.ok();
     }
 
