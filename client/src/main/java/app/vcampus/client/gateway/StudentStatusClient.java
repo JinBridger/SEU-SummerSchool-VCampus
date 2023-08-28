@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class StudentStatusClient {
 
     public static boolean deleteInfo(NettyHandler handler, String cardNumber){
-        CountDownLatch latch = new CountDownLatch(1);
+        CountDownLatch latch = new CountDownLatch(3);
         AtomicReference<Response> response = new AtomicReference<>();
         Request request = new Request();
         request.setUri("student/deleteInfo");
@@ -41,19 +41,19 @@ public class StudentStatusClient {
                                   String school,
                                   String birthPlace,
                                   String status,
-                                  String politicalStatus){
+                                  String politicalStatus) {
         CountDownLatch latch = new CountDownLatch(2);
         AtomicReference<Response> response = new AtomicReference<>();
         Request request = new Request();
         request.setUri("student/searchInfo");
         request.setParams(Map.of(
                 "cardNumber", cardNumber,
-                "studentNumber",studentNumber,
-                "major",major,
-                "school",school,
-                "birthPlace",birthPlace,
-                "status",status,
-                "politicalStatus",politicalStatus
+                "studentNumber", studentNumber,
+                "major", major,
+                "school", school,
+                "birthPlace", birthPlace,
+                "status", status,
+                "politicalStatus", politicalStatus
         ));
         handler.sendRequest(request, res -> {
             response.set(res);
@@ -61,7 +61,7 @@ public class StudentStatusClient {
             latch.countDown();
         });
 
-        if(response.get().getStatus().equals("success")){
+        if (response.get().getStatus().equals("success")) {
             Student student = new Student();
             Map<String, String> data = (Map<String, String>) ((Map<String, Object>) response.get().getData()).get("student");
             student.setCardNumber(Integer.valueOf(data.get("cardNumber")));
@@ -72,9 +72,37 @@ public class StudentStatusClient {
             student.setStatus(Status.valueOf(data.get("status")));
             student.setPoliticalStatus(PoliticalStatus.valueOf(data.get("politicalStatus")));
             return student;
-        }else {
+        } else {
             return null;
         }
-
     }
+        public static Student searchInfo(NettyHandler handler, String cardNumber){
+            CountDownLatch latch = new CountDownLatch(1);
+            AtomicReference<Response> response = new AtomicReference<>();
+            Request request = new Request();
+            request.setUri("student/searchInfo");
+            request.setParams(Map.of(
+                    "cardNumber", cardNumber
+            ));
+            handler.sendRequest(request, res -> {
+                response.set(res);
+                System.out.println(res);
+                latch.countDown();
+            });
+
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            if(response.get().getStatus().equals("success")){
+                Map<String, String> data = (Map<String, String>) response.get().getData();
+                return Student.fromMap(data);
+            } else{
+                return null;
+            }
+        }
+
 }

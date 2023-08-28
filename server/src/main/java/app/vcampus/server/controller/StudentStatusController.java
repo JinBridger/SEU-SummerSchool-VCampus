@@ -117,4 +117,19 @@ public class StudentStatusController {
 
         return Response.Common.ok(student.toMap());
     }
+
+    @RouteMapping(uri = "student/getSelf", role = "student")
+    public Response getSelf(Request request, org.hibernate.Session database) {
+        Integer cardNumber = request.getSession().getCardNum();
+
+        Student student = database.get(Student.class, cardNumber);
+
+        if (student == null) {
+            return Response.Common.error("no such card number");
+        }
+
+        System.out.println(student);
+
+        return Response.Common.ok(student.toMap());
+    }
 }
