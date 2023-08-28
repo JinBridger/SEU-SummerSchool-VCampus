@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -17,7 +18,8 @@ public class Course {
     @Id
     public UUID uuid;
 
-    public String courseId;
+    @Column(nullable = false)
+    public Integer courseId;
 
     @Column(nullable = false)
     public String courseName;
@@ -26,5 +28,33 @@ public class Course {
     public Integer school;//School offered
 
     public float credit;//credit
+
+    public static Course fromMap(Map<String,String> data)
+    {
+        try {
+            Course course=new Course();
+            course.setUuid(UUID.fromString(data.get("uuid")));
+            course.setCourseId(Integer.parseInt(data.get("courseId")));
+            course.setCourseName(data.get("courseName"));
+            course.setSchool(Integer.parseInt("school"));
+            course.setCredit(Float.parseFloat(data.get("credit")));
+            return course;
+        }
+        catch(Exception e) {
+            log.warn("Failed to parse from map: {}",data,e);
+            return null;
+        }
+
+    }
+
+    public Map<String,String> toMap() {
+        return Map.of(
+                "uuid",getUuid().toString(),
+                "courseId",getCourseId().toString(),
+                "courseName",getCourseName(),
+                "school",getSchool().toString(),
+                "credit", Float.toString(getCredit())
+        );
+    }
 
 }
