@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
-class LoginViewModel() : ViewModel() {
+class LoginViewModel : ViewModel() {
     val loginState = mutableStateOf(false)
 
     fun login(username: String, password: String) {

@@ -123,6 +123,13 @@ public class StudentStatusClient {
             latch.countDown();
         });
 
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+
         if(response.get().getStatus().equals("success")){
             Map<String, String> data = (Map<String, String>) response.get().getData();
             return Student.fromMap(data);
