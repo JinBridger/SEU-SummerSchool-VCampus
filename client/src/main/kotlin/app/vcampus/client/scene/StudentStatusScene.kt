@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Menu
@@ -17,14 +17,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import app.vcampus.client.scene.components.NavShape
-import app.vcampus.client.scene.components.navDrawer
-import app.vcampus.client.scene.components.navDrawerItem
+import app.vcampus.client.scene.components.NavRail
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.StudentStatusViewModel
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.Navigator
-import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.viewmodel.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -117,7 +114,8 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         value = major,
                         onValueChange = { major = it },
                         label = { Text("专业") },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = major == ""
                     )
                 }
 
@@ -126,7 +124,8 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         value = school,
                         onValueChange = { school = it },
                         label = { Text("学院") },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = school == ""
                     )
                 }
             }
@@ -139,7 +138,8 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         value = cardNumber,
                         onValueChange = { cardNumber = it },
                         label = { Text("一卡通号") },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = cardNumber == ""
                     )
                 }
 
@@ -148,8 +148,21 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         value = studentNumber,
                         onValueChange = { studentNumber = it },
                         label = { Text("学号") },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = studentNumber == ""
                     )
+                }
+            }
+
+            Spacer(Modifier.height(20.dp))
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                Button(onClick = {}) {
+                    Row {
+                        Icon(Icons.Default.Done, "")
+                        Spacer(Modifier.width(5.dp))
+                        Text("保存修改")
+                    }
                 }
             }
         }
@@ -195,15 +208,14 @@ fun StudentStatusScene(
                     }
                 },
             )
-        },
-        drawerShape = NavShape(0.dp, 0.3f),
-        drawerContent = {
-            navDrawer(navi)
         }
     ) {
-        Box(Modifier.fillMaxSize()) {
-            Box(Modifier.width(800.dp).align(Alignment.TopCenter)) {
-                StudentStatusForStudent(viewModel)
+        Row {
+            NavRail(navi, "/student_status")
+            Box(Modifier.fillMaxSize()) {
+                Box(Modifier.width(800.dp).align(Alignment.TopCenter)) {
+                    StudentStatusForStudent(viewModel)
+                }
             }
         }
     }
