@@ -109,7 +109,7 @@ fun DatePicker(
                         }
 
                         Header("日", "一", "二", "三", "四", "五", "六")
-                        Divider(Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.colors.primary))
+//                        Divider(Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.colors.primary))
 
                         val startDay = GregorianCalendar(year, month, 1)
                             .apply {

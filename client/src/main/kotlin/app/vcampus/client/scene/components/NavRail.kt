@@ -17,7 +17,8 @@ fun NavRail(navigator: Navigator, currentPos: String) {
                 selected = currentPos == it.path,
                 onClick = { navigator.navigate(it.path) },
                 icon = { Icon(it.icon, "") },
-                label = { Text(it.name) }
+                label = { Text(it.name) },
+                alwaysShowLabel = false
             )
         }
     }

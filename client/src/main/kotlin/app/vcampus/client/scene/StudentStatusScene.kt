@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.vcampus.client.scene.components.NavRail
+import app.vcampus.client.scene.components.TopBar
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.StudentStatusViewModel
 import kotlinx.coroutines.launch
@@ -67,7 +65,11 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         value = familyName,
                         onValueChange = { familyName = it },
                         label = { Text("姓") },
-                        isError = familyName == ""
+                        isError = familyName == "",
+                        trailingIcon = {
+                            if (familyName == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
                     )
                 }
 
@@ -76,20 +78,28 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         value = givenName,
                         onValueChange = { givenName = it },
                         label = { Text("名") },
-                        isError = givenName == ""
+                        isError = givenName == "",
+                        trailingIcon = {
+                            if (givenName == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
                     )
                 }
 
-                Box(Modifier.fillParentMaxWidth(0.15F).padding(5.dp)) {
+                Box(Modifier.fillParentMaxWidth(0.20F).padding(5.dp)) {
                     OutlinedTextField(
                         value = gender,
                         onValueChange = { gender = it },
                         label = { Text("性别") },
-                        isError = gender == ""
+                        isError = gender == "",
+                        trailingIcon = {
+                            if (gender == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
                     )
                 }
 
-                Box(Modifier.fillParentMaxWidth(0.35F).padding(5.dp)) {
+                Box(Modifier.fillParentMaxWidth(0.30F).padding(5.dp)) {
                     OutlinedTextField(
                         value = sdf.format(birthDate),
                         onValueChange = {},
@@ -115,7 +125,11 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         onValueChange = { major = it },
                         label = { Text("专业") },
                         modifier = Modifier.fillMaxWidth(),
-                        isError = major == ""
+                        isError = major == "",
+                        trailingIcon = {
+                            if (major == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
                     )
                 }
 
@@ -125,7 +139,11 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         onValueChange = { school = it },
                         label = { Text("学院") },
                         modifier = Modifier.fillMaxWidth(),
-                        isError = school == ""
+                        isError = school == "",
+                        trailingIcon = {
+                            if (school == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
                     )
                 }
             }
@@ -139,7 +157,11 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         onValueChange = { cardNumber = it },
                         label = { Text("一卡通号") },
                         modifier = Modifier.fillMaxWidth(),
-                        isError = cardNumber == ""
+                        isError = cardNumber == "",
+                        trailingIcon = {
+                            if (cardNumber == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
                     )
                 }
 
@@ -149,7 +171,11 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         onValueChange = { studentNumber = it },
                         label = { Text("学号") },
                         modifier = Modifier.fillMaxWidth(),
-                        isError = studentNumber == ""
+                        isError = studentNumber == "",
+                        trailingIcon = {
+                            if (studentNumber == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
                     )
                 }
             }
@@ -184,30 +210,7 @@ fun StudentStatusScene(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "学籍管理",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            lineHeight = 24.sp,
-                            fontWeight = FontWeight(600),
-                            color = Color(0xFFFFFFFF),
-                            letterSpacing = 0.15.sp,
-                        )
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { coroutineScope.launch { scaffoldState.drawerState.open() } }) {
-                        Icon(Icons.Default.Menu, contentDescription = null)
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.Edit, contentDescription = null)
-                    }
-                },
-            )
+            TopBar("学籍管理")
         }
     ) {
         Row {

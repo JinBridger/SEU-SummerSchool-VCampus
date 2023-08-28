@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.NavRail
+import app.vcampus.client.scene.components.TopBar
 import app.vcampus.client.viewmodel.MainPanelViewModel
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.Navigator
@@ -36,30 +37,7 @@ fun MainPanelScene(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "欢迎来到 VCampus 自助服务大厅！",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            lineHeight = 24.sp,
-                            fontWeight = FontWeight(600),
-                            color = Color(0xFFFFFFFF),
-                            letterSpacing = 0.15.sp,
-                        )
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { coroutineScope.launch { scaffoldState.drawerState.open() } }) {
-                        Icon(Icons.Default.Menu, contentDescription = null)
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.Edit, contentDescription = null)
-                    }
-                },
-            )
+            TopBar("欢迎来到自助服务大厅！")
         }
     ) {
         Row {
