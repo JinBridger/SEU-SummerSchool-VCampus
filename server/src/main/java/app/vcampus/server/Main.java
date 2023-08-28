@@ -21,17 +21,17 @@ public class Main {
 
         Session database = Database.init();
 
-        Transaction tx = database.beginTransaction();
-        User user = new User();
-        user.setCardNum(123456);
-        user.setName("admin");
-        user.setGender(Gender.unspecified);
-        user.setPassword(Password.hash("123456"));
-        user.setEmail("admin@seu.edu.cn");
-        user.setRoles(new String[]{"admin"});
-        user.setPhone("12345678901");
-        database.persist(user);
-        tx.commit();
+//        Transaction tx = database.beginTransaction();
+//        User user = new User();
+//        user.setCardNum(123456);
+//        user.setName("admin");
+//        user.setGender(Gender.unspecified);
+//        user.setPassword(Password.hash("123456"));
+//        user.setEmail("admin@seu.edu.cn");
+//        user.setRoles(new String[]{"admin"});
+//        user.setPhone("12345678901");
+//        database.persist(user);
+//        tx.commit();
 
         NettyServer server = new NettyServer(9091);
         server.run(router, database);
