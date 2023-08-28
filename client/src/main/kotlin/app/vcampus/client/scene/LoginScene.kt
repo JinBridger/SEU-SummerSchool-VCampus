@@ -37,6 +37,12 @@ fun LoginScene(
     var username by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    val loginState by viewModel.loginState
+
+    when(loginState) {
+        true -> onLogin()
+        false -> {}
+    }
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Box(Modifier.shadow(elevation = 10.dp).size(1064.dp, 600.dp).background(Color.White)) {
@@ -130,12 +136,14 @@ fun LoginScene(
 
                                 Button(
                                     onClick = {
-                                        if (viewModel.login(username, password)) {
-                                            println("successful!")
-                                            onLogin()
-                                        } else {
-                                            println("failed!")
-                                        }
+                                        viewModel.login(username, password)
+
+//                                        if (viewModel.login(username, password)) {
+//                                            println("successful!")
+//                                            onLogin()
+//                                        } else {
+//                                            println("failed!")
+//                                        }
                                     }
                                 ) {
                                     Text("登录")
