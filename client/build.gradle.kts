@@ -75,3 +75,17 @@ compose.desktop {
         }
     }
 }
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "app.vcampus.client.Application"
+    }
+
+    doFirst {
+        from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+}
