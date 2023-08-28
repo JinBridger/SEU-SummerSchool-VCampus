@@ -2,8 +2,10 @@ package app.vcampus.client.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import app.vcampus.client.repository.FakeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
@@ -12,17 +14,9 @@ class LoginViewModel() : ViewModel() {
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
-            loginInternal(username, password).collect {
-                loginState.value = it
+            withContext(Dispatchers.Default) {
+                loginState.value = FakeRepository.login(username, password)
             }
-        }
-    }
-
-    private suspend fun loginInternal(username: String, password: String) = flow {
-        try {
-            emit(FakeRepository.login(username, password))
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 }
