@@ -38,7 +38,7 @@ public class AuthClient {
 
         if (response.get().getStatus().equals("success")) {
             User user = new User();
-            Map<String, String> data = (Map<String, String>) ((Map<String, Object>) response.get().getData()).get("user");
+            Map<String, String> data = (Map<String, String>) response.get().getData();
             user.setCardNum(Integer.parseInt(data.get("cardNum")));
             user.setName(data.get("name"));
             user.setGender(Gender.valueOf(data.get("gender")));

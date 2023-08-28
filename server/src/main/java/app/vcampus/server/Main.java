@@ -25,6 +25,7 @@ public class Main {
 //        user.setPassword(Password.hash("123456"));
 //        user.setEmail("admin@seu.edu.cn");
 //        user.setRoles(new String[]{"admin"});
+//        user.setPhone("12345678901");
 //        database.persist(user);
 //        tx.commit();
 

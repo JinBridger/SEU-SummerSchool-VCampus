@@ -39,7 +39,7 @@ fun LoginScene(
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     val loginState by viewModel.loginState
 
-    when(loginState) {
+    when (loginState) {
         true -> onLogin()
         false -> {}
     }

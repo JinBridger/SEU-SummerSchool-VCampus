@@ -18,7 +18,7 @@ class LoginViewModel() : ViewModel() {
         }
     }
 
-    suspend fun loginInternal(username: String, password: String) = flow {
+    private suspend fun loginInternal(username: String, password: String) = flow {
         try {
             emit(FakeRepository.login(username, password))
         } catch (e: Exception) {
