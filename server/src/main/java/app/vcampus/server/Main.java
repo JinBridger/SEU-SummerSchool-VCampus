@@ -28,7 +28,7 @@ public class Main {
 //        database.persist(user);
 //        tx.commit();
 
-        NettyServer server = new NettyServer(9090);
+        NettyServer server = new NettyServer(9091);
         server.run(router, database);
     }
 }

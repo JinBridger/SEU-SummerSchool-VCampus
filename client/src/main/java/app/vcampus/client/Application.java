@@ -13,7 +13,7 @@ public class Application {
     private static final ExecutorService executorService = java.util.concurrent.Executors.newCachedThreadPool();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        NettyClient client = new NettyClient("127.0.0.1", 9090);
+        NettyClient client = new NettyClient("127.0.0.1", 9091);
         Future<NettyHandler> future = executorService.submit(client);
         NettyHandler handler = future.get();
 //

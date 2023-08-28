@@ -1,6 +1,6 @@
 package app.vcampus.client.repository
 
-import app.vcampus.client.entity.User
+import app.vcampus.server.entity.User
 import app.vcampus.client.gateway.AuthClient
 import app.vcampus.client.net.NettyHandler
 

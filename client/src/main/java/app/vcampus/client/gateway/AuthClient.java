@@ -1,7 +1,7 @@
 package app.vcampus.client.gateway;
 
-import app.vcampus.client.entity.User;
-import app.vcampus.client.enums.Gender;
+import app.vcampus.server.entity.User;
+import app.vcampus.server.enums.Gender;
 import app.vcampus.client.net.NettyHandler;
 import app.vcampus.client.utility.Request;
 import app.vcampus.client.utility.Response;
