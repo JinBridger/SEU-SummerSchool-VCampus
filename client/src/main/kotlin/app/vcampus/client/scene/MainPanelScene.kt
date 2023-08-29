@@ -41,8 +41,8 @@ fun MainPanelScene(
 //            TopBar("欢迎来到自助服务大厅！")
 //        }
 //    ) {
-        Row {
-            NavRail(navi, "/home")
+//        Row {
+//            NavRail(navi, "/home")
 
             Box(Modifier.fillMaxSize()) {
                 Box(Modifier.width(800.dp).align(Alignment.TopCenter)) {
@@ -54,6 +54,6 @@ fun MainPanelScene(
                     }
                 }
             }
-        }
+//        }
 //    }
 }

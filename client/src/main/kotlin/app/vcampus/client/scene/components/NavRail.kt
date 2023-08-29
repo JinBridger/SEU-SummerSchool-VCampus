@@ -1,11 +1,10 @@
 package app.vcampus.client.scene.components
 
-import androidx.compose.material.Icon
-import androidx.compose.material.NavigationRail
-import androidx.compose.material.NavigationRailItem
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import app.vcampus.client.Navis
 import moe.tlaster.precompose.navigation.Navigator
 

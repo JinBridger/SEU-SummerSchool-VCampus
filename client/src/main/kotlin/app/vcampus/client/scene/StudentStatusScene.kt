@@ -308,13 +308,13 @@ fun StudentStatusScene(
 //    Scaffold(scaffoldState = scaffoldState, topBar = {
 //        TopBar("学籍管理")
 //    }) {
-    Row {
-        NavRail(navi, "/student_status")
+//    Row {
+//        NavRail(navi, "/student_status")
 //            Box(Modifier.fillMaxSize()) {
 //                Box(Modifier.width(800.dp).align(Alignment.TopCenter)) {
         StudentStatusForStudent(viewModel)
 //                }
 //            }
-    }
+//    }
 //    }
 }

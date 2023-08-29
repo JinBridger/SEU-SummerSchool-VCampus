@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="13b06e68-b3fb-4616-99c1-c60110386ba5" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/LibraryScene.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/ShopScene.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/TeachingAffairsScene.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/components/EnterAnimation.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/viewmodel/LibraryViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/viewmodel/ShopViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/viewmodel/TeachingAffairsViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/_2023_8_29_21_51____.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2023_8_29_21_51____.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/App.kt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/App.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/Nav.kt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/Nav.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/MainPanelScene.kt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/MainPanelScene.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/StudentStatusScene.kt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/StudentStatusScene.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/components/NavRail.kt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/components/NavRail.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +50,8 @@
       <list>
         <option value="Enum" />
         <option value="Class" />
+        <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -45,8 +59,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 3
 }</component>
   <component name="ProjectId" id="2UbM955ZVRwicz1lm5EwNstuOS1" />
   <component name="ProjectLevelVcsManager">
@@ -60,11 +73,17 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "模块",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.keymap"
+    "settings.editor.selected.configurable": "proofread",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RunManager" selected="应用程序.Application">
@@ -94,6 +113,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="应用程序.Application" />
+      <item itemvalue="应用程序.Main" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="应用程序.Application" />
@@ -109,8 +132,13 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1693203674555</updated>
+      <workItem from="1693321547198" duration="529000" />
+      <workItem from="1693322163950" duration="4720000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -134,6 +162,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
