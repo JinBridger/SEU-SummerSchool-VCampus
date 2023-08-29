@@ -14,6 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.vcampus.client.scene.components.FullScreenDialog
 import app.vcampus.client.scene.components.NavRail
 import app.vcampus.client.scene.components.TopBar
 import app.vcampus.client.scene.components.pageTitle
@@ -25,6 +26,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
+fun StudentStatusContent(viewModel: StudentStatusViewModel) {
+
+}
+
+@Composable
 fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
     var familyName by viewModel.familyName
     var givenName by viewModel.givenName
@@ -34,27 +40,24 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
     var school by viewModel.school
     var cardNumber by viewModel.cardNumber
     var studentNumber by viewModel.studentNumber
+    var birthPlace by viewModel.birthPlace
+    var politicalStatus by viewModel.politicalStatus
+    var status by viewModel.status
 
-    var showDatePicker by remember { mutableStateOf(false) }
+    var showFullScreenDialog by remember { mutableStateOf(false) }
 
-    val sdf = SimpleDateFormat("yyyy年MM月dd日")
-
-    if (showDatePicker) {
-        DatePicker(
-            initDate = Date(),
-            onDismissRequest = { showDatePicker = false },
-            onDateSelect = {
-                birthDate = it
-                showDatePicker = false
-            },
-            minYear = 1900
+    if (showFullScreenDialog) {
+        FullScreenDialog(
+            onDismissRequest = {showFullScreenDialog = false},
+            onConfirmed = {showFullScreenDialog = false}
         )
     }
 
+
     LazyColumn {
         item {
-            Spacer(Modifier.height(50.dp))
-            pageTitle("个人学籍信息", "查看修改个人学籍信息")
+            Spacer(Modifier.height(80.dp))
+            pageTitle("个人学籍信息", "查看个人学籍信息")
         }
 
         item {
@@ -66,6 +69,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         onValueChange = { familyName = it },
                         label = { Text("姓") },
                         isError = familyName == "",
+                        readOnly = true,
                         trailingIcon = {
                             if (familyName == "")
                                 Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
@@ -79,6 +83,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         onValueChange = { givenName = it },
                         label = { Text("名") },
                         isError = givenName == "",
+                        readOnly = true,
                         trailingIcon = {
                             if (givenName == "")
                                 Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
@@ -92,6 +97,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         onValueChange = { gender = it },
                         label = { Text("性别") },
                         isError = gender == "",
+                        readOnly = true,
                         trailingIcon = {
                             if (gender == "")
                                 Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
@@ -101,17 +107,64 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
 
                 Box(Modifier.fillParentMaxWidth(0.30F).padding(5.dp)) {
                     OutlinedTextField(
-                        value = sdf.format(birthDate),
-                        onValueChange = {},
+                        value = birthDate,
+                        onValueChange = { birthDate = it },
                         label = { Text("出生日期") },
+                        isError = birthDate == "",
                         readOnly = true,
                         trailingIcon = {
-                            IconButton(onClick = {
-                                showDatePicker = true
-                            }) {
-                                Icon(Icons.Default.ExpandMore, "")
-                            }
+                            if (birthDate == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
                         }
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(10.dp))
+
+            Row {
+                Box(Modifier.fillParentMaxWidth(0.4F).padding(5.dp)) {
+                    OutlinedTextField(
+                        value = birthPlace,
+                        onValueChange = { birthPlace = it },
+                        label = { Text("籍贯") },
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = birthPlace == "",
+                        readOnly = true,
+                        trailingIcon = {
+                            if (birthPlace == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
+                    )
+                }
+
+                Box(Modifier.fillParentMaxWidth(0.3F).padding(5.dp)) {
+                    OutlinedTextField(
+                        value = politicalStatus,
+                        onValueChange = { politicalStatus = it },
+                        label = { Text("政治面貌") },
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = politicalStatus == "",
+                        readOnly = true,
+                        trailingIcon = {
+                            if (politicalStatus == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
+                    )
+                }
+
+                Box(Modifier.fillParentMaxWidth(0.3F).padding(5.dp)) {
+                    OutlinedTextField(
+                        value = status,
+                        onValueChange = { status = it },
+                        label = { Text("学籍状态") },
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = status == "",
+                        readOnly = true,
+                        trailingIcon = {
+                            if (status == "")
+                                Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
+                        },
                     )
                 }
             }
@@ -126,6 +179,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         label = { Text("专业") },
                         modifier = Modifier.fillMaxWidth(),
                         isError = major == "",
+                        readOnly = true,
                         trailingIcon = {
                             if (major == "")
                                 Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
@@ -140,6 +194,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         label = { Text("学院") },
                         modifier = Modifier.fillMaxWidth(),
                         isError = school == "",
+                        readOnly = true,
                         trailingIcon = {
                             if (school == "")
                                 Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
@@ -158,6 +213,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         label = { Text("一卡通号") },
                         modifier = Modifier.fillMaxWidth(),
                         isError = cardNumber == "",
+                        readOnly = true,
                         trailingIcon = {
                             if (cardNumber == "")
                                 Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
@@ -172,6 +228,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                         label = { Text("学号") },
                         modifier = Modifier.fillMaxWidth(),
                         isError = studentNumber == "",
+                        readOnly = true,
                         trailingIcon = {
                             if (studentNumber == "")
                                 Icon(Icons.Filled.Error,"error", tint = MaterialTheme.colors.error)
@@ -183,7 +240,9 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
             Spacer(Modifier.height(20.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                Button(onClick = {}) {
+                Button(onClick = {
+                    showFullScreenDialog = true
+                }) {
                     Row {
                         Icon(Icons.Default.Done, "")
                         Spacer(Modifier.width(5.dp))

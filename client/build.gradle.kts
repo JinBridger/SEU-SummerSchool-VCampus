@@ -30,7 +30,6 @@ dependencies {
     api(compose.animation)
     implementation("io.netty:netty-all:4.1.97.Final")
     implementation("com.google.code.gson:gson:2.10.1")
-
     val precompose_version = "1.4.3"
     implementation("org.jetbrains.compose.material:material-icons-extended-desktop:1.4.3")
 

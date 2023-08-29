@@ -2,7 +2,9 @@ package app.vcampus.client.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import app.vcampus.client.repository.FakeRepository
+import app.vcampus.server.entity.Student
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
@@ -13,11 +15,16 @@ class StudentStatusViewModel() : ViewModel() {
     val familyName = mutableStateOf("")
     val givenName = mutableStateOf("")
     val gender = mutableStateOf("")
-    val birthDate = mutableStateOf(Date())
+    val birthDate = mutableStateOf("")
     val major = mutableStateOf("")
     val school = mutableStateOf("")
     val cardNumber = mutableStateOf("")
     val studentNumber = mutableStateOf("")
+    val birthPlace = mutableStateOf("")
+    val politicalStatus = mutableStateOf("")
+    val status = mutableStateOf("")
+
+    val student = mutableStateOf(Student())
 
     init {
         getStudentStatus()
@@ -25,13 +32,20 @@ class StudentStatusViewModel() : ViewModel() {
 
     fun getStudentStatus() {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                val student = FakeRepository.getSelf()
-                println("wtfisthis: ")
-                println(student.toString())
-                cardNumber.value = student.getCardNumber().toString()
-                studentNumber.value = student.getStudentNumber().toString()
+            getStudentStatusInternal().collect {
+                student.value = it
+
+                cardNumber.value = it.cardNumber.toString()
+                studentNumber.value = it.studentNumber.toString()
             }
+        }
+    }
+
+    suspend fun getStudentStatusInternal() = flow {
+        try {
+            emit(FakeRepository.getSelf())
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }
