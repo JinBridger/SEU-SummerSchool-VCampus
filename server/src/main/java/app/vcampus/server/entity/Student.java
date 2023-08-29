@@ -37,9 +37,9 @@ public class Student {
     
     public Date birthDate;
 
-    public Integer major;
+    public String major;
 
-    public Integer school;
+    public String school;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -56,8 +56,8 @@ public class Student {
             Student student = new Student();
             student.setCardNumber(Integer.parseInt(data.get("cardNumber")));
             student.setStudentNumber(data.get("studentNumber"));
-            student.setMajor(Integer.parseInt(data.get("major")));
-            student.setSchool(Integer.parseInt(data.get("school")));
+            student.setMajor(data.get("major"));
+            student.setSchool(data.get("school"));
             student.setBirthPlace(data.get("birthPlace"));
             student.setStatus(Status.valueOf(data.get("status")));
             student.setPoliticalStatus(PoliticalStatus.valueOf(data.get("politicalStatus")));
@@ -76,8 +76,8 @@ public class Student {
         return Map.ofEntries(
                 Map.entry("cardNumber", getCardNumber().toString()),
                 Map.entry("studentNumber", getStudentNumber()),
-                Map.entry("major", getMajor().toString()),
-                Map.entry("school", getSchool().toString()),
+                Map.entry("major", getMajor()),
+                Map.entry("school", getSchool()),
                 Map.entry("birthPlace", getBirthPlace()),
                 Map.entry("status", getStatus().toString()),
                 Map.entry("politicalStatus", getPoliticalStatus().toString()),

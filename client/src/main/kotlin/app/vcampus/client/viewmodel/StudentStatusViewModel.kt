@@ -37,16 +37,16 @@ class StudentStatusViewModel() : ViewModel() {
                 student.value = it
 
                 cardNumber.value = it.cardNumber.toString()
-                studentNumber.value = it.studentNumber.toString()
+                studentNumber.value = it.studentNumber
                 familyName.value = it.familyName
                 givenName.value = it.givenName
-                gender.value = it.getGender().toString()
+                gender.value = it.getGender().label
                 birthDate.value = DateUtility.fromDate(it.birthDate)
                 major.value = it.major.toString()
                 school.value = it.school.toString()
                 birthPlace.value = it.birthPlace
-                politicalStatus.value = it.politicalStatus.toString()
-                status.value = it.status.toString()
+                politicalStatus.value = it.politicalStatus.label
+                status.value = it.status.label
             }
         }
     }

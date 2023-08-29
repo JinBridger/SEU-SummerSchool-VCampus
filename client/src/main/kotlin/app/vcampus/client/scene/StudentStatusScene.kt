@@ -273,19 +273,19 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                             }
                         }
 
-                        Spacer(Modifier.height(20.dp))
-
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                            Button(onClick = {
-                                showFullScreenDialog = true
-                            }) {
-                                Row {
-                                    Icon(Icons.Default.Done, "")
-                                    Spacer(Modifier.width(5.dp))
-                                    Text("保存修改")
-                                }
-                            }
-                        }
+//                        Spacer(Modifier.height(20.dp))
+//
+//                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+//                            Button(onClick = {
+//                                showFullScreenDialog = true
+//                            }) {
+//                                Row {
+//                                    Icon(Icons.Default.Done, "")
+//                                    Spacer(Modifier.width(5.dp))
+//                                    Text("保存修改")
+//                                }
+//                            }
+//                        }
                     }
                 }
             }
