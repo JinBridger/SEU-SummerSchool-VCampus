@@ -15,5 +15,5 @@ val Navis = arrayListOf(
     NaviItem("学籍", "/student_status", Icons.Default.Person),
     NaviItem("教务", "/teaching_affairs", Icons.Default.School),
     NaviItem("图书馆", "/library", Icons.Default.Book),
-    NaviItem("超市", "/shop", Icons.Default.ShoppingCart),
+    NaviItem("超市", "/shop", Icons.Default.LocalMall),
 )

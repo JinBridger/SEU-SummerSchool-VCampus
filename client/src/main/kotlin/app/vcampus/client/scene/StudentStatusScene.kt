@@ -25,10 +25,12 @@ import moe.tlaster.precompose.viewmodel.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-@Composable
-fun StudentStatusContent(viewModel: StudentStatusViewModel) {
 
-}
+val studentStatusSideBarItem = listOf(
+    SideBarItem(true, "学籍信息", "", Icons.Default.Info),
+    SideBarItem(false, "我的学籍信息", "查看我的学籍信息", Icons.Default.Info)
+)
+
 
 @Composable
 fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
@@ -52,7 +54,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
     }
 
     Row(modifier = Modifier.fillMaxWidth()) {
-        SideBar()
+        SideBar(studentStatusSideBarItem)
         Box(
             modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp).background(Color.White)
                 .padding(horizontal = 100.dp)
@@ -272,20 +274,6 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                                 )
                             }
                         }
-
-//                        Spacer(Modifier.height(20.dp))
-//
-//                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-//                            Button(onClick = {
-//                                showFullScreenDialog = true
-//                            }) {
-//                                Row {
-//                                    Icon(Icons.Default.Done, "")
-//                                    Spacer(Modifier.width(5.dp))
-//                                    Text("保存修改")
-//                                }
-//                            }
-//                        }
                     }
                 }
             }

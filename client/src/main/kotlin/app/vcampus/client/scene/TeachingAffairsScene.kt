@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,10 +16,20 @@ import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
+val teachingAffairsSideBarItem = listOf(
+    SideBarItem(true, "教务信息", "", Icons.Default.Info),
+    SideBarItem(false, "我的课表", "查看个人课表", Icons.Default.CalendarMonth),
+    SideBarItem(false, "我的成绩", "查看个人成绩单", Icons.Default.FileOpen),
+
+    SideBarItem(true, "教务工具", "", Icons.Default.Info),
+    SideBarItem(false, "选课", "进入选课页面", Icons.Default.Checklist),
+    SideBarItem(false, "评教", "进入评教页面", Icons.Default.Diversity1)
+)
+
 @Composable
 fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
     Row(modifier = Modifier.fillMaxWidth()) {
-        SideBar()
+        SideBar(teachingAffairsSideBarItem)
         Box(
             modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp)
                 .background(
