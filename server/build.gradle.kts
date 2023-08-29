@@ -30,19 +30,33 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.register<Jar>("uberJar") {
-    archiveClassifier.set("uber")
-
-    from(sourceSets.main.get().output)
-
-    dependsOn(configurations.runtimeClasspath)
-    from({
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-    })
-}
+//tasks.register<Jar>("uberJar") {
+//    archiveClassifier.set("uber")
+//
+//    from(sourceSets.main.get().output)
+//
+//    dependsOn(configurations.runtimeClasspath)
+//    from({
+//        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+//    })
+//}
+//
+//tasks.withType<Jar> {
+//    manifest {
+//        attributes["Main-Class"] = "app.vcampus.server.Main"
+//    }
+//}
 
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "app.vcampus.server.Main"
     }
+
+    doFirst {
+        from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }

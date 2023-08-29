@@ -30,7 +30,6 @@ dependencies {
     api(compose.animation)
     implementation("io.netty:netty-all:4.1.97.Final")
     implementation("com.google.code.gson:gson:2.10.1")
-
     val precompose_version = "1.4.3"
     implementation("org.jetbrains.compose.material:material-icons-extended-desktop:1.4.3")
 
@@ -74,4 +73,18 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "app.vcampus.client.Application"
+    }
+
+    doFirst {
+        from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }

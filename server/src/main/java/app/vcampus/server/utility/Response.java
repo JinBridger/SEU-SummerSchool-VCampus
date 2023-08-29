@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Data
@@ -19,6 +20,12 @@ public class Response {
     public static class Common {
         public static Response ok() {
             return new Response("success", "OK");
+        }
+
+        public static Response ok(Map<String, String> data) {
+            Response response = new Response("success", "OK");
+            response.setData(data);
+            return response;
         }
 
         public static Response error(String message) {

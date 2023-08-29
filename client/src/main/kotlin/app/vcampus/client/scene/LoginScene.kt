@@ -21,6 +21,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.vcampus.client.scene.components.pageTitle
+import app.vcampus.client.scene.components.sarasaUiSc
+import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.viewmodel.LoginViewModel
 import moe.tlaster.precompose.viewmodel.viewModel
 
@@ -37,9 +40,15 @@ fun LoginScene(
     var username by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    val loginState by viewModel.loginState
+
+    when (loginState) {
+        true -> onLogin()
+        false -> {}
+    }
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Box(Modifier.shadow(elevation = 10.dp).size(1064.dp, 600.dp).background(Color.White)) {
+        Box(Modifier.size(1064.dp, 600.dp).shadowCustom(blurRadius = 10.dp).background(Color.White)) {
             Row {
                 Image(
                     painterResource("seu-side.png"),
@@ -62,27 +71,30 @@ fun LoginScene(
                             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
                         ) {
                             Column {
-                                Text(
-                                    text = "统一登录验证",
-                                    style = TextStyle(
-                                        fontSize = 34.sp,
-                                        lineHeight = 36.sp,
-                                        fontWeight = FontWeight(700),
-                                        color = Color(0xDE000000),
-                                        textAlign = TextAlign.Start,
-                                    )
-                                )
-
-                                Text(
-                                    text = "VCampus",
-                                    style = TextStyle(
-                                        fontSize = 14.sp,
-                                        lineHeight = 20.sp,
-                                        fontWeight = FontWeight(400),
-                                        color = Color(0x99000000),
-                                        letterSpacing = 0.25.sp,
-                                    )
-                                )
+                                pageTitle("统一验证登录", "VCampus")
+//                                Text(
+//                                    text = "统一登录验证1",
+//                                    style = TextStyle(
+//                                        fontSize = 34.sp,
+//                                        lineHeight = 36.sp,
+//                                        fontWeight = FontWeight(700),
+//                                        color = Color(0xDE000000),
+//                                        textAlign = TextAlign.Start,
+//                                        fontFamily = sarasaUiSc
+//                                    )
+//                                )
+//
+//                                Text(
+//                                    text = "VCampus1",
+//                                    style = TextStyle(
+//                                        fontSize = 14.sp,
+//                                        lineHeight = 20.sp,
+//                                        fontWeight = FontWeight(400),
+//                                        color = Color(0x99000000),
+//                                        letterSpacing = 0.25.sp,
+//                                        fontFamily = sarasaUiSc
+//                                    )
+//                                )
                             }
 
                             Column(
@@ -130,12 +142,14 @@ fun LoginScene(
 
                                 Button(
                                     onClick = {
-                                        if (viewModel.login(username, password)) {
-                                            println("successful!")
-                                            onLogin()
-                                        } else {
-                                            println("failed!")
-                                        }
+                                        viewModel.login(username, password)
+
+//                                        if (viewModel.login(username, password)) {
+//                                            println("successful!")
+//                                            onLogin()
+//                                        } else {
+//                                            println("failed!")
+//                                        }
                                     }
                                 ) {
                                     Text("登录")

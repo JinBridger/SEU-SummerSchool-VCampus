@@ -2,7 +2,9 @@ package app.vcampus.client.repository
 
 import app.vcampus.server.entity.User
 import app.vcampus.client.gateway.AuthClient
+import app.vcampus.client.gateway.StudentStatusClient
 import app.vcampus.client.net.NettyHandler
+import app.vcampus.server.entity.Student
 
 object FakeRepository {
     private lateinit var handler: NettyHandler;
@@ -22,5 +24,9 @@ object FakeRepository {
         }
 
         return false
+    }
+
+    fun getSelf(): Student {
+        return StudentStatusClient.getSelf(handler)
     }
 }

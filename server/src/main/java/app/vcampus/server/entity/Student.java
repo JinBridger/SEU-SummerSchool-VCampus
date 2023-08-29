@@ -2,8 +2,11 @@ package app.vcampus.server.entity;
 
 import app.vcampus.server.enums.PoliticalStatus;
 import app.vcampus.server.enums.Status;
-import app.vcampus.server.utility.Request;
-import app.vcampus.server.utility.Response;
+import app.vcampus.server.enums.Gender;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+import app.vcampus.server.utility.DateUtility;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,18 @@ public class Student {
     @Column(nullable = false)
     public String studentNumber;
 
+    @Column(nullable = false)
+    public String familyName;
+
+    @Column(nullable = false)
+    public String givenName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    public Gender gender;
+    
+    public Date birthDate;
+
     public Integer major;
 
     public Integer school;
@@ -36,42 +51,40 @@ public class Student {
     @Column(nullable = false)
     public PoliticalStatus politicalStatus;
 
-    public static Student fromRequest(Request request) {
+    public static Student fromMap(Map<String, String> data) {
         try {
-            String cardNumber = request.getParams().get("cardNumber");
-            String studentNumber = request.getParams().get("studentNumber");
-            String major = request.getParams().get("major");
-            String school = request.getParams().get("school");
-            String birthPlace = request.getParams().get("birthPlace");
-            Status status = Status.valueOf(request.getParams().get("status"));
-            PoliticalStatus politicalStatus = PoliticalStatus.valueOf(request.getParams().get("politicalStatus"));
-
             Student student = new Student();
-            student.setCardNumber(Integer.valueOf(cardNumber));
-            student.setStudentNumber(studentNumber);
-            student.setMajor(Integer.valueOf(major));
-            student.setSchool(Integer.valueOf(school));
-            student.setBirthPlace(birthPlace);
-            student.setStatus(status);
-            student.setPoliticalStatus(politicalStatus);
+            student.setCardNumber(Integer.parseInt(data.get("cardNumber")));
+            student.setStudentNumber(data.get("studentNumber"));
+            student.setMajor(Integer.parseInt(data.get("major")));
+            student.setSchool(Integer.parseInt(data.get("school")));
+            student.setBirthPlace(data.get("birthPlace"));
+            student.setStatus(Status.valueOf(data.get("status")));
+            student.setPoliticalStatus(PoliticalStatus.valueOf(data.get("politicalStatus")));
+            student.setGivenName(data.get("givenName"));
+            student.setFamilyName(data.get("familyName"));
+            student.setBirthDate(DateUtility.toDate(data.get("birthDate")));
+            student.setGender(Gender.valueOf(data.get("gender")));
             return student;
         } catch (Exception e) {
-            log.warn("Failed to parse student from request", e);
+            log.warn("Failed to parse student from map: {}", data, e);
             return null;
         }
     }
 
-    public Response toResponse() {
-        Response response = Response.Common.ok();
-        response.setData(Map.of(
-            "cardNumber", cardNumber,
-            "studentNumber", studentNumber,
-            "major", major,
-            "school", school,
-            "birthPlace", birthPlace,
-            "status", status,
-            "politicalStatus", politicalStatus
-        ));
-        return response;
+    public Map<String, String> toMap() {
+        return Map.ofEntries(
+                Map.entry("cardNumber", getCardNumber().toString()),
+                Map.entry("studentNumber", getStudentNumber()),
+                Map.entry("major", getMajor().toString()),
+                Map.entry("school", getSchool().toString()),
+                Map.entry("birthPlace", getBirthPlace()),
+                Map.entry("status", getStatus().toString()),
+                Map.entry("politicalStatus", getPoliticalStatus().toString()),
+                Map.entry("givenName", getGivenName()),
+                Map.entry("familyName", getFamilyName()),
+                Map.entry("birthDate", DateUtility.fromDate(getBirthDate())),
+                Map.entry("gender", getGender().toString())
+        );
     }
 }

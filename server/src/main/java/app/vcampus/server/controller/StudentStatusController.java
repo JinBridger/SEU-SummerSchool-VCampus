@@ -18,7 +18,7 @@ public class StudentStatusController {
     */
     @RouteMapping(uri = "student/updateInfo")
     public Response updateInfo(Request request, org.hibernate.Session database) {
-        Student newStudent = Student.fromRequest(request);
+        Student newStudent = Student.fromMap(request.getParams());
 
         if (newStudent == null) {
             return Response.Common.badRequest();
@@ -36,6 +36,9 @@ public class StudentStatusController {
         student.setStatus(newStudent.getStatus());
         student.setBirthPlace(newStudent.getBirthPlace());
         student.setPoliticalStatus(newStudent.getPoliticalStatus());
+        student.setGivenName(newStudent.getGivenName());
+        student.setFamilyName(newStudent.getFamilyName());
+        student.setBirthDate(newStudent.getBirthDate());
         database.persist(student);
         tx.commit();
         return Response.Common.ok();
@@ -49,7 +52,7 @@ public class StudentStatusController {
      */
     @RouteMapping(uri = "student/addInfo")
     public Response addInfo(Request request, org.hibernate.Session database) {
-        Student newStudent = Student.fromRequest(request);
+        Student newStudent = Student.fromMap(request.getParams());
         if (newStudent == null) {
             return Response.Common.badRequest();
         }
@@ -115,6 +118,21 @@ public class StudentStatusController {
 
         System.out.println(student);
 
-        return student.toResponse();
+        return Response.Common.ok(student.toMap());
+    }
+
+    @RouteMapping(uri = "student/getSelf", role = "student")
+    public Response getSelf(Request request, org.hibernate.Session database) {
+        Integer cardNumber = request.getSession().getCardNum();
+
+        Student student = database.get(Student.class, cardNumber);
+
+        if (student == null) {
+            return Response.Common.error("no such card number");
+        }
+
+        System.out.println(student.toMap());
+
+        return Response.Common.ok(student.toMap());
     }
 }

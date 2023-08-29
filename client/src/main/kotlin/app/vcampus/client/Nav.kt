@@ -1,8 +1,7 @@
 package app.vcampus.client
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class NaviItem(
@@ -13,5 +12,8 @@ data class NaviItem(
 
 val Navis = arrayListOf(
     NaviItem("主页", "/home", Icons.Default.Home),
-    NaviItem("学籍管理", "/student_status", Icons.Default.Person)
+    NaviItem("学籍", "/student_status", Icons.Default.Person),
+    NaviItem("教务", "/home", Icons.Default.School),
+    NaviItem("图书馆", "/home", Icons.Default.Book),
+    NaviItem("超市", "/home", Icons.Default.ShoppingCart),
 )
