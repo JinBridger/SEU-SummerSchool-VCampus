@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.NavRail
 import app.vcampus.client.scene.components.TopBar
+import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.MainPanelViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
@@ -34,12 +35,12 @@ fun MainPanelScene(
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            TopBar("欢迎来到自助服务大厅！")
-        }
-    ) {
+//    Scaffold(
+//        scaffoldState = scaffoldState,
+//        topBar = {
+//            TopBar("欢迎来到自助服务大厅！")
+//        }
+//    ) {
         Row {
             NavRail(navi, "/home")
 
@@ -48,29 +49,11 @@ fun MainPanelScene(
                     LazyColumn {
                         item {
                             Spacer(Modifier.height(50.dp))
-                            Text(
-                                text = "晚上好，${FakeRepository.user.name}",
-                                style = TextStyle(
-                                    fontSize = 34.sp,
-                                    lineHeight = 36.sp,
-                                    fontWeight = FontWeight(400),
-                                    color = Color(0xDE000000),
-                                )
-                            )
-                            Text(
-                                text = "今天想做些什么？",
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                    lineHeight = 20.sp,
-                                    fontWeight = FontWeight(400),
-                                    color = Color(0x99000000),
-                                    letterSpacing = 0.25.sp,
-                                )
-                            )
+                            pageTitle("晚上好，${FakeRepository.user.name}", "今天想做些什么？")
                         }
                     }
                 }
             }
         }
-    }
+//    }
 }
