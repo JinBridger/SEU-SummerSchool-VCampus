@@ -1,6 +1,5 @@
 package app.vcampus.client.scene
 
-import DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,32 +7,27 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import app.vcampus.client.scene.components.*
 import app.vcampus.client.viewmodel.StudentStatusViewModel
-import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
-import java.text.SimpleDateFormat
-import java.util.*
 
 
-val studentStatusSideBarItem = listOf(
-    SideBarItem(true, "学籍信息", "", Icons.Default.Info),
-    SideBarItem(false, "我的学籍信息", "查看我的学籍信息", Icons.Default.Info)
-)
+
 
 
 @Composable
 fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
+    val studentStatusSideBarItem =
+        mutableStateListOf(
+            SideBarItem(true, "学籍信息", "", Icons.Default.Info, false),
+            SideBarItem(false, "我的学籍信息", "查看我的学籍信息", Icons.Default.Info, false)
+        )
+
+
     var familyName by viewModel.familyName
     var givenName by viewModel.givenName
     var gender by viewModel.gender
@@ -54,7 +48,12 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
     }
 
     Row(modifier = Modifier.fillMaxWidth()) {
-        SideBar(studentStatusSideBarItem)
+        SideBar(studentStatusSideBarItem) {
+            (0..<studentStatusSideBarItem.size).forEach { i ->
+                studentStatusSideBarItem[i] = studentStatusSideBarItem[i].copy(isChosen = false)
+            }
+            studentStatusSideBarItem[it] = studentStatusSideBarItem[it].copy(isChosen = true)
+        }
         Box(
             modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp).background(Color.White)
                 .padding(horizontal = 100.dp)

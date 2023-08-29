@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="13b06e68-b3fb-4616-99c1-c60110386ba5" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/Nav.kt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/Nav.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/LibraryScene.kt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/LibraryScene.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/ShopScene.kt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/ShopScene.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/StudentStatusScene.kt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/kotlin/app/vcampus/client/scene/StudentStatusScene.kt" afterDir="false" />

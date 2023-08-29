@@ -14,22 +14,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.*
-import app.vcampus.client.viewmodel.LibraryViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
-val shopSideBarItem = listOf(
-    SideBarItem(true, "购物", "", Icons.Default.Info),
-    SideBarItem(false, "购物页面", "选择商品", Icons.Default.ShoppingBasket),
 
-    SideBarItem(true, "订单相关", "", Icons.Default.Info),
-    SideBarItem(false, "我的订单", "查看所有订单", Icons.Default.FormatListBulleted),
-)
 
 @Composable
 fun ShopStatusForUser(viewModel: ShopViewModel) {
+    val shopSideBarItem = mutableStateListOf(
+        SideBarItem(true, "购物", "", Icons.Default.Info, false),
+        SideBarItem(false, "购物页面", "选择商品", Icons.Default.ShoppingBasket, false),
+
+        SideBarItem(true, "订单相关", "", Icons.Default.Info, false),
+        SideBarItem(false, "我的订单", "查看所有订单", Icons.Default.FormatListBulleted, false),
+    )
+
     Row(modifier = Modifier.fillMaxWidth()) {
-        SideBar(shopSideBarItem)
+        SideBar(shopSideBarItem) {
+            (0..<shopSideBarItem.size).forEach { i ->
+                shopSideBarItem[i] = shopSideBarItem[i].copy(isChosen = false)
+            }
+            shopSideBarItem[it] = shopSideBarItem[it].copy(isChosen = true)
+        }
         Box(
             modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp)
                 .background(
