@@ -3,6 +3,7 @@ package app.vcampus.client.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.server.entity.Student
+import app.vcampus.server.utility.DateUtility
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -37,6 +38,15 @@ class StudentStatusViewModel() : ViewModel() {
 
                 cardNumber.value = it.cardNumber.toString()
                 studentNumber.value = it.studentNumber.toString()
+                familyName.value = it.familyName
+                givenName.value = it.givenName
+                gender.value = it.getGender().toString()
+                birthDate.value = DateUtility.fromDate(it.birthDate)
+                major.value = it.major.toString()
+                school.value = it.school.toString()
+                birthPlace.value = it.birthPlace
+                politicalStatus.value = it.politicalStatus.toString()
+                status.value = it.status.toString()
             }
         }
     }

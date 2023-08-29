@@ -131,7 +131,7 @@ public class StudentStatusController {
             return Response.Common.error("no such card number");
         }
 
-        System.out.println(student);
+        System.out.println(student.toMap());
 
         return Response.Common.ok(student.toMap());
     }
