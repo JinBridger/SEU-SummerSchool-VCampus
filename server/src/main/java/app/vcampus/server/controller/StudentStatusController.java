@@ -36,6 +36,9 @@ public class StudentStatusController {
         student.setStatus(newStudent.getStatus());
         student.setBirthPlace(newStudent.getBirthPlace());
         student.setPoliticalStatus(newStudent.getPoliticalStatus());
+        student.setGivenName(newStudent.getGivenName());
+        student.setFamilyName(newStudent.getFamilyName());
+        student.setBirthDate(newStudent.getBirthDate());
         database.persist(student);
         tx.commit();
         return Response.Common.ok();

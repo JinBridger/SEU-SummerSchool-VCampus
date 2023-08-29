@@ -2,8 +2,10 @@ package app.vcampus.server.entity;
 
 import app.vcampus.server.enums.PoliticalStatus;
 import app.vcampus.server.enums.Status;
-import app.vcampus.server.utility.Request;
-import app.vcampus.server.utility.Response;
+import app.vcampus.server.enums.Gender;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,17 @@ public class Student {
     @Column(nullable = false)
     public String studentNumber;
 
+    @Column(nullable = false)
+    public String familyName;
+
+    @Column(nullable = false)
+    public String givenName;
+
+    @Column(nullable = false)
+    public Gender gender;
+    
+    public String birthDate;
+
     public Integer major;
 
     public Integer school;
@@ -36,6 +49,7 @@ public class Student {
     @Column(nullable = false)
     public PoliticalStatus politicalStatus;
 
+
     public static Student fromMap(Map<String, String> data) {
         try {
             Student student = new Student();
@@ -46,6 +60,9 @@ public class Student {
             student.setBirthPlace(data.get("birthPlace"));
             student.setStatus(Status.valueOf(data.get("status")));
             student.setPoliticalStatus(PoliticalStatus.valueOf(data.get("politicalStatus")));
+            student.setGivenName(data.get("givenName"));
+            student.setFamilyName(data.get("familyName"));
+            student.setBirthDate(data.get("birthDate"));
             return student;
         } catch (Exception e) {
             log.warn("Failed to parse student from map: {}", data, e);
@@ -61,7 +78,10 @@ public class Student {
             "school", getSchool().toString(),
             "birthPlace", getBirthPlace(),
             "status", getStatus().toString(),
-            "politicalStatus", getPoliticalStatus().toString()
+            "politicalStatus", getPoliticalStatus().toString(),
+            "givenName",getGivenName().toString(),
+            "familyName",getFamilyName().toString(),
+            "birthDate",getBirthDate().toString()
         );
     }
 }
