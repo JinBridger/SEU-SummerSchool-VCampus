@@ -1,0 +1,31 @@
+package app.vcampus.client.scene.components
+
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+
+@Composable
+fun pageTitle(heading: String, caption: String) {
+    Text(
+        text = heading,
+        style = TextStyle(
+            fontSize = 34.sp,
+            lineHeight = 36.sp,
+            fontWeight = FontWeight(400),
+            color = Color(0xDE000000),
+        )
+    )
+    Text(
+        text = caption,
+        style = TextStyle(
+            fontSize = 14.sp,
+            lineHeight = 20.sp,
+            fontWeight = FontWeight(400),
+            color = Color(0x99000000),
+            letterSpacing = 0.25.sp,
+        )
+    )
+}

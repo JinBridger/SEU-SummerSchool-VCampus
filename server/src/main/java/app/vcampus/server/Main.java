@@ -2,6 +2,7 @@ package app.vcampus.server;
 
 import app.vcampus.server.controller.AuthController;
 import app.vcampus.server.controller.IndexController;
+import app.vcampus.server.controller.LibraryBookController;
 import app.vcampus.server.controller.StudentStatusController;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
@@ -14,6 +15,7 @@ public class Main {
         router.addController(AuthController.class);
         router.addController(IndexController.class);
         router.addController(StudentStatusController.class);
+        router.addController(LibraryBookController.class);
 
         Session database = Database.init();
 
