@@ -1,5 +1,6 @@
 package app.vcampus.client.scene
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
@@ -43,14 +44,16 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
                         )
                         .padding(horizontal = 100.dp)
         ) {
-            when (currentSubscene.value) {
-                "" -> blankSubscene()
-                "查询图书" -> searchBookSubscene(viewModel)
-                "我的书籍" -> myBookSubscene(viewModel)
-                "预约还书" -> reserveReturnBookSubscene(viewModel)
-                "添加图书" -> addBookSubscene(viewModel)
-                "修改图书" -> modifyBookSubscene(viewModel)
-                "办理借还书" -> returnBorrowSubscene(viewModel)
+            Crossfade(currentSubscene.value) {
+                when (it) {
+                    "" -> blankSubscene()
+                    "查询图书" -> searchBookSubscene(viewModel)
+                    "我的书籍" -> myBookSubscene(viewModel)
+                    "预约还书" -> reserveReturnBookSubscene(viewModel)
+                    "添加图书" -> addBookSubscene(viewModel)
+                    "修改图书" -> modifyBookSubscene(viewModel)
+                    "办理借还书" -> returnBorrowSubscene(viewModel)
+                }
             }
         }
     }

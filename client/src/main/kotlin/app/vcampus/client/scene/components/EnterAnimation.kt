@@ -14,7 +14,7 @@ fun enterAnimation(content: @Composable () -> Unit) {
             ) + expandHorizontally(
                     expandFrom = Alignment.End
             ),
-            exit = slideOutHorizontally() + shrinkHorizontally() + fadeOut(),
+            exit = slideOutHorizontally() + shrinkHorizontally(),
             content = content,
             initiallyVisible = false
     )

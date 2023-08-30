@@ -1,5 +1,6 @@
 package app.vcampus.client.scene
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
@@ -41,13 +42,15 @@ fun ShopStatusForUser(viewModel: ShopViewModel) {
                         )
                         .padding(horizontal = 100.dp)
         ) {
-            when (currentSubscene.value) {
-                "" -> blankSubscene()
-                "购物页面" -> selectItemSubscene(viewModel)
-                "我的订单" -> myOrderSubscene(viewModel)
-                "添加商品" -> addItemSubscene(viewModel)
-                "修改商品" -> modifyItemSubscene(viewModel)
-                "查看后台信息" -> dashboardSubscene(viewModel)
+            Crossfade(currentSubscene.value) {
+                when (it) {
+                    "" -> blankSubscene()
+                    "购物页面" -> selectItemSubscene(viewModel)
+                    "我的订单" -> myOrderSubscene(viewModel)
+                    "添加商品" -> addItemSubscene(viewModel)
+                    "修改商品" -> modifyItemSubscene(viewModel)
+                    "查看后台信息" -> dashboardSubscene(viewModel)
+                }
             }
         }
     }

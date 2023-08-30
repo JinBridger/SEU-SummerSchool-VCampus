@@ -1,5 +1,6 @@
 package app.vcampus.client.scene
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
@@ -9,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBar
 import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.blankSubscene
@@ -20,6 +20,7 @@ import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
     val studentStatusSideBarItem = viewModel.studentStatusSideBarItem
@@ -38,10 +39,12 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
         Box(modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
                 offsetX = 3.dp, blurRadius = 10.dp).background(
                 Color.White).padding(horizontal = 100.dp)) {
-            when (currentSubscene.value) {
-                "" -> blankSubscene()
-                "我的学籍信息" -> studentStatusSubscene(viewModel)
-                "修改学籍信息" -> modifyStudentStatusSubscene(viewModel)
+            Crossfade(currentSubscene.value){
+                when (it) {
+                    "" -> blankSubscene()
+                    "我的学籍信息" -> studentStatusSubscene(viewModel)
+                    "修改学籍信息" -> modifyStudentStatusSubscene(viewModel)
+                }
             }
         }
     }

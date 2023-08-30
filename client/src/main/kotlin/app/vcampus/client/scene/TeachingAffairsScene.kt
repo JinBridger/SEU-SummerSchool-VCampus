@@ -1,5 +1,6 @@
 package app.vcampus.client.scene
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
@@ -43,16 +44,18 @@ fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
                         )
                         .padding(horizontal = 100.dp)
         ) {
-            when (currentSubscene.value) {
-                "" -> blankSubscene()
-                "我的课表" -> myScheduleSubscene(viewModel)
-                "我的成绩" -> myGradeSubscene(viewModel)
-                "我的课堂" -> myClassSubscene(viewModel)
-                "评教结果" -> evaluateResultSubscene(viewModel)
-                "选课" -> chooseClassSubscene(viewModel)
-                "评教" -> evaluateTeacherSubscene(viewModel)
-                "排课" -> arrangeClassSubscene(viewModel)
-                "录入成绩" -> enterScoreSubscene(viewModel)
+            Crossfade(currentSubscene.value) {
+                when (it) {
+                    "" -> blankSubscene()
+                    "我的课表" -> myScheduleSubscene(viewModel)
+                    "我的成绩" -> myGradeSubscene(viewModel)
+                    "我的课堂" -> myClassSubscene(viewModel)
+                    "评教结果" -> evaluateResultSubscene(viewModel)
+                    "选课" -> chooseClassSubscene(viewModel)
+                    "评教" -> evaluateTeacherSubscene(viewModel)
+                    "排课" -> arrangeClassSubscene(viewModel)
+                    "录入成绩" -> enterScoreSubscene(viewModel)
+                }
             }
 //            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
 //
