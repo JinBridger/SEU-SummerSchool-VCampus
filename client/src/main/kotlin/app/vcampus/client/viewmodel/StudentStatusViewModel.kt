@@ -13,7 +13,9 @@ import kotlinx.coroutines.launch
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
-class StudentStatusViewModel(identity: List<String>) : ViewModel() {
+class StudentStatusViewModel() : ViewModel() {
+    val identity = FakeRepository.user.roles.toList()
+
     val familyName = mutableStateOf("")
     val givenName = mutableStateOf("")
     val gender = mutableStateOf("")

@@ -14,10 +14,7 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.SideBar
 import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.blankSubscene
-import app.vcampus.client.scene.subscene.teachingaffairs.chooseClassSubscene
-import app.vcampus.client.scene.subscene.teachingaffairs.evaluateTeacherSubscene
-import app.vcampus.client.scene.subscene.teachingaffairs.myGradeSubscene
-import app.vcampus.client.scene.subscene.teachingaffairs.myScheduleSubscene
+import app.vcampus.client.scene.subscene.teachingaffairs.*
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
@@ -26,7 +23,7 @@ import moe.tlaster.precompose.viewmodel.viewModel
 @Composable
 fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
     val teachingAffairsSideBarItem = viewModel.teachingAffairsSideBarItem
-    val currentSubscene = remember { mutableStateOf(-1) }
+    val currentSubscene = remember { mutableStateOf("") }
 
     Row(modifier = Modifier.fillMaxWidth()) {
         SideBar(teachingAffairsSideBarItem) {
@@ -36,7 +33,7 @@ fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
             }
             teachingAffairsSideBarItem[it] = teachingAffairsSideBarItem[it].copy(
                     isChosen = true)
-            currentSubscene.value = it
+            currentSubscene.value = teachingAffairsSideBarItem[it].heading
         }
         Box(
                 modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
@@ -47,11 +44,15 @@ fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
                         .padding(horizontal = 100.dp)
         ) {
             when (currentSubscene.value) {
-                -1 -> blankSubscene()
-                1 -> myScheduleSubscene(viewModel)
-                2 -> myGradeSubscene(viewModel)
-                4 -> chooseClassSubscene(viewModel)
-                5 -> evaluateTeacherSubscene(viewModel)
+                "" -> blankSubscene()
+                "我的课表" -> myScheduleSubscene(viewModel)
+                "我的成绩" -> myGradeSubscene(viewModel)
+                "我的课堂" -> myClassSubscene(viewModel)
+                "评教结果" -> evaluateResultSubscene(viewModel)
+                "选课" -> chooseClassSubscene(viewModel)
+                "评教" -> evaluateTeacherSubscene(viewModel)
+                "排课" -> arrangeClassSubscene(viewModel)
+                "录入成绩" -> enterScoreSubscene(viewModel)
             }
 //            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
 //

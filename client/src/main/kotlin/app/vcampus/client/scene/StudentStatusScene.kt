@@ -52,7 +52,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
 @Composable
 fun StudentStatusScene(navi: Navigator) {
     val viewModel = viewModel(StudentStatusViewModel::class, listOf()) {
-        StudentStatusViewModel(FakeRepository.user.roles.toList())
+        StudentStatusViewModel()
     }
 
     StudentStatusForStudent(viewModel)
