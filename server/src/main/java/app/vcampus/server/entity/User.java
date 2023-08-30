@@ -11,7 +11,7 @@ import java.util.Map;
 @Data
 @Slf4j
 @Table(name = "user")
-public class User {
+public class User implements IEntity {
     @Id
     @Column(name = "card_number")
     public Integer cardNum;
