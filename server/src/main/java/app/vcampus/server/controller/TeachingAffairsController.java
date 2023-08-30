@@ -1,6 +1,7 @@
 package app.vcampus.server.controller;
 
 
+import app.vcampus.server.entity.Class;
 import app.vcampus.server.entity.Course;
 import app.vcampus.server.entity.User;
 import app.vcampus.server.utility.Request;
@@ -34,10 +35,33 @@ public class TeachingAffairsController {
         return Response.Common.ok();
     }
 
+//    @RouteMapping(uri="class/searchClass")
+//    public Response searchClass(Request request,org.hibernate.Session database)
+//    {
+//        String courseId=request.getParams().get("courseId");
+//        if(courseId==null){
+//            return Response.Common.error("course id could not be empty");
+//        }
+//
+//        Class class
+//    }
+
     @RouteMapping(uri = "class/addClass")
     public  Response addClass(Request request,org.hibernate.Session database)
     {
-        return null;
+        Class newclass= Class.fromMap(request.getParams());
+        if(newclass==null)return Response.Common.badRequest();
+
+        User user=database.get(User.class,newclass.getCourseId());
+        if(user==null){
+            return Response.Common.error("not found");
+        }
+
+        Transaction tx=database.beginTransaction();
+        database.persist(newclass);
+        tx.commit();
+
+        return Response.Common.ok();
     }
 
 
