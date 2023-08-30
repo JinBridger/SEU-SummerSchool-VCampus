@@ -106,24 +106,24 @@ public class StudentStatusController {
     Test passed on 2023/08/27
     Test:{"uri":"student/searchInfo","params":{"cardNumber":"250"}}
     */
-//    @RouteMapping(uri = "student/searchInfo")
-//    public Response searchInfo(Request request, org.hibernate.Session database) {
-//        String cardNumber = request.getParams().get("cardNumber");
-//
-//        if (cardNumber == null) {
-//            return Response.Common.error("card number cannot be empty");
-//        }
-//
-//        Student student = database.get(Student.class, Integer.parseInt(cardNumber));
-//
-//        if (student == null) {
-//            return Response.Common.error("no such card number");
-//        }
-//
-//        System.out.println(student);
-//
-//        return Response.Common.ok(student.toMap());
-//    }
+    @RouteMapping(uri = "student/searchInfo")
+    public Response searchInfo(Request request, org.hibernate.Session database) {
+        String cardNumber = request.getParams().get("cardNumber");
+
+        if (cardNumber == null) {
+            return Response.Common.error("card number cannot be empty");
+        }
+
+        Student student = database.get(Student.class, Integer.parseInt(cardNumber));
+
+        if (student == null) {
+            return Response.Common.error("no such card number");
+        }
+
+        System.out.println(student);
+
+        return Response.Common.ok(student.toMap());
+    }
 
     @RouteMapping(uri = "student/getSelf", role = "student")
     public Response getSelf(Request request, org.hibernate.Session database) {
