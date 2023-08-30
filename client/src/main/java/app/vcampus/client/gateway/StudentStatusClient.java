@@ -1,11 +1,9 @@
 package app.vcampus.client.gateway;
 
 import app.vcampus.server.entity.Student;
-import app.vcampus.server.enums.PoliticalStatus;
-import app.vcampus.server.enums.Status;
 import app.vcampus.client.net.NettyHandler;
-import app.vcampus.client.utility.Request;
-import app.vcampus.client.utility.Response;
+import app.vcampus.server.utility.Request;
+import app.vcampus.server.utility.Response;
 
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;

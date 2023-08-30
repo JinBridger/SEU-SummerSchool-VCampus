@@ -1,7 +1,7 @@
 package app.vcampus.client.net;
 
-import app.vcampus.client.utility.Request;
-import app.vcampus.client.utility.Response;
+import app.vcampus.server.utility.Request;
+import app.vcampus.server.utility.Response;
 import com.google.gson.Gson;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
