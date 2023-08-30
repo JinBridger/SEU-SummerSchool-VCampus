@@ -7,8 +7,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.*
 import app.vcampus.client.scene.subscene.blankSubscene
+import app.vcampus.client.scene.subscene.studentstatus.modifyStudentStatusSubscene
 import app.vcampus.client.scene.subscene.studentstatus.studentStatusSubscene
 import app.vcampus.client.viewmodel.StudentStatusViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -18,7 +20,7 @@ import moe.tlaster.precompose.viewmodel.viewModel
 @Composable
 fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
     val studentStatusSideBarItem = viewModel.studentStatusSideBarItem
-    val currentSubscene = remember { mutableStateOf(-1) }
+    val currentSubscene = remember { mutableStateOf("") }
 
     Row(modifier = Modifier.fillMaxWidth()) {
         SideBar(studentStatusSideBarItem) {
@@ -26,12 +28,13 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
                 studentStatusSideBarItem[i] = studentStatusSideBarItem[i].copy(isChosen = false)
             }
             studentStatusSideBarItem[it] = studentStatusSideBarItem[it].copy(isChosen = true)
-            currentSubscene.value = it
+            currentSubscene.value = studentStatusSideBarItem[it].heading
         }
         Box(modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp).background(Color.White).padding(horizontal = 100.dp)) {
             when (currentSubscene.value) {
-                -1 -> blankSubscene()
-                1 -> studentStatusSubscene(viewModel)
+                "" -> blankSubscene()
+                "我的学籍信息" -> studentStatusSubscene(viewModel)
+                "修改学籍信息" -> modifyStudentStatusSubscene(viewModel)
             }
         }
     }
@@ -42,7 +45,7 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
 @Composable
 fun StudentStatusScene(navi: Navigator) {
     val viewModel = viewModel(StudentStatusViewModel::class, listOf()) {
-        StudentStatusViewModel()
+        StudentStatusViewModel(FakeRepository.user.roles.toList())
     }
 
     StudentStatusForStudent(viewModel)
