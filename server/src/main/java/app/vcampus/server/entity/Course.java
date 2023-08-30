@@ -48,13 +48,13 @@ public class Course {
     }
 
     public Map<String,String> toMap() {
-        return Map.of(
-                "uuid",getUuid().toString(),
-                "courseId",getCourseId().toString(),
-                "courseName",getCourseName(),
-                "school",getSchool().toString(),
-                "credit", Float.toString(getCredit())
-        );
+        return Map.ofEntries(
+                Map.entry("uuid",getUuid().toString()),
+                Map.entry("courseId",getCourseId().toString()),
+                Map.entry("courseName",getCourseName()),
+                Map.entry("school",getSchool().toString()),
+                Map.entry("credit", Float.toString(getCredit()))
+                );
     }
 
 }
