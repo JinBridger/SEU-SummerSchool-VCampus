@@ -28,10 +28,10 @@ public class StoreController {
         return Response.Common.ok(storeItem.toMap());
     }
 
-    @RouteMapping(uri="storeItem/selectItem")
-    public Response selectItem(Request request,org.hibernate.Session database){
-        
-    }
+//    @RouteMapping(uri="storeItem/selectItem")
+//    public Response selectItem(Request request,org.hibernate.Session database){
+//
+//    }
 
     @RouteMapping(uri="storeItem/addItem")
     public Response addItem(Request request,org.hibernate.Session database){
