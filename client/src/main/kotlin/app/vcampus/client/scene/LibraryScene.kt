@@ -11,6 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.*
+import app.vcampus.client.scene.subscene.blankSubscene
+import app.vcampus.client.scene.subscene.library.myBookSubscene
+import app.vcampus.client.scene.subscene.library.reserveReturnBookSubscene
+import app.vcampus.client.scene.subscene.library.searchBookSubscene
+import app.vcampus.client.scene.subscene.studentstatus.studentStatusSubscene
 import app.vcampus.client.viewmodel.LibraryViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
@@ -20,14 +25,8 @@ import moe.tlaster.precompose.viewmodel.viewModel
 
 @Composable
 fun LibraryStatusForUser(viewModel: LibraryViewModel) {
-    val librarySideBarItem = mutableStateListOf(
-        SideBarItem(true, "查询", "", Icons.Default.Info, false),
-        SideBarItem(false, "查询图书", "查找图书馆藏书", Icons.Default.Search, false),
-        SideBarItem(false, "我的书籍", "查看已借阅书籍", Icons.Default.MenuBook, false),
-
-        SideBarItem(true, "借还相关", "", Icons.Default.Info, false),
-        SideBarItem(false, "预约还书", "预约还书时间", Icons.Default.Event, false),
-    )
+    val librarySideBarItem = viewModel.librarySideBarItem
+    val currentSubscene = remember { mutableStateOf(-1) }
 
     Row(modifier = Modifier.fillMaxWidth()) {
         SideBar(librarySideBarItem) {
@@ -35,6 +34,7 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
                 librarySideBarItem[i] = librarySideBarItem[i].copy(isChosen = false)
             }
             librarySideBarItem[it] = librarySideBarItem[it].copy(isChosen = true)
+            currentSubscene.value = it
         }
         Box(
             modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp)
@@ -43,14 +43,11 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
                 )
                 .padding(horizontal = 100.dp)
         ) {
-            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-
-                LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    item {
-                        Spacer(Modifier.height(80.dp))
-                        pageTitle("图书馆", "查找图书")
-                    }
-                }
+            when (currentSubscene.value) {
+                -1 -> blankSubscene()
+                1 -> searchBookSubscene(viewModel)
+                2 -> myBookSubscene(viewModel)
+                4 -> reserveReturnBookSubscene(viewModel)
             }
         }
     }

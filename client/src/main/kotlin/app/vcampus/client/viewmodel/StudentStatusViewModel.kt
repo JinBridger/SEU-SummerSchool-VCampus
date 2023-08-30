@@ -1,7 +1,11 @@
 package app.vcampus.client.viewmodel
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import app.vcampus.client.repository.FakeRepository
+import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.Student
 import app.vcampus.server.utility.DateUtility
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +30,8 @@ class StudentStatusViewModel() : ViewModel() {
     val status = mutableStateOf("")
 
     val student = mutableStateOf(Student())
+
+    val studentStatusSideBarItem = mutableStateListOf(SideBarItem(true, "学籍信息", "", Icons.Default.Info, false), SideBarItem(false, "我的学籍信息", "查看我的学籍信息", Icons.Default.Info, false))
 
     init {
         getStudentStatus()

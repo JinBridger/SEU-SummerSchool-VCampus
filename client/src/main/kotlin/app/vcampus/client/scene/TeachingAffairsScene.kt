@@ -2,32 +2,27 @@ package app.vcampus.client.scene
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.*
+import app.vcampus.client.scene.subscene.blankSubscene
+import app.vcampus.client.scene.subscene.studentstatus.studentStatusSubscene
+import app.vcampus.client.scene.subscene.teachingaffairs.chooseClassSubscene
+import app.vcampus.client.scene.subscene.teachingaffairs.evaluateTeacherSubscene
+import app.vcampus.client.scene.subscene.teachingaffairs.myGradeSubscene
+import app.vcampus.client.scene.subscene.teachingaffairs.myScheduleSubscene
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
 
-
 @Composable
 fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
-    val teachingAffairsSideBarItem = mutableStateListOf(
-        SideBarItem(true, "教务信息", "", Icons.Default.Info, false),
-        SideBarItem(false, "我的课表", "查看个人课表", Icons.Default.CalendarMonth, false),
-        SideBarItem(false, "我的成绩", "查看个人成绩单", Icons.Default.FileOpen, false),
-
-        SideBarItem(true, "教务工具", "", Icons.Default.Info, false),
-        SideBarItem(false, "选课", "进入选课页面", Icons.Default.Checklist, false),
-        SideBarItem(false, "评教", "进入评教页面", Icons.Default.Diversity1, false)
-    )
+    val teachingAffairsSideBarItem = viewModel.teachingAffairsSideBarItem
+    val currentSubscene = remember { mutableStateOf(-1) }
 
     Row(modifier = Modifier.fillMaxWidth()) {
         SideBar(teachingAffairsSideBarItem) {
@@ -35,23 +30,31 @@ fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
                 teachingAffairsSideBarItem[i] = teachingAffairsSideBarItem[i].copy(isChosen = false)
             }
             teachingAffairsSideBarItem[it] = teachingAffairsSideBarItem[it].copy(isChosen = true)
+            currentSubscene.value = it
         }
         Box(
-            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp)
-                .background(
-                    Color.White
-                )
-                .padding(horizontal = 100.dp)
+                modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp)
+                        .background(
+                                Color.White
+                        )
+                        .padding(horizontal = 100.dp)
         ) {
-            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-
-                LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    item {
-                        Spacer(Modifier.height(80.dp))
-                        pageTitle("教务处", "教务信息")
-                    }
-                }
+            when (currentSubscene.value) {
+                -1 -> blankSubscene()
+                1 -> myScheduleSubscene(viewModel)
+                2 -> myGradeSubscene(viewModel)
+                4 -> chooseClassSubscene(viewModel)
+                5 -> evaluateTeacherSubscene(viewModel)
             }
+//            Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+//
+//                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+//                    item {
+//                        Spacer(Modifier.height(80.dp))
+//                        pageTitle("教务处", "教务信息")
+//                    }
+//                }
+//            }
         }
     }
 }
@@ -59,7 +62,7 @@ fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
 @ExperimentalMaterialApi
 @Composable
 fun TeachingAffairsScene(
-    navi: Navigator
+        navi: Navigator
 ) {
     val viewModel = viewModel(TeachingAffairsViewModel::class, listOf()) {
         TeachingAffairsViewModel()
