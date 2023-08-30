@@ -46,29 +46,17 @@ class TeachingAffairsViewModel() : ViewModel() {
                     Icons.Default.Checklist, false),
                     SideBarItem(false, "评教", "进入评教页面",
                             Icons.Default.Diversity1, false))
+
             "affairs_staff" -> listOf(
-                    SideBarItem(false, "排课", "进行排课", Icons.Default.EditCalendar, false),
-                    SideBarItem(false, "录入成绩", "录入课程成绩", Icons.Default.HistoryEdu, false)
+                    SideBarItem(false, "排课", "进行排课",
+                            Icons.Default.EditCalendar, false),
+                    SideBarItem(false, "录入成绩", "录入课程成绩",
+                            Icons.Default.HistoryEdu, false)
             )
+
             else -> emptyList()
         }
     }
 
     val teachingAffairsSideBarItem = sideBarContent.toMutableStateList()
-
-
-//    val teachingAffairsSideBarItem = mutableStateListOf(
-//            SideBarItem(true, "教务信息", "", Icons.Default.Info, false),
-//            SideBarItem(false, "我的课表", "查看个人课表",
-//                    Icons.Default.CalendarMonth, false),
-//            SideBarItem(false, "我的成绩", "查看个人成绩单",
-//                    Icons.Default.FileOpen, false),
-//
-//            SideBarItem(true, "教务工具", "", Icons.Default.Info, false),
-//            SideBarItem(false, "选课", "进入选课页面", Icons.Default.Checklist,
-//                    false),
-//            SideBarItem(false, "评教", "进入评教页面", Icons.Default.Diversity1,
-//                    false)
-//    )
-
 }

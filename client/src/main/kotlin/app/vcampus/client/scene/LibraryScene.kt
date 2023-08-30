@@ -14,9 +14,7 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.SideBar
 import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.blankSubscene
-import app.vcampus.client.scene.subscene.library.myBookSubscene
-import app.vcampus.client.scene.subscene.library.reserveReturnBookSubscene
-import app.vcampus.client.scene.subscene.library.searchBookSubscene
+import app.vcampus.client.scene.subscene.library.*
 import app.vcampus.client.viewmodel.LibraryViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
@@ -25,7 +23,7 @@ import moe.tlaster.precompose.viewmodel.viewModel
 @Composable
 fun LibraryStatusForUser(viewModel: LibraryViewModel) {
     val librarySideBarItem = viewModel.librarySideBarItem
-    val currentSubscene = remember { mutableStateOf(-1) }
+    val currentSubscene = remember { mutableStateOf("") }
 
     Row(modifier = Modifier.fillMaxWidth()) {
         SideBar(librarySideBarItem) {
@@ -35,7 +33,7 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
             }
             librarySideBarItem[it] = librarySideBarItem[it].copy(
                     isChosen = true)
-            currentSubscene.value = it
+            currentSubscene.value = librarySideBarItem[it].heading
         }
         Box(
                 modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
@@ -46,10 +44,13 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
                         .padding(horizontal = 100.dp)
         ) {
             when (currentSubscene.value) {
-                -1 -> blankSubscene()
-                1 -> searchBookSubscene(viewModel)
-                2 -> myBookSubscene(viewModel)
-                4 -> reserveReturnBookSubscene(viewModel)
+                "" -> blankSubscene()
+                "查询图书" -> searchBookSubscene(viewModel)
+                "我的书籍" -> myBookSubscene(viewModel)
+                "预约还书" -> reserveReturnBookSubscene(viewModel)
+                "添加图书" -> addBookSubscene(viewModel)
+                "修改图书" -> modifyBookSubscene(viewModel)
+                "办理借还书" -> returnBorrowSubscene(viewModel)
             }
         }
     }
