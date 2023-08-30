@@ -34,6 +34,11 @@ public class TeachingAffairsController {
         return Response.Common.ok();
     }
 
+    @RouteMapping(uri = "class/addClass")
+    public  Response addClass(Request request,org.hibernate.Session database)
+    {
+        return null;
+    }
 
 
 
