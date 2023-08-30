@@ -91,7 +91,6 @@ public class StudentStatusController {
         Transaction tx = database.beginTransaction();
         database.remove(student);
         tx.commit();
-
         return Response.Common.ok();
     }
 

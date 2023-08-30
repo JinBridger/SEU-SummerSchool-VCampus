@@ -2,7 +2,7 @@ package app.vcampus.client;
 
 import app.vcampus.client.net.NettyClient;
 import app.vcampus.client.net.NettyHandler;
-import app.vcampus.client.utility.Request;
+import app.vcampus.server.utility.Request;
 import io.netty.channel.Channel;
 
 import java.util.concurrent.ExecutionException;

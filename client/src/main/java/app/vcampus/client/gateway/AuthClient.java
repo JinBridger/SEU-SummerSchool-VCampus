@@ -1,17 +1,13 @@
 package app.vcampus.client.gateway;
 
 import app.vcampus.server.entity.User;
-import app.vcampus.server.enums.Gender;
 import app.vcampus.client.net.NettyHandler;
-import app.vcampus.client.utility.Request;
-import app.vcampus.client.utility.Response;
+import app.vcampus.server.utility.Request;
+import app.vcampus.server.utility.Response;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static com.google.gson.internal.$Gson$Types.arrayOf;
 
 public class AuthClient {
     public static User login(NettyHandler handler, String username, String password) {

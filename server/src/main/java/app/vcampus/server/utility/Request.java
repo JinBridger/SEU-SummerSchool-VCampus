@@ -7,10 +7,10 @@ import java.util.UUID;
 
 @Data
 public class Request {
-    UUID id;
+    UUID id = UUID.randomUUID();
 
     String uri;
     Map<String, String> params;
-    Map<String, Integer> params1;
+
     Session session;
 }
