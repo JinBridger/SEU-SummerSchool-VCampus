@@ -5,11 +5,13 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Typography
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ModifierInfo
 import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,14 +33,14 @@ fun App() {
     val navigator = rememberNavigator()
     val currentPos by navigator.currentEntry.collectAsState(initial = null)
     MaterialTheme(typography = sarasaTypography) {
-        Row {
+        Row(modifier = Modifier.background(Color(0xFFEEEEEE))) {
             if (currentPos != null) {
                 if (currentPos!!.path != "/login")
                     NavRail(navigator = navigator, currentPos = currentPos!!.path)
             }
             NavHost(
-                navigator = navigator,
-                initialRoute = "/login",
+                    navigator = navigator,
+                    initialRoute = "/login",
             ) {
                 scene("/login") {
                     LoginScene(onLogin = {
