@@ -19,7 +19,7 @@ public class Course {
     public UUID uuid;
 
     @Column(nullable = false)
-    public Integer courseId;
+    public String courseId;
 
     @Column(nullable = false)
     public String courseName;
@@ -29,32 +29,30 @@ public class Course {
 
     public float credit;//credit
 
-    public static Course fromMap(Map<String,String> data)
-    {
+    public static Course fromMap(Map<String, String> data) {
         try {
-            Course course=new Course();
+            Course course = new Course();
             course.setUuid(UUID.fromString(data.get("uuid")));
-            course.setCourseId(Integer.parseInt(data.get("courseId")));
+            course.setCourseId(data.get("courseId"));
             course.setCourseName(data.get("courseName"));
             course.setSchool(Integer.parseInt("school"));
             course.setCredit(Float.parseFloat(data.get("credit")));
             return course;
-        }
-        catch(Exception e) {
-            log.warn("Failed to parse from map: {}",data,e);
+        } catch (Exception e) {
+            log.warn("Failed to parse from map: {}", data, e);
             return null;
         }
 
     }
 
-    public Map<String,String> toMap() {
+    public Map<String, String> toMap() {
         return Map.ofEntries(
-                Map.entry("uuid",getUuid().toString()),
-                Map.entry("courseId",getCourseId().toString()),
-                Map.entry("courseName",getCourseName()),
-                Map.entry("school",getSchool().toString()),
+                Map.entry("uuid", getUuid().toString()),
+                Map.entry("courseId", getCourseId()),
+                Map.entry("courseName", getCourseName()),
+                Map.entry("school", getSchool().toString()),
                 Map.entry("credit", Float.toString(getCredit()))
-                );
+        );
     }
 
 }

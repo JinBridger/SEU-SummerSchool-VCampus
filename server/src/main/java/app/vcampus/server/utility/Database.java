@@ -1,9 +1,6 @@
 package app.vcampus.server.utility;
 
-import app.vcampus.server.entity.Course;
-import app.vcampus.server.entity.LibraryBook;
-import app.vcampus.server.entity.Student;
-import app.vcampus.server.entity.User;
+import app.vcampus.server.entity.*;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 
@@ -15,6 +12,7 @@ public class Database {
                 .addAnnotatedClass(Student.class)
                 .addAnnotatedClass(Course.class)
                 .addAnnotatedClass(LibraryBook.class)
+                .addAnnotatedClass(TeachingClass.class)
                 .buildSessionFactory().openSession();
     }
 }

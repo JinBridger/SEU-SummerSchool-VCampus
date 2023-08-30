@@ -14,7 +14,7 @@ fun NavRail(navigator: Navigator, currentPos: String) {
         Navis.forEach {
             NavigationRailItem(
                 selected = currentPos == it.path,
-                onClick = { navigator.navigate(it.path) },
+                onClick = { if (currentPos != it.path) navigator.navigate(it.path) },
                 icon = { Icon(it.icon, "") },
                 label = { Text(it.name) },
                 alwaysShowLabel = false

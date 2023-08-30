@@ -21,6 +21,7 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.33")
     implementation("org.springframework.security:spring-security-crypto:6.1.3")
     implementation("org.bouncycastle:bcprov-jdk18on:1.76")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
