@@ -1,28 +1,24 @@
 package app.vcampus.client.scene
 
-import app.vcampus.client.viewmodel.ShopViewModel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FormatListBulleted
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.ShoppingBasket
-import androidx.compose.runtime.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import app.vcampus.client.scene.components.*
+import app.vcampus.client.scene.components.SideBar
+import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.blankSubscene
-import app.vcampus.client.scene.subscene.library.myBookSubscene
-import app.vcampus.client.scene.subscene.library.reserveReturnBookSubscene
-import app.vcampus.client.scene.subscene.library.searchBookSubscene
 import app.vcampus.client.scene.subscene.shop.myOrderSubscene
 import app.vcampus.client.scene.subscene.shop.selectItemSubscene
+import app.vcampus.client.viewmodel.ShopViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
-
 
 
 @Composable
@@ -39,11 +35,12 @@ fun ShopStatusForUser(viewModel: ShopViewModel) {
             currentSubscene.value = it
         }
         Box(
-            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp)
-                .background(
-                    Color.White
-                )
-                .padding(horizontal = 100.dp)
+                modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                        offsetX = 3.dp, blurRadius = 10.dp)
+                        .background(
+                                Color.White
+                        )
+                        .padding(horizontal = 100.dp)
         ) {
             when (currentSubscene.value) {
                 -1 -> blankSubscene()
@@ -57,7 +54,7 @@ fun ShopStatusForUser(viewModel: ShopViewModel) {
 @ExperimentalMaterialApi
 @Composable
 fun ShopScene(
-    navi: Navigator
+        navi: Navigator
 ) {
     val viewModel = viewModel(ShopViewModel::class, listOf()) {
         ShopViewModel()

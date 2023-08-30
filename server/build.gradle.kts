@@ -54,7 +54,9 @@ tasks.withType<Jar> {
     }
 
     doFirst {
-        from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+        from(configurations.runtimeClasspath.get().map {
+            if (it.isDirectory) it else zipTree(it)
+        })
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }

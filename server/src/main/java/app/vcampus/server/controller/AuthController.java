@@ -7,8 +7,6 @@ import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.Session;
 import app.vcampus.server.utility.router.RouteMapping;
 
-import java.util.Map;
-
 public class AuthController {
     @RouteMapping(uri = "auth/login")
     public Response login(Request request, org.hibernate.Session database) {

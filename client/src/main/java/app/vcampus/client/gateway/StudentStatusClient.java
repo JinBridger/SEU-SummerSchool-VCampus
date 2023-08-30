@@ -1,18 +1,17 @@
 package app.vcampus.client.gateway;
 
-import app.vcampus.server.entity.Student;
 import app.vcampus.client.net.NettyHandler;
+import app.vcampus.server.entity.Student;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
-import app.vcampus.server.utility.DateUtility;
 
 public class StudentStatusClient {
 
-//    public static boolean deleteInfo(NettyHandler handler, String cardNumber){
+    //    public static boolean deleteInfo(NettyHandler handler, String cardNumber){
 //        CountDownLatch latch = new CountDownLatch(1);
 //        AtomicReference<Response> response = new AtomicReference<>();
 //        Request request = new Request();
@@ -65,9 +64,9 @@ public class StudentStatusClient {
                 "birthPlace", birthPlace,
                 "status", status,
                 "politicalStatus", politicalStatus,
-                "givenName",givenName,
-                "familyName",familyName,
-                "birthDate",birthDate
+                "givenName", givenName,
+                "familyName", familyName,
+                "birthDate", birthDate
 //                "gender",gender
         ));
 
@@ -94,36 +93,36 @@ public class StudentStatusClient {
     }
 
     public static Student searchInfo(NettyHandler handler,
-                                     String cardNumber){
-            CountDownLatch latch = new CountDownLatch(1);
-            AtomicReference<Response> response = new AtomicReference<>();
-            Request request = new Request();
-            request.setUri("student/searchInfo");
-            request.setParams(Map.of(
-                    "cardNumber", cardNumber
-            ));
-            handler.sendRequest(request, res -> {
-                response.set(res);
-                System.out.println(res);
-                latch.countDown();
-            });
+                                     String cardNumber) {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicReference<Response> response = new AtomicReference<>();
+        Request request = new Request();
+        request.setUri("student/searchInfo");
+        request.setParams(Map.of(
+                "cardNumber", cardNumber
+        ));
+        handler.sendRequest(request, res -> {
+            response.set(res);
+            System.out.println(res);
+            latch.countDown();
+        });
 
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            if(response.get().getStatus().equals("success")){
-                Map<String, String> data = (Map<String, String>) response.get().getData();
-                return Student.fromMap(data);
-            } else{
-                return null;
-            }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
         }
 
-    public static Student getSelf(NettyHandler handler){
+        if (response.get().getStatus().equals("success")) {
+            Map<String, String> data = (Map<String, String>) response.get().getData();
+            return Student.fromMap(data);
+        } else {
+            return null;
+        }
+    }
+
+    public static Student getSelf(NettyHandler handler) {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Response> response = new AtomicReference<>();
         Request request = new Request();
@@ -141,10 +140,10 @@ public class StudentStatusClient {
             return null;
         }
 
-        if(response.get().getStatus().equals("success")){
+        if (response.get().getStatus().equals("success")) {
             Map<String, String> data = (Map<String, String>) response.get().getData();
             return Student.fromMap(data);
-        } else{
+        } else {
             return null;
         }
     }

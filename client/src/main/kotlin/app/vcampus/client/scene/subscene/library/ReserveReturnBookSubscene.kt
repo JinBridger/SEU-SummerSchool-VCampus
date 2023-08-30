@@ -10,7 +10,8 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 
 @Composable
 fun reserveReturnBookSubscene(viewModel: LibraryViewModel) {
-    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+    Row(horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))

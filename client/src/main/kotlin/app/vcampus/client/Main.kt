@@ -2,11 +2,8 @@ package app.vcampus.client
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.window.WindowDraggableArea
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.WindowPlacement
-import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import app.vcampus.client.net.NettyHandler
@@ -17,7 +14,7 @@ import moe.tlaster.precompose.PreComposeWindow
 fun main(handler: NettyHandler) {
     FakeRepository.setHandler(handler)
     application {
-    val state = rememberWindowState(size = DpSize(1400.dp, 800.dp))
+        val state = rememberWindowState(size = DpSize(1400.dp, 800.dp))
         PreComposeWindow(
                 title = "PreCompose Sample",
                 onCloseRequest = {

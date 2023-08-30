@@ -18,15 +18,17 @@ import androidx.compose.ui.unit.sp
 
 
 data class SideBarItem(
-    val isLabel: Boolean, val heading: String, val caption: String, val icon: ImageVector, val isChosen: Boolean
+        val isLabel: Boolean, val heading: String, val caption: String,
+        val icon: ImageVector, val isChosen: Boolean
 )
 
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SideBar(
-    sideBarItems: List<SideBarItem> = listOf(SideBarItem(false, "", "", Icons.Default.Person, false)),
-    onClick: (index: Int) -> Unit = {}
+        sideBarItems: List<SideBarItem> = listOf(
+                SideBarItem(false, "", "", Icons.Default.Person, false)),
+        onClick: (index: Int) -> Unit = {}
 ) {
     Box(modifier = Modifier.fillMaxWidth(0.25F)) {
         LazyColumn(state = rememberLazyListState()) {
@@ -35,17 +37,26 @@ fun SideBar(
                     if (!it.isLabel) {
                         if (it.isChosen) {
                             ListItem(
-                                modifier = Modifier.background(MaterialTheme.colors.primary),
-                                secondaryText = { Text(it.caption, color = Color.White) },
-                                icon = { Icon(it.icon, "", tint = Color.White) },
+                                    modifier = Modifier.background(
+                                            MaterialTheme.colors.primary),
+                                    secondaryText = {
+                                        Text(it.caption, color = Color.White)
+                                    },
+                                    icon = {
+                                        Icon(it.icon, "", tint = Color.White)
+                                    },
                             ) {
                                 Text(it.heading, color = Color.White)
                             }
                         } else {
                             ListItem(
-                                modifier = Modifier.clickable { onClick(sideBarItems.indexOf(it)) },
-                                secondaryText = { Text(it.caption) },
-                                icon = { Icon(it.icon, "", tint = Color.DarkGray) },
+                                    modifier = Modifier.clickable {
+                                        onClick(sideBarItems.indexOf(it))
+                                    },
+                                    secondaryText = { Text(it.caption) },
+                                    icon = {
+                                        Icon(it.icon, "", tint = Color.DarkGray)
+                                    },
                             ) {
                                 Text(it.heading)
                             }
@@ -58,10 +69,10 @@ fun SideBar(
                         Row {
                             Spacer(modifier = Modifier.width(18.dp))
                             Text(
-                                text = it.heading,
-                                fontWeight = FontWeight(700),
-                                fontSize = 14.sp,
-                                color = Color.DarkGray
+                                    text = it.heading,
+                                    fontWeight = FontWeight(700),
+                                    fontSize = 14.sp,
+                                    color = Color.DarkGray
                             )
                         }
 

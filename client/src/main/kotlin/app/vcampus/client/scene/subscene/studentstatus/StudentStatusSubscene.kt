@@ -31,7 +31,8 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
     var status by viewModel.status
 
 
-    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+    Row(horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()) {
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
@@ -50,7 +51,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = familyName == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (familyName == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (familyName == "") Icon(
+                                            Icons.Filled.Error, "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }
@@ -63,7 +66,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = givenName == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (givenName == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (givenName == "") Icon(
+                                            Icons.Filled.Error, "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }
@@ -76,15 +81,23 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = gender == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (gender == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (gender == "") Icon(Icons.Filled.Error,
+                                            "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }
 
                     Box(Modifier.fillParentMaxWidth(0.30F).padding(5.dp)) {
-                        OutlinedTextField(value = birthDate, onValueChange = { birthDate = it }, label = { Text("出生日期") }, isError = birthDate == "", readOnly = true, trailingIcon = {
-                            if (birthDate == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
-                        })
+                        OutlinedTextField(value = birthDate,
+                                onValueChange = { birthDate = it },
+                                label = { Text("出生日期") },
+                                isError = birthDate == "", readOnly = true,
+                                trailingIcon = {
+                                    if (birthDate == "") Icon(
+                                            Icons.Filled.Error, "error",
+                                            tint = MaterialTheme.colors.error)
+                                })
                     }
                 }
 
@@ -100,7 +113,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = birthPlace == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (birthPlace == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (birthPlace == "") Icon(
+                                            Icons.Filled.Error, "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }
@@ -114,7 +129,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = politicalStatus == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (politicalStatus == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (politicalStatus == "") Icon(
+                                            Icons.Filled.Error, "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }
@@ -128,7 +145,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = status == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (status == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (status == "") Icon(Icons.Filled.Error,
+                                            "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }
@@ -146,7 +165,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = major == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (major == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (major == "") Icon(Icons.Filled.Error,
+                                            "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }
@@ -160,7 +181,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = school == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (school == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (school == "") Icon(Icons.Filled.Error,
+                                            "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }
@@ -178,7 +201,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = cardNumber == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (cardNumber == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (cardNumber == "") Icon(
+                                            Icons.Filled.Error, "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }
@@ -192,7 +217,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                                 isError = studentNumber == "",
                                 readOnly = true,
                                 trailingIcon = {
-                                    if (studentNumber == "") Icon(Icons.Filled.Error, "error", tint = MaterialTheme.colors.error)
+                                    if (studentNumber == "") Icon(
+                                            Icons.Filled.Error, "error",
+                                            tint = MaterialTheme.colors.error)
                                 },
                         )
                     }

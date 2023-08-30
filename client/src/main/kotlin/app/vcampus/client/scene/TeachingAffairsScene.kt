@@ -2,14 +2,18 @@ package app.vcampus.client.scene
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import app.vcampus.client.scene.components.*
+import app.vcampus.client.scene.components.SideBar
+import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.blankSubscene
-import app.vcampus.client.scene.subscene.studentstatus.studentStatusSubscene
 import app.vcampus.client.scene.subscene.teachingaffairs.chooseClassSubscene
 import app.vcampus.client.scene.subscene.teachingaffairs.evaluateTeacherSubscene
 import app.vcampus.client.scene.subscene.teachingaffairs.myGradeSubscene
@@ -27,13 +31,16 @@ fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
     Row(modifier = Modifier.fillMaxWidth()) {
         SideBar(teachingAffairsSideBarItem) {
             (0..<teachingAffairsSideBarItem.size).forEach { i ->
-                teachingAffairsSideBarItem[i] = teachingAffairsSideBarItem[i].copy(isChosen = false)
+                teachingAffairsSideBarItem[i] = teachingAffairsSideBarItem[i].copy(
+                        isChosen = false)
             }
-            teachingAffairsSideBarItem[it] = teachingAffairsSideBarItem[it].copy(isChosen = true)
+            teachingAffairsSideBarItem[it] = teachingAffairsSideBarItem[it].copy(
+                    isChosen = true)
             currentSubscene.value = it
         }
         Box(
-                modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(offsetX = 3.dp, blurRadius = 10.dp)
+                modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                        offsetX = 3.dp, blurRadius = 10.dp)
                         .background(
                                 Color.White
                         )

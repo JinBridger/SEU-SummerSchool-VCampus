@@ -1,13 +1,7 @@
 package app.vcampus.server.controller;
 
 
-import app.vcampus.server.entity.TeachingClass;
-import app.vcampus.server.entity.Course;
-import app.vcampus.server.utility.Request;
-import app.vcampus.server.utility.Response;
-import app.vcampus.server.utility.router.RouteMapping;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Transaction;
 
 @Slf4j
 public class TeachingAffairsController {

@@ -1,20 +1,16 @@
 package app.vcampus.server.entity;
 
-import app.vcampus.server.enums.BookStatus;
-import app.vcampus.server.enums.LibraryAction;
 import app.vcampus.server.enums.LibraryUserStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.UUID;
-import java.time.LocalDateTime;
 
 @Entity
 @Slf4j
 @Data
-@Table(name="LibraryUser")
+@Table(name = "LibraryUser")
 public class LibraryUser {
     @Id
     public Integer cardNumber;
@@ -42,12 +38,12 @@ public class LibraryUser {
         }
     }
 
-    public Map<String,String> toMap(){
+    public Map<String, String> toMap() {
         return Map.ofEntries(
-                Map.entry("cardNumber",getCardNumber().toString()),
-                Map.entry("status",getStatus().toString()),
-                Map.entry("borrowed",getBorrowed().toString()),
-                Map.entry("maxBorrow",getMaxBorrow().toString())
+                Map.entry("cardNumber", getCardNumber().toString()),
+                Map.entry("status", getStatus().toString()),
+                Map.entry("borrowed", getBorrowed().toString()),
+                Map.entry("maxBorrow", getMaxBorrow().toString())
         );
     }
 }

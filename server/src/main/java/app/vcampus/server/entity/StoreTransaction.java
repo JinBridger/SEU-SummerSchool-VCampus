@@ -1,8 +1,8 @@
 package app.vcampus.server.entity;
 
-import app.vcampus.server.utility.DateUtility;
-import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,9 +36,9 @@ public class StoreTransaction {
 
     public String remark;
 
-    public static StoreTransaction fromMap(Map<String,String> data){
-        try{
-            StoreTransaction storeTransaction=new StoreTransaction();
+    public static StoreTransaction fromMap(Map<String, String> data) {
+        try {
+            StoreTransaction storeTransaction = new StoreTransaction();
 
             storeTransaction.setUuid(UUID.fromString(data.get("uuid")));
             storeTransaction.setItemUUID(UUID.fromString(data.get("itemUUID")));
@@ -49,21 +49,21 @@ public class StoreTransaction {
             storeTransaction.setRemark(data.get("remark"));
 
             return storeTransaction;
-        }catch(Exception e){
-            log.warn("Failed to parse student from map:{}",data,e);
+        } catch (Exception e) {
+            log.warn("Failed to parse student from map:{}", data, e);
             return null;
         }
     }
 
-    public Map<String,String> toMap(){
+    public Map<String, String> toMap() {
         return Map.ofEntries(
-                Map.entry("uuid",getUuid().toString()),
-                Map.entry("itemUUID",getItemUUID().toString()),
-                Map.entry("itemPrice",getItemPrice().toString()),
-                Map.entry("amount",getAmount().toString()),
-                Map.entry("cardNumber",getCardNumber().toString()),
-                Map.entry("time",getTime().toString()),
-                Map.entry("remark",getRemark())
+                Map.entry("uuid", getUuid().toString()),
+                Map.entry("itemUUID", getItemUUID().toString()),
+                Map.entry("itemPrice", getItemPrice().toString()),
+                Map.entry("amount", getAmount().toString()),
+                Map.entry("cardNumber", getCardNumber().toString()),
+                Map.entry("time", getTime().toString()),
+                Map.entry("remark", getRemark())
         );
     }
 }

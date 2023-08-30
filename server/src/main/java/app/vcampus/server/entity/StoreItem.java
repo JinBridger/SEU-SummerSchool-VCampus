@@ -1,11 +1,8 @@
 package app.vcampus.server.entity;
 
-import app.vcampus.server.enums.PoliticalStatus;
-import app.vcampus.server.enums.Status;
-import app.vcampus.server.utility.Request;
-import app.vcampus.server.utility.Response;
-import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,9 +31,9 @@ public class StoreItem {
 
     public String description;
 
-    public static StoreItem fromMap(Map<String,String> data){
-        try{
-            StoreItem storeItem=new StoreItem();
+    public static StoreItem fromMap(Map<String, String> data) {
+        try {
+            StoreItem storeItem = new StoreItem();
 
             storeItem.setUuid(UUID.fromString(data.get("uuid")));
             storeItem.setItemName(data.get("itemName"));
@@ -46,20 +43,20 @@ public class StoreItem {
             storeItem.setDescription(data.get("description"));
 
             return storeItem;
-        }catch (Exception e){
-            log.warn("Failed to parse storeitem from map:{}",data,e);
+        } catch (Exception e) {
+            log.warn("Failed to parse storeitem from map:{}", data, e);
             return null;
         }
     }
 
-    public Map<String,String> toMap(){
+    public Map<String, String> toMap() {
         return Map.ofEntries(
-                Map.entry("uuid",getUuid().toString()),
-                Map.entry("itemName",getItemName()),
-                Map.entry("price",getPrice().toString()),
-                Map.entry("barcode",getBarcode()),
-                Map.entry("stock",getStock().toString()),
-                Map.entry("description",getDescription())
+                Map.entry("uuid", getUuid().toString()),
+                Map.entry("itemName", getItemName()),
+                Map.entry("price", getPrice().toString()),
+                Map.entry("barcode", getBarcode()),
+                Map.entry("stock", getStock().toString()),
+                Map.entry("description", getDescription())
         );
     }
 

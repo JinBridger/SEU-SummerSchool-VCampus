@@ -2,21 +2,16 @@ package app.vcampus.client.viewmodel
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.runtime.invalidateGroupsWithKey
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.Student
 import app.vcampus.server.utility.DateUtility
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
-import java.util.*
 
 class StudentStatusViewModel(identity: List<String>) : ViewModel() {
     val familyName = mutableStateOf("")

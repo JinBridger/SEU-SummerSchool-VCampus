@@ -18,8 +18,8 @@ import java.util.function.Consumer;
 
 public class NettyHandler extends ChannelInboundHandlerAdapter {
     private final Gson gson = new Gson();
-    private ChannelHandlerContext ctx;
     private final Map<UUID, Consumer<Response>> callbacks = new HashMap<>();
+    private ChannelHandlerContext ctx;
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {

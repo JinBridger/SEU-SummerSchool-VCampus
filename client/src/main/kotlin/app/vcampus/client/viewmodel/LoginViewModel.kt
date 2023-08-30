@@ -3,7 +3,6 @@ package app.vcampus.client.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import app.vcampus.client.repository.FakeRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel

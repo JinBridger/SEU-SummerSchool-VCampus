@@ -6,21 +6,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.platform.Font
 
 val sarasaUiSc = FontFamily(
-    Font(
-        resource = "sarasa-ui-sc-regular.ttf",
-        weight = FontWeight(400)
-    ),
-    Font(
-        resource = "sarasa-ui-sc-bold.ttf",
-        weight = FontWeight(900)
-    ),
-    Font(
-        resource = "sarasa-ui-sc-semibold.ttf",
-        weight = FontWeight(700)
-    ),
+        Font(
+                resource = "sarasa-ui-sc-regular.ttf",
+                weight = FontWeight(400)
+        ),
+        Font(
+                resource = "sarasa-ui-sc-bold.ttf",
+                weight = FontWeight(900)
+        ),
+        Font(
+                resource = "sarasa-ui-sc-semibold.ttf",
+                weight = FontWeight(700)
+        ),
 )
 
 
 val sarasaTypography = Typography(
-    defaultFontFamily = sarasaUiSc,
+        defaultFontFamily = sarasaUiSc,
 )

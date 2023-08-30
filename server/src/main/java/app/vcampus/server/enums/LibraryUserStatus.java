@@ -9,7 +9,7 @@ public enum LibraryUserStatus {
 
     private String label;
 
-    LibraryUserStatus(String label){
-        this.label=label;
+    LibraryUserStatus(String label) {
+        this.label = label;
     }
 }

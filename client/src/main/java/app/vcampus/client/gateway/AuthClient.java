@@ -1,7 +1,7 @@
 package app.vcampus.client.gateway;
 
-import app.vcampus.server.entity.User;
 import app.vcampus.client.net.NettyHandler;
+import app.vcampus.server.entity.User;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 

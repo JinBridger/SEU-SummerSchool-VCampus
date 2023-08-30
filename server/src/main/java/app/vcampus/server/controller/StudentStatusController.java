@@ -20,7 +20,7 @@ public class StudentStatusController {
     Test passed on 2023/08/27
     Test : {"uri":"student/updateInfo","params":{"cardNumber":"1000","studentNumber":"15","major":"2","school":"2"}}
     */
-    @RouteMapping(uri = "student/updateInfo",role = "teachingAffairs")
+    @RouteMapping(uri = "student/updateInfo", role = "teachingAffairs")
     public Response updateInfo(Request request, org.hibernate.Session database) {
         Student newStudent = Student.fromMap(request.getParams());
 

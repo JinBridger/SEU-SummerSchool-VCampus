@@ -1,7 +1,10 @@
 package app.vcampus.client.net;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -11,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.Callable;
 
 public class NettyClient implements Callable<NettyHandler> {
+    private static final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private final String host;
     private final int port;
 
@@ -18,8 +22,6 @@ public class NettyClient implements Callable<NettyHandler> {
         this.host = host;
         this.port = port;
     }
-
-    private static final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     @Override
     public NettyHandler call() {

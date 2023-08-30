@@ -34,14 +34,6 @@ public class User implements IEntity {
     @Column(name = "role")
     public String roleStr;
 
-    public String[] getRoles() {
-        return roleStr.split(",");
-    }
-
-    public void setRoles(String[] roles) {
-        this.roleStr = String.join(",", roles);
-    }
-
     public static User fromMap(Map<String, String> data) {
         try {
             User user = new User();
@@ -56,6 +48,14 @@ public class User implements IEntity {
             log.warn("Failed to parse user from map: {}", data, e);
             return null;
         }
+    }
+
+    public String[] getRoles() {
+        return roleStr.split(",");
+    }
+
+    public void setRoles(String[] roles) {
+        this.roleStr = String.join(",", roles);
     }
 
     public Map<String, String> toMap() {

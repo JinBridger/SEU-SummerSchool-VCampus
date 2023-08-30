@@ -1,8 +1,9 @@
 package app.vcampus.server.enums;
+
 import lombok.Getter;
 
 @Getter
-public enum BookStatus implements IEnum{
+public enum BookStatus implements IEnum {
     outLoan("出借"),
     available("可借"),
     newly("新增"),
@@ -10,8 +11,8 @@ public enum BookStatus implements IEnum{
 
     private String label;
 
-    BookStatus(String label){
-        this.label=label;
+    BookStatus(String label) {
+        this.label = label;
     }
 
 }

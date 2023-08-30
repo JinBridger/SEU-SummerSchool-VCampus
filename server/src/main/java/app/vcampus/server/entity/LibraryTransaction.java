@@ -1,14 +1,13 @@
 package app.vcampus.server.entity;
 
-import app.vcampus.server.enums.BookStatus;
 import app.vcampus.server.enums.LibraryAction;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -33,9 +32,9 @@ public class LibraryTransaction {
     public LocalDateTime time;
 
 
-    public static LibraryTransaction fromMap(Map<String,String>data){
+    public static LibraryTransaction fromMap(Map<String, String> data) {
         try {
-            LibraryTransaction tx=new LibraryTransaction();
+            LibraryTransaction tx = new LibraryTransaction();
             tx.setUuid(UUID.fromString(data.get("UUID")));
             tx.setBookUuid(UUID.fromString(data.get("bookUuid")));
             tx.setAction(LibraryAction.valueOf(data.get("action")));
@@ -47,13 +46,13 @@ public class LibraryTransaction {
         }
     }
 
-    public Map<String,String> toMap(){
+    public Map<String, String> toMap() {
         return Map.ofEntries(
-                Map.entry("UUID",getUuid().toString()),
-                Map.entry("bookUuid",getBookUuid().toString()),
-                Map.entry("userId",getUserId().toString()),
-                Map.entry("action",getAction().toString()),
-                Map.entry("time",getTime().toString())
+                Map.entry("UUID", getUuid().toString()),
+                Map.entry("bookUuid", getBookUuid().toString()),
+                Map.entry("userId", getUserId().toString()),
+                Map.entry("action", getAction().toString()),
+                Map.entry("time", getTime().toString())
         );
     }
 
