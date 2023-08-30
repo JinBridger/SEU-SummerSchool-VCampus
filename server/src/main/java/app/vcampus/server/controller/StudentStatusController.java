@@ -20,7 +20,7 @@ public class StudentStatusController {
     Test passed on 2023/08/27
     Test : {"uri":"student/updateInfo","params":{"cardNumber":"1000","studentNumber":"15","major":"2","school":"2"}}
     */
-    @RouteMapping(uri = "student/updateInfo")
+    @RouteMapping(uri = "student/updateInfo",role = "teachingAffairs")
     public Response updateInfo(Request request, org.hibernate.Session database) {
         Student newStudent = Student.fromMap(request.getParams());
 
@@ -45,7 +45,7 @@ public class StudentStatusController {
         student.setBirthDate(newStudent.getBirthDate());
         database.persist(student);
         tx.commit();
-        return Response.Common.ok();
+        return Response.Common.ok(student.toMap());
     }
 
     /*
@@ -70,7 +70,7 @@ public class StudentStatusController {
         database.persist(newStudent);
         tx.commit();
 
-        return Response.Common.ok();
+        return Response.Common.ok(newStudent.toMap());
     }
 
     /*
