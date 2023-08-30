@@ -2,11 +2,15 @@ package app.vcampus.server.controller;
 
 import app.vcampus.server.entity.Student;
 import app.vcampus.server.entity.User;
+import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.router.RouteMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class StudentStatusController {
@@ -101,24 +105,24 @@ public class StudentStatusController {
     Test passed on 2023/08/27
     Test:{"uri":"student/searchInfo","params":{"cardNumber":"250"}}
     */
-    @RouteMapping(uri = "student/searchInfo")
-    public Response searchInfo(Request request, org.hibernate.Session database) {
-        String cardNumber = request.getParams().get("cardNumber");
-
-        if (cardNumber == null) {
-            return Response.Common.error("card number cannot be empty");
-        }
-
-        Student student = database.get(Student.class, Integer.parseInt(cardNumber));
-
-        if (student == null) {
-            return Response.Common.error("no such card number");
-        }
-
-        System.out.println(student);
-
-        return Response.Common.ok(student.toMap());
-    }
+//    @RouteMapping(uri = "student/searchInfo")
+//    public Response searchInfo(Request request, org.hibernate.Session database) {
+//        String cardNumber = request.getParams().get("cardNumber");
+//
+//        if (cardNumber == null) {
+//            return Response.Common.error("card number cannot be empty");
+//        }
+//
+//        Student student = database.get(Student.class, Integer.parseInt(cardNumber));
+//
+//        if (student == null) {
+//            return Response.Common.error("no such card number");
+//        }
+//
+//        System.out.println(student);
+//
+//        return Response.Common.ok(student.toMap());
+//    }
 
     @RouteMapping(uri = "student/getSelf", role = "student")
     public Response getSelf(Request request, org.hibernate.Session database) {
@@ -133,5 +137,23 @@ public class StudentStatusController {
         System.out.println(student.toMap());
 
         return Response.Common.ok(student.toMap());
+    }
+
+    @RouteMapping(uri = "student/filter", role = "teachingAffairs")
+    public Response filter(Request request, org.hibernate.Session database) {
+        try {
+            String keyword = request.getParams().get("keyword");
+            List<Student> students;
+            if (keyword == null) {
+                students = Database.loadAllData(Student.class, database);
+            } else {
+                students = Database.likeQuery(Student.class, new String[]{"cardNumber", "studentNumber", "givenName", "familyName", "birthDate", "major", "school", "birthPlace"}, keyword, database);
+            }
+
+            return Response.Common.ok(students.stream().map(Student::toMap).collect(Collectors.toList()));
+        } catch (Exception e) {
+            log.warn("Failed to filter students", e);
+            return Response.Common.error("Failed to filter students");
+        }
     }
 }

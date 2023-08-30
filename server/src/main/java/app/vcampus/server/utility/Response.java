@@ -22,7 +22,7 @@ public class Response {
             return new Response("success", "OK");
         }
 
-        public static Response ok(Map<String, String> data) {
+        public static Response ok(Object data) {
             Response response = new Response("success", "OK");
             response.setData(data);
             return response;
