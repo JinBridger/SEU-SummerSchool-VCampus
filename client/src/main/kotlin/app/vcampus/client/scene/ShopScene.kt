@@ -14,8 +14,7 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.SideBar
 import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.blankSubscene
-import app.vcampus.client.scene.subscene.shop.myOrderSubscene
-import app.vcampus.client.scene.subscene.shop.selectItemSubscene
+import app.vcampus.client.scene.subscene.shop.*
 import app.vcampus.client.viewmodel.ShopViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
@@ -24,7 +23,7 @@ import moe.tlaster.precompose.viewmodel.viewModel
 @Composable
 fun ShopStatusForUser(viewModel: ShopViewModel) {
     val shopSideBarItem = viewModel.shopSideBarItem
-    val currentSubscene = remember { mutableStateOf(-1) }
+    val currentSubscene = remember { mutableStateOf("") }
 
     Row(modifier = Modifier.fillMaxWidth()) {
         SideBar(shopSideBarItem) {
@@ -32,7 +31,7 @@ fun ShopStatusForUser(viewModel: ShopViewModel) {
                 shopSideBarItem[i] = shopSideBarItem[i].copy(isChosen = false)
             }
             shopSideBarItem[it] = shopSideBarItem[it].copy(isChosen = true)
-            currentSubscene.value = it
+            currentSubscene.value = shopSideBarItem[it].heading
         }
         Box(
                 modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
@@ -43,9 +42,12 @@ fun ShopStatusForUser(viewModel: ShopViewModel) {
                         .padding(horizontal = 100.dp)
         ) {
             when (currentSubscene.value) {
-                -1 -> blankSubscene()
-                1 -> selectItemSubscene(viewModel)
-                3 -> myOrderSubscene(viewModel)
+                "" -> blankSubscene()
+                "购物页面" -> selectItemSubscene(viewModel)
+                "我的订单" -> myOrderSubscene(viewModel)
+                "添加商品" -> addItemSubscene(viewModel)
+                "修改商品" -> modifyItemSubscene(viewModel)
+                "查看后台信息" -> dashboardSubscene(viewModel)
             }
         }
     }

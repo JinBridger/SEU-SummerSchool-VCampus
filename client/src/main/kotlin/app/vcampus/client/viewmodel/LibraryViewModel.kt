@@ -49,7 +49,7 @@ class LibraryViewModel : ViewModel() {
         when (it) {
             "library_staff" -> listOf(
                     SideBarItem(false, "添加图书", "添加新的图书",
-                            Icons.Default.BookmarkAdd,
+                            Icons.Default.LibraryAdd,
                             false),
                     SideBarItem(false, "修改图书", "修改现有图书",
                             Icons.Default.AutoFixHigh,

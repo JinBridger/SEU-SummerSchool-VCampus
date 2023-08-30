@@ -2,21 +2,60 @@ package app.vcampus.client.viewmodel
 
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FormatListBulleted
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.ShoppingBasket
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.toMutableStateList
+import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
 import moe.tlaster.precompose.viewmodel.ViewModel
 
 class ShopViewModel() : ViewModel() {
-    val shopSideBarItem = mutableStateListOf(
-            SideBarItem(true, "购物", "", Icons.Default.Info, false),
-            SideBarItem(false, "购物页面", "选择商品",
-                    Icons.Default.ShoppingBasket, false),
+    val identity = FakeRepository.user.roles.toList()
 
-            SideBarItem(true, "订单相关", "", Icons.Default.Info, false),
-            SideBarItem(false, "我的订单", "查看所有订单",
-                    Icons.Default.FormatListBulleted, false),
-    )
+    val sideBarContent = (if (identity.contains("shop_user")) {
+        listOf(SideBarItem(true, "购物", "", Icons.Default.Info, false))
+    } else {
+        emptyList()
+    }) + identity.flatMap {
+        when (it) {
+            "shop_user" -> listOf(
+                    SideBarItem(false, "购物页面", "选择商品",
+                            Icons.Default.ShoppingBasket, false)
+            )
+
+            else -> emptyList()
+        }
+    } + (if (identity.contains("shop_user")) {
+        listOf(SideBarItem(true, "订单相关", "", Icons.Default.Info, false))
+    } else {
+        emptyList()
+    }) + identity.flatMap {
+        when (it) {
+            "shop_user" -> listOf(
+                    SideBarItem(false, "我的订单", "查看所有订单",
+                            Icons.Default.FormatListBulleted, false)
+            )
+
+            else -> emptyList()
+        }
+    }  + (if (identity.contains("shop_staff")) {
+        listOf(SideBarItem(true, "管理工具", "", Icons.Default.Info, false))
+    } else {
+        emptyList()
+    }) + identity.flatMap {
+        when (it) {
+            "shop_staff" -> listOf(
+                    SideBarItem(false, "添加商品", "添加新的商品",
+                            Icons.Default.LibraryAdd, false),
+                    SideBarItem(false, "修改商品", "修改商品信息",
+                            Icons.Default.AutoFixHigh, false),
+                    SideBarItem(false, "查看后台信息", "仪表盘",
+                            Icons.Default.Speed, false),
+            )
+
+            else -> emptyList()
+        }
+    }
+
+    val shopSideBarItem = sideBarContent.toMutableStateList()
 }
