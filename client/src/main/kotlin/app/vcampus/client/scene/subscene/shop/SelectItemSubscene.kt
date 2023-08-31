@@ -1,6 +1,6 @@
 package app.vcampus.client.scene.subscene.shop
 
-import androidx.compose.animation.Crossfade
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +21,7 @@ import app.vcampus.client.scene.components.shopCheckListItem
 import app.vcampus.client.scene.components.shopItemCard
 import app.vcampus.client.viewmodel.ShopViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun selectItemSubscene(viewModel: ShopViewModel) {
     val openState = rememberBottomSheetScaffoldState()
@@ -61,12 +61,33 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                             }
                         }
                         Spacer(Modifier.weight(1F))
-                        Text("已选择 ${viewModel.chosenItemsCount.value} 项商品",
-                                color = Color.White)
+                        AnimatedContent(
+                                targetState = viewModel.chosenItemsCount.value,
+                                transitionSpec = {
+                                    slideInVertically(
+                                            initialOffsetY = { 40 }) + fadeIn() with slideOutVertically(
+                                            targetOffsetY = { -40 }) + fadeOut()
+                                }
+                        ) {
+                            Text("已选择 ${viewModel.chosenItemsCount.value} 项商品",
+                                    color = Color.White)
+                        }
                         Spacer(Modifier.width(16.dp))
-                        Text("共 ${String.format("%.2f", viewModel.chosenItemsPrice.value / 100.0)} 元",
-                                color = Color.White,
-                                fontWeight = FontWeight(700))
+                        AnimatedContent(
+                                targetState = viewModel.chosenItemsPrice.value,
+                                transitionSpec = {
+                                    slideInVertically(
+                                            initialOffsetY = { 40 }) + fadeIn() with slideOutVertically(
+                                            targetOffsetY = { -40 }) + fadeOut()
+                                }
+                        ) {
+                            Text("共 ${
+                                String.format("%.2f",
+                                        viewModel.chosenItemsPrice.value / 100.0)
+                            } 元",
+                                    color = Color.White,
+                                    fontWeight = FontWeight(700))
+                        }
                         Spacer(Modifier.width(16.dp))
                     }
                 }
@@ -79,9 +100,21 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                             item {
                                 Spacer(Modifier.height(80.dp))
                                 Row {
-                                    pageTitle(
-                                            "共 ${String.format("%.2f", viewModel.chosenItemsPrice.value / 100.0)} 元",
-                                            "已选择 ${viewModel.chosenItemsCount.value} 件商品")
+                                    AnimatedContent(
+                                            targetState = viewModel.chosenItemsPrice.value,
+                                            transitionSpec = {
+                                                slideInVertically(
+                                                        initialOffsetY = { 40 }) + fadeIn() with slideOutVertically(
+                                                        targetOffsetY = { -40 }) + fadeOut()
+                                            }
+                                    ) {
+                                        pageTitle(
+                                                "共 ${
+                                                    String.format("%.2f",
+                                                            viewModel.chosenItemsPrice.value / 100.0)
+                                                } 元",
+                                                "已选择 ${viewModel.chosenItemsCount.value} 件商品")
+                                    }
                                     Spacer(Modifier.weight(1F))
                                     Button(onClick = {}) {
                                         Text("立即支付")
@@ -96,7 +129,7 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                         shapeRadius = 3.dp)) {
                                     Column(modifier = Modifier.fillMaxWidth()) {
                                         viewModel.chosenShopItems.forEach {
-                                            if(it.stock != 0) {
+                                            if (it.stock != 0) {
                                                 shopCheckListItem(it, viewModel)
                                             }
                                         }
@@ -128,30 +161,40 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                             Spacer(modifier = Modifier.height(20.dp))
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 Column {
-                                    shopItemCard(viewModel.totalShopItems[it * 3], viewModel)
+                                    shopItemCard(
+                                            viewModel.totalShopItems[it * 3],
+                                            viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))
                                 Column {
-                                    shopItemCard(viewModel.totalShopItems[it * 3 + 1], viewModel)
+                                    shopItemCard(
+                                            viewModel.totalShopItems[it * 3 + 1],
+                                            viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))
                                 Column {
-                                    shopItemCard(viewModel.totalShopItems[it * 3 + 2], viewModel)
+                                    shopItemCard(
+                                            viewModel.totalShopItems[it * 3 + 2],
+                                            viewModel)
                                 }
                             }
                         }
                     }
 
-                    if(viewModel.totalShopItems.size.mod(3) == 2) {
+                    if (viewModel.totalShopItems.size.mod(3) == 2) {
                         item {
                             Spacer(modifier = Modifier.height(20.dp))
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 Column {
-                                    shopItemCard(viewModel.totalShopItems[viewModel.totalShopItems.size - 2], viewModel)
+                                    shopItemCard(
+                                            viewModel.totalShopItems[viewModel.totalShopItems.size - 2],
+                                            viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))
                                 Column {
-                                    shopItemCard(viewModel.totalShopItems[viewModel.totalShopItems.size - 1], viewModel)
+                                    shopItemCard(
+                                            viewModel.totalShopItems[viewModel.totalShopItems.size - 1],
+                                            viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))
                                 Column {
@@ -161,12 +204,14 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                         }
                     }
 
-                    if(viewModel.totalShopItems.size.mod(3) == 1) {
+                    if (viewModel.totalShopItems.size.mod(3) == 1) {
                         item {
                             Spacer(modifier = Modifier.height(20.dp))
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 Column {
-                                    shopItemCard(viewModel.totalShopItems[viewModel.totalShopItems.size - 1], viewModel)
+                                    shopItemCard(
+                                            viewModel.totalShopItems[viewModel.totalShopItems.size - 1],
+                                            viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))
                                 Column {
