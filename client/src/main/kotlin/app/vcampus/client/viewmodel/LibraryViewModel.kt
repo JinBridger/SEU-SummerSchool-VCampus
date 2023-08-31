@@ -3,14 +3,18 @@ package app.vcampus.client.viewmodel
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.*
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
+import app.vcampus.server.enums.BookStatus
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
 
 class LibraryViewModel : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
+    val addBook = AddBook()
 
     val sideBarContent = (if (identity.contains("library_user")) {
         listOf(SideBarItem(true, "查询", "", Icons.Default.Info, false))
@@ -63,5 +67,37 @@ class LibraryViewModel : ViewModel() {
         }
     }
 
+
+
     val librarySideBarItem = sideBarContent.toMutableStateList()
+
+    class AddBook : ViewModel() {
+        var isbn = mutableStateOf("")
+        var showDetails = mutableStateOf(false)
+        var name = mutableStateOf("")
+        var author = mutableStateOf("")
+        var press = mutableStateOf("")
+        var description = mutableStateOf("")
+        var place = mutableStateOf("")
+        var bookStatus = mutableStateOf(BookStatus.available)
+
+        fun preAddBook() {
+            showDetails.value = false
+
+            viewModelScope.launch {
+                preAddBookInternal().collect {
+                    name.value = it.name ?: ""
+                    author.value = it.author ?: ""
+                    press.value = it.press ?: ""
+                    description.value = it.description ?: ""
+
+                    showDetails.value = true
+                }
+            }
+        }
+
+        private suspend fun preAddBookInternal() = flow {
+            emit(FakeRepository.preAddBook(isbn.value))
+        }
+    }
 }

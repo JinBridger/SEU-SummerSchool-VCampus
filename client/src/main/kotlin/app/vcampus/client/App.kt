@@ -1,6 +1,7 @@
 package app.vcampus.client
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.ExperimentalMaterialApi
@@ -20,6 +21,7 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
+@Preview
 fun App() {
     val navigator = rememberNavigator()
     val currentPos by navigator.currentEntry.collectAsState(initial = null)

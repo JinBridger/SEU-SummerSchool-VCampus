@@ -41,4 +41,12 @@ public class Database {
         criteria.where(builder.or(conditions.toArray(new Predicate[0])));
         return session.createQuery(criteria).getResultList();
     }
+
+    public static <T> List<T> getWhere(Class<T> type, String field, String value, Session session) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<T> criteria = builder.createQuery(type);
+        Root<T> itemRoot = criteria.from(type);
+        criteria.where(builder.equal(itemRoot.get(field).as(String.class), value));
+        return session.createQuery(criteria).getResultList();
+    }
 }

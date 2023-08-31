@@ -1,11 +1,14 @@
 import app.vcampus.server.entity.TeachingClass;
 import app.vcampus.server.utility.Pair;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
 public class IEntityTest {
+    private final Gson gson = new Gson();
+
     @Test
     public void teachingClass() {
         TeachingClass teachingClass = new TeachingClass();
@@ -22,8 +25,7 @@ public class IEntityTest {
                 )
         ));
 
-        Map<String, String> map = teachingClass.toMap();
-        TeachingClass newTeachingClass = TeachingClass.fromMap(map);
+        TeachingClass newTeachingClass = gson.fromJson(teachingClass.toJson(), TeachingClass.class);
         assert newTeachingClass != null;
 
         assert teachingClass.getUuid().equals(newTeachingClass.getUuid());

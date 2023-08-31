@@ -1,5 +1,6 @@
 package app.vcampus.client.scene.components
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text

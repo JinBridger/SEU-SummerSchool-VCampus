@@ -14,7 +14,7 @@ import java.util.UUID;
 @Table(name = "book")
 public class LibraryBook implements IEntity {
     @Id
-    public UUID uuid;
+    public UUID uuid = UUID.randomUUID();
 
     @Column(nullable = false)
     public String name;
@@ -36,46 +36,20 @@ public class LibraryBook implements IEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    public BookStatus bookStatus;
+    public BookStatus bookStatus = BookStatus.available;
 
-    public static LibraryBook fromMap(Map<String, String> data) {
+    public static LibraryBook fromWeb(Map<String, Object> data) {
         try {
-            String uuid = data.get("UUID");
-            String name = data.get("name");
-            String ISBN = data.get("ISBN");
-            String author = data.get("author");
-            String press = data.get("press");
-            String description = data.get("description");
-            String place = data.get("place");
-            BookStatus bookStatus = BookStatus.valueOf(data.get("bookStatus"));
-
             LibraryBook book = new LibraryBook();
-            book.setUuid(UUID.fromString(uuid));
-            book.setName(name);
-            book.setIsbn(ISBN);
-            book.setAuthor(author);
-            book.setPress(press);
-            book.setDescription(description);
-            book.setPlace(place);
-            book.setBookStatus(bookStatus);
+            book.setName((String) data.get("bookName"));
+            book.setIsbn((String) data.get("isbn"));
+            book.setAuthor((String) data.get("author"));
+            book.setPress((String) data.get("press"));
+            book.setDescription((String) data.get("bookDesc"));
             return book;
-
         } catch (Exception e) {
-            log.warn("Failed to parse student from request", e);
+            log.warn("Failed to parse book from web", e);
             return null;
         }
-    }
-
-    public Map<String, String> toMap() {
-        return Map.of(
-                "UUID", getUuid().toString(),
-                "name", getName(),
-                "ISBN", getIsbn(),
-                "author", getAuthor(),
-                "press", getPress(),
-                "description", getDescription(),
-                "place", getPlace(),
-                "bookStatus", getBookStatus().toString()
-        );
     }
 }

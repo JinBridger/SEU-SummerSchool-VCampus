@@ -3,9 +3,9 @@
     How to use:
       var showDatePicker by remember { mutableStateOf(false) }
       var selectedDate by remember { mutableStateOf(Date()) }
-      
+
       //implement here the logic to show datepicker and use de return value
-      
+
       if (showDatePicker) {
            DatePicker(
               initDate = Date(),
@@ -15,7 +15,7 @@
                   showDatePicker = false
               }
            )
-       } 
+       }
 */
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -43,11 +44,11 @@ import java.util.*
 @Preview
 @Composable
 fun DatePicker(
-        initDate: Date = Date(),
-        onDateSelect: (Date) -> Unit,
-        onDismissRequest: () -> Unit,
-        minYear: Int = GregorianCalendar().get(Calendar.YEAR) - 10,
-        maxYear: Int = GregorianCalendar().get(Calendar.YEAR) + 10
+    initDate: Date = Date(),
+    onDateSelect: (Date) -> Unit,
+    onDismissRequest: () -> Unit,
+    minYear: Int = GregorianCalendar().get(Calendar.YEAR) - 10,
+    maxYear: Int = GregorianCalendar().get(Calendar.YEAR) + 10
 ) {
     val calendar = GregorianCalendar().apply {
         time = initDate
@@ -58,56 +59,62 @@ fun DatePicker(
     var day by remember { mutableStateOf(calendar.get(Calendar.DAY_OF_MONTH)) }
 
     EmptyBaseDialog(
-            onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest
     ) {
         MaterialTheme {
             Card(
-                    elevation = 8.dp
+                elevation = 8.dp
             ) {
                 Column(
-                        modifier = Modifier.width(IntrinsicSize.Min)
+                    modifier = Modifier.width(IntrinsicSize.Min)
                 ) {
 
                     Box(
-                            modifier = Modifier.background(
-                                    MaterialTheme.colors.primary)
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
+                        modifier = Modifier.background(
+                            MaterialTheme.colors.primary
+                        )
+                            .fillMaxWidth()
+                            .padding(16.dp)
                     ) {
                         Text(
-                                text = SimpleDateFormat(
-                                        "yyyy 年 MMMM d 日, EEEE").format(
-                                        GregorianCalendar(year, month,
-                                                day).time),
-                                color = MaterialTheme.colors.onPrimary,
-                                style = MaterialTheme.typography.h6
+                            text = SimpleDateFormat(
+                                "yyyy 年 MM 月 d 日"
+                            ).format(
+                                GregorianCalendar(
+                                    year, month,
+                                    day
+                                ).time
+                            ),
+                            color = MaterialTheme.colors.onPrimary,
+                            style = MaterialTheme.typography.h6
                         )
                     }
 
                     //Días
                     Column(
-                            modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(8.dp)
                     ) {
 
 
                         Box(
-                                modifier = Modifier.fillMaxWidth()
-                                        .padding(8.dp),
-                                contentAlignment = Alignment.CenterStart
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(8.dp),
+                            contentAlignment = Alignment.CenterStart
                         ) {
 
                             MonthSelector(
-                                    month = month,
-                                    onValueChange = { month = it }
+                                month = month,
+                                onValueChange = { month = it }
                             )
 
                             YearSelector(
-                                    year = year,
-                                    onValueChange = { year = it },
-                                    minYear = minYear,
-                                    maxYear = maxYear,
-                                    modifier = Modifier.align(
-                                            Alignment.CenterEnd)
+                                year = year,
+                                onValueChange = { year = it },
+                                minYear = minYear,
+                                maxYear = maxYear,
+                                modifier = Modifier.align(
+                                    Alignment.CenterEnd
+                                )
                             )
 
                         }
@@ -116,14 +123,16 @@ fun DatePicker(
 //                        Divider(Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.colors.primary))
 
                         val startDay = GregorianCalendar(year, month, 1)
-                                .apply {
-                                    firstDayOfWeek = Calendar.SUNDAY
-                                }.get(Calendar.DAY_OF_WEEK)
+                            .apply {
+                                firstDayOfWeek = Calendar.SUNDAY
+                            }.get(Calendar.DAY_OF_WEEK)
 
                         var render = false
                         var dayCounter = 1
-                        val maxDay = GregorianCalendar(year, month,
-                                1).daysCount()
+                        val maxDay = GregorianCalendar(
+                            year, month,
+                            1
+                        ).daysCount()
 
                         if (day > maxDay) {
                             day = maxDay
@@ -139,9 +148,9 @@ fun DatePicker(
                                         Day(0, false) { }
                                     } else {
                                         Day(
-                                                day = dayCounter,
-                                                selected = (day == dayCounter),
-                                                onChangeValue = { day = it }
+                                            day = dayCounter,
+                                            selected = (day == dayCounter),
+                                            onChangeValue = { day = it }
                                         )
                                         dayCounter++
                                     }
@@ -152,25 +161,29 @@ fun DatePicker(
                     }
 
                     Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
                     ) {
                         TextButton(
-                                onClick = { onDismissRequest() }
+                            onClick = { onDismissRequest() }
                         ) {
                             Text(
-                                    text = "取消"
+                                text = "取消"
                             )
                         }
 
                         TextButton(
-                                onClick = {
-                                    onDateSelect(GregorianCalendar(year, month,
-                                            day).time)
-                                }
+                            onClick = {
+                                onDateSelect(
+                                    GregorianCalendar(
+                                        year, month,
+                                        day
+                                    ).time
+                                )
+                            }
                         ) {
                             Text(
-                                    text = "确定"
+                                text = "确定"
                             )
                         }
                     }
@@ -183,26 +196,28 @@ fun DatePicker(
 
 @Composable
 fun YearSelector(
-        year: Int,
-        onValueChange: (Int) -> Unit,
-        minYear: Int,
-        maxYear: Int,
-        modifier: Modifier = Modifier
+    year: Int,
+    onValueChange: (Int) -> Unit,
+    minYear: Int,
+    maxYear: Int,
+    modifier: Modifier = Modifier
 ) {
     var expandYearList by remember { mutableStateOf(false) }
 
     Row(
-            modifier = modifier.clickable { expandYearList = true },
-            verticalAlignment = Alignment.CenterVertically
+        modifier = modifier.clickable { expandYearList = true },
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = year.toString())
         Spacer(Modifier.width(4.dp))
-        Icon(imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = null)
+        Icon(
+            imageVector = Icons.Default.ArrowDropDown,
+            contentDescription = null
+        )
 
         DropdownMenu(
-                expanded = expandYearList,
-                onDismissRequest = { expandYearList = false }
+            expanded = expandYearList,
+            onDismissRequest = { expandYearList = false }
         ) {
             for (y in minYear..maxYear) {
                 DropdownMenuItem(onClick = {
@@ -218,23 +233,25 @@ fun YearSelector(
 
 @Composable
 fun MonthSelector(
-        month: Int,
-        onValueChange: (Int) -> Unit
+    month: Int,
+    onValueChange: (Int) -> Unit
 ) {
     var expandMonthList by remember { mutableStateOf(false) }
 
     Row(
-            modifier = Modifier.clickable { expandMonthList = true },
-            verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.clickable { expandMonthList = true },
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = monthName(month).uppercase())
         Spacer(Modifier.width(4.dp))
-        Icon(imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = null)
+        Icon(
+            imageVector = Icons.Default.ArrowDropDown,
+            contentDescription = null
+        )
 
         DropdownMenu(
-                expanded = expandMonthList,
-                onDismissRequest = { expandMonthList = false }
+            expanded = expandMonthList,
+            onDismissRequest = { expandMonthList = false }
         ) {
             for (m in Calendar.JANUARY..Calendar.DECEMBER) {
                 DropdownMenuItem(onClick = {
@@ -259,29 +276,29 @@ fun Header(vararg daysNames: String) {
 
 @Composable
 fun Day(
-        day: Int,
-        selected: Boolean,
-        onChangeValue: (Int) -> Unit
+    day: Int,
+    selected: Boolean,
+    onChangeValue: (Int) -> Unit
 ) {
     val clickable = day != 0
 
     Box(
-            modifier = Modifier.size(48.dp)
-                    .padding(3.dp)
-                    .clip(RoundedCornerShape(50))
-                    .background(
-                            if (selected) {
-                                MaterialTheme.colors.primary
-                            } else {
-                                MaterialTheme.colors.surface
-                            }
-                    ).clickable(enabled = clickable) { onChangeValue(day) },
-            contentAlignment = Alignment.Center
+        modifier = Modifier.size(48.dp)
+            .padding(3.dp)
+            .clip(RoundedCornerShape(50))
+            .background(
+                if (selected) {
+                    MaterialTheme.colors.primary
+                } else {
+                    MaterialTheme.colors.surface
+                }
+            ).clickable(enabled = clickable) { onChangeValue(day) },
+        contentAlignment = Alignment.Center
     ) {
         if (day != 0) {
             Text(
-                    text = day.toString(),
-                    color = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+                text = day.toString(),
+                color = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
             )
         }
     }
@@ -290,13 +307,13 @@ fun Day(
 @Composable
 fun DayName(day: String) {
     Box(
-            modifier = Modifier.size(48.dp)
-                    .padding(3.dp),
-            contentAlignment = Alignment.Center
+        modifier = Modifier.size(48.dp)
+            .padding(3.dp),
+        contentAlignment = Alignment.Center
     ) {
         Text(
-                text = day,
-                color = MaterialTheme.colors.primary
+            text = day,
+            color = MaterialTheme.colors.primary
         )
     }
 }
@@ -330,47 +347,45 @@ fun GregorianCalendar.daysCount(): Int {
 
 private val TextPadding = Modifier.padding(0.dp)
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EmptyBaseDialog(
-        onDismissRequest: () -> Unit,
-        modifier: Modifier = Modifier,
-        shape: Shape = MaterialTheme.shapes.medium,
-        backgroundColor: Color = MaterialTheme.colors.surface,
-        contentColor: Color = contentColorFor(backgroundColor),
-        dialogProvider: AlertDialogProvider = PopupAlertDialogProvider,
-        content: @Composable () -> Unit
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+    shape: Shape = MaterialTheme.shapes.medium,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    content: @Composable () -> Unit
 ) {
-    with(dialogProvider) {
-        AlertDialog(onDismissRequest = onDismissRequest) {
-            AlertDialogContent2(
-                    modifier = modifier.width(IntrinsicSize.Min),
-                    content = content,
-                    shape = shape,
-                    backgroundColor = backgroundColor,
-                    contentColor = contentColor
-            )
-        }
+    Dialog(
+        onDismissRequest = onDismissRequest,
+    ) {
+        AlertDialogContent2(
+            modifier = modifier.width(IntrinsicSize.Min),
+            content = content,
+            shape = shape,
+            backgroundColor = backgroundColor,
+            contentColor = contentColor
+        )
     }
 }
 
 @Composable
 internal fun AlertDialogContent2(
-        modifier: Modifier = Modifier,
-        content: @Composable () -> Unit,
-        shape: Shape = MaterialTheme.shapes.medium,
-        backgroundColor: Color = MaterialTheme.colors.surface,
-        contentColor: Color = contentColorFor(backgroundColor),
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+    shape: Shape = MaterialTheme.shapes.medium,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    contentColor: Color = contentColorFor(backgroundColor),
 ) {
     Surface(
-            modifier = modifier,
-            shape = shape,
-            color = backgroundColor,
-            contentColor = contentColor
+        modifier = modifier,
+        shape = shape,
+        color = backgroundColor,
+        contentColor = contentColor
     ) {
         Column {
             AlertDialogBaselineLayout2(
-                    content = content
+                content = content
             )
         }
     }
@@ -378,19 +393,19 @@ internal fun AlertDialogContent2(
 
 @Composable
 internal fun ColumnScope.AlertDialogBaselineLayout2(
-        content: @Composable (() -> Unit)
+    content: @Composable (() -> Unit)
 ) {
     Layout(
-            {
-                Box(TextPadding.layoutId("content").align(Alignment.Start)) {
-                    content()
-                }
-            },
-            Modifier.weight(1f, false)
+        {
+            Box(TextPadding.layoutId("content").align(Alignment.Start)) {
+                content()
+            }
+        },
+        Modifier.weight(1f, false)
     ) { measurables, constraints ->
 
         val textPlaceable = measurables.firstOrNull { it.layoutId == "content" }?.measure(
-                constraints.copy(minHeight = 0)
+            constraints.copy(minHeight = 0)
         )
 
         val layoutWidth = textPlaceable?.width ?: 0

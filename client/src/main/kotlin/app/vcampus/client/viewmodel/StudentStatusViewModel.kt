@@ -52,10 +52,10 @@ class StudentStatusViewModel() : ViewModel() {
     val studentStatusSideBarItem = sideBarContent.toMutableStateList()
 
     init {
-        getStudentStatus()
+        if (identity.contains("student")) getStudentStatus()
     }
 
-    fun getStudentStatus() {
+    private fun getStudentStatus() {
         viewModelScope.launch {
             getStudentStatusInternal().collect {
                 student.value = it
@@ -75,7 +75,7 @@ class StudentStatusViewModel() : ViewModel() {
         }
     }
 
-    suspend fun getStudentStatusInternal() = flow {
+    private suspend fun getStudentStatusInternal() = flow {
         try {
             emit(FakeRepository.getSelf())
         } catch (e: Exception) {
