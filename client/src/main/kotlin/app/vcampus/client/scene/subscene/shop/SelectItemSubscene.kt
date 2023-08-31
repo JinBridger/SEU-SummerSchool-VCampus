@@ -104,8 +104,8 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                             targetState = viewModel.chosenItemsPrice.value,
                                             transitionSpec = {
                                                 slideInVertically(
-                                                        initialOffsetY = { 40 }) + fadeIn() with slideOutVertically(
-                                                        targetOffsetY = { -40 }) + fadeOut()
+                                                        initialOffsetY = { 100 }) + fadeIn() with slideOutVertically(
+                                                        targetOffsetY = { -100 }) + fadeOut()
                                             }
                                     ) {
                                         pageTitle(
