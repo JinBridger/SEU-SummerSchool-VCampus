@@ -24,10 +24,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.vcampus.client.repository._StoreItem
+import app.vcampus.client.viewmodel.ShopViewModel
 
 
 @Composable
-fun shopCheckListItem() {
+fun shopCheckListItem(item: _StoreItem, viewModel: ShopViewModel) {
     Column {
         Row(modifier = Modifier.fillMaxWidth().height(150.dp).padding(6.dp)) {
             Box(modifier = Modifier.aspectRatio(1F).fillMaxHeight().clip(
@@ -40,34 +42,46 @@ fun shopCheckListItem() {
             Spacer(modifier = Modifier.width(10.dp))
 
             Column(modifier = Modifier.fillMaxWidth()) {
-                Text(text = "日行现货索尼PS5家用游戏机PLAYSTATION5官方正品百亿补贴假一赔十",
+                Text(text = item.itemName,
                         fontWeight = FontWeight(700), maxLines = 1,
                         overflow = TextOverflow.Ellipsis)
                 Spacer(modifier = Modifier.weight(1F))
                 Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically) {
-                    TextButton(onClick = {},
+                    TextButton(onClick = {
+                        viewModel.chosenShopItems.forEachIndexed { index, it ->
+                            if (it.itemName == item.itemName) {
+                                viewModel.chosenShopItems[index] = it.copy(
+                                        stock = it.stock - 1)
+                                viewModel.chosenItemsCount.value -= 1
+                                viewModel.chosenItemsPrice.value -= it.price
+                            }
+                        }
+                    },
                             modifier = Modifier.height(30.dp).aspectRatio(1F),
                             contentPadding = PaddingValues(0.dp)) {
                         Icon(Icons.Default.Remove, "")
                     }
-
-//                    Button(onClick = {}, shape = CircleShape,
-//                            modifier = Modifier.height(20.dp).aspectRatio(1F),
-//                            contentPadding = PaddingValues(2.dp)) {
-//                        Icon(Icons.Default.Remove, "")
-//                    }
                     Spacer(modifier = Modifier.width(6.dp))
                     Box(modifier = Modifier.border(width = 1.dp,
                             color = Color.LightGray,
                             RoundedCornerShape(8.dp)).height(30.dp).width(
                             30.dp),
                             contentAlignment = Alignment.Center) {
-                        Text("1")
+                        Text(item.stock.toString())
                     }
                     Spacer(modifier = Modifier.width(6.dp))
-                    TextButton(onClick = {},
+                    TextButton(onClick = {
+                        viewModel.chosenShopItems.forEachIndexed { index, it ->
+                            if (it.itemName == item.itemName) {
+                                viewModel.chosenShopItems[index] = it.copy(
+                                        stock = it.stock + 1)
+                                viewModel.chosenItemsCount.value += 1
+                                viewModel.chosenItemsPrice.value += it.price
+                            }
+                        }
+                    },
                             modifier = Modifier.height(30.dp).aspectRatio(1F),
                             contentPadding = PaddingValues(0.dp)) {
                         Icon(Icons.Default.Add, "")
@@ -87,7 +101,7 @@ fun shopCheckListItem() {
                         Text("￥", fontSize = 14.sp)
                         Spacer(modifier = Modifier.height(10.dp))
                     }
-                    Text("2799.00", fontWeight = FontWeight(700),
+                    Text(String.format("%.2f", item.price / 100.0), fontWeight = FontWeight(700),
                             fontSize = 24.sp)
                     Spacer(modifier = Modifier.weight(1F))
                 }
@@ -98,15 +112,15 @@ fun shopCheckListItem() {
     }
 }
 
-@Composable
-fun shopCheckList() {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            (0..10).forEach {
-                item {
-                    shopCheckListItem()
-                }
-            }
-        }
-    }
-}
+//@Composable
+//fun shopCheckList() {
+//    Card(modifier = Modifier.fillMaxWidth()) {
+//        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+//            (0..10).forEach {
+//                item {
+//                    shopCheckListItem()
+//                }
+//            }
+//        }
+//    }
+//}

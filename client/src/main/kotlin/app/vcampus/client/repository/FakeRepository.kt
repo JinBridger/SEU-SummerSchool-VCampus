@@ -8,6 +8,9 @@ import app.vcampus.server.entity.LibraryBook
 import app.vcampus.server.entity.Student
 import app.vcampus.server.entity.User
 
+data class _StoreItem(val itemName: String, val price: Int,
+                      val barcode: String, val stock: Int)
+
 object FakeRepository {
     private lateinit var handler: NettyHandler;
     lateinit var user: User;
@@ -38,7 +41,21 @@ object FakeRepository {
         book?.let {
             return it
         }
-        
+
         return LibraryBook()
+    }
+    fun getAllStoreItems(): List<_StoreItem> {
+        return listOf(
+                _StoreItem("索尼国行PS5主机PlayStation电视游戏机蓝光8K港版日版现货闪送", 279900, "thisisbarcode", 100),
+                _StoreItem("微软Xbox Series S/X 国行主机 XSS XSX 日欧版 次时代4K游戏主机", 190000, "thisisbarcode", 100),
+                _StoreItem("任天堂Switch OLED日版主机NS续航港版健身朱紫塞尔达限定游戏机", 163000, "thisisbarcode", 100),
+                _StoreItem("华硕RTX4090猛禽ROG玩家国度电竞特工台式机电脑游戏独立显卡", 1414900, "thisisbarcode", 100),
+                _StoreItem("Intel/英特尔 第13代 i9 13900K 13900KF CPU 中文盒装处理器全新", 387900, "thisisbarcode", 100),
+                _StoreItem("Apple/苹果 13 英寸 MacBook Air Apple M2 芯片 8 核中央处理器 8 核图形处理器 8GB 统一内存 256GB 固态硬盘", 899900, "thisisbarcode", 100),
+                _StoreItem("Apple/苹果 iPhone 14 Pro", 799900, "thisisbarcode", 100),
+                _StoreItem("Apple/苹果 11 英寸 iPad Pro", 679900, "thisisbarcode", 100),
+                _StoreItem("Asus/华硕ROG MAXIMUS Z790 HERO EVA二代台式机电脑电竞游戏主板", 509900, "thisisbarcode", 100),
+                _StoreItem("芝奇DDR5内存条6000 6400 7600幻锋戟RGB台式电脑游戏16G/32G套装", 72900, "thisisbarcode", 100),
+        )
     }
 }
