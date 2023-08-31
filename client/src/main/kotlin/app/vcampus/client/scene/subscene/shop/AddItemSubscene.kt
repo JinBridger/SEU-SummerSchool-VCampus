@@ -10,12 +10,14 @@ import app.vcampus.client.viewmodel.ShopViewModel
 
 @Composable
 fun addItemSubscene(viewModel: ShopViewModel) {
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            item {
-                Spacer(Modifier.height(80.dp))
-                pageTitle("添加商品", "添加新的商品")
+    Box(modifier = Modifier.fillMaxSize().padding(horizontal = 100.dp)) {
+        Row(horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                item {
+                    Spacer(Modifier.height(80.dp))
+                    pageTitle("添加商品", "添加新的商品")
+                }
             }
         }
     }

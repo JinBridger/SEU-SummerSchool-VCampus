@@ -10,12 +10,14 @@ import app.vcampus.client.viewmodel.ShopViewModel
 
 @Composable
 fun myOrderSubscene(viewModel: ShopViewModel) {
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            item {
-                Spacer(Modifier.height(80.dp))
-                pageTitle("我的订单", "查看所有订单")
+    Box(modifier = Modifier.fillMaxSize().padding(horizontal = 100.dp)) {
+        Row(horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                item {
+                    Spacer(Modifier.height(80.dp))
+                    pageTitle("我的订单", "查看所有订单")
+                }
             }
         }
     }

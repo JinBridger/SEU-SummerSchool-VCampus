@@ -40,7 +40,6 @@ fun ShopStatusForUser(viewModel: ShopViewModel) {
                         .background(
                                 Color.White
                         )
-                        .padding(horizontal = 100.dp)
         ) {
             Crossfade(currentSubscene.value) {
                 when (it) {
