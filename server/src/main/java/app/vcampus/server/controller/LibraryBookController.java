@@ -1,5 +1,6 @@
 package app.vcampus.server.controller;
 
+import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.LibraryBook;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Request;
@@ -8,6 +9,7 @@ import app.vcampus.server.utility.router.RouteMapping;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Transaction;
 
 import java.lang.reflect.Type;
 import java.net.http.HttpClient;
@@ -15,24 +17,26 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 public class LibraryBookController {
 
-//    @RouteMapping(uri = "library/addBook")
-//    public Response addBook(Request request, org.hibernate.Session database) {
-//        LibraryBook newBook = LibraryBook.fromMap(request.getParams());
-//        if (newBook == null) {
-//            return Response.Common.badRequest();
-//        }
-//
-//        Transaction tx = database.beginTransaction();
-//        database.persist(newBook);
-//        tx.commit();
-//
-//        return Response.Common.ok();
-//    }
-//
+    @RouteMapping(uri = "library/addBook")
+    public Response addBook(Request request, org.hibernate.Session database) {
+        LibraryBook newBook = IEntity.fromJson(request.getParams().get("book"), LibraryBook.class);
+        if (newBook == null) {
+            return Response.Common.badRequest();
+        }
+
+        newBook.setUuid(UUID.randomUUID());
+        Transaction tx = database.beginTransaction();
+        database.persist(newBook);
+        tx.commit();
+
+        return Response.Common.ok();
+    }
+
 //    @RouteMapping(uri = "library/deleteBook")
 //    public Response deleteBook(Request request, org.hibernate.Session database) {
 //        String UUID = request.getParams().get("UUID");
@@ -101,6 +105,7 @@ public class LibraryBookController {
                     .build();
 
             HttpResponse result = HttpClient.newHttpClient().send(httpRequest, java.net.http.HttpResponse.BodyHandlers.ofString());
+            log.info(result.toString());
             Type type = new TypeToken<Map<String, Object>>(){}.getType();
             Map<String, Object> data = (new Gson()).fromJson(result.body().toString(), type);
             data = (Map<String, Object>) data.get("data");

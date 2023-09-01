@@ -28,7 +28,7 @@ public class LibraryBook implements IEntity {
     @Column(nullable = false)
     public String press;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="TEXT")
     public String description;
 
     @Column(nullable = false)

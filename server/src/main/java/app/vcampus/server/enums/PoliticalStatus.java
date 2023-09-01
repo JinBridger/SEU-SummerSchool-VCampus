@@ -3,7 +3,7 @@ package app.vcampus.server.enums;
 import lombok.Getter;
 
 @Getter
-public enum PoliticalStatus implements IEnum {
+public enum PoliticalStatus implements LabelledEnum {
     CommunistPartyOfChina("中国共产党党员"),
 
     ProbationaryPartyMember("中国共产党预备党员"),

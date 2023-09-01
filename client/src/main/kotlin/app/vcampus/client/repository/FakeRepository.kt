@@ -30,7 +30,7 @@ object FakeRepository {
         val user = AuthClient.login(handler, username, password)
 
         user?.let {
-            print(it)
+            println(it)
             this.user = it
             return true
         }
@@ -50,6 +50,10 @@ object FakeRepository {
         }
 
         return LibraryBook()
+    }
+
+    fun addBook(newBook: LibraryBook): Boolean {
+        return LibraryClient.addBook(handler, newBook)
     }
 
     fun getAllStoreItems(): List<_StoreItem> {

@@ -3,7 +3,7 @@ package app.vcampus.server.enums;
 import lombok.Getter;
 
 @Getter
-public enum Status implements IEnum {
+public enum Status implements LabelledEnum {
     inSchool("在籍"),
     graduated("毕业"),
     dropout("退学"),

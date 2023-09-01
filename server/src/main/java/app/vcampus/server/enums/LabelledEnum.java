@@ -1,5 +1,5 @@
 package app.vcampus.server.enums;
 
-public interface IEnum {
+public interface LabelledEnum {
     String getLabel();
 }

@@ -6,9 +6,12 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
+import app.vcampus.server.entity.LibraryBook
 import app.vcampus.server.enums.BookStatus
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
@@ -81,23 +84,55 @@ class LibraryViewModel : ViewModel() {
         var place = mutableStateOf("")
         var bookStatus = mutableStateOf(BookStatus.available)
 
+        var showMessage = mutableStateOf(false)
+        var result = mutableStateOf(true)
+
         fun preAddBook() {
             showDetails.value = false
 
             viewModelScope.launch {
-                preAddBookInternal().collect {
-                    name.value = it.name ?: ""
-                    author.value = it.author ?: ""
-                    press.value = it.press ?: ""
-                    description.value = it.description ?: ""
+                withContext(Dispatchers.Default) {
+                    preAddBookInternal().collect {
+                        name.value = it.name ?: ""
+                        author.value = it.author ?: ""
+                        press.value = it.press ?: ""
+                        description.value = it.description ?: ""
 
-                    showDetails.value = true
+                        showDetails.value = true
+                    }
                 }
             }
         }
 
         private suspend fun preAddBookInternal() = flow {
             emit(FakeRepository.preAddBook(isbn.value))
+        }
+
+        fun addBook() {
+            showMessage.value = false
+
+            val newBook = LibraryBook()
+
+            newBook.isbn = isbn.value
+            newBook.name = name.value
+            newBook.author = author.value
+            newBook.press = press.value
+            newBook.description = description.value
+            newBook.place = place.value
+            newBook.bookStatus = bookStatus.value
+
+            viewModelScope.launch {
+                withContext(Dispatchers.Default) {
+                    addBookInternal(newBook).collect {
+                        result.value = it
+                        showMessage.value = true
+                    }
+                }
+            }
+        }
+
+        private suspend fun addBookInternal(newBook: LibraryBook) = flow {
+            emit(FakeRepository.addBook(newBook))
         }
     }
 }

@@ -3,6 +3,7 @@ package app.vcampus.client.gateway;
 import app.vcampus.client.net.NettyHandler;
 import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.LibraryBook;
+import app.vcampus.server.entity.User;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 
@@ -38,5 +39,29 @@ public class LibraryClient {
         } else {
             return new LibraryBook();
         }
+    }
+
+    public static boolean addBook(NettyHandler handler, LibraryBook newBook) {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicReference<Response> response = new AtomicReference<>();
+        Request request = new Request();
+        request.setUri("library/addBook");
+        request.setParams(Map.of(
+                "book", newBook.toJson()
+        ));
+        handler.sendRequest(request, res -> {
+            response.set(res);
+            System.out.println(res);
+            latch.countDown();
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return response.get().getStatus().equals("success");
     }
 }

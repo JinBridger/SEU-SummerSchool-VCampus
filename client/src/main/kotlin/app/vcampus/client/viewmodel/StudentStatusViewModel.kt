@@ -8,8 +8,10 @@ import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.Student
 import app.vcampus.server.utility.DateUtility
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
@@ -57,20 +59,22 @@ class StudentStatusViewModel() : ViewModel() {
 
     private fun getStudentStatus() {
         viewModelScope.launch {
-            getStudentStatusInternal().collect {
-                student.value = it
+            withContext(Dispatchers.Default) {
+                getStudentStatusInternal().collect {
+                    student.value = it
 
-                cardNumber.value = it.cardNumber.toString()
-                studentNumber.value = it.studentNumber
-                familyName.value = it.familyName
-                givenName.value = it.givenName
-                gender.value = it.getGender().label
-                birthDate.value = DateUtility.fromDate(it.birthDate)
-                major.value = it.major.toString()
-                school.value = it.school.toString()
-                birthPlace.value = it.birthPlace
-                politicalStatus.value = it.politicalStatus.label
-                status.value = it.status.label
+                    cardNumber.value = it.cardNumber.toString()
+                    studentNumber.value = it.studentNumber
+                    familyName.value = it.familyName
+                    givenName.value = it.givenName
+                    gender.value = it.getGender().label
+                    birthDate.value = DateUtility.fromDate(it.birthDate)
+                    major.value = it.major.toString()
+                    school.value = it.school.toString()
+                    birthPlace.value = it.birthPlace
+                    politicalStatus.value = it.politicalStatus.label
+                    status.value = it.status.label
+                }
             }
         }
     }
