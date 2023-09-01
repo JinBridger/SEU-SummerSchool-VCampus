@@ -71,7 +71,6 @@ class LibraryViewModel : ViewModel() {
     }
 
 
-
     val librarySideBarItem = sideBarContent.toMutableStateList()
 
     class AddBook : ViewModel() {
@@ -120,6 +119,14 @@ class LibraryViewModel : ViewModel() {
             newBook.description = description.value
             newBook.place = place.value
             newBook.bookStatus = bookStatus.value
+
+            if (name.value == "" || isbn.value == "" || author.value == "" ||
+                    press.value == "" || description.value == "" || place.value == "") {
+                showMessage.value = true
+                result.value = false
+                return
+            }
+
 
             viewModelScope.launch {
                 withContext(Dispatchers.Default) {

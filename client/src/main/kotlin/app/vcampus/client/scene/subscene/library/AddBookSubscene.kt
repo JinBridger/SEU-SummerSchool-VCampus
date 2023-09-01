@@ -6,17 +6,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import app.vcampus.client.scene.components.Select
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.LibraryViewModel
 import app.vcampus.server.enums.BookStatus
+import kotlinx.coroutines.launch
 
 //@OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,10 +30,11 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
 
 //    val datePickerState = rememberDatePickerState()
     var bookStatus by viewModel.addBook.bookStatus
+    val scope = rememberCoroutineScope()
 
     Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
     ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
@@ -46,17 +45,17 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
             item {
                 Spacer(Modifier.height(20.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
-                        value = isbn,
-                        onValueChange = { isbn = it },
-                        label = { Text("新增书籍 ISBN") },
-                        modifier = Modifier.padding(
-                            0.dp, 0.dp, 16.dp,
-                            0.dp
-                        ).weight(1F)
+                            value = isbn,
+                            onValueChange = { isbn = it },
+                            label = { Text("新增书籍 ISBN") },
+                            modifier = Modifier.padding(
+                                    0.dp, 0.dp, 16.dp,
+                                    0.dp
+                            ).weight(1F)
                     )
                     Column {
                         Spacer(Modifier.height(8.dp))
@@ -107,60 +106,60 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
                             Spacer(Modifier.height(8.dp))
 
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Box(Modifier.fillParentMaxWidth(0.32F)) {
                                     OutlinedTextField(
-                                        value = name,
-                                        onValueChange = { name = it },
-                                        label = { Text("书名") },
-                                        isError = name == "",
-                                        trailingIcon = {
-                                            if (name == "") Icon(
-                                                Icons.Filled.Error,
-                                                "error",
-                                                tint = MaterialTheme.colors.error
-                                            )
-                                        },
-                                        singleLine = true,
-                                        modifier = Modifier.fillMaxWidth()
+                                            value = name,
+                                            onValueChange = { name = it },
+                                            label = { Text("书名") },
+                                            isError = name == "",
+                                            trailingIcon = {
+                                                if (name == "") Icon(
+                                                        Icons.Filled.Error,
+                                                        "error",
+                                                        tint = MaterialTheme.colors.error
+                                                )
+                                            },
+                                            singleLine = true,
+                                            modifier = Modifier.fillMaxWidth()
                                     )
                                 }
 
                                 Box(Modifier.fillParentMaxWidth(0.32F)) {
                                     OutlinedTextField(
-                                        value = author,
-                                        onValueChange = { author = it },
-                                        label = { Text("作者") },
-                                        isError = author == "",
-                                        trailingIcon = {
-                                            if (author == "") Icon(
-                                                Icons.Filled.Error,
-                                                "error",
-                                                tint = MaterialTheme.colors.error
-                                            )
-                                        },
-                                        singleLine = true,
-                                        modifier = Modifier.fillMaxWidth()
+                                            value = author,
+                                            onValueChange = { author = it },
+                                            label = { Text("作者") },
+                                            isError = author == "",
+                                            trailingIcon = {
+                                                if (author == "") Icon(
+                                                        Icons.Filled.Error,
+                                                        "error",
+                                                        tint = MaterialTheme.colors.error
+                                                )
+                                            },
+                                            singleLine = true,
+                                            modifier = Modifier.fillMaxWidth()
                                     )
                                 }
 
                                 Box(Modifier.fillParentMaxWidth(0.32F)) {
                                     OutlinedTextField(
-                                        value = press,
-                                        onValueChange = { press = it },
-                                        label = { Text("出版社") },
-                                        isError = press == "",
-                                        trailingIcon = {
-                                            if (press == "") Icon(
-                                                Icons.Filled.Error,
-                                                "error",
-                                                tint = MaterialTheme.colors.error
-                                            )
-                                        },
-                                        singleLine = true,
-                                        modifier = Modifier.fillMaxWidth()
+                                            value = press,
+                                            onValueChange = { press = it },
+                                            label = { Text("出版社") },
+                                            isError = press == "",
+                                            trailingIcon = {
+                                                if (press == "") Icon(
+                                                        Icons.Filled.Error,
+                                                        "error",
+                                                        tint = MaterialTheme.colors.error
+                                                )
+                                            },
+                                            singleLine = true,
+                                            modifier = Modifier.fillMaxWidth()
                                     )
                                 }
                             }
@@ -170,11 +169,11 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
                             Row(Modifier.fillMaxWidth()) {
                                 Box(Modifier.fillMaxWidth()) {
                                     OutlinedTextField(
-                                        value = description,
-                                        onValueChange = { description = it },
-                                        label = { Text("简介") },
-                                        maxLines = 5,
-                                        modifier = Modifier.fillMaxWidth()
+                                            value = description,
+                                            onValueChange = { description = it },
+                                            label = { Text("简介") },
+                                            maxLines = 5,
+                                            modifier = Modifier.fillMaxWidth()
                                     )
                                 }
                             }
@@ -182,31 +181,31 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
                             Spacer(Modifier.height(16.dp))
 
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Box(Modifier.fillParentMaxWidth(0.48F)) {
                                     OutlinedTextField(
-                                        value = place,
-                                        onValueChange = { place = it },
-                                        label = { Text("书籍位置") },
-                                        isError = place == "",
-                                        trailingIcon = {
-                                            if (place == "") Icon(
-                                                Icons.Filled.Error,
-                                                "error",
-                                                tint = MaterialTheme.colors.error
-                                            )
-                                        },
-                                        modifier = Modifier.fillMaxWidth()
+                                            value = place,
+                                            onValueChange = { place = it },
+                                            label = { Text("书籍位置") },
+                                            isError = place == "",
+                                            trailingIcon = {
+                                                if (place == "") Icon(
+                                                        Icons.Filled.Error,
+                                                        "error",
+                                                        tint = MaterialTheme.colors.error
+                                                )
+                                            },
+                                            modifier = Modifier.fillMaxWidth()
                                     )
                                 }
 
                                 Box(Modifier.fillParentMaxWidth(0.48F)) {
                                     Select(
-                                        selectList = BookStatus.values().asList(),
-                                        label = { Text("书籍状态") },
-                                        setValue = { bookStatus = it }
+                                            selectList = BookStatus.values().asList(),
+                                            label = { Text("书籍状态") },
+                                            setValue = { bookStatus = it }
                                     )
                                 }
                             }
@@ -214,13 +213,13 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
                             Spacer(Modifier.height(16.dp))
 
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.End
                             ) {
                                 Button(
-                                    onClick = {
-                                        viewModel.addBook.addBook()
-                                    }
+                                        onClick = {
+                                            viewModel.addBook.addBook()
+                                        }
                                 ) {
                                     Text("添加")
                                 }
@@ -233,12 +232,25 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
             item {
                 Spacer(Modifier.height(16.dp))
 
+                val state = remember {
+                    SnackbarHostState()
+                }
+                SnackbarHost(hostState = state)
+
                 Crossfade(viewModel.addBook.showMessage) {
                     if (it.value) {
                         if (viewModel.addBook.result.value) {
-                            Text("已成功添加书籍。")
+                            scope.launch {
+                                state.showSnackbar(
+                                        "已成功添加书籍", "关闭"
+                                )
+                            }
                         } else {
-                            Text("添加书籍失败，请重试。")
+                            scope.launch {
+                                state.showSnackbar(
+                                        "添加书籍失败", "关闭"
+                                )
+                            }
                         }
                     }
                 }
