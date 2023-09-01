@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Paid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,11 +21,15 @@ import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.components.shopCheckListItem
 import app.vcampus.client.scene.components.shopItemCard
 import app.vcampus.client.viewmodel.ShopViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun selectItemSubscene(viewModel: ShopViewModel) {
-    val openState = rememberBottomSheetScaffoldState()
+    val openState = rememberBottomSheetScaffoldState(
+            bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
+    )
+    val coroutineScope = rememberCoroutineScope()
 
     BottomSheetScaffold(
             scaffoldState = openState,
@@ -35,11 +40,20 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                     Row(modifier = Modifier.fillMaxSize(),
                             verticalAlignment = Alignment.CenterVertically) {
                         Spacer(Modifier.width(8.dp))
-                        Crossfade(
-                                openState.bottomSheetState.isExpanded
+                        AnimatedContent(
+                                targetState = openState.bottomSheetState.isExpanded,
+                                transitionSpec = {
+                                    slideInVertically(
+                                            initialOffsetY = { 40 }) + fadeIn() with slideOutVertically(
+                                            targetOffsetY = { -40 }) + fadeOut()
+                                }
                         ) {
                             if (it) {
-                                TextButton(onClick = {},
+                                TextButton(onClick = {
+                                    coroutineScope.launch {
+                                        openState.bottomSheetState.collapse()
+                                    }
+                                },
                                         colors = ButtonDefaults.buttonColors(
                                                 contentColor = Color.White)) {
                                     Icon(Icons.Default.Paid, "")
@@ -49,7 +63,11 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                     Icon(Icons.Default.KeyboardArrowDown, "")
                                 }
                             } else {
-                                TextButton(onClick = {},
+                                TextButton(onClick = {
+                                    coroutineScope.launch {
+                                        openState.bottomSheetState.expand()
+                                    }
+                                },
                                         colors = ButtonDefaults.buttonColors(
                                                 contentColor = Color.White)) {
                                     Icon(Icons.Default.Paid, "")
