@@ -75,4 +75,6 @@ class ShopViewModel() : ViewModel() {
 
     private val _chosenItemsPrice = mutableStateOf(0)
     val chosenItemsPrice: MutableState<Int> = _chosenItemsPrice
+
+    val totalOrderItems = FakeRepository.getAllOrder()
 }
