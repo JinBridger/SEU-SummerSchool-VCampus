@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.UUID;
+
 @Slf4j
 public class TeachingAffairsController {
     @RouteMapping(uri = "course/addCourse")
@@ -83,6 +85,37 @@ public class TeachingAffairsController {
         System.out.println(teachingClass);
 
         return Response.Common.ok(teachingClass.toMap());
+    }
+
+
+    @RouteMapping(uri = "selectedClass/recordGrade", role = "teachingAffairs")
+    public Response recordGrade(Request request, org.hibernate.Session database) {
+        String uuidString = request.getParams().get("uuid");
+        String gradeString = request.getParams().get("grade");
+
+        if (uuidString == null || gradeString == null) {
+            return Response.Common.badRequest();
+        }
+
+        try {
+            UUID uuid = UUID.fromString(uuidString);
+            Integer grade = Integer.parseInt(gradeString);
+
+            SelectedClass selectedClass = database.get(SelectedClass.class, uuid);
+            if (selectedClass == null) {
+                return Response.Common.error("SelectedClass not found");
+            }
+
+            Transaction tx = database.beginTransaction();
+            selectedClass.setGrade(grade);
+            database.persist(selectedClass);
+            tx.commit();
+
+            return Response.Common.ok();
+        } catch (Exception e) {
+            log.warn("Failed to parse UUID or grade", e);
+            return Response.Common.badRequest();
+        }
     }
 
 
