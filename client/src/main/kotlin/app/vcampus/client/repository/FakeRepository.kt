@@ -7,11 +7,16 @@ import app.vcampus.client.net.NettyHandler
 import app.vcampus.server.entity.LibraryBook
 import app.vcampus.server.entity.Student
 import app.vcampus.server.entity.User
+import app.vcampus.server.utility.Pair
 
 data class _StoreItem(val itemName: String, val price: Int,
                       val barcode: String, val stock: Int)
 
 data class _StoreOrder(val date: String, val order: List<_StoreItem>)
+
+data class _TeachingClass(
+        val schedule: List<Pair<Pair<Int, Int>, Pair<Int, Pair<Int, Int>>>>,
+        val courseName: String, val teacherId: Int, val position: String)
 
 object FakeRepository {
     private lateinit var handler: NettyHandler;
@@ -77,6 +82,20 @@ object FakeRepository {
                 _StoreItem(
                         "芝奇DDR5内存条6000 6400 7600幻锋戟RGB台式电脑游戏16G/32G套装",
                         72900, "thisisbarcode", 100),
+        )
+    }
+
+    fun getAllSchedule(): List<_TeachingClass> {
+        return listOf(
+                _TeachingClass(listOf(Pair(Pair(1, 16), Pair(1, Pair(2, 4)))),
+                        "sig", 111, "九龙湖"),
+                _TeachingClass(listOf(Pair(Pair(1, 16), Pair(2, Pair(6, 7)))),
+                        "alg", 222, "九龙湖"),
+                _TeachingClass(listOf(Pair(Pair(1, 16), Pair(3, Pair(8, 10)))),
+                        "ds", 333, "九龙湖"),
+                _TeachingClass(listOf(Pair(Pair(1, 16), Pair(4, Pair(11, 13)))),
+                        "os", 444, "九龙湖"),
+
         )
     }
 

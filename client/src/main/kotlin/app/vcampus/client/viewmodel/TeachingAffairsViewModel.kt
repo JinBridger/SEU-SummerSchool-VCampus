@@ -59,4 +59,7 @@ class TeachingAffairsViewModel() : ViewModel() {
     }
 
     val teachingAffairsSideBarItem = sideBarContent.toMutableStateList()
+
+    // class table
+    val schedules = FakeRepository.getAllSchedule()
 }
