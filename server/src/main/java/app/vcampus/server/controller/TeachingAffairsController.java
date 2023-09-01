@@ -5,11 +5,12 @@ import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.router.RouteMapping;
+import jakarta.persistence.TypedQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 public class TeachingAffairsController {
@@ -34,7 +35,7 @@ public class TeachingAffairsController {
 
     /*This method is used to select courses for students*/
     @RouteMapping(uri="selectedClass/selectClass")
-    public Response selectclass(Request request, org.hibernate.Session database) {
+    public Response selectClass(Request request, org.hibernate.Session database) {
         SelectedClass newSelectedClass = SelectedClass.fromMap(request.getParams());
         if (newSelectedClass == null) {
             return Response.Common.badRequest();
@@ -119,4 +120,40 @@ public class TeachingAffairsController {
     }
 
 
+    @RouteMapping(uri = "student/myGrades", role = "student")
+    public Response getMyGrades(Request request, org.hibernate.Session database) {
+        String cardNumberString = request.getParams().get("cardNumber");
+
+        if (cardNumberString == null)
+        {
+            return Response.Common.error("card number cannot be empty");
+        }
+
+        try {
+            Integer cardNumber = Integer.parseInt(cardNumberString);
+
+            TypedQuery<SelectedClass> query = database.createQuery(
+                            "SELECT sc FROM SelectedClass sc WHERE sc.cardNumber = :cardNumber", SelectedClass.class)
+                    .setParameter("cardNumber", cardNumber);
+
+            List<SelectedClass> mySelectedClasses = query.getResultList();
+
+            if (mySelectedClasses.isEmpty()) {
+                return Response.Common.error("no selected classes found for this card number");
+            }
+
+            List<Map<String, String>> gradeList = new ArrayList<>();
+            for (SelectedClass selectedClass : mySelectedClasses) {
+                Map<String, String> gradeInfo = new HashMap<>();
+                gradeInfo.put("classUuid", selectedClass.getClassUuid().toString());
+                gradeInfo.put("grade", selectedClass.getGrade().toString());
+                gradeList.add(gradeInfo);
+            }
+
+            return Response.Common.ok(gradeList);
+        } catch (NumberFormatException e) {
+            log.warn("Failed to parse card number", e);
+            return Response.Common.badRequest();
+        }
+    }
 }
