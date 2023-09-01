@@ -1,16 +1,24 @@
 package app.vcampus.server.controller;
 
 import app.vcampus.server.entity.StoreItem;
-import app.vcampus.server.utility.Request;
-import app.vcampus.server.utility.Response;
+import app.vcampus.server.entity.StoreTransaction;
+import app.vcampus.server.entity.User;
+import app.vcampus.server.utility.*;
 import app.vcampus.server.utility.router.RouteMapping;
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.util.Store;
 import org.hibernate.Transaction;
+
+import javax.management.Query;
+import java.time.LocalDateTime;
+
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 
 public class StoreController {
-    @RouteMapping(uri = "storeItem/searchItem")
+    @RouteMapping(uri = "storeItem/searchItem",role="admin")
     public Response searchItem(Request request, org.hibernate.Session database) {
         String itemName = request.getParams().get("itemName");
         if (itemName == null) {
@@ -24,12 +32,7 @@ public class StoreController {
         return Response.Common.ok(storeItem.toMap());
     }
 
-//    @RouteMapping(uri="storeItem/selectItem")
-//    public Response selectItem(Request request,org.hibernate.Session database){
-//
-//    }
-
-    @RouteMapping(uri = "storeItem/addItem")
+    @RouteMapping(uri = "storeItem/addItem",role="admin")
     public Response addItem(Request request, org.hibernate.Session database) {
         StoreItem newStoreItem = StoreItem.fromMap(request.getParams());
         if (newStoreItem == null) {
@@ -45,7 +48,7 @@ public class StoreController {
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "storeItem/deleteItem")
+    @RouteMapping(uri = "storeItem/deleteItem",role="admin")
     public Response deleteItem(Request request, org.hibernate.Session database) {
         String itemName = request.getParams().get("itemName");
         if (itemName == null) {
@@ -62,7 +65,7 @@ public class StoreController {
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "storeItem/updateItem")
+    @RouteMapping(uri = "storeItem/updateItem",role="admin")
     public Response updateItem(Request request, org.hibernate.Session database) {
         StoreItem newStoreItem = StoreItem.fromMap(request.getParams());
         if (newStoreItem == null) {
@@ -84,4 +87,55 @@ public class StoreController {
         return Response.Common.ok();
     }
 
+    @RouteMapping(uri="storeTransaction/selectItem")
+    public Response selectItem(Request request,org.hibernate.Session database){
+        StoreItem selectStoreItem= StoreItem.fromMap(request.getParams());
+        if(selectStoreItem==null){
+            return Response.Common.badRequest();
+        }
+
+        Transaction tx=database.beginTransaction();
+        StoreTransaction newStoreTransaction=new StoreTransaction();
+        newStoreTransaction.setUuid(UUID.randomUUID());
+        newStoreTransaction.setItemUUID(selectStoreItem.getUuid());
+        newStoreTransaction.setAmount(Integer.parseInt(request.getParams().get("amount")));
+        newStoreTransaction.setItemPrice(selectStoreItem.getPrice());
+        newStoreTransaction.setCardNumber(Integer.parseInt(request.getParams().get("cardNumber")));
+        newStoreTransaction.setTime(LocalDateTime.now());
+        newStoreTransaction.setRemark(request.getParams().get("remark"));
+        database.persist(newStoreTransaction);
+        tx.commit();
+        return Response.Common.ok();
+    }
+
+    @RouteMapping(uri="storeTransaction/pay")
+    public Response pay(Request request,org.hibernate.Session database){
+        try{
+            List<StoreTransaction> allItems= Database.loadAllData(StoreTransaction.class,database);
+            Integer totalPrice=0;
+            for(StoreTransaction storeTransaction:allItems){
+                totalPrice+=storeTransaction.getItemPrice()*storeTransaction.getAmount();
+            }
+
+            String cardNumber=request.getParams().get("cardNumber");
+            String password=request.getParams().get("password");
+            if(cardNumber==null||password==null){
+                return Response.Common.badRequest();
+            }
+            User user=database.get(User.class,Integer.parseInt(cardNumber));
+            if(user==null||!Password.verify(password,user.getPassword())){
+                return Response.Common.error("Incorrect card number or password");
+            }
+            //扣钱
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return Response.Common.ok();
+    }
+
+    /*@RouteMapping(uri="storeTransaction/getReport",role="admin")
+    public Response getReport(Request request,org.hibernate.Session database){
+
+        return Response.Common.ok();
+    }*/
 }
