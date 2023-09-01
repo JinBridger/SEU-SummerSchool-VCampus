@@ -5,6 +5,7 @@
 \usepackage{multirow}
 \usepackage{multicol}
 \usepackage{fancyhdr}
+\usepackage{longtable}
 
 \geometry{a4paper,left=25mm,right=20mm,top=25mm,bottom=25mm}
 
@@ -28,9 +29,27 @@
 \end{table}%
 
 
-\begin{table}[htbp]
-    \centering
-    \begin{tabular}{c|c|cc}
+% \begin{table}[htbp]
+% \centering
+\begin{center}
+    \begin{longtable}{c|c|cc}
+        \hline
+        \endfirsthead
+
+        % \multicolumn{3}{c}%
+        % {{\bfseries \tablename\ \thetable{} -- continued from previous page}}                                                                                                            \\
+        % \hline \multicolumn{1}{|c|}{\textbf{First column}} & \multicolumn{1}{c|}{\textbf{Second column}} & \multicolumn{1}{c|}{\textbf{Third column}}                                    \\ \hline
+        % \endhead
+
+        \hline \multicolumn{4}{r}{{续上页}}                                                                                                                \\ \hline
+        \endhead
+
+        \hline \multicolumn{4}{r}{{接下页}}                                                                                                                \\ \hline
+        \endfoot
+
+        \hline
+        \endlastfoot
+
         \hline
         \multirow{4}[8]{*}{\makecell[c]{\textbf{第一周}}} & 进度                     & \multicolumn{2}{l}{正常}                                            \\
         \cline{2-4}                                       & \multirow{2}[4]{*}{状态} & \multicolumn{1}{c|}{客户端}      & \multicolumn{1}{l}{\makecell[l]{
@@ -72,8 +91,26 @@
         ·在下周完成基本功能的实现与测试                                                                                                                    \\
         }}                                                                                                                                                 \\
         \hline
-    \end{tabular}%
-\end{table}%
+        \multirow{4}[8]{*}{\makecell[c]{\textbf{第二周}                                                                                                    \\ 后半周 }} & 进度                     & \multicolumn{2}{l}{正常}                                            \\
+        \cline{2-4}                                       & \multirow{2}[4]{*}{状态} & \multicolumn{1}{c|}{客户端}      & \multicolumn{1}{l}{\makecell[l]{
+        ·完成了商店选购页面与订单页面                                                                                                                      \\
+        ·完成了图书馆导入页面                                                                                                                              \\
+        ·完成了查看课表页面                                                                                                                                \\
+        }}                                                                                                                                                 \\
+        \cline{3-4}                                       &                          & \multicolumn{1}{c|}{服务器端}    & \multicolumn{1}{l}{\makecell[l]{
+        ·对项目配置了自动部署 CI/CD                                                                                                                        \\
+        ·基本完成大部分实体类的编写                                                                                                                        \\
+        ·基本完成大部分服务类的编写                                                                                                                        \\
+        }}                                                                                                                                                 \\
+        \cline{2-4}                                       & 计划                     & \multicolumn{2}{c}{\makecell[l]{
+        ·在本周末完成大部分前端界面                                                                                                                        \\
+        ·在下周进行前后端对接联合调试并完成基本功能的实现与测试                                                                                            \\
+        }}                                                                                                                                                 \\
+        \hline
+    \end{longtable}%
+\end{center}
+
+% \end{}%
 
 
 \end{document}
