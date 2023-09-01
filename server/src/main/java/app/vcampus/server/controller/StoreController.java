@@ -95,10 +95,16 @@ public class StoreController {
         }
 
         Transaction tx=database.beginTransaction();
+        Integer nowStock=selectStoreItem.getStock();
+        Integer salesAmount=Integer.parseInt(request.getParams().get("amount"));
+        if(salesAmount>nowStock){
+            return Response.Common.error("Sale amount must not exceed stock");
+        }
+        selectStoreItem.setStock(nowStock-salesAmount);
         StoreTransaction newStoreTransaction=new StoreTransaction();
         newStoreTransaction.setUuid(UUID.randomUUID());
         newStoreTransaction.setItemUUID(selectStoreItem.getUuid());
-        newStoreTransaction.setAmount(Integer.parseInt(request.getParams().get("amount")));
+        newStoreTransaction.setAmount(salesAmount);
         newStoreTransaction.setItemPrice(selectStoreItem.getPrice());
         newStoreTransaction.setCardNumber(Integer.parseInt(request.getParams().get("cardNumber")));
         newStoreTransaction.setTime(LocalDateTime.now());
