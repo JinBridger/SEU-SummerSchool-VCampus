@@ -52,4 +52,34 @@ public class LibraryBook implements IEntity {
             return null;
         }
     }
+
+    public static LibraryBook fromMap(Map<String,String>data){
+        try {
+            LibraryBook book=new LibraryBook();
+            book.setUuid(UUID.fromString(data.get("uuid")));
+            book.setName(data.get("name"));
+            book.setIsbn(data.get("uuid"));
+            book.setPlace(data.get("place"));
+            book.setPress(data.get("press"));
+            book.setDescription(data.get("description"));
+            book.setBookStatus(BookStatus.valueOf(data.get("bookStatus")));
+            book.setAuthor(data.get("author"));
+            return book;
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Map<String,String>toMap(){
+        return Map.ofEntries(
+                Map.entry("uuid",getUuid().toString()),
+                Map.entry("name",getName()),
+                Map.entry("place",getName()),
+                Map.entry("press",getPress()),
+                Map.entry("isbn",getIsbn()),
+                Map.entry("description",getDescription()),
+                Map.entry("bookStatus",getBookStatus().toString()),
+                Map.entry("author",getAuthor())
+        );
+    }
 }

@@ -2,6 +2,7 @@ package app.vcampus.server.controller;
 
 import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.LibraryBook;
+import app.vcampus.server.entity.LibraryTransaction;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
@@ -116,4 +117,24 @@ public class LibraryBookController {
             return Response.Common.error("Failed to get book info");
         }
     }
+
+    @RouteMapping(uri="library/getBookInfo")
+    public Response getBookInfo(Request request,org.hibernate.Session database){
+        /*
+        this method is used when user clicks the searched book to show the detailed book information
+         */
+        String id=request.getParams().get("uuid");
+        if(id==null) return Response.Common.error("uuid cannot be empty");
+
+        UUID uuid=UUID.fromString(id);
+        LibraryBook book=database.get(LibraryBook.class,uuid);
+
+        if(book==null){
+            return Response.Common.error("missing book information");
+        }
+
+        return Response.Common.ok(book.toMap());
+    }
+
+
 }
