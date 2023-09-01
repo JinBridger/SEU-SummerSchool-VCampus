@@ -25,6 +25,7 @@ fun TopBar(heading: String, onClose: () -> Unit) {
                                 fontWeight = FontWeight(600),
                                 color = Color(0xFFFFFFFF),
                                 letterSpacing = 0.15.sp,
+                                fontFamily = sarasaUiSc
                         )
                 )
             },
