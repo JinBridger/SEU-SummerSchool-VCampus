@@ -81,6 +81,7 @@ class LibraryViewModel : ViewModel() {
         var press = mutableStateOf("")
         var description = mutableStateOf("")
         var place = mutableStateOf("")
+        var cover = mutableStateOf("")
         var bookStatus = mutableStateOf(BookStatus.available)
 
         var showMessage = mutableStateOf(false)
@@ -96,6 +97,7 @@ class LibraryViewModel : ViewModel() {
                         author.value = it.author ?: ""
                         press.value = it.press ?: ""
                         description.value = it.description ?: ""
+                        cover.value = it.cover ?: ""
 
                         showDetails.value = true
                     }
@@ -119,6 +121,7 @@ class LibraryViewModel : ViewModel() {
             newBook.description = description.value
             newBook.place = place.value
             newBook.bookStatus = bookStatus.value
+            newBook.cover = cover.value
 
             if (name.value == "" || isbn.value == "" || author.value == "" ||
                     press.value == "" || description.value == "" || place.value == "") {
@@ -126,7 +129,6 @@ class LibraryViewModel : ViewModel() {
                 result.value = false
                 return
             }
-
 
             viewModelScope.launch {
                 withContext(Dispatchers.Default) {

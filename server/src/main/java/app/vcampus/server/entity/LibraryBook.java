@@ -1,10 +1,12 @@
 package app.vcampus.server.entity;
 
 import app.vcampus.server.enums.BookStatus;
+import com.google.gson.reflect.TypeToken;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -28,11 +30,13 @@ public class LibraryBook implements IEntity {
     @Column(nullable = false)
     public String press;
 
-    @Column(nullable = false, columnDefinition="TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     public String description;
 
     @Column(nullable = false)
     public String place;
+
+    public String cover;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -46,6 +50,14 @@ public class LibraryBook implements IEntity {
             book.setAuthor((String) data.get("author"));
             book.setPress((String) data.get("press"));
             book.setDescription((String) data.get("bookDesc"));
+            try {
+                List<String> pictures = gson.fromJson((String) data.get("pictures"), new TypeToken<List<String>>() {
+                }.getType());
+                book.setCover(pictures.get(0));
+            } catch (Exception e) {
+                log.warn("Failed to parse cover", e);
+                e.printStackTrace();
+            }
             return book;
         } catch (Exception e) {
             log.warn("Failed to parse book from web", e);

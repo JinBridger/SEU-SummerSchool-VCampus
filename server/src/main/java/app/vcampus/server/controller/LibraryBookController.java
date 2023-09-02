@@ -3,6 +3,7 @@ package app.vcampus.server.controller;
 import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.LibraryBook;
 import app.vcampus.server.entity.LibraryTransaction;
+import app.vcampus.server.entity.Student;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
@@ -19,11 +20,12 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class LibraryBookController {
 
-    @RouteMapping(uri = "library/addBook")
+    @RouteMapping(uri = "library/addBook", role = "library_staff")
     public Response addBook(Request request, org.hibernate.Session database) {
         LibraryBook newBook = IEntity.fromJson(request.getParams().get("book"), LibraryBook.class);
         if (newBook == null) {
@@ -75,26 +77,27 @@ public class LibraryBookController {
 //
 //    }
 //
-//    @RouteMapping(uri = "library/searchBook")
-//    public Response searchBook(Request request, org.hibernate.Session database) {
-//        String UUID = request.getParams().get("UUID");
-//        if (UUID == null) return Response.Common.error("Book UUID cannot be empty");
-//
-//        LibraryBook searchedBook = database.get(LibraryBook.class, UUID);
-//        if (searchedBook == null) return Response.Common.error("No such book");
-//
-//        System.out.println(searchedBook);
-//
-//        return searchedBook.toResponse();
-//
-//    }
+    @RouteMapping(uri = "library/searchBook")
+    public Response searchBook(Request request, org.hibernate.Session database) {
+        try {
+            String keyword = request.getParams().get("keyword");
+            if (keyword == null) return Response.Common.error("Keyword cannot be empty");
+            List<LibraryBook> books = Database.likeQuery(LibraryBook.class, new String[]{"name", "isbn", "author", "description", "press"}, keyword, database);
 
-    @RouteMapping(uri = "library/isbn")
+            return Response.Common.ok(books.stream().collect(Collectors.groupingBy(w -> w.isbn)).entrySet().stream().collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    e -> e.getValue().stream().map(LibraryBook::toJson).collect(Collectors.toList())
+            )));
+        } catch (Exception e) {
+            return Response.Common.error("Failed to search students");
+        }
+    }
+
+    @RouteMapping(uri = "library/isbn", role = "library_staff")
     public Response isbn(Request request, org.hibernate.Session database) {
         String isbn = request.getParams().get("isbn");
 
         if (isbn == null) return Response.Common.error("ISBN cannot be empty");
-
 
         List<LibraryBook> searchedBook = Database.getWhere(LibraryBook.class, "isbn", isbn, database);
         if (!searchedBook.isEmpty()) return Response.Common.ok(Map.of("book", searchedBook.get(0).toJson()));

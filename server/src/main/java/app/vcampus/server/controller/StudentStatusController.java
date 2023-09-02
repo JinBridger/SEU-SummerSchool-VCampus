@@ -140,7 +140,7 @@ public class StudentStatusController {
         return Response.Common.ok(student.toMap());
     }
 
-    @RouteMapping(uri = "student/filter", role = "teachingAffairs")
+    @RouteMapping(uri = "student/filter", role = "affairs_staff")
     public Response filter(Request request, org.hibernate.Session database) {
         try {
             String keyword = request.getParams().get("keyword");
