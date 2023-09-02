@@ -1,12 +1,15 @@
 package app.vcampus.client.scene.subscene.shop
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,9 +53,8 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                                 )
                             }
                             Spacer(Modifier.height(20.dp))
-                            Card(modifier = Modifier.fillMaxWidth().shadowCustom(
-                                    blurRadius = 3.dp,
-                                    shapeRadius = 3.dp)) {
+                            Card(modifier = Modifier.fillMaxWidth().border(1.dp,
+                                    color = Color.LightGray, shape = RoundedCornerShape(4.dp))) {
                                 Column(modifier = Modifier.fillMaxWidth()) {
                                     it.order.forEach {
                                         if (it.stock != 0) {

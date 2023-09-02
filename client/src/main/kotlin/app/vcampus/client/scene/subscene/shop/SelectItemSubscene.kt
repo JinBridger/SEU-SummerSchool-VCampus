@@ -2,8 +2,10 @@ package app.vcampus.client.scene.subscene.shop
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -142,9 +144,8 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                             }
 
                             item {
-                                Card(modifier = Modifier.fillMaxWidth().shadowCustom(
-                                        blurRadius = 3.dp,
-                                        shapeRadius = 3.dp)) {
+                                Card(modifier = Modifier.fillMaxWidth().border(1.dp,
+                                        color = Color.LightGray, shape = RoundedCornerShape(4.dp))) {
                                     Column(modifier = Modifier.fillMaxWidth()) {
                                         viewModel.chosenShopItems.forEach {
                                             if (it.stock != 0) {
