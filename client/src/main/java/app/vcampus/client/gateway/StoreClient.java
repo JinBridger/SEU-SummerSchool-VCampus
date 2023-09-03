@@ -10,9 +10,6 @@ import app.vcampus.server.utility.Response;
 
 
 public class StoreClient {
-    public StoreClient(){
-
-    }
     public static StoreItem addItem(NettyHandler handler, String uuid, String itemName, String price, String barcode, String stock, String description) {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Response> response = new AtomicReference();

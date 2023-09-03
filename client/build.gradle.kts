@@ -31,6 +31,8 @@ dependencies {
     implementation("io.netty:netty-all:4.1.97.Final")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
+    implementation("org.slf4j:slf4j-api:2.0.7")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
     val precompose_version = "1.5.0"
     implementation(

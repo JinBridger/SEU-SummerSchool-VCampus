@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum BookStatus implements LabelledEnum {
-    outLoan("出借"),
     available("可借"),
-    newly("新增"),
-    reserved("预定");
+    lend("借出"),
+    newly("新书（未上架）"),
+    returned("已归还（未上架）");
 
-    private String label;
+    private final String label;
 
     BookStatus(String label) {
         this.label = label;

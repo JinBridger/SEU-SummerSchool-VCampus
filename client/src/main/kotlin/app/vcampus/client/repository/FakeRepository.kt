@@ -8,7 +8,7 @@ import app.vcampus.server.entity.LibraryBook
 import app.vcampus.server.entity.Student
 import app.vcampus.server.entity.User
 import app.vcampus.server.utility.Pair
-
+import mu.KotlinLogging
 
 
 data class _GradeItem(
@@ -27,6 +27,7 @@ data class _TeachingClass(
 object FakeRepository {
     private lateinit var handler: NettyHandler;
     lateinit var user: User;
+    private val logger = KotlinLogging.logger {}
 
     fun setHandler(handler: NettyHandler) {
         this.handler = handler
@@ -36,7 +37,7 @@ object FakeRepository {
         val user = AuthClient.login(handler, username, password)
 
         user?.let {
-            println(it)
+            logger.debug { it }
             this.user = it
             return true
         }
