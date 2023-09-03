@@ -3,6 +3,7 @@ package app.vcampus.server.entity;
 import app.vcampus.server.enums.LibraryAction;
 import jakarta.persistence.*;
 import lombok.Data;
+import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Data
 @Slf4j
 @Table(name = "bookTransaction")
-public class LibraryTransaction {
+public class LibraryTransaction implements IEntity{
     @Id
     public UUID uuid;
 

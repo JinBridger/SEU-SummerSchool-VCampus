@@ -56,6 +56,10 @@ object FakeRepository {
         return LibraryClient.addBook(handler, newBook)
     }
 
+    fun getBookInfo(book:LibraryBook):Unit{
+        LibraryClient.getBookInfo(handler,book.getUuid())
+    }
+
     fun getAllStoreItems(): List<_StoreItem> {
         return listOf(
                 _StoreItem(

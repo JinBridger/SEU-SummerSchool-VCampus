@@ -70,15 +70,16 @@ public class LibraryBook implements IEntity {
             LibraryBook book=new LibraryBook();
             book.setUuid(UUID.fromString(data.get("uuid")));
             book.setName(data.get("name"));
-            book.setIsbn(data.get("uuid"));
+            book.setIsbn(data.get("isbn"));
             book.setPlace(data.get("place"));
             book.setPress(data.get("press"));
             book.setDescription(data.get("description"));
             book.setBookStatus(BookStatus.valueOf(data.get("bookStatus")));
             book.setAuthor(data.get("author"));
             return book;
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.warn("fail to parse book from map");
+            return null;
         }
     }
 
