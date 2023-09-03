@@ -13,6 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -102,7 +103,13 @@ fun LoginScene(
                                         value = username,
                                         onValueChange = { username = it },
                                         label = { Text("一卡通号") },
-                                        modifier = Modifier.fillMaxWidth()
+                                        modifier = Modifier.fillMaxWidth().onPreviewKeyEvent {
+                                            event:KeyEvent->
+                                            if(event.type== KeyEventType.KeyDown&&event.key==Key.Enter){
+                                                viewModel.login(username, password)
+                                                true
+                                            }else{false}
+                                        }
                                 )
 
                                 OutlinedTextField(
@@ -110,7 +117,13 @@ fun LoginScene(
                                         onValueChange = { password = it },
                                         label = { Text("密码") },
                                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier.fillMaxWidth().onPreviewKeyEvent {
+                                                                                      event:KeyEvent->
+                                                                                      if(event.type== KeyEventType.KeyDown&&event.key==Key.Enter){
+                                                                                          viewModel.login(username, password)
+                                                                                          true
+                                                                                      }else{false}
+                                        },
                                         trailingIcon = {
                                             val image = if (passwordVisible)
                                                 Icons.Filled.Visibility
