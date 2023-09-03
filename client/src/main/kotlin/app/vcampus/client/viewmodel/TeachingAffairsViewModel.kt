@@ -62,4 +62,6 @@ class TeachingAffairsViewModel() : ViewModel() {
 
     // class table
     val schedules = FakeRepository.getAllSchedule()
+
+    val StudentGradeItems = FakeRepository.getStudentGrade()
 }

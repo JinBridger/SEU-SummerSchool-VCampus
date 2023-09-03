@@ -9,6 +9,12 @@ import app.vcampus.server.entity.Student
 import app.vcampus.server.entity.User
 import app.vcampus.server.utility.Pair
 
+
+
+data class _GradeItem(
+    val courseName: String, val grade: Int,
+    val credit: Double, val courseId: String)
+
 data class _StoreItem(val itemName: String, val price: Int,
                       val barcode: String, val stock: Int)
 
@@ -58,6 +64,18 @@ object FakeRepository {
 
     fun getBookInfo(book:LibraryBook):Unit{
         LibraryClient.getBookInfo(handler,book.getUuid())
+    }
+
+
+    fun getStudentGrade(): List<_GradeItem> {
+        return listOf(
+            _GradeItem(
+                "信号与系统",60,4.000,"B09G1010"),
+            _GradeItem(
+                "信号与系统",60,4.000,"B09G1010"),
+            _GradeItem(
+                "信号与系统",60,4.000,"B09G1010"),
+        )
     }
 
     fun getAllStoreItems(): List<_StoreItem> {
