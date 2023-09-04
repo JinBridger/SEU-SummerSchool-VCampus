@@ -156,4 +156,19 @@ public class TeachingAffairsController {
             return Response.Common.badRequest();
         }
     }
+
+    @RouteMapping(uri = "TeachingEvaluaiotn", role = "student")
+    public Response addEvaluaiton(Request request, org.hibernate.Session database)
+    {
+        TeachingEvaluation newTeachingEvaluation=IEntity.fromJson(request.getParams().get("evaluation"), TeachingEvaluation.class);
+        if(newTeachingEvaluation==null)
+        {
+            return Response.Common.badRequest();
+        }
+        newTeachingEvaluation.setUuid(UUID.randomUUID());
+        Transaction tx=database.beginTransaction();
+        database.persist(newTeachingEvaluation);
+        tx.commit();
+        return Response.Common.ok();
+    }
 }

@@ -4,6 +4,7 @@ import app.vcampus.client.net.NettyHandler;
 import app.vcampus.server.entity.Course;
 import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.SelectedClass;
+import app.vcampus.server.entity.TeachingEvaluation;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -114,6 +115,22 @@ public class TeachingAffairsClient
             return response.getStatus().equals("success");
         }catch(InterruptedException e) {
             log.warn("Fail to  record grade", e);
+            return false;
+        }
+    }
+
+    public static boolean addEvaluatoin(NettyHandler handler, TeachingEvaluation newEvaluation) {
+        Request request = new Request();
+        request.setUri("teachingEvaluation/addEvaluation");
+        request.setParams(Map.of(
+                "evaluaiton", newEvaluation.toJson()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals(("success"));
+        } catch (InterruptedException e) {
+            log.warn("Fail to add teaching evaluation", e);
             return false;
         }
     }
