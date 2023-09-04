@@ -20,10 +20,12 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 @Composable
 fun searchBookSubscene(viewModel: LibraryViewModel) {
     var keyword by viewModel.searchBook.keyword
-    var searched by viewModel.searchBook.searched
+    val searched by viewModel.searchBook.searched
 
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))
@@ -33,17 +35,17 @@ fun searchBookSubscene(viewModel: LibraryViewModel) {
             item {
                 Spacer(Modifier.height(20.dp))
                 Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
-                            value = keyword,
-                            onValueChange = { keyword = it },
-                            label = { Text("搜索图书（支持模糊搜索）") },
-                            modifier = Modifier.padding(
-                                    0.dp, 0.dp, 16.dp,
-                                    0.dp
-                            ).weight(1F)
+                        value = keyword,
+                        onValueChange = { keyword = it },
+                        label = { Text("搜索图书（支持模糊搜索）") },
+                        modifier = Modifier.padding(
+                            0.dp, 0.dp, 16.dp,
+                            0.dp
+                        ).weight(1F)
                     )
                     Column {
                         Spacer(Modifier.height(8.dp))
@@ -64,7 +66,7 @@ fun searchBookSubscene(viewModel: LibraryViewModel) {
 
                     Spacer(Modifier.height(8.dp))
                 } else {
-                    if (keyword.isBlank() && !searched) {
+                    if (keyword.isBlank() || !searched) {
                         Text("输入任意内容以搜索...", fontSize = 14.sp)
                     } else {
                         Text("未检索到任何结果", fontSize = 14.sp)

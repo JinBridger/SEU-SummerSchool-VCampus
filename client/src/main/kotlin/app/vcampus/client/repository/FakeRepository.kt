@@ -12,6 +12,7 @@ import app.vcampus.server.entity.User
 import app.vcampus.server.utility.Pair
 import moe.tlaster.precompose.viewmodel.ViewModel
 import mu.KotlinLogging
+import java.util.UUID
 
 
 data class _GradeItem(
@@ -86,6 +87,14 @@ object FakeRepository {
 
     fun searchBook(keyword: String): Map<String, List<LibraryBook>> {
         return LibraryClient.searchBook(handler, keyword) ?: mapOf()
+    }
+
+    fun updateBook(book: LibraryBook): Boolean {
+        return LibraryClient.updateBook(handler, book)
+    }
+
+    fun deleteBook(uuid: UUID): Boolean {
+        return LibraryClient.deleteBook(handler, uuid)
     }
 
     fun getStudentGrade(): List<_GradeItem> {

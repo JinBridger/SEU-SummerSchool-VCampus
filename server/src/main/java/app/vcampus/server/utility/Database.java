@@ -1,10 +1,7 @@
 package app.vcampus.server.utility;
 
 import app.vcampus.server.entity.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 
@@ -50,5 +47,16 @@ public class Database {
         Root<T> itemRoot = criteria.from(type);
         criteria.where(builder.equal(itemRoot.get(field).as(String.class), value));
         return session.createQuery(criteria).getResultList();
+    }
+
+    public static <T> void updateWhere(Class<T> type, String field, String value, List<Pair<String, String>> updates, Session session) {
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaUpdate<T> criteria = builder.createCriteriaUpdate(type);
+        Root<T> itemRoot = criteria.from(type);
+
+        criteria.where(builder.equal(itemRoot.get(field).as(String.class), value));
+        updates.forEach(pair -> criteria.set(pair.getFirst(), pair.getSecond()));
+
+        session.createMutationQuery(criteria).executeUpdate();
     }
 }

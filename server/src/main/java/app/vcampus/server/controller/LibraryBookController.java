@@ -3,8 +3,8 @@ package app.vcampus.server.controller;
 import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.LibraryBook;
 import app.vcampus.server.entity.LibraryTransaction;
-import app.vcampus.server.entity.Student;
 import app.vcampus.server.utility.Database;
+import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.router.RouteMapping;
@@ -34,19 +34,26 @@ public class LibraryBookController {
 
         newBook.setUuid(UUID.randomUUID());
         Transaction tx = database.beginTransaction();
+        Database.updateWhere(LibraryBook.class, "isbn", newBook.getIsbn(), List.of(
+                new Pair<>("name", newBook.getName()),
+                new Pair<>("description", newBook.getDescription()),
+                new Pair<>("author", newBook.getAuthor()),
+                new Pair<>("press", newBook.getPress()),
+                new Pair<>("cover", newBook.getCover())
+        ), database);
         database.persist(newBook);
         tx.commit();
 
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "library/deleteBook",role="library_staff")
+    @RouteMapping(uri = "library/deleteBook", role = "library_staff")
     public Response deleteBook(Request request, org.hibernate.Session database) {
         String id = request.getParams().get("uuid");
 
         if (id == null) return Response.Common.error("Book UUID cannot be empty");
 
-        UUID uuid=UUID.fromString(id);
+        UUID uuid = UUID.fromString(id);
         LibraryBook toDelete = database.get(LibraryBook.class, uuid);
         if (toDelete == null) return Response.Common.error("No such book");
 
@@ -57,29 +64,31 @@ public class LibraryBookController {
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "library/updateBook")
+    @RouteMapping(uri = "library/updateBook", role = "library_staff")
     public Response updateBook(Request request, org.hibernate.Session database) {
         /*
             when users borrow a book or the administrator update some books' information manually,
             some book information will be updated with this method
          */
-        LibraryBook newBook = LibraryBook.fromMap(request.getParams());
-        if(newBook==null) return Response.Common.badRequest();
 
+        LibraryBook newBook = IEntity.fromJson(request.getParams().get("book"), LibraryBook.class);
         LibraryBook toUpdate = database.get(LibraryBook.class, newBook.getUuid());
-        if (toUpdate == null) return Response.Common.error("Incorrect book UUID");
-
-        if (newBook == toUpdate) return Response.Common.error("No update");
+        if (toUpdate == null) {
+            return Response.Common.badRequest();
+        }
 
         Transaction tx = database.beginTransaction();
-        toUpdate.setBookStatus(newBook.getBookStatus());
+        toUpdate.setName(newBook.getName());
         toUpdate.setDescription(newBook.getDescription());
         toUpdate.setPlace(newBook.getPlace());
+        toUpdate.setCover(newBook.getCover());
+        toUpdate.setPress(newBook.getPress());
+        toUpdate.setAuthor(newBook.getAuthor());
+        toUpdate.setBookStatus(newBook.getBookStatus());
         database.persist(toUpdate);
         tx.commit();
 
         return Response.Common.ok();
-
     }
 
     @RouteMapping(uri = "library/searchBook")
@@ -115,7 +124,8 @@ public class LibraryBookController {
 
             HttpResponse result = HttpClient.newHttpClient().send(httpRequest, java.net.http.HttpResponse.BodyHandlers.ofString());
             log.info(result.toString());
-            Type type = new TypeToken<Map<String, Object>>(){}.getType();
+            Type type = new TypeToken<Map<String, Object>>() {
+            }.getType();
             Map<String, Object> data = (new Gson()).fromJson(result.body().toString(), type);
             data = (Map<String, Object>) data.get("data");
             LibraryBook newBook = LibraryBook.fromWeb(data);
@@ -126,31 +136,31 @@ public class LibraryBookController {
         }
     }
 
-    @RouteMapping(uri="library/getBookInfo")
-    public Response getBookInfo(Request request,org.hibernate.Session database){
-        /*
-        this method is used when user clicks the searched book to show the detailed book information
-         */
-        try {
-            String id=request.getParams().get("uuid");
-            if(id==null) return Response.Common.error("uuid cannot be empty");
+//    @RouteMapping(uri="library/getBookInfo")
+//    public Response getBookInfo(Request request,org.hibernate.Session database){
+//        /*
+//        this method is used when user clicks the searched book to show the detailed book information
+//         */
+//        try {
+//            String id=request.getParams().get("uuid");
+//            if(id==null) return Response.Common.error("uuid cannot be empty");
+//
+//            UUID uuid=UUID.fromString(id);
+//            LibraryBook book=database.get(LibraryBook.class,uuid);
+//
+//            if(book==null){
+//                return Response.Common.error("missing book information");
+//            }
+//
+//            return Response.Common.ok(book.toMap());
+//        } catch (Exception e) {
+//            return Response.Common.error("Fail to get book information");
+//        }
+//    }
 
-            UUID uuid=UUID.fromString(id);
-            LibraryBook book=database.get(LibraryBook.class,uuid);
 
-            if(book==null){
-                return Response.Common.error("missing book information");
-            }
-
-            return Response.Common.ok(book.toMap());
-        } catch (Exception e) {
-            return Response.Common.error("Fail to get book information");
-        }
-    }
-
-
-    @RouteMapping(uri="library/queryRecord",role="library_staff")
-    public Response queryBookTransaction(Request request,org.hibernate.Session database){
+    @RouteMapping(uri = "library/queryRecord", role = "library_staff")
+    public Response queryBookTransaction(Request request, org.hibernate.Session database) {
         /*
             this method is used when the administrator query a book's transaction records
          */

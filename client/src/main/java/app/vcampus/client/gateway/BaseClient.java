@@ -14,6 +14,7 @@ public class BaseClient {
     public static Response sendRequest(NettyHandler handler, Request request) throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Response> response = new AtomicReference<>();
+        log.debug("Sending request: {}", request);
         handler.sendRequest(request, res -> {
             log.debug("Response received: {}", res);
             response.set(res);

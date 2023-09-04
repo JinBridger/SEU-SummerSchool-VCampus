@@ -16,22 +16,20 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 import app.vcampus.server.enums.BookStatus
 import kotlinx.coroutines.launch
 
-//@OptIn(ExperimentalMaterial3Api::class)
-@OptIn(ExperimentalStdlibApi::class)
 @Composable
 fun addBookSubscene(viewModel: LibraryViewModel) {
-    var isbn by viewModel.addBook.isbn
     val showDetails by viewModel.addBook.showDetails
 
-    var name by viewModel.addBook.name
-    var author by viewModel.addBook.author
-    var press by viewModel.addBook.press
-    var description by viewModel.addBook.description
-    var place by viewModel.addBook.place
-    var cover by viewModel.addBook.cover
-    var callNumber by viewModel.addBook.callNumber
+    var isbn by viewModel.addBook.newBook.value.isbn
+    var name by viewModel.addBook.newBook.value.name
+    var author by viewModel.addBook.newBook.value.author
+    var press by viewModel.addBook.newBook.value.press
+    var description by viewModel.addBook.newBook.value.description
+    var place by viewModel.addBook.newBook.value.place
+    var cover by viewModel.addBook.newBook.value.cover
+    var callNumber by viewModel.addBook.newBook.value.callNumber
+    var bookStatus by viewModel.addBook.newBook.value.bookStatus
 
-    var bookStatus by viewModel.addBook.bookStatus
     val scope = rememberCoroutineScope()
 
     Row(
@@ -186,6 +184,7 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
                                                     tint = MaterialTheme.colors.error
                                                 )
                                             },
+                                            singleLine = true,
                                             modifier = Modifier.fillMaxWidth()
                                         )
                                     }
@@ -203,6 +202,7 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
                                                     tint = MaterialTheme.colors.error
                                                 )
                                             },
+                                            singleLine = true,
                                             modifier = Modifier.fillMaxWidth()
                                         )
                                     }

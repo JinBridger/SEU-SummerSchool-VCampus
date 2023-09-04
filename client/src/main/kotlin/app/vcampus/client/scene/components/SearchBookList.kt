@@ -3,7 +3,6 @@ package app.vcampus.client.scene.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -18,93 +17,80 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.loadImageBitmap
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.vcampus.client.viewmodel.MutableLibraryBook
 import app.vcampus.server.entity.LibraryBook
 import app.vcampus.server.enums.BookStatus
-import app.vcampus.server.utility.Pair
 import com.seanproctor.datatable.DataColumn
 import com.seanproctor.datatable.TableColumnWidth
 import com.seanproctor.datatable.material.DataTable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.io.IOException
-import java.net.URL
 import java.util.stream.Collectors
+import app.vcampus.server.utility.Pair
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun <T> AsyncImage(
-    load: suspend () -> T,
-    painterFor: @Composable (T) -> Painter,
-    contentDescription: String,
-    modifier: Modifier = Modifier,
-    contentScale: ContentScale = ContentScale.Fit,
+fun searchBookListItem(
+    _bookList: List<LibraryBook>,
+    isEditable: Boolean = false,
+    onEdit: (LibraryBook, Boolean) -> Unit = { _: LibraryBook, _: Boolean -> }
 ) {
-    val image: T? by produceState<T?>(null) {
-        value = withContext(Dispatchers.IO) {
-            try {
-                load()
-            } catch (e: IOException) {
-                // instead of printing to console, you can also write this to log,
-                // or show some error placeholder
-                e.printStackTrace()
-                null
-            }
-        }
-    }
-
-    if (image != null) {
-        Image(
-            painter = painterFor(image!!),
-            contentDescription = contentDescription,
-            contentScale = contentScale,
-            modifier = modifier
-        )
-    }
-}
-
-fun loadImageBitmap(url: String): ImageBitmap =
-    URL(url).openStream().buffered().use(::loadImageBitmap)
-
-@OptIn(ExperimentalMaterialApi::class, ExperimentalStdlibApi::class)
-@Composable
-fun searchBookListItem(bookList: List<LibraryBook>, isEditable: Boolean = false) {
     var expanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
+    var bookList = _bookList.toList()
     val primaryBook = bookList[0]
 
-    Surface(modifier = Modifier.fillMaxWidth().border(1.dp,
-            color = Color.LightGray,
-            shape = RoundedCornerShape(4.dp)).animateContentSize(
-            animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
-            )
+    var name by remember { mutableStateOf(primaryBook.name) }
+    var author by remember { mutableStateOf(primaryBook.author) }
+    var press by remember { mutableStateOf(primaryBook.press) }
+    var cover by remember { mutableStateOf(primaryBook.cover) }
+    var description by remember { mutableStateOf(primaryBook.description) }
+
+    var modifiedBooks = mutableListOf<Pair<MutableLibraryBook, MutableState<Boolean>>>()
+
+    bookList.forEach {
+        val newBook = MutableLibraryBook()
+        newBook.fromLibraryBook(it)
+        modifiedBooks.add(Pair(newBook, mutableStateOf(false)))
+    }
+
+    Surface(modifier = Modifier.fillMaxWidth().border(
+        1.dp,
+        color = Color.LightGray,
+        shape = RoundedCornerShape(4.dp)
+    ).animateContentSize(
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = LinearOutSlowInEasing
+        )
     ), onClick = { expanded = !expanded }) {
         Box(Modifier.fillMaxSize().padding(10.dp)) {
             Column {
                 Row {
                     Column {
-                        Text(primaryBook.name, fontWeight = FontWeight(700))
-                        Text(primaryBook.author)
+                        Text(name, fontWeight = FontWeight(700))
+                        Text(author)
                         Spacer(Modifier.height(4.dp))
-                        Text(primaryBook.press, fontSize = 14.sp)
+                        Text(press, fontSize = 14.sp)
                     }
                     Spacer(Modifier.weight(1F))
                     Column {
-                        Text("馆藏副本：" + bookList.size, fontSize = 12.sp,
-                                fontWeight = FontWeight(700),
-                                color = Color.Gray)
-                        Text("可借副本：" + bookList.stream().filter { book -> book.bookStatus.equals(BookStatus.available) }
-                            .collect(Collectors.counting()), fontSize = 12.sp,
-                                fontWeight = FontWeight(700),
-                                color = Color.Gray)
+                        Text(
+                            "馆藏副本：" + modifiedBooks.size, fontSize = 12.sp,
+                            fontWeight = FontWeight(700),
+                            color = Color.Gray
+                        )
+                        Text(
+                            "可借副本：" + modifiedBooks.stream()
+                                .filter { book -> book.first.bookStatus.value == BookStatus.available }
+                                .collect(Collectors.counting()), fontSize = 12.sp,
+                            fontWeight = FontWeight(700),
+                            color = Color.Gray)
                     }
                 }
 
@@ -122,21 +108,27 @@ fun searchBookListItem(bookList: List<LibraryBook>, isEditable: Boolean = false)
                                 Spacer(Modifier.height(4.dp))
                                 Row {
                                     Text("简介: ", fontWeight = FontWeight(700))
-                                    Text(primaryBook.description)
+                                    Text(description)
                                 }
                                 Spacer(Modifier.height(4.dp))
                             }
                             Spacer(Modifier.width(10.dp))
                             Column {
-                                Box(modifier = Modifier.fillMaxWidth().aspectRatio(
-                                        0.7F).clip(
-                                        RoundedCornerShape(4.dp)).background(
-                                        Color.Cyan)) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().aspectRatio(
+                                        0.7F
+                                    ).clip(
+                                        RoundedCornerShape(4.dp)
+                                    ).background(
+                                        Color.Cyan
+                                    )
+                                ) {
                                     AsyncImage(
-                                        load = { loadImageBitmap(primaryBook.cover) },
+                                        load = { loadImageBitmap(cover) },
                                         painterFor = { remember { BitmapPainter(it) } },
                                         contentDescription = "",
-                                        contentScale = ContentScale.FillBounds)
+                                        contentScale = ContentScale.FillBounds
+                                    )
                                 }
                                 Spacer(Modifier.weight(1F))
                             }
@@ -144,68 +136,76 @@ fun searchBookListItem(bookList: List<LibraryBook>, isEditable: Boolean = false)
                         Spacer(Modifier.height(12.dp))
                         Divider()
                         DataTable(
-                                rowHeight = 40.dp,
-                                headerHeight = 40.dp,
-                                modifier = Modifier.fillMaxWidth(),
-                                columns = listOf(
-                                        DataColumn(
-                                                width = TableColumnWidth.Flex(
-                                                        2F)) {
-                                            Text("索书号",
-                                                    fontWeight = FontWeight(
-                                                            700))
-                                        },
-                                        DataColumn(
-                                                width = TableColumnWidth.Flex(
-                                                        2F)) {
-                                            Text("条形码",
-                                                    fontWeight = FontWeight(
-                                                            700))
-                                        },
-                                        DataColumn(
-                                                width = TableColumnWidth.Flex(
-                                                        6F)) {
-                                            Text("馆藏地",
-                                                    fontWeight = FontWeight(
-                                                            700))
-                                        },
-                                        DataColumn(
-                                                width = TableColumnWidth.Flex(
-                                                        1F)) {
-                                            Text("书籍状态",
-                                                    fontWeight = FontWeight(
-                                                            700))
-                                        },
-                                )
+                            rowHeight = 40.dp,
+                            headerHeight = 40.dp,
+                            modifier = Modifier.fillMaxWidth(),
+                            columns = listOf(
+                                DataColumn(
+                                    width = TableColumnWidth.Flex(
+                                        2F
+                                    )
+                                ) {
+                                    Text(
+                                        "索书号",
+                                        fontWeight = FontWeight(
+                                            700
+                                        )
+                                    )
+                                },
+                                DataColumn(
+                                    width = TableColumnWidth.Flex(
+                                        2F
+                                    )
+                                ) {
+                                    Text(
+                                        "条形码",
+                                        fontWeight = FontWeight(
+                                            700
+                                        )
+                                    )
+                                },
+                                DataColumn(
+                                    width = TableColumnWidth.Flex(
+                                        6F
+                                    )
+                                ) {
+                                    Text(
+                                        "馆藏地",
+                                        fontWeight = FontWeight(
+                                            700
+                                        )
+                                    )
+                                },
+                                DataColumn(
+                                    width = TableColumnWidth.Flex(
+                                        1F
+                                    )
+                                ) {
+                                    Text(
+                                        "书籍状态",
+                                        fontWeight = FontWeight(
+                                            700
+                                        )
+                                    )
+                                },
+                            )
                         ) {
-                            bookList.forEach {
+                            modifiedBooks.forEach {
                                 row {
                                     cell {
-                                        Text(it.callNumber)
+                                        Text(it.first.callNumber.value)
                                     }
                                     cell {
-                                        Text(it.uuid.toString().split("-").last())
+                                        Text(it.first.uuid.toString().split("-").last())
                                     }
                                     cell {
-                                        Text(it.place)
+                                        Text(it.first.place.value)
                                     }
                                     cell {
-                                        Text(it.bookStatus.label)
+                                        Text(it.first.bookStatus.value.label, color = Color(it.first.bookStatus.value.color))
                                     }
                                 }
                             }
-//                            row {
-//                                cell { Text("TP312C/98/.4") }
-//                                cell { Text("2847857") }
-//                                cell { Text("工业技术图书阅览室（九龙湖A401）") }
-//                                cell { Text("可借", color = Color(0xff508e54)) }
-//                            }
-//                            row {
-//                                cell { Text("TP312C/98/.4") }
-//                                cell { Text("2847859") }
-//                                cell { Text("工业技术图书阅览室（九龙湖A401）") }
-//                                cell { Text("可借", color = Color(0xff508e54)) }
-//                            }
                         }
 
                         if (isEditable) {
@@ -218,172 +218,241 @@ fun searchBookListItem(bookList: List<LibraryBook>, isEditable: Boolean = false)
                         }
                     } else {
                         Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             OutlinedTextField(
-                                    value = "",
-                                    onValueChange = { },
-                                    label = { Text("书名") },
-                                    modifier = Modifier.padding(
-                                            0.dp, 0.dp, 16.dp,
-                                            0.dp
-                                    ).weight(1F)
+                                value = name,
+                                onValueChange = { name = it },
+                                label = { Text("书名") },
+                                modifier = Modifier.padding(
+                                    0.dp, 0.dp, 16.dp,
+                                    0.dp
+                                ).weight(1F),
+                                singleLine = true
                             )
                             OutlinedTextField(
-                                    value = "",
-                                    onValueChange = { },
-                                    label = { Text("作者") },
-                                    modifier = Modifier.padding(
-                                            0.dp, 0.dp, 16.dp,
-                                            0.dp
-                                    ).weight(1F)
+                                value = author,
+                                onValueChange = { author = it },
+                                label = { Text("作者") },
+                                modifier = Modifier.padding(
+                                    0.dp, 0.dp, 16.dp,
+                                    0.dp
+                                ).weight(1F),
+                                singleLine = true
                             )
                             OutlinedTextField(
-                                    value = "",
-                                    onValueChange = { },
-                                    label = { Text("出版社") },
-                                    modifier = Modifier.padding(
-                                            0.dp, 0.dp, 0.dp,
-                                            0.dp
-                                    ).weight(1F)
+                                value = press,
+                                onValueChange = { press = it },
+                                label = { Text("出版社") },
+                                modifier = Modifier.padding(
+                                    0.dp, 0.dp, 0.dp,
+                                    0.dp
+                                ).weight(1F),
+                                singleLine = true
                             )
                         }
                         Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             OutlinedTextField(
-                                    value = "",
-                                    onValueChange = { },
-                                    label = { Text("封面图片链接") },
-                                    modifier = Modifier.padding(
-                                            0.dp, 0.dp, 16.dp,
-                                            0.dp
-                                    ).weight(2F)
+                                value = cover,
+                                onValueChange = { cover = it },
+                                label = { Text("封面图片链接") },
+                                modifier = Modifier.padding(
+                                    0.dp, 0.dp, 16.dp,
+                                    0.dp
+                                ).weight(2F),
+                                singleLine = true
                             )
                             OutlinedTextField(
-                                    value = "",
-                                    onValueChange = { },
-                                    label = { Text("ISBN") },
-                                    modifier = Modifier.padding(
-                                            0.dp, 0.dp, 0.dp,
-                                            0.dp
-                                    ).weight(1F)
+                                value = primaryBook.isbn,
+                                onValueChange = { },
+                                enabled = false,
+                                label = { Text("ISBN") },
+                                modifier = Modifier.padding(
+                                    0.dp, 0.dp, 0.dp,
+                                    0.dp
+                                ).weight(1F),
+                                singleLine = true
                             )
                         }
                         Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             OutlinedTextField(
-                                    value = "",
-                                    onValueChange = { },
-                                    label = { Text("简介") },
-                                    modifier = Modifier.padding(
-                                            0.dp, 0.dp, 0.dp,
-                                            0.dp
-                                    ).weight(1F)
+                                value = description,
+                                onValueChange = { description = it },
+                                label = { Text("简介") },
+                                modifier = Modifier.padding(
+                                    0.dp, 0.dp, 0.dp,
+                                    0.dp
+                                ).weight(1F),
+                                maxLines = 5
                             )
                         }
 
                         DataTable(
-                                modifier = Modifier.fillMaxWidth(),
-                                columns = listOf(
-                                        DataColumn(
-                                                width = TableColumnWidth.Flex(
-                                                        2F)) {
-                                            Text("索书号",
-                                                    fontWeight = FontWeight(
-                                                            700))
-                                        },
-                                        DataColumn(
-                                                width = TableColumnWidth.Flex(
-                                                        2F)) {
-                                            Text("条形码",
-                                                    fontWeight = FontWeight(
-                                                            700))
-                                        },
-                                        DataColumn(
-                                                width = TableColumnWidth.Flex(
-                                                        6F)) {
-                                            Text("馆藏地",
-                                                    fontWeight = FontWeight(
-                                                            700))
-                                        },
-                                        DataColumn(
-                                                width = TableColumnWidth.Flex(
-                                                        1F)) {
-                                            Text("书籍状态",
-                                                    fontWeight = FontWeight(
-                                                            700))
-                                        },
-                                        DataColumn(
-                                                width = TableColumnWidth.Flex(
-                                                        1F)) {
-                                            Text("操作",
-                                                    fontWeight = FontWeight(
-                                                            700))
-                                        }
-                                )
+                            modifier = Modifier.fillMaxWidth(),
+                            columns = listOf(
+                                DataColumn(
+                                    width = TableColumnWidth.Flex(
+                                        2F
+                                    )
+                                ) {
+                                    Text(
+                                        "索书号",
+                                        fontWeight = FontWeight(
+                                            700
+                                        )
+                                    )
+                                },
+                                DataColumn(
+                                    width = TableColumnWidth.Flex(
+                                        2F
+                                    )
+                                ) {
+                                    Text(
+                                        "条形码",
+                                        fontWeight = FontWeight(
+                                            700
+                                        )
+                                    )
+                                },
+                                DataColumn(
+                                    width = TableColumnWidth.Flex(
+                                        6F
+                                    )
+                                ) {
+                                    Text(
+                                        "馆藏地",
+                                        fontWeight = FontWeight(
+                                            700
+                                        )
+                                    )
+                                },
+                                DataColumn(
+                                    width = TableColumnWidth.Flex(
+                                        4F
+                                    )
+                                ) {
+                                    Text(
+                                        "书籍状态",
+                                        fontWeight = FontWeight(
+                                            700
+                                        )
+                                    )
+                                },
+                                DataColumn(
+                                    width = TableColumnWidth.Flex(
+                                        1F
+                                    )
+                                ) {
+                                    Text(
+                                        "操作",
+                                        fontWeight = FontWeight(
+                                            700
+                                        )
+                                    )
+                                }
+                            )
                         ) {
-                            row {
-                                cell {
-                                    Box(
-                                            modifier = Modifier.fillMaxSize(0.9F).border(1.dp, color = Color.Gray, shape = RoundedCornerShape(4.dp)).padding(4.dp)
-                                    ) {
-                                        BasicTextField(
-                                                value = "",
-                                                onValueChange = { },
+                            modifiedBooks.forEach {
+                                row {
+                                    cell {
+                                        Box(
+                                            modifier = Modifier.fillMaxSize(0.9F)
+                                                .border(1.dp, color = Color.Gray, shape = RoundedCornerShape(4.dp))
+                                                .padding(4.dp)
+                                        ) {
+                                            BasicTextField(
+                                                value = it.first.callNumber.value,
+                                                onValueChange = { v -> it.first.callNumber.value = v },
+                                                textStyle = TextStyle(textDecoration = if (it.second.value) TextDecoration.LineThrough else TextDecoration.None)
+                                            )
+                                        }
+                                    }
+                                    cell {
+                                        Text(
+                                            it.first.uuid.toString().split("-").last(),
+                                            textDecoration = if (it.second.value) TextDecoration.LineThrough else TextDecoration.None
                                         )
                                     }
-                                }
-                                cell {
-                                    Box(
-                                            modifier = Modifier.fillMaxSize(0.9F).border(1.dp, color = Color.Gray, shape = RoundedCornerShape(4.dp)).padding(4.dp)
-                                    ) {
-                                        BasicTextField(
-                                                value = "",
-                                                onValueChange = { },
-                                        )
+                                    cell {
+                                        Box(
+                                            modifier = Modifier.fillMaxSize(0.9F)
+                                                .border(1.dp, color = Color.Gray, shape = RoundedCornerShape(4.dp))
+                                                .padding(4.dp)
+                                        ) {
+                                            BasicTextField(
+                                                value = it.first.place.value,
+                                                onValueChange = { v -> it.first.place.value = v },
+                                                textStyle = TextStyle(textDecoration = if (it.second.value) TextDecoration.LineThrough else TextDecoration.None)
+                                            )
+                                        }
                                     }
-                                }
-                                cell {
-                                    Box(
-                                            modifier = Modifier.fillMaxSize(0.9F).border(1.dp, color = Color.Gray, shape = RoundedCornerShape(4.dp)).padding(4.dp)
-                                    ) {
-                                        BasicTextField(
-                                                value = "",
-                                                onValueChange = { },
-                                        )
+                                    cell {
+                                        Box(
+                                            modifier = Modifier.fillMaxSize(0.9F)
+                                                .border(1.dp, color = Color.Gray, shape = RoundedCornerShape(4.dp))
+                                                .padding(4.dp)
+                                        ) {
+                                            Select(
+                                                selectList = BookStatus.entries,
+                                                label = { Text("书籍状态") },
+                                                setValue = { v -> it.first.bookStatus.value = v },
+                                                value = it.first.bookStatus.value,
+                                                basic = true,
+                                                textStyle = TextStyle(textDecoration = if (it.second.value) TextDecoration.LineThrough else TextDecoration.None)
+                                            )
+                                        }
                                     }
-                                }
-                                cell {
-                                    Box(
-                                            modifier = Modifier.fillMaxSize(0.9F).border(1.dp, color = Color.Gray, shape = RoundedCornerShape(4.dp)).padding(4.dp)
-                                    ) {
-                                        BasicTextField(
-                                                value = "",
-                                                onValueChange = { },
-                                        )
-                                    }
-                                }
-                                cell {
-                                    TextButton(onClick = {}) {
-                                        Text("删除图书")
+                                    cell {
+                                        TextButton(onClick = {
+                                            it.second.value = !it.second.value
+                                        }) {
+                                            if (it.second.value) {
+                                                Text("撤销删除")
+                                            } else {
+                                                Text("删除副本")
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
 
-                        if(isEditing) {
+                        if (isEditing) {
                             Spacer(Modifier.height(10.dp))
                             Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Spacer(Modifier.weight(1F))
                                 Button(onClick = {
+
+                                    val i  = modifiedBooks.iterator()
+
+                                    while (i.hasNext()) {
+                                        val pair = i.next()
+
+                                        pair.first.name.value = name
+                                        pair.first.author.value = author
+                                        pair.first.press.value = press
+                                        pair.first.cover.value = cover
+                                        pair.first.description.value = description
+
+                                        onEdit(pair.first.toLibraryBook(), pair.second.value)
+
+                                        if (pair.second.value) {
+                                            i.remove()
+                                        }
+                                    }
+
+                                    bookList = modifiedBooks.map { it.first.toLibraryBook() }
+
                                     isEditing = false
                                 }) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -394,6 +463,20 @@ fun searchBookListItem(bookList: List<LibraryBook>, isEditable: Boolean = false)
                                 }
                                 Spacer(Modifier.width(8.dp))
                                 Button(onClick = {
+                                    name = primaryBook.name
+                                    author = primaryBook.author
+                                    press = primaryBook.press
+                                    cover = primaryBook.cover
+                                    description = primaryBook.description
+
+                                    modifiedBooks = mutableListOf()
+
+                                    bookList.forEach {
+                                        val newBook = MutableLibraryBook()
+                                        newBook.fromLibraryBook(it)
+                                        modifiedBooks.add(Pair(newBook, mutableStateOf(false)))
+                                    }
+
                                     isEditing = false
                                 }) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {

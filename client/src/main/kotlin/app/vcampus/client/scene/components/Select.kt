@@ -3,6 +3,7 @@ package app.vcampus.client.scene.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import app.vcampus.server.enums.LabelledEnum
 import kotlin.reflect.full.declaredMemberFunctions
@@ -44,10 +46,13 @@ inline fun <reified T : Any, R> T.getPrivateProperty(name: String): R? =
 fun <T> Select(
     selectList: List<T>,
     label: @Composable (() -> Unit)? = null,
-    setValue: ((T) -> Unit)
+    setValue: ((T) -> Unit),
+    value: T? = null,
+    basic: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current
 ) where T : Enum<T>, T : LabelledEnum {
     var dropExpand by remember { mutableStateOf(false) }
-    var selected by remember { mutableStateOf(selectList[0]) }
+    var selected by remember { mutableStateOf(value ?: selectList[0]) }
     var dropDownWidth by remember { mutableStateOf(0) }
 
     val callBack = fun(t: T, expand: Boolean) {
@@ -59,33 +64,60 @@ fun <T> Select(
     val defaultTextFieldColors = TextFieldDefaults.textFieldColors()
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        OutlinedTextField(
-            selected.label,
-            label = label,
-            onValueChange = { },
-            readOnly = true,
-            enabled = false,
-            modifier = Modifier
-                .fillMaxWidth()
-                .noRippleClickable { callBack(selected, true) }
-                .onSizeChanged { dropDownWidth = it.width },
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowDropDown,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(16.dp)
-                )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                disabledTextColor = defaultTextFieldColors.textColor(true).value,
-                disabledBorderColor = defaultTextFieldColors.indicatorColor(true, false, remember { MutableInteractionSource() }).value,
-                disabledPlaceholderColor = defaultTextFieldColors.placeholderColor(true).value,
-                disabledLabelColor = defaultTextFieldColors.labelColor(true, false, remember { MutableInteractionSource() }).value,
-                disabledLeadingIconColor = defaultTextFieldColors.leadingIconColor(true, false).value,
-                disabledTrailingIconColor = defaultTextFieldColors.trailingIconColor(true, false).value
+        if (basic) {
+            BasicTextField(
+                value = selected.label,
+                onValueChange = { },
+                readOnly = true,
+                enabled = false,
+                textStyle = textStyle,
+                decorationBox = { innerTextField ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .noRippleClickable { callBack(selected, true) }
+                            .onSizeChanged { dropDownWidth = it.width },
+                    ) {
+                        innerTextField()
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowDropDown,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                        )
+                    }
+                }
             )
-        )
+        } else {
+            OutlinedTextField(
+                selected.label,
+                label = label,
+                onValueChange = { },
+                readOnly = true,
+                enabled = false,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .noRippleClickable { callBack(selected, true) }
+                    .onSizeChanged { dropDownWidth = it.width },
+                textStyle = textStyle,
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.ArrowDropDown,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(16.dp)
+                    )
+                },
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledTextColor = defaultTextFieldColors.textColor(true).value,
+                    disabledBorderColor = defaultTextFieldColors.indicatorColor(true, false, remember { MutableInteractionSource() }).value,
+                    disabledPlaceholderColor = defaultTextFieldColors.placeholderColor(true).value,
+                    disabledLabelColor = defaultTextFieldColors.labelColor(true, false, remember { MutableInteractionSource() }).value,
+                    disabledLeadingIconColor = defaultTextFieldColors.leadingIconColor(true, false).value,
+                    disabledTrailingIconColor = defaultTextFieldColors.trailingIconColor(true, false).value
+                )
+            )
+        }
 
         DropdownMenu(
             expanded = dropExpand,

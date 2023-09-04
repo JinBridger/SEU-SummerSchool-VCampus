@@ -97,4 +97,36 @@ public class LibraryClient {
             return null;
         }
     }
+
+    public static boolean updateBook(NettyHandler handler, LibraryBook book) {
+        Request request = new Request();
+        request.setUri("library/updateBook");
+        request.setParams(Map.of(
+                "book", book.toJson()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to update book", e);
+            return false;
+        }
+    }
+
+    public static boolean deleteBook(NettyHandler handler, UUID uuid) {
+        Request request = new Request();
+        request.setUri("library/deleteBook");
+        request.setParams(Map.of(
+                "uuid", uuid.toString()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to delete book", e);
+            return false;
+        }
+    }
 }
