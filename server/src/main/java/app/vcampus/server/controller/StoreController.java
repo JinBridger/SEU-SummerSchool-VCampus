@@ -1,6 +1,7 @@
 package app.vcampus.server.controller;
 
 import app.vcampus.server.entity.StoreItem;
+import app.vcampus.server.entity.StoreReport;
 import app.vcampus.server.entity.StoreTransaction;
 import app.vcampus.server.entity.User;
 import app.vcampus.server.utility.*;
@@ -12,13 +13,14 @@ import org.hibernate.Transaction;
 import javax.management.Query;
 import java.time.LocalDateTime;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 
 public class StoreController {
-    @RouteMapping(uri = "storeItem/searchItem",role="admin")
+    @RouteMapping(uri = "storeItem/searchItem")
     public Response searchItem(Request request, org.hibernate.Session database) {
         String itemName = request.getParams().get("itemName");
         if (itemName == null) {
@@ -97,15 +99,16 @@ public class StoreController {
 
         Transaction tx=database.beginTransaction();
         Integer nowStock=selectStoreItem.getStock();
-        Integer salesAmount=Integer.parseInt(request.getParams().get("amount"));
-        if(salesAmount>nowStock){
+        Integer salesVolume=Integer.parseInt(request.getParams().get("amount"));
+        if(salesVolume>nowStock){
             return Response.Common.error("Sale amount must not exceed stock");
         }
-        selectStoreItem.setStock(nowStock-salesAmount);
+        selectStoreItem.setStock(nowStock-salesVolume);
+        selectStoreItem.setSalesVolume(salesVolume);
         StoreTransaction newStoreTransaction=new StoreTransaction();
         newStoreTransaction.setUuid(UUID.randomUUID());
         newStoreTransaction.setItemUUID(selectStoreItem.getUuid());
-        newStoreTransaction.setAmount(salesAmount);
+        newStoreTransaction.setAmount(salesVolume);
         newStoreTransaction.setItemPrice(selectStoreItem.getPrice());
         newStoreTransaction.setCardNumber(Integer.parseInt(request.getParams().get("cardNumber")));
         newStoreTransaction.setTime(LocalDateTime.now());
@@ -140,9 +143,33 @@ public class StoreController {
         return Response.Common.ok();
     }
 
-    /*@RouteMapping(uri="storeTransaction/getReport",role="admin")
+    @RouteMapping(uri="storeItem/getReport",role="admin")
     public Response getReport(Request request,org.hibernate.Session database){
+        try{
+            List<StoreItem> allItems=Database.loadAllData(StoreItem.class,database);
+            if(allItems.isEmpty()){
+                return Response.Common.error("Empty report");
+            }
+            Collections.sort(allItems,(o1,o2)->o2.getSalesVolume()-o1.getSalesVolume());
+            int i=1;
+            for(StoreItem itemInOrder:allItems){
+                StoreReport storeReport=new StoreReport();
 
+                storeReport.setUuid(UUID.randomUUID());
+                storeReport.setItemUUID(itemInOrder.getUuid());
+                storeReport.setRank(i);
+                storeReport.setItemName(itemInOrder.getItemName());
+                storeReport.setPrice(itemInOrder.getPrice());
+                storeReport.setPictureLink(itemInOrder.getPictureLink());
+                storeReport.setBarcode(itemInOrder.getBarcode());
+                storeReport.setStock(itemInOrder.getStock());
+                storeReport.setSalesVolume(itemInOrder.getSalesVolume());
+                storeReport.setDescription(itemInOrder.getDescription());
+                i++;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return Response.Common.ok();
-    }*/
+    }
 }

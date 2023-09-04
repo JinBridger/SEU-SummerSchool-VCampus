@@ -11,11 +11,17 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "storeitem")
+@Table(name = "storereport")
 @Slf4j
-public class StoreItem {
+public class StoreReport {
     @Column(nullable = false)
     public UUID uuid;
+
+    @Column(nullable = false)
+    public UUID itemUUID;
+
+    @Column(nullable = false)
+    public Integer rank;
 
     @Column(nullable = false)
     public String itemName;
@@ -37,20 +43,22 @@ public class StoreItem {
 
     public String description;
 
-    public static StoreItem fromMap(Map<String, String> data) {
+    public static StoreReport fromMap(Map<String, String> data) {
         try {
-            StoreItem storeItem = new StoreItem();
+            StoreReport storeReport = new StoreReport();
 
-            storeItem.setUuid(UUID.fromString(data.get("uuid")));
-            storeItem.setItemName(data.get("itemName"));
-            storeItem.setPrice(Integer.parseInt(data.get("price")));
-            storeItem.setPictureLink(data.get("pictureLink"));
-            storeItem.setBarcode(data.get("barcode"));
-            storeItem.setStock(Integer.parseInt(data.get("stock")));
-            storeItem.setSalesVolume(Integer.parseInt(data.get("salesVolume")));
-            storeItem.setDescription(data.get("description"));
+            storeReport.setUuid(UUID.fromString(data.get("uuid")));
+            storeReport.setItemUUID(UUID.fromString(data.get("itemUUID")));
+            storeReport.setRank(Integer.parseInt(data.get("rank")));
+            storeReport.setItemName(data.get("itemName"));
+            storeReport.setPrice(Integer.parseInt(data.get("price")));
+            storeReport.setPictureLink(data.get("pictureLink"));
+            storeReport.setBarcode(data.get("barcode"));
+            storeReport.setStock(Integer.parseInt(data.get("stock")));
+            storeReport.setSalesVolume(Integer.parseInt(data.get("salesVolume")));
+            storeReport.setDescription(data.get("description"));
 
-            return storeItem;
+            return storeReport;
         } catch (Exception e) {
             log.warn("Failed to parse storeitem from map:{}", data, e);
             return null;
@@ -60,6 +68,8 @@ public class StoreItem {
     public Map<String, String> toMap() {
         return Map.ofEntries(
                 Map.entry("uuid", getUuid().toString()),
+                Map.entry("itemUUID",getItemUUID().toString()),
+                Map.entry("rank",getRank().toString()),
                 Map.entry("itemName", getItemName()),
                 Map.entry("price", getPrice().toString()),
                 Map.entry("pictureLink",getPictureLink()),
@@ -69,5 +79,4 @@ public class StoreItem {
                 Map.entry("description", getDescription())
         );
     }
-
 }
