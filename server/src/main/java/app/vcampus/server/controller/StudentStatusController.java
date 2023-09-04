@@ -151,7 +151,7 @@ public class StudentStatusController {
                 students = Database.likeQuery(Student.class, new String[]{"cardNumber", "studentNumber", "givenName", "familyName", "birthDate", "major", "school", "birthPlace"}, keyword, database);
             }
 
-            return Response.Common.ok(students.stream().map(Student::toMap).collect(Collectors.toList()));
+            return Response.Common.ok(students.stream().map(Student::toJson).collect(Collectors.toList()));
         } catch (Exception e) {
             log.warn("Failed to filter students", e);
             return Response.Common.error("Failed to filter students");

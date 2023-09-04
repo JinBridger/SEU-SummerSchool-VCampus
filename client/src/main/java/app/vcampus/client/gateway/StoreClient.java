@@ -1,45 +1,35 @@
 package app.vcampus.client.gateway;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import app.vcampus.client.net.NettyHandler;
+import app.vcampus.server.entity.IEntity;
+import app.vcampus.server.entity.LibraryBook;
 import app.vcampus.server.entity.StoreItem;
 import app.vcampus.server.entity.StoreTransaction;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
-import kotlinx.coroutines.internal.LockFreeTaskQueue;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 public class StoreClient {
-//    public static StoreItem addItem(NettyHandler handler, String uuid, String itemName, String price, String barcode, String stock, String description) {
-//        CountDownLatch latch = new CountDownLatch(1);
-//        AtomicReference<Response> response = new AtomicReference();
-//        Request request = new Request();
-//        request.setUri("storeItem/addItem");
-//        request.setParams(Map.of("uuid", uuid, "itemName", itemName, "price", price, "barcode", barcode, "stock", stock, "description", description));
-//        handler.sendRequest(request, (res) -> {
-//            response.set(res);
-//            System.out.println(res);
-//            latch.countDown();
-//        });
-//
-//        try {
-//            latch.await();
-//        } catch (InterruptedException var16) {
-//            var16.printStackTrace();
-//            return null;
-//        }
-//
-//        if ((response.get()).getStatus().equals("success")) {
-//            Map<String, String> data = (Map)((Map)((Response)response.get()).getData()).get("storeItem");
-//            StoreItem storeItem=StoreItem.fromMap(data);
-//            return storeItem;
-//        } else {
-//            return null;
-//        }
-//    }
-//
+    public static boolean addItem(NettyHandler handler, StoreItem newStoreItem) {
+        Request request=new Request();
+        request.setUri("storeItem/addItem");
+        request.setParams(Map.of("item",newStoreItem.toJson()));
+        try{
+            Response response=BaseClient.sendRequest(handler,request);
+            return response.getStatus().equals("success");
+        }catch (InterruptedException e){
+            log.warn("Fail to add item",e);
+            return false;
+        }
+    }
+
 //    public static boolean deleteItem(NettyHandler handler,String itemName){
 //        CountDownLatch latch=new CountDownLatch(1);
 //        AtomicReference<Response> response=new AtomicReference();
@@ -145,5 +135,26 @@ public class StoreClient {
 //            return null;
 //        }
 //    }
-    
+//
+    public static List<StoreItem> getAll(NettyHandler handler){
+        Request request=new Request();
+        request.setUri("storeItem/filter");
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            if(response.getStatus().equals("success")){
+                List<String> raw_data = (List<String>) response.getData();
+                List<StoreItem> data = new LinkedList<>();
+                raw_data.forEach(json -> data.add(IEntity.fromJson(json, StoreItem.class)));
+                return data;
+            }else{
+                return null;
+            }
+        } catch (Exception e){
+            log.warn(String.valueOf(e));
+            return null;
+        }
+
+    }
+
 }

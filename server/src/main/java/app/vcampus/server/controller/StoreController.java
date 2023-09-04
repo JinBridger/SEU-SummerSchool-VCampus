@@ -1,9 +1,6 @@
 package app.vcampus.server.controller;
 
-import app.vcampus.server.entity.StoreItem;
-import app.vcampus.server.entity.StoreReport;
-import app.vcampus.server.entity.StoreTransaction;
-import app.vcampus.server.entity.User;
+import app.vcampus.server.entity.*;
 import app.vcampus.server.utility.*;
 import app.vcampus.server.utility.router.RouteMapping;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 
@@ -35,22 +33,31 @@ public class StoreController {
         return Response.Common.ok(Map.of("item", storeItem.toJson()));
     }
 
-//    @RouteMapping(uri = "storeItem/addItem",role="admin")
-//    public Response addItem(Request request, org.hibernate.Session database) {
-//        StoreItem newStoreItem = StoreItem.fromMap(request.getParams());
-//        if (newStoreItem == null) {
-//            return Response.Common.badRequest();
-//        }
-//        StoreItem storeItem = database.get(StoreItem.class, newStoreItem.getItemName());
-//        if (storeItem == null) {
-//            return Response.Common.error("Store item not found");
-//        }
-//        Transaction tx = database.beginTransaction();
-//        database.persist(newStoreItem);
-//        tx.commit();
-//        return Response.Common.ok();
-//    }
-//
+    @RouteMapping(uri = "storeItem/filter", role = "admin")
+    public Response filter(Request request, org.hibernate.Session database) {
+        try{
+            List<StoreItem> allItems;
+            allItems=Database.loadAllData(StoreItem.class,database);
+            return Response.Common.ok(allItems.stream().map(StoreItem::toJson).collect(Collectors.toList()));
+        }catch (Exception e){
+            log.warn("Failed to filter store items",e);
+            return Response.Common.error("Failed to filter store items");
+        }
+    }
+
+    @RouteMapping(uri = "storeItem/addItem",role="admin")
+    public Response addItem(Request request, org.hibernate.Session database) {
+        StoreItem newStoreItem=IEntity.fromJson(request.getParams().get("item"),StoreItem.class);
+        if(newStoreItem==null){
+            return Response.Common.badRequest();
+        }
+        newStoreItem.setUuid(UUID.randomUUID());
+        Transaction tx=database.beginTransaction();
+        database.persist(newStoreItem);
+        tx.commit();
+        return Response.Common.ok();
+    }
+
 //    @RouteMapping(uri = "storeItem/deleteItem",role="admin")
 //    public Response deleteItem(Request request, org.hibernate.Session database) {
 //        String itemName = request.getParams().get("itemName");
