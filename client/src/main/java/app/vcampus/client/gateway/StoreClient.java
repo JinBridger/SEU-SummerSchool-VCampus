@@ -1,16 +1,10 @@
 package app.vcampus.client.gateway;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import app.vcampus.client.net.NettyHandler;
-import app.vcampus.server.entity.IEntity;
-import app.vcampus.server.entity.LibraryBook;
-import app.vcampus.server.entity.StoreItem;
-import app.vcampus.server.entity.StoreTransaction;
+import app.vcampus.server.entity.*;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +55,23 @@ public class StoreClient {
             }
         } catch (InterruptedException e) {
             log.warn("Fail to get item info", e);
+            return null;
+        }
+    }
+    public static StoreItem searchId(NettyHandler handler, String uuid) {
+        Request request = new Request();
+        request.setUri("storeItem/searchId");
+        request.setParams(Map.of("uuid", uuid));
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            if (response.getStatus().equals("success")) {
+                StoreItem data=(StoreItem) response.getData();
+                return data;
+            } else {
+                throw new RuntimeException("Failed to get item");
+            }
+        } catch (InterruptedException e) {
+            log.warn("Fail to get item", e);
             return null;
         }
     }

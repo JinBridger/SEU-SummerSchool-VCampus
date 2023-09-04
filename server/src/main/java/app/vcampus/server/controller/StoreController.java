@@ -3,6 +3,7 @@ package app.vcampus.server.controller;
 import app.vcampus.server.entity.*;
 import app.vcampus.server.utility.*;
 import app.vcampus.server.utility.router.RouteMapping;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.util.Store;
 import org.hibernate.Transaction;
@@ -33,6 +34,22 @@ public class StoreController {
         }
     }
 
+    @RouteMapping(uri = "storeItem/searchId")
+    public Response searchId(Request request, org.hibernate.Session database) {
+        try {
+            String uuid=request.getParams().toString();
+            if (uuid == null)
+                return Response.Common.error("UUID cannot be empty");
+            UUID id=UUID.fromString(uuid);
+            StoreItem storeItem=database.get(StoreItem.class,id);
+            if(storeItem==null){
+                return Response.Common.error("missing item information");
+            }
+            return Response.Common.ok(storeItem.toJson());
+        } catch (Exception e) {
+            return Response.Common.error("Failed to search item");
+        }
+    }
 
     @RouteMapping(uri = "storeItem/filter", role = "admin")
     public Response filter(Request request, org.hibernate.Session database) {
@@ -72,6 +89,7 @@ public class StoreController {
         Transaction tx = database.beginTransaction();
         database.remove(toDelete);
         tx.commit();
+        //List<Pair<Integer,StoreItem>>
         return Response.Common.ok();
     }
 
