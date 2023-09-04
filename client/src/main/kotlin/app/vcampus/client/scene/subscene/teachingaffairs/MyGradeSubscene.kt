@@ -35,7 +35,6 @@ fun myGradeSubscene(viewModel: TeachingAffairsViewModel) {
                     GradeListItem(it,viewModel)
                     Spacer(Modifier.height(10.dp))
                 }
-                Spacer(Modifier.height(10.dp))
             }
 
             item {

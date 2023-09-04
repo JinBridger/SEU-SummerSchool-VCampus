@@ -132,66 +132,16 @@ fun GradeListItem(
                             )
                         }
                     }
-//                    Text(
-//                        "学分:${
-//                            String.format(
-//                                "%.2f",
-//                                item.credit / 1.0
-//                            )
-//                        } ",
-//                        color = Color.LightGray
-//                    )
-//                    SuggestionChip(
-//                        onClick = {},
-//                        modifier = Modifier.padding(4.dp),
-//                        label = { Text(
-//                            "限选",
-//                            color = Color.Black) }
-//                        )
-//                    Chip(
-//                        onClick = {},
-//                        modifier = Modifier.padding(4.dp),
-//                        border = BorderStroke(0.5.dp, Color.Black),
-//                        colors = ChipDefaults.chipColors(backgroundColor = Color.White),
-//                        content = { Text(
-//                            "限选",
-//                            color = Color.Black) }
-//                        )
                     Spacer(modifier = Modifier.weight(1F))
                     Text(
                             item.grade.toString() + " 分",
                             fontWeight = FontWeight(700),
-//                    fontSize = 25.sp
                     )
                 }
 
                 if (expanded) {
                     Spacer(Modifier.height(8.dp))
                     Divider()
-//                    Column(modifier = Modifier.fillMaxWidth()) {
-//                        Row(modifier = Modifier.fillMaxWidth()) {
-//                            Row {
-//                                Text("平时成绩", fontWeight = FontWeight(700))
-//                                Text("100")
-//                            }
-//                            Spacer(Modifier.width(4.dp))
-//                            Row {
-//                                Text("期中成绩", fontWeight = FontWeight(700))
-//                                Text("100")
-//                            }
-//                            Spacer(Modifier.width(4.dp))
-//                            Row {
-//                                Text("期末成绩", fontWeight = FontWeight(700))
-//                                Text("100")
-//                            }
-//                        }
-//                        Spacer(Modifier.height(10.dp))
-//                        Row {
-//                            Divider()
-//                            Text("课程成绩分布", fontWeight = FontWeight(700))
-//                        }
-//                    }
-
                     DataTable(
                             rowHeight = 40.dp,
                             headerHeight = 40.dp,
