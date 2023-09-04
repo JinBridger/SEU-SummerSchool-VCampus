@@ -18,21 +18,23 @@ import app.vcampus.client.viewmodel.StudentStatusViewModel
 
 @Composable
 fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
-    var familyName by viewModel.familyName
-    var givenName by viewModel.givenName
-    var gender by viewModel.gender
-    var birthDate by viewModel.birthDate
-    var major by viewModel.major
-    var school by viewModel.school
-    var cardNumber by viewModel.cardNumber
-    var studentNumber by viewModel.studentNumber
-    var birthPlace by viewModel.birthPlace
-    var politicalStatus by viewModel.politicalStatus
-    var status by viewModel.status
+    var familyName by viewModel.student.value.familyName
+    var givenName by viewModel.student.value.givenName
+    var gender by viewModel.student.value.gender
+    var birthDate by viewModel.student.value.birthDate
+    var major by viewModel.student.value.major
+    var school by viewModel.student.value.school
+    var cardNumber by viewModel.student.value.cardNumber
+    var studentNumber by viewModel.student.value.studentNumber
+    var birthPlace by viewModel.student.value.birthPlace
+    var politicalStatus by viewModel.student.value.politicalStatus
+    var status by viewModel.student.value.status
 
 
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
@@ -45,59 +47,38 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                 Row(Modifier.fillMaxWidth()) {
                     Box(Modifier.fillParentMaxWidth(0.25F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = familyName,
-                                onValueChange = { familyName = it },
-                                label = { Text("姓") },
-                                isError = familyName == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (familyName == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = familyName,
+                            onValueChange = { },
+                            label = { Text("姓") },
+                            readOnly = true,
                         )
                     }
 
                     Box(Modifier.fillParentMaxWidth(0.25F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = givenName,
-                                onValueChange = { givenName = it },
-                                label = { Text("名") },
-                                isError = givenName == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (givenName == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = givenName,
+                            onValueChange = { },
+                            label = { Text("名") },
+                            readOnly = true,
                         )
                     }
 
                     Box(Modifier.fillParentMaxWidth(0.20F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = gender,
-                                onValueChange = { gender = it },
-                                label = { Text("性别") },
-                                isError = gender == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (gender == "") Icon(Icons.Filled.Error,
-                                            "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = gender.label,
+                            onValueChange = { },
+                            label = { Text("性别") },
+                            readOnly = true,
                         )
                     }
 
                     Box(Modifier.fillParentMaxWidth(0.30F).padding(5.dp)) {
-                        OutlinedTextField(value = birthDate,
-                                onValueChange = { birthDate = it },
-                                label = { Text("出生日期") },
-                                isError = birthDate == "", readOnly = true,
-                                trailingIcon = {
-                                    if (birthDate == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
-                                })
+                        OutlinedTextField(
+                            value = birthDate,
+                            onValueChange = { birthDate = it },
+                            label = { Text("出生日期") },
+                            readOnly = true,
+                        )
                     }
                 }
 
@@ -106,49 +87,31 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                 Row {
                     Box(Modifier.fillParentMaxWidth(0.4F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = birthPlace,
-                                onValueChange = { birthPlace = it },
-                                label = { Text("籍贯") },
-                                modifier = Modifier.fillMaxWidth(),
-                                isError = birthPlace == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (birthPlace == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = birthPlace,
+                            onValueChange = { birthPlace = it },
+                            label = { Text("籍贯") },
+                            modifier = Modifier.fillMaxWidth(),
+                            readOnly = true,
                         )
                     }
 
                     Box(Modifier.fillParentMaxWidth(0.3F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = politicalStatus,
-                                onValueChange = { politicalStatus = it },
-                                label = { Text("政治面貌") },
-                                modifier = Modifier.fillMaxWidth(),
-                                isError = politicalStatus == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (politicalStatus == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = politicalStatus.label,
+                            onValueChange = { },
+                            label = { Text("政治面貌") },
+                            modifier = Modifier.fillMaxWidth(),
+                            readOnly = true,
                         )
                     }
 
                     Box(Modifier.fillParentMaxWidth(0.3F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = status,
-                                onValueChange = { status = it },
-                                label = { Text("学籍状态") },
-                                modifier = Modifier.fillMaxWidth(),
-                                isError = status == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (status == "") Icon(Icons.Filled.Error,
-                                            "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = status.label,
+                            onValueChange = { },
+                            label = { Text("学籍状态") },
+                            modifier = Modifier.fillMaxWidth(),
+                            readOnly = true,
                         )
                     }
                 }
@@ -158,33 +121,21 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                 Row {
                     Box(Modifier.fillParentMaxWidth(0.5F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = major,
-                                onValueChange = { major = it },
-                                label = { Text("专业") },
-                                modifier = Modifier.fillMaxWidth(),
-                                isError = major == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (major == "") Icon(Icons.Filled.Error,
-                                            "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = major,
+                            onValueChange = { major = it },
+                            label = { Text("专业") },
+                            modifier = Modifier.fillMaxWidth(),
+                            readOnly = true,
                         )
                     }
 
                     Box(Modifier.fillParentMaxWidth(0.5F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = school,
-                                onValueChange = { school = it },
-                                label = { Text("学院") },
-                                modifier = Modifier.fillMaxWidth(),
-                                isError = school == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (school == "") Icon(Icons.Filled.Error,
-                                            "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = school,
+                            onValueChange = { school = it },
+                            label = { Text("学院") },
+                            modifier = Modifier.fillMaxWidth(),
+                            readOnly = true,
                         )
                     }
                 }
@@ -194,33 +145,28 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
                 Row {
                     Box(Modifier.fillParentMaxWidth(0.5F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = cardNumber,
-                                onValueChange = { cardNumber = it },
-                                label = { Text("一卡通号") },
-                                modifier = Modifier.fillMaxWidth(),
-                                isError = cardNumber == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (cardNumber == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = cardNumber.toString(),
+                            onValueChange = { },
+                            label = { Text("一卡通号") },
+                            modifier = Modifier.fillMaxWidth(),
+                            readOnly = true,
                         )
                     }
 
                     Box(Modifier.fillParentMaxWidth(0.5F).padding(5.dp)) {
                         OutlinedTextField(
-                                value = studentNumber,
-                                onValueChange = { studentNumber = it },
-                                label = { Text("学号") },
-                                modifier = Modifier.fillMaxWidth(),
-                                isError = studentNumber == "",
-                                readOnly = true,
-                                trailingIcon = {
-                                    if (studentNumber == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
-                                },
+                            value = studentNumber,
+                            onValueChange = { studentNumber = it },
+                            label = { Text("学号") },
+                            modifier = Modifier.fillMaxWidth(),
+                            isError = studentNumber == "",
+                            readOnly = true,
+                            trailingIcon = {
+                                if (studentNumber == "") Icon(
+                                    Icons.Filled.Error, "error",
+                                    tint = MaterialTheme.colors.error
+                                )
+                            },
                         )
                     }
                 }

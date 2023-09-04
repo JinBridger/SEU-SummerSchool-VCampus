@@ -3,7 +3,7 @@ package app.vcampus.server.enums;
 import lombok.Getter;
 
 @Getter
-public enum Status implements LabelledEnum {
+public enum StudentStatus implements LabelledEnum {
     inSchool("在籍"),
     graduated("毕业"),
     dropout("退学"),
@@ -12,7 +12,7 @@ public enum Status implements LabelledEnum {
 
     private String label;
 
-    Status(String label) {
+    StudentStatus(String label) {
         this.label = label;
     }
 }

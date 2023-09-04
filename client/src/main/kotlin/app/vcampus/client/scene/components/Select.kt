@@ -49,13 +49,15 @@ fun <T> Select(
     setValue: ((T) -> Unit),
     value: T? = null,
     basic: Boolean = false,
-    textStyle: TextStyle = LocalTextStyle.current
+    textStyle: TextStyle = LocalTextStyle.current,
+    readOnly: Boolean = false
 ) where T : Enum<T>, T : LabelledEnum {
     var dropExpand by remember { mutableStateOf(false) }
     var selected by remember { mutableStateOf(value ?: selectList[0]) }
     var dropDownWidth by remember { mutableStateOf(0) }
 
     val callBack = fun(t: T, expand: Boolean) {
+        if (readOnly) return
         selected = t
         dropExpand = expand
         setValue(t)

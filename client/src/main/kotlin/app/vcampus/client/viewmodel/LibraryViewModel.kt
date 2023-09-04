@@ -86,22 +86,6 @@ class LibraryViewModel : ViewModel() {
 
             else -> emptyList()
         }
-    } + (if (identity.contains("library_user")) {
-        listOf(SideBarItem(true, "借还相关", "", Icons.Default.Info, false))
-    } else {
-        emptyList()
-    }) + identity.flatMap {
-        when (it) {
-            "library_user" -> listOf(
-                SideBarItem(
-                    false, "预约还书", "预约还书时间",
-                    Icons.Default.Event,
-                    false
-                )
-            )
-
-            else -> emptyList()
-        }
     } + (if (identity.contains("library_staff")) {
         listOf(SideBarItem(true, "管理工具", "", Icons.Default.Info, false))
     } else {

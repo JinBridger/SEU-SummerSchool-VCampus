@@ -21,19 +21,6 @@ import moe.tlaster.precompose.viewmodel.viewModel
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
-    var familyName by viewModel.familyName
-    var givenName by viewModel.givenName
-    var gender by viewModel.gender
-    var birthDate by viewModel.birthDate
-    var major by viewModel.major
-    var school by viewModel.school
-    var cardNumber by viewModel.cardNumber
-    var studentNumber by viewModel.studentNumber
-    var birthPlace by viewModel.birthPlace
-    var politicalStatus by viewModel.politicalStatus
-    var status by viewModel.status
-
-
     val studentStatusSideBarItem = viewModel.studentStatusSideBarItem
     val currentSubscene = remember { mutableStateOf("") }
 

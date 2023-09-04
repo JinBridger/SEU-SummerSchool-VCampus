@@ -1,16 +1,10 @@
 package app.vcampus.server;
 
 import app.vcampus.server.controller.*;
-import app.vcampus.server.entity.Student;
-import app.vcampus.server.enums.Gender;
-import app.vcampus.server.enums.PoliticalStatus;
-import app.vcampus.server.enums.Status;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.router.Router;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import app.vcampus.server.utility.DateUtility;
 
 public class Main {
     public static void main(String[] args) throws Exception {

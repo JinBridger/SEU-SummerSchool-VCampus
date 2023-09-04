@@ -55,16 +55,6 @@ object FakeRepository {
     fun login(username: String, password: String): Boolean {
         val user = AuthClient.login(handler, username, password)
 
-//        val tempStoreItem = StoreItem()
-//        tempStoreItem.description = "test"
-//        tempStoreItem.itemName = "任天堂Switch OLED日版主机NS续航港版健身朱紫塞尔达限定游戏机"
-//        tempStoreItem.barcode = "0123456789123"
-//        tempStoreItem.price = 279900
-//        tempStoreItem.stock = 99
-//        tempStoreItem.salesVolume = 1
-//        tempStoreItem.pictureLink = "https://i.dawnlab.me/05f0f5392e8efc95de553bafa2e30722.png"
-//        StoreClient.addItem(handler, tempStoreItem)
-
         user?.let {
             logger.debug { it }
             this.user = it
@@ -76,6 +66,14 @@ object FakeRepository {
 
     fun getSelf(): Student {
         return StudentStatusClient.getSelf(handler)
+    }
+
+    fun searchStudent(keyword: String): List<Student> {
+        return StudentStatusClient.searchInfo(handler, keyword)
+    }
+
+    fun updateStudent(student: Student): Boolean {
+        return StudentStatusClient.updateInfo(handler, student)
     }
 
     fun preAddBook(isbn: String): LibraryBook {

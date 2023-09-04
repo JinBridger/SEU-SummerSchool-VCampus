@@ -3,50 +3,39 @@ package app.vcampus.client.scene.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.seanproctor.datatable.DataColumn
-import com.seanproctor.datatable.TableColumnWidth
-import com.seanproctor.datatable.material.DataTable
-import app.vcampus.client.viewmodel.StudentStatusViewModel
+import app.vcampus.client.viewmodel.MutableStudent
+import app.vcampus.server.entity.IEntity
+import app.vcampus.server.entity.Student
+import app.vcampus.server.enums.Gender
+import app.vcampus.server.enums.PoliticalStatus
+import app.vcampus.server.enums.StudentStatus
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchStudentStatusItem(
-                            isEditable: Boolean = true,
-                            viewModel: StudentStatusViewModel) {
-
-    var familyName by viewModel.familyName
-    var givenName by viewModel.givenName
-    var gender by viewModel.gender
-    var birthDate by viewModel.birthDate
-    var major by viewModel.major
-    var school by viewModel.school
-    var cardNumber by viewModel.cardNumber
-    var studentNumber by viewModel.studentNumber
-    var birthPlace by viewModel.birthPlace
-    var politicalStatus by viewModel.politicalStatus
-    var status by viewModel.status
-
+    _student: Student,
+    isEditable: Boolean = true,
+    onEdit: (Student) -> Unit,
+) {
+    var student = IEntity.fromJson(_student.toJson(), Student::class.java)
+    val mutableStudent = MutableStudent()
+    mutableStudent.fromStudent(student)
 
     var expanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
@@ -69,13 +58,13 @@ fun SearchStudentStatusItem(
                     Column(modifier = Modifier.fillMaxHeight()) {
                         Row {
                             Text(
-                                school,
+                                mutableStudent.school.value,
                                 fontWeight = FontWeight(700),
                                 color = Color.Black
                             )
                             Spacer(modifier = Modifier.width(20.dp))
                             Text(
-                                major,
+                                mutableStudent.major.value,
                                 fontWeight = FontWeight(700),
                                 color = Color.Black
                             )
@@ -84,13 +73,13 @@ fun SearchStudentStatusItem(
                         Spacer(modifier = Modifier.height(10.dp))
                         Row {
                             Text(
-                                "学号:${cardNumber} ",
+                                "学号：${mutableStudent.studentNumber.value} ",
                                 fontWeight = FontWeight(700),
                                 color = Color.DarkGray
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                "一卡通号:${studentNumber} ",
+                                "一卡通号：${mutableStudent.cardNumber.value.toString()} ",
                                 fontWeight = FontWeight(700),
                                 color = Color.DarkGray
                             )
@@ -99,298 +88,237 @@ fun SearchStudentStatusItem(
                     Spacer(modifier = Modifier.weight(1F))
                     Row {
                         Text(
-                            familyName,
+                            mutableStudent.familyName.value,
                             fontWeight = FontWeight(700),
                             fontSize = 20.sp
                         )
                         Text(
-                            givenName,
+                            mutableStudent.givenName.value,
                             fontWeight = FontWeight(700),
                             fontSize = 20.sp
                         )
                     }
                 }
                 if (expanded) {
-                    if (!isEditing) {
-                        Spacer(Modifier.height(6.dp))
-                        Divider()
-                        Spacer(Modifier.height(6.dp))
-                        Column {
-                            Row {
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = familyName,
-                                    onValueChange = { familyName = it },
-                                    label = { Text("姓") },
-                                    isError = familyName == "",
-                                    readOnly = true,
-                                    trailingIcon = {
-                                        if (familyName == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    }
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = givenName,
-                                    onValueChange = { givenName = it },
-                                    label = { Text("名") },
-                                    isError = givenName == "",
-                                    readOnly = true,
-                                    trailingIcon = {
-                                        if (givenName == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    }
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = gender,
-                                    onValueChange = { gender = it },
-                                    label = { Text("性别") },
-                                    isError = gender == "",
-                                    readOnly = true,
-                                    trailingIcon = {
-                                        if (gender == "") Icon(
-                                            Icons.Filled.Error,
-                                            "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    }
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = birthDate,
-                                    onValueChange = { birthDate = it },
-                                    label = { Text("出生日期") },
-                                    isError = birthDate == "", readOnly = true,
-                                    trailingIcon = {
-                                        if (birthDate == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
-                            }
-                            Row {
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = birthPlace,
-                                    onValueChange = { birthPlace = it },
-                                    label = { Text("籍贯") },
-                                    isError = birthPlace == "", readOnly = true,
-                                    trailingIcon = {
-                                        if (birthPlace == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = politicalStatus,
-                                    onValueChange = { politicalStatus = it },
-                                    label = { Text("政治面貌") },
-                                    isError = politicalStatus == "", readOnly = true,
-                                    trailingIcon = {
-                                        if (politicalStatus == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = status,
-                                    onValueChange = { status = it },
-                                    label = { Text("学籍状态") },
-                                    isError = status == "", readOnly = true,
-                                    trailingIcon = {
-                                        if (status == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
-                            }
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row {
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.5F),
-                                    value = major,
-                                    onValueChange = { major = it },
-                                    label = { Text("专业") },
-                                    isError = major == "", readOnly = true,
-                                    trailingIcon = {
-                                        if (major == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
-                                Spacer(modifier = Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.5F),
-                                    value = school,
-                                    onValueChange = { school = it },
-                                    label = { Text("学院") },
-                                    isError = school == "", readOnly = true,
-                                    trailingIcon = {
-                                        if (school == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
-                            }
-                        }
-                        if (isEditable) {
-                            Row(modifier = Modifier.fillMaxWidth()) {
-                                Spacer(Modifier.weight(1F))
-                                Button(onClick = { isEditing = true }) {
-                                    Text("修改学生学籍信息")
+                    Spacer(Modifier.height(6.dp))
+                    Divider()
+                    Spacer(Modifier.height(6.dp))
+                    Column {
+                        Row {
+                            OutlinedTextField(
+                                modifier = Modifier.weight(0.25F),
+                                value = mutableStudent.familyName.value,
+                                onValueChange = { mutableStudent.familyName.value = it },
+                                label = { Text("姓") },
+                                isError = mutableStudent.familyName.value == "",
+                                readOnly = !isEditing,
+                                trailingIcon = {
+                                    if (mutableStudent.familyName.value == "") Icon(
+                                        Icons.Filled.Error, "error",
+                                        tint = MaterialTheme.colors.error
+                                    )
                                 }
-                            }
-                        }
-                    } else {
-                        Spacer(Modifier.height(6.dp))
-                        Divider()
-                        Spacer(Modifier.height(6.dp))
-                        Column {
-                            Row {
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = familyName,
-                                    onValueChange = { familyName = it },
-                                    label = { Text("姓") },
-                                    isError = familyName == "",
-                                    readOnly = false,
-                                    trailingIcon = {
-                                        if (familyName == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    }
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = givenName,
-                                    onValueChange = { givenName = it },
-                                    label = { Text("名") },
-                                    isError = givenName == "",
-                                    readOnly = false,
-                                    trailingIcon = {
-                                        if (givenName == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    }
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = gender,
-                                    onValueChange = { gender = it },
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            OutlinedTextField(
+                                modifier = Modifier.weight(0.25F),
+                                value = mutableStudent.givenName.value,
+                                onValueChange = { mutableStudent.givenName.value = it },
+                                label = { Text("名") },
+                                isError = mutableStudent.givenName.value == "",
+                                readOnly = !isEditing,
+                                trailingIcon = {
+                                    if (mutableStudent.givenName.value == "") Icon(
+                                        Icons.Filled.Error, "error",
+                                        tint = MaterialTheme.colors.error
+                                    )
+                                }
+                            )
+                            Spacer(Modifier.width(8.dp))
+//                                OutlinedTextField(
+//                                    modifier = Modifier.weight(0.25F),
+//                                    value = gender,
+//                                    onValueChange = { gender = it },
+//                                    label = { Text("性别") },
+//                                    isError = gender == "",
+//                                    readOnly = !isEditing,
+//                                    trailingIcon = {
+//                                        if (gender == "") Icon(
+//                                            Icons.Filled.Error,
+//                                            "error",
+//                                            tint = MaterialTheme.colors.error
+//                                        )
+//                                    }
+//                                )
+                            Box(modifier = Modifier.weight(0.25F)) {
+                                Select(
+                                    selectList = Gender.entries,
                                     label = { Text("性别") },
-                                    isError = gender == "",
-                                    readOnly = false,
-                                    trailingIcon = {
-                                        if (gender == "") Icon(
-                                            Icons.Filled.Error,
-                                            "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    }
+                                    value = mutableStudent.gender.value,
+                                    setValue = {
+                                        mutableStudent.gender.value = it
+                                    },
+                                    readOnly = !isEditing
                                 )
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = birthDate,
-                                    onValueChange = { birthDate = it },
-                                    label = { Text("出生日期") },
-                                    isError = birthDate == "", readOnly = false,
-                                    trailingIcon = {
-                                        if (birthDate == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
                             }
-                            Row {
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = birthPlace,
-                                    onValueChange = { birthPlace = it },
-                                    label = { Text("籍贯") },
-                                    isError = birthPlace == "", readOnly = false,
-                                    trailingIcon = {
-                                        if (birthPlace == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = politicalStatus,
-                                    onValueChange = { politicalStatus = it },
+                            Spacer(Modifier.width(8.dp))
+                            OutlinedTextField(
+                                modifier = Modifier.weight(0.25F),
+                                value = mutableStudent.birthDate.value,
+                                onValueChange = { mutableStudent.birthDate.value = it },
+                                label = { Text("出生日期") },
+                                isError = mutableStudent.birthDate.value == "",
+                                readOnly = !isEditing,
+                                trailingIcon = {
+                                    if (mutableStudent.birthDate.value == "") Icon(
+                                        Icons.Filled.Error, "error",
+                                        tint = MaterialTheme.colors.error
+                                    )
+                                })
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row {
+                            OutlinedTextField(
+                                modifier = Modifier.weight(0.25F),
+                                value = mutableStudent.birthPlace.value,
+                                onValueChange = { mutableStudent.birthPlace.value = it },
+                                label = { Text("籍贯") },
+                                isError = mutableStudent.birthPlace.value == "",
+                                readOnly = !isEditing,
+                                trailingIcon = {
+                                    if (mutableStudent.birthPlace.value == "") Icon(
+                                        Icons.Filled.Error, "error",
+                                        tint = MaterialTheme.colors.error
+                                    )
+                                })
+                            Spacer(Modifier.width(8.dp))
+//                                OutlinedTextField(
+//                                    modifier = Modifier.weight(0.25F),
+//                                    value = politicalStatus,
+//                                    onValueChange = { politicalStatus = it },
+//                                    label = { Text("政治面貌") },
+//                                    isError = politicalStatus == "",
+//                                    readOnly = !isEditing,
+//                                    trailingIcon = {
+//                                        if (politicalStatus == "") Icon(
+//                                            Icons.Filled.Error, "error",
+//                                            tint = MaterialTheme.colors.error
+//                                        )
+//                                    })
+                            Box(modifier = Modifier.weight(0.25F)) {
+                                Select(
+                                    selectList = PoliticalStatus.entries,
                                     label = { Text("政治面貌") },
-                                    isError = politicalStatus == "", readOnly = false,
-                                    trailingIcon = {
-                                        if (politicalStatus == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
-                                Spacer(Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.25F),
-                                    value = status,
-                                    onValueChange = { status = it },
-                                    label = { Text("学籍状态") },
-                                    isError = status == "", readOnly = false,
-                                    trailingIcon = {
-                                        if (status == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
+                                    value = mutableStudent.politicalStatus.value,
+                                    setValue = {
+                                        mutableStudent.politicalStatus.value = it
+                                    },
+                                    readOnly = !isEditing
+                                )
                             }
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row {
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.5F),
-                                    value = major,
-                                    onValueChange = { major = it },
-                                    label = { Text("专业") },
-                                    isError = major == "", readOnly = false,
-                                    trailingIcon = {
-                                        if (major == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
-                                Spacer(modifier = Modifier.width(8.dp))
-                                OutlinedTextField(
-                                    modifier = Modifier.weight(0.5F),
-                                    value = school,
-                                    onValueChange = { school = it },
-                                    label = { Text("学院") },
-                                    isError = school == "", readOnly = false,
-                                    trailingIcon = {
-                                        if (school == "") Icon(
-                                            Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error
-                                        )
-                                    })
+                            Spacer(Modifier.width(8.dp))
+//                                OutlinedTextField(
+//                                    modifier = Modifier.weight(0.25F),
+//                                    value = status,
+//                                    onValueChange = { status = it },
+//                                    label = { Text("学籍状态") },
+//                                    isError = status == "",
+//                                    readOnly = !isEditing,
+//                                    trailingIcon = {
+//                                        if (status == "") Icon(
+//                                            Icons.Filled.Error, "error",
+//                                            tint = MaterialTheme.colors.error
+//                                        )
+//                                    })
+                            Box(modifier = Modifier.weight(0.25F)) {
+                                Select(
+                                    selectList = StudentStatus.entries,
+                                    label = { Text("学籍状态") },
+                                    value = mutableStudent.status.value,
+                                    setValue = {
+                                        mutableStudent.status.value = it
+                                    },
+                                    readOnly = !isEditing
+                                )
                             }
                         }
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            Spacer(Modifier.weight(1F))
-                            Button(onClick = { isEditing = false }) {
-                                Text("保存修改")
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row {
+                            OutlinedTextField(
+                                modifier = Modifier.weight(0.5F),
+                                value = mutableStudent.major.value,
+                                onValueChange = { mutableStudent.major.value = it },
+                                label = { Text("专业") },
+                                isError = mutableStudent.major.value == "",
+                                readOnly = !isEditing,
+                                trailingIcon = {
+                                    if (mutableStudent.major.value == "") Icon(
+                                        Icons.Filled.Error, "error",
+                                        tint = MaterialTheme.colors.error
+                                    )
+                                })
+                            Spacer(modifier = Modifier.width(8.dp))
+                            OutlinedTextField(
+                                modifier = Modifier.weight(0.5F),
+                                value = mutableStudent.school.value,
+                                onValueChange = { mutableStudent.school.value = it },
+                                label = { Text("学院") },
+                                isError = mutableStudent.school.value == "",
+                                readOnly = !isEditing,
+                                trailingIcon = {
+                                    if (mutableStudent.school.value == "") Icon(
+                                        Icons.Filled.Error, "error",
+                                        tint = MaterialTheme.colors.error
+                                    )
+                                })
+                        }
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        if (isEditable) {
+                            if (!isEditing) {
+                                Row(modifier = Modifier.fillMaxWidth()) {
+                                    Spacer(Modifier.weight(1F))
+                                    Button(onClick = { isEditing = true }) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Icon(Icons.Default.Edit, "")
+                                            Spacer(Modifier.width(2.dp))
+                                            Text("修改学生学籍信息")
+                                        }
+                                    }
+                                }
+                            } else {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Spacer(Modifier.weight(1F))
+                                    Button(onClick = {
+                                        student = mutableStudent.toStudent()
+
+                                        onEdit(student)
+
+                                        isEditing = false
+                                    }) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Icon(Icons.Default.Done, "")
+                                            Spacer(Modifier.width(2.dp))
+                                            Text("确认")
+                                        }
+                                    }
+                                    Spacer(Modifier.width(8.dp))
+                                    Button(onClick = {
+                                        mutableStudent.fromStudent(student)
+
+                                        isEditing = false
+                                    }) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Icon(Icons.Default.Close, "")
+                                            Spacer(Modifier.width(2.dp))
+                                            Text("取消")
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

@@ -2,7 +2,7 @@ package app.vcampus.server.entity;
 
 import app.vcampus.server.enums.Gender;
 import app.vcampus.server.enums.PoliticalStatus;
-import app.vcampus.server.enums.Status;
+import app.vcampus.server.enums.StudentStatus;
 import app.vcampus.server.utility.DateUtility;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -41,7 +41,7 @@ public class Student implements IEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    public Status status;
+    public StudentStatus status;
 
     public String birthPlace;
 
@@ -57,7 +57,7 @@ public class Student implements IEntity {
             student.setMajor(data.get("major"));
             student.setSchool(data.get("school"));
             student.setBirthPlace(data.get("birthPlace"));
-            student.setStatus(Status.valueOf(data.get("status")));
+            student.setStatus(StudentStatus.valueOf(data.get("status")));
             student.setPoliticalStatus(PoliticalStatus.valueOf(data.get("politicalStatus")));
             student.setGivenName(data.get("givenName"));
             student.setFamilyName(data.get("familyName"));

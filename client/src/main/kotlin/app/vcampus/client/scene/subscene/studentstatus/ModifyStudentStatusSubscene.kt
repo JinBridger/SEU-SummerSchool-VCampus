@@ -21,10 +21,12 @@ import app.vcampus.client.viewmodel.StudentStatusViewModel
 
 @Composable
 fun modifyStudentStatusSubscene(viewModel: StudentStatusViewModel) {
+    var keyword by viewModel.searchKeyword
 
-
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))
@@ -38,9 +40,9 @@ fun modifyStudentStatusSubscene(viewModel: StudentStatusViewModel) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
-                        value = "",
-                        onValueChange = { },
-                        label = { Text("搜索学生(请用一卡通号索引)") },
+                        value = keyword,
+                        onValueChange = { keyword = it },
+                        label = { Text("搜索学生（模糊搜索）") },
                         modifier = Modifier.padding(
                             0.dp, 0.dp, 16.dp,
                             0.dp
@@ -49,7 +51,7 @@ fun modifyStudentStatusSubscene(viewModel: StudentStatusViewModel) {
                     Column {
                         Spacer(Modifier.height(8.dp))
                         Button(onClick = {
-
+                            viewModel.searchStudent()
                         }, modifier = Modifier.height(56.dp)) {
                             Icon(Icons.Default.Search, "")
                         }
@@ -60,11 +62,15 @@ fun modifyStudentStatusSubscene(viewModel: StudentStatusViewModel) {
                 Spacer(Modifier.height(8.dp))
             }
 
-            item{
-                SearchStudentStatusItem(true,viewModel)
+            viewModel.searchedStudents.forEach { student ->
+                item {
+                    SearchStudentStatusItem(student, true) {
+                        viewModel.updateStudent(it)
+                    }
+                }
             }
 
-            item{
+            item {
                 Spacer(Modifier.height(80.dp))
             }
         }
