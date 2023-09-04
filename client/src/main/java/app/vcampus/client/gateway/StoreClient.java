@@ -75,7 +75,6 @@ public class StoreClient {
             return null;
         }
     }
-
     public static List<StoreItem> getAll(NettyHandler handler) {
         Request request = new Request();
         request.setUri("storeItem/filter");
@@ -116,23 +115,7 @@ public class StoreClient {
         }
     }
 
-    public static StoreItem searchId(NettyHandler handler, String uuid) {
-        Request request = new Request();
-        request.setUri("storeItem/searchId");
-        request.setParams(Map.of("uuid", uuid));
-        try {
-            Response response = BaseClient.sendRequest(handler, request);
-            if (response.getStatus().equals("success")) {
-                StoreItem data=(StoreItem) response.getData();
-                return data;
-            } else {
-                throw new RuntimeException("Failed to get item");
-            }
-        } catch (InterruptedException e) {
-            log.warn("Fail to get item", e);
-            return null;
-        }
-    }
+
 
 //    public static boolean deleteItem(NettyHandler handler,String itemName){
 //        CountDownLatch latch=new CountDownLatch(1);
