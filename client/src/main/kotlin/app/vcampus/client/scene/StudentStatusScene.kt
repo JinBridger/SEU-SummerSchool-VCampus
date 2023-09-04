@@ -4,9 +4,7 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -23,6 +21,19 @@ import moe.tlaster.precompose.viewmodel.viewModel
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
+    var familyName by viewModel.familyName
+    var givenName by viewModel.givenName
+    var gender by viewModel.gender
+    var birthDate by viewModel.birthDate
+    var major by viewModel.major
+    var school by viewModel.school
+    var cardNumber by viewModel.cardNumber
+    var studentNumber by viewModel.studentNumber
+    var birthPlace by viewModel.birthPlace
+    var politicalStatus by viewModel.politicalStatus
+    var status by viewModel.status
+
+
     val studentStatusSideBarItem = viewModel.studentStatusSideBarItem
     val currentSubscene = remember { mutableStateOf("") }
 
