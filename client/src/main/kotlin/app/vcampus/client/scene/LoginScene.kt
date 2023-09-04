@@ -37,10 +37,22 @@ fun LoginScene(
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     val loginState by viewModel.loginState
+    val errorMessage by viewModel.errorMessage
+    val snackbarHostState = remember{SnackbarHostState()}
+    var textVisible by rememberSaveable{ mutableStateOf(false) }
 
     when (loginState) {
         true -> onLogin()
         false -> {}
+    }
+
+    LaunchedEffect(errorMessage) {
+        if (!errorMessage.isNullOrBlank()) {
+            //snackbarHostState.showSnackbar(errorMessage.toString())
+            viewModel.errorMessage.value = null // Clear the error message after displaying it
+            password = "" // Clear the password field
+            textVisible=true
+        }
     }
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -114,7 +126,10 @@ fun LoginScene(
 
                                 OutlinedTextField(
                                         value = password,
-                                        onValueChange = { password = it },
+                                        onValueChange = {
+                                            password = it
+                                            textVisible=false
+                                                        },
                                         label = { Text("密码") },
                                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                         modifier = Modifier.fillMaxWidth().onPreviewKeyEvent {
@@ -138,6 +153,24 @@ fun LoginScene(
                                             }
                                         }
                                 )
+
+//                                SnackbarHost(
+//                                    hostState = snackbarHostState,
+//                                   // modifier = Modifier.align(Alignment.BottomCenter)
+//                                ) { snackbarData ->
+//                                    Snackbar(
+//                                        snackbarData = snackbarData,
+//                                        modifier = Modifier.padding(16.dp)
+//                                    )
+//                                }
+
+                                if(textVisible){
+                                    Text(
+                                        text = "！一卡通号或密码错误",
+                                        color = Color.Red
+                                    )
+                                }
+
                             }
 
                             Row(
