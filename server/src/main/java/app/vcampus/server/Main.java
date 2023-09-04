@@ -1,10 +1,16 @@
 package app.vcampus.server;
 
 import app.vcampus.server.controller.*;
+import app.vcampus.server.entity.Student;
+import app.vcampus.server.enums.Gender;
+import app.vcampus.server.enums.PoliticalStatus;
+import app.vcampus.server.enums.Status;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.router.Router;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import app.vcampus.server.utility.DateUtility;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -43,6 +49,31 @@ public class Main {
 //        database.persist(teachingClass);
 //        tx.commit();
 
+//        Transaction tx = database.beginTransaction();
+//        Student student =new Student();
+//        student.setCardNumber(123456);
+//        student.setStudentNumber("123456");
+//        student.setStatus(Status.inSchool);
+//        student.setPoliticalStatus(PoliticalStatus.Masses);
+//        student.setGivenName("小明");
+//        student.setFamilyName("王");
+//        student.setBirthPlace("SEU");
+//        String testString ="2023-09-04";
+//        student.setBirthDate(DateUtility.toDate(testString));
+//        student.setGender(Gender.male);
+//        student.setMajor("计算机科学与技术");
+//        student.setSchool("计算机科学与工程学院");
+//        database.persist(student);
+//        User user = new User();
+//        user.setCardNum(123456);
+//        user.setName("admin");
+//        user.setGender(Gender.unspecified);
+//        user.setPassword(Password.hash("123456"));
+//        user.setEmail("admin@seu.edu.cn");
+//        user.setRoles(new String[]{"admin"});
+//        user.setPhone("12345678901");
+//        database.persist(user);
+//        tx.commit();
         NettyServer server = new NettyServer(9091);
         server.run(router, database);
     }

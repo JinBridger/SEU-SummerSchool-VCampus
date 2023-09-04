@@ -31,8 +31,9 @@ import app.vcampus.client.viewmodel.StudentStatusViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SearchStudentStatusItem(isEditable: Boolean = true,
-                            viewModel: StudentStatusViewModel){
+fun SearchStudentStatusItem(
+                            isEditable: Boolean = true,
+                            viewModel: StudentStatusViewModel) {
 
     var familyName by viewModel.familyName
     var givenName by viewModel.givenName
@@ -49,30 +50,32 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
 
     var expanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
-    Surface(modifier = Modifier.fillMaxWidth().border(1.dp,
+    Surface(modifier = Modifier.fillMaxWidth().border(
+        1.dp,
         color = Color.LightGray,
-        shape = RoundedCornerShape(4.dp)).animateContentSize(
+        shape = RoundedCornerShape(4.dp)
+    ).animateContentSize(
         animationSpec = tween(
             durationMillis = 300,
             easing = LinearOutSlowInEasing
         )
     ), onClick = { expanded = !expanded }) {
-        Box(Modifier.fillMaxSize().padding(10.dp)){
+        Box(Modifier.fillMaxSize().padding(10.dp)) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(),
                     verticalAlignment = Alignment.CenterVertically
-                ){
+                ) {
                     Column(modifier = Modifier.fillMaxHeight()) {
-                        Row{
+                        Row {
                             Text(
-                                    "计算机科学与工程学院",
-                                    fontWeight = FontWeight(700),
-                                    color = Color.Black
+                                school,
+                                fontWeight = FontWeight(700),
+                                color = Color.Black
                             )
                             Spacer(modifier = Modifier.width(20.dp))
                             Text(
-                                "计算机科学与技术专业",
+                                major,
                                 fontWeight = FontWeight(700),
                                 color = Color.Black
                             )
@@ -81,28 +84,34 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                         Spacer(modifier = Modifier.height(10.dp))
                         Row {
                             Text(
-                                "学号：09021199",
+                                "学号:${cardNumber} ",
                                 fontWeight = FontWeight(700),
                                 color = Color.DarkGray
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                "一卡通号：213210999",
+                                "一卡通号:${studentNumber} ",
                                 fontWeight = FontWeight(700),
                                 color = Color.DarkGray
                             )
                         }
                     }
                     Spacer(modifier = Modifier.weight(1F))
-                    Text(
-                        "丁真珍珠",
-                        fontWeight = FontWeight(700),
-                        fontSize = 20.sp
-                    )
+                    Row {
+                        Text(
+                            familyName,
+                            fontWeight = FontWeight(700),
+                            fontSize = 20.sp
+                        )
+                        Text(
+                            givenName,
+                            fontWeight = FontWeight(700),
+                            fontSize = 20.sp
+                        )
+                    }
                 }
-
-                if(expanded){
-                    if(!isEditing){
+                if (expanded) {
+                    if (!isEditing) {
                         Spacer(Modifier.height(6.dp))
                         Divider()
                         Spacer(Modifier.height(6.dp))
@@ -163,10 +172,11 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (birthDate == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                             }
-                            Row{
+                            Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.25F),
                                     value = birthPlace,
@@ -176,7 +186,8 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (birthPlace == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                                 Spacer(Modifier.width(8.dp))
                                 OutlinedTextField(
@@ -188,7 +199,8 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (politicalStatus == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                                 Spacer(Modifier.width(8.dp))
                                 OutlinedTextField(
@@ -200,11 +212,12 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (status == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                             }
                             Spacer(modifier = Modifier.height(8.dp))
-                            Row{
+                            Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.5F),
                                     value = major,
@@ -214,7 +227,8 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (major == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                                 Spacer(modifier = Modifier.width(8.dp))
                                 OutlinedTextField(
@@ -226,19 +240,20 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (school == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                             }
                         }
-                        if(isEditable){
-                            Row(modifier = Modifier.fillMaxWidth()){
+                        if (isEditable) {
+                            Row(modifier = Modifier.fillMaxWidth()) {
                                 Spacer(Modifier.weight(1F))
-                                Button(onClick = {isEditing = true}){
+                                Button(onClick = { isEditing = true }) {
                                     Text("修改学生学籍信息")
                                 }
                             }
                         }
-                    } else{
+                    } else {
                         Spacer(Modifier.height(6.dp))
                         Divider()
                         Spacer(Modifier.height(6.dp))
@@ -299,10 +314,11 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (birthDate == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                             }
-                            Row{
+                            Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.25F),
                                     value = birthPlace,
@@ -312,7 +328,8 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (birthPlace == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                                 Spacer(Modifier.width(8.dp))
                                 OutlinedTextField(
@@ -324,7 +341,8 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (politicalStatus == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                                 Spacer(Modifier.width(8.dp))
                                 OutlinedTextField(
@@ -336,11 +354,12 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (status == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                             }
                             Spacer(modifier = Modifier.height(8.dp))
-                            Row{
+                            Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.5F),
                                     value = major,
@@ -350,7 +369,8 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (major == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                                 Spacer(modifier = Modifier.width(8.dp))
                                 OutlinedTextField(
@@ -362,13 +382,14 @@ fun SearchStudentStatusItem(isEditable: Boolean = true,
                                     trailingIcon = {
                                         if (school == "") Icon(
                                             Icons.Filled.Error, "error",
-                                            tint = MaterialTheme.colors.error)
+                                            tint = MaterialTheme.colors.error
+                                        )
                                     })
                             }
                         }
-                        Row(modifier = Modifier.fillMaxWidth()){
+                        Row(modifier = Modifier.fillMaxWidth()) {
                             Spacer(Modifier.weight(1F))
-                            Button(onClick = {isEditing = false}){
+                            Button(onClick = { isEditing = false }) {
                                 Text("保存修改")
                             }
                         }
