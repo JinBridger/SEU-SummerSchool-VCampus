@@ -59,7 +59,7 @@ class StudentStatusViewModel() : ViewModel() {
 
     private fun getStudentStatus() {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 getStudentStatusInternal().collect {
                     student.value = it
 

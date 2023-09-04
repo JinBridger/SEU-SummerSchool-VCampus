@@ -29,7 +29,6 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
     var place by viewModel.addBook.place
     var cover by viewModel.addBook.cover
 
-//    val datePickerState = rememberDatePickerState()
     var bookStatus by viewModel.addBook.bookStatus
     val scope = rememberCoroutineScope()
 

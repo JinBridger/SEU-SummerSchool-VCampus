@@ -91,7 +91,7 @@ class LibraryViewModel : ViewModel() {
             showDetails.value = false
 
             viewModelScope.launch {
-                withContext(Dispatchers.Default) {
+                withContext(Dispatchers.IO) {
                     preAddBookInternal().collect {
                         name.value = it.name ?: ""
                         author.value = it.author ?: ""
@@ -131,7 +131,7 @@ class LibraryViewModel : ViewModel() {
             }
 
             viewModelScope.launch {
-                withContext(Dispatchers.Default) {
+                withContext(Dispatchers.IO) {
                     addBookInternal(newBook).collect {
                         result.value = it
                         showMessage.value = true
