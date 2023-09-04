@@ -8,7 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.repository._StoreItem
+import app.vcampus.client.repository.copy
 import app.vcampus.client.scene.components.SideBarItem
+import app.vcampus.server.entity.StoreItem
 import moe.tlaster.precompose.viewmodel.ViewModel
 
 class ShopViewModel() : ViewModel() {
@@ -68,6 +70,7 @@ class ShopViewModel() : ViewModel() {
     val chosenShopItems = totalShopItems.map {
         it.copy(stock = 0)
     }.toMutableList()
+
 //    val chosenShopItems: List<_StoreItem> = _chosenShopItems
 
     private val _chosenItemsCount = mutableStateOf(0)

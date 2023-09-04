@@ -19,7 +19,7 @@ public class Main {
         router.addController(IndexController.class);
         router.addController(StudentStatusController.class);
         router.addController(LibraryBookController.class);
-        //router.addController(StoreController.class);
+        router.addController(StoreController.class);
 
         Session database = Database.init();
 

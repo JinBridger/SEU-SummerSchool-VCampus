@@ -10,7 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -18,17 +20,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.vcampus.client.repository._StoreItem
+import app.vcampus.client.repository.copy
 import app.vcampus.client.viewmodel.ShopViewModel
+import app.vcampus.server.entity.StoreItem
 
 @Composable
-fun shopItemCard(item: _StoreItem, viewModel: ShopViewModel) {
+fun shopItemCard(item: StoreItem, viewModel: ShopViewModel) {
     Card(modifier = Modifier.shadowCustom(blurRadius = 3.dp,
             shapeRadius = 3.dp).height(340.dp).width(250.dp)) {
         Column {
             Box(modifier = Modifier.aspectRatio(1F).fillMaxWidth()) {
-                Image(painterResource("test_image.png"), "",
-                        modifier = Modifier.fillMaxSize(),
+                AsyncImage(
+                        load = { loadImageBitmap(item.pictureLink) },
+                        painterFor = { remember { BitmapPainter(it) } },
+                        contentDescription = "",
                         contentScale = ContentScale.FillBounds)
+//                Image(painterResource("test_image.png"), "",
+//                        modifier = Modifier.fillMaxSize(),
+//                        contentScale = ContentScale.FillBounds)
             }
             Column(modifier = Modifier.fillMaxSize()) {
                 Row(modifier = Modifier.weight(1F).fillMaxWidth().padding(

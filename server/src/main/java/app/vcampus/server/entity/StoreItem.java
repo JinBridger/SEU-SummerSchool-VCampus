@@ -16,7 +16,7 @@ import java.util.UUID;
 @Slf4j
 public class StoreItem implements IEntity {
     @Id
-    public UUID uuid;
+    public UUID uuid = UUID.randomUUID();
 
     @Column(nullable = false)
     public String itemName;
@@ -38,6 +38,8 @@ public class StoreItem implements IEntity {
 
     @Column(columnDefinition = "TEXT")
     public String description;
+
+
 
 //    public static StoreItem fromMap(Map<String, String> data) {
 //        try {

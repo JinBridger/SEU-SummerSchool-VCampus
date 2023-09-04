@@ -11,31 +11,35 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
+import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import app.vcampus.client.repository._StoreItem
+import app.vcampus.client.repository.copy
 import app.vcampus.client.viewmodel.ShopViewModel
+import app.vcampus.server.entity.StoreItem
 
 
 @Composable
-fun shopCheckListItem(item: _StoreItem, viewModel: ShopViewModel) {
+fun shopCheckListItem(item: StoreItem, viewModel: ShopViewModel) {
     Column {
         Row(modifier = Modifier.fillMaxWidth().height(150.dp).padding(6.dp)) {
             Box(modifier = Modifier.aspectRatio(1F).fillMaxHeight().clip(
                     RoundedCornerShape(4.dp))) {
-                Image(painterResource("test_image.png"), "",
-                        modifier = Modifier.fillMaxSize(),
+                AsyncImage(
+                        load = { loadImageBitmap(item.pictureLink) },
+                        painterFor = { remember { BitmapPainter(it) } },
+                        contentDescription = "",
                         contentScale = ContentScale.FillBounds)
             }
 
