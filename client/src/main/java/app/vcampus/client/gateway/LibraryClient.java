@@ -5,10 +5,13 @@ import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.LibraryBook;
 import app.vcampus.server.entity.Student;
 import app.vcampus.server.entity.User;
+import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -50,6 +53,29 @@ public class LibraryClient {
         } catch (InterruptedException e) {
             log.warn("Fail to add book", e);
             return false;
+        }
+    }
+
+    public static Map<String, List<LibraryBook>> searchBook(NettyHandler handler, String keyword) {
+        Request request = new Request();
+        request.setUri("library/searchBook");
+        request.setParams(Map.of(
+                "keyword", keyword
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            if (response.getStatus().equals("success")) {
+                Map<String, List<String>> raw_data = (Map<String, List<String>>) response.getData();
+                Map<String, List<LibraryBook>> data = new HashMap<>();
+                raw_data.forEach((key, value) -> data.put(key, value.stream().map(json -> IEntity.fromJson(json, LibraryBook.class)).toList()));
+                return data;
+            } else {
+                throw new RuntimeException("Failed to get book info");
+            }
+        } catch (InterruptedException e) {
+            log.warn("Fail to get book info", e);
+            return null;
         }
     }
 

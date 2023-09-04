@@ -6,6 +6,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -17,6 +19,9 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun searchBookSubscene(viewModel: LibraryViewModel) {
+    var keyword by viewModel.searchBook.keyword
+    var searched by viewModel.searchBook.searched
+
     Row(horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -32,8 +37,8 @@ fun searchBookSubscene(viewModel: LibraryViewModel) {
                         verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
-                            value = "",
-                            onValueChange = {  },
+                            value = keyword,
+                            onValueChange = { keyword = it },
                             label = { Text("搜索图书（支持模糊搜索）") },
                             modifier = Modifier.padding(
                                     0.dp, 0.dp, 16.dp,
@@ -43,20 +48,33 @@ fun searchBookSubscene(viewModel: LibraryViewModel) {
                     Column {
                         Spacer(Modifier.height(8.dp))
                         Button(onClick = {
-//                            viewModel.addBook.preAddBook()
+                            viewModel.searchBook.searchBook()
                         }, modifier = Modifier.height(56.dp)) {
                             Icon(Icons.Default.Search, "")
                         }
                     }
                 }
-                Spacer(Modifier.height(20.dp))
-                Text("共检索到10条结果", fontSize = 14.sp)
-                Spacer(Modifier.height(8.dp))
             }
 
-            (0..10).forEach {
+            item {
+                Spacer(Modifier.height(20.dp))
+
+                if (viewModel.searchBook.bookList.isNotEmpty()) {
+                    Text("共检索到 ${viewModel.searchBook.bookList.size} 条结果", fontSize = 14.sp)
+
+                    Spacer(Modifier.height(8.dp))
+                } else {
+                    if (keyword.isBlank() && !searched) {
+                        Text("输入任意内容以搜索...", fontSize = 14.sp)
+                    } else {
+                        Text("未检索到任何结果", fontSize = 14.sp)
+                    }
+                }
+            }
+
+            viewModel.searchBook.bookList.forEach {
                 item {
-                    searchBookListItem()
+                    searchBookListItem(it.value)
                 }
             }
 

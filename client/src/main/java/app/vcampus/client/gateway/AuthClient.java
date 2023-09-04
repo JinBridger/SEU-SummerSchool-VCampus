@@ -26,10 +26,9 @@ public class AuthClient {
                 Map<String, String> data = (Map<String, String>) response.getData();
                 return User.fromMap(data);
             } else {
-                //throw new RuntimeException("Failed to login");
-                return null;
+                throw new RuntimeException("Failed to login");
             }
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             log.warn("Fail to login", e);
             return null;
         }

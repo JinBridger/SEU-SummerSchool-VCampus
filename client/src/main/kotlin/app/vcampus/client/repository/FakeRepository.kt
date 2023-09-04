@@ -50,23 +50,16 @@ object FakeRepository {
     }
 
     fun preAddBook(isbn: String): LibraryBook {
-        val book = LibraryClient.preAddBook(handler, isbn)
-
-        book?.let {
-            return it
-        }
-
-        return LibraryBook()
+        return LibraryClient.preAddBook(handler, isbn) ?: LibraryBook()
     }
 
     fun addBook(newBook: LibraryBook): Boolean {
         return LibraryClient.addBook(handler, newBook)
     }
 
-    fun getBookInfo(book:LibraryBook):Unit{
-        LibraryClient.getBookInfo(handler,book.getUuid())
+    fun searchBook(keyword: String): Map<String, List<LibraryBook>> {
+        return LibraryClient.searchBook(handler, keyword) ?: mapOf()
     }
-
 
     fun getStudentGrade(): List<_GradeItem> {
         return listOf(

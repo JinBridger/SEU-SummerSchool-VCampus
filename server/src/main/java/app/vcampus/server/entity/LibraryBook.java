@@ -38,6 +38,9 @@ public class LibraryBook implements IEntity {
 
     public String cover;
 
+    @Column(nullable = false, name = "call_number")
+    public String callNumber;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     public BookStatus bookStatus = BookStatus.available;

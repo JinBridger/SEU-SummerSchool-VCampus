@@ -55,11 +55,11 @@ fun modifyBookSubscene(viewModel: LibraryViewModel) {
                 Spacer(Modifier.height(8.dp))
             }
 
-            (0..10).forEach {
-                item {
-                    searchBookListItem(true)
-                }
-            }
+//            (0..10).forEach {
+//                item {
+//                    searchBookListItem(listOf(), true)
+//                }
+//            }
 
             item {
                 Spacer(Modifier.height(80.dp))

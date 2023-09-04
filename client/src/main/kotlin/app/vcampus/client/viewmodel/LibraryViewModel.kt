@@ -8,6 +8,7 @@ import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.LibraryBook
 import app.vcampus.server.enums.BookStatus
+import app.vcampus.server.utility.Pair
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ import moe.tlaster.precompose.viewmodel.viewModelScope
 class LibraryViewModel : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
     val addBook = AddBook()
+    val searchBook = SearchBook()
 
     val sideBarContent = (if (identity.contains("library_user")) {
         listOf(SideBarItem(true, "查询", "", Icons.Default.Info, false))
@@ -82,6 +84,7 @@ class LibraryViewModel : ViewModel() {
         var description = mutableStateOf("")
         var place = mutableStateOf("")
         var cover = mutableStateOf("")
+        var callNumber = mutableStateOf("")
         var bookStatus = mutableStateOf(BookStatus.available)
 
         var showMessage = mutableStateOf(false)
@@ -98,6 +101,8 @@ class LibraryViewModel : ViewModel() {
                         press.value = it.press ?: ""
                         description.value = it.description ?: ""
                         cover.value = it.cover ?: ""
+                        place.value = it.place ?: ""
+                        callNumber.value = it.callNumber ?: ""
 
                         showDetails.value = true
                     }
@@ -122,9 +127,10 @@ class LibraryViewModel : ViewModel() {
             newBook.place = place.value
             newBook.bookStatus = bookStatus.value
             newBook.cover = cover.value
+            newBook.callNumber = callNumber.value
 
             if (name.value == "" || isbn.value == "" || author.value == "" ||
-                    press.value == "" || description.value == "" || place.value == "") {
+                    press.value == "" || description.value == "" || place.value == "" || callNumber.value == "") {
                 showMessage.value = true
                 result.value = false
                 return
@@ -142,6 +148,29 @@ class LibraryViewModel : ViewModel() {
 
         private suspend fun addBookInternal(newBook: LibraryBook) = flow {
             emit(FakeRepository.addBook(newBook))
+        }
+    }
+
+    class SearchBook : ViewModel() {
+        val keyword = mutableStateOf("")
+        val bookList = mutableStateMapOf<String, List<LibraryBook>>()
+        var searched = mutableStateOf(false)
+        
+        fun searchBook() {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    searchBookInternal().collect {
+                        bookList.clear()
+                        bookList.putAll(it)
+
+                        searched.value = true
+                    }
+                }
+            }
+        }
+
+        private suspend fun searchBookInternal() = flow {
+            emit(FakeRepository.searchBook(keyword.value))
         }
     }
 }

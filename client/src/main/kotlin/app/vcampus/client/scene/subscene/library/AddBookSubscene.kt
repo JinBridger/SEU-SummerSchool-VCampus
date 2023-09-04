@@ -28,6 +28,7 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
     var description by viewModel.addBook.description
     var place by viewModel.addBook.place
     var cover by viewModel.addBook.cover
+    var callNumber by viewModel.addBook.callNumber
 
     var bookStatus by viewModel.addBook.bookStatus
     val scope = rememberCoroutineScope()
@@ -171,7 +172,7 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    Box(Modifier.fillParentMaxWidth(0.48F)) {
+                                    Box(Modifier.fillParentMaxWidth(0.32F)) {
                                         OutlinedTextField(
                                             value = place,
                                             onValueChange = { place = it },
@@ -188,7 +189,24 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
                                         )
                                     }
 
-                                    Box(Modifier.fillParentMaxWidth(0.48F)) {
+                                    Box(Modifier.fillParentMaxWidth(0.32F)) {
+                                        OutlinedTextField(
+                                            value = callNumber,
+                                            onValueChange = { callNumber = it },
+                                            label = { Text("索书号") },
+                                            isError = callNumber == "",
+                                            trailingIcon = {
+                                                if (callNumber == "") Icon(
+                                                    Icons.Filled.Error,
+                                                    "error",
+                                                    tint = MaterialTheme.colors.error
+                                                )
+                                            },
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+
+                                    Box(Modifier.fillParentMaxWidth(0.32F)) {
                                         Select(
                                             selectList = BookStatus.entries,
                                             label = { Text("书籍状态") },

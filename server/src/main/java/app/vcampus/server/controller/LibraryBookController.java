@@ -121,7 +121,7 @@ public class LibraryBookController {
             LibraryBook newBook = LibraryBook.fromWeb(data);
             return Response.Common.ok(Map.of("book", newBook.toJson()));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn("Fail to get book info", e);
             return Response.Common.error("Failed to get book info");
         }
     }
