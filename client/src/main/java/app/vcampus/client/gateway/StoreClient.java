@@ -5,8 +5,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import app.vcampus.client.net.NettyHandler;
 import app.vcampus.server.entity.StoreItem;
+import app.vcampus.server.entity.StoreTransaction;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
+import kotlinx.coroutines.internal.LockFreeTaskQueue;
 
 
 public class StoreClient {
@@ -14,7 +16,7 @@ public class StoreClient {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Response> response = new AtomicReference();
         Request request = new Request();
-        request.setUri("store/addItem");
+        request.setUri("storeItem/addItem");
         request.setParams(Map.of("uuid", uuid, "itemName", itemName, "price", price, "barcode", barcode, "stock", stock, "description", description));
         handler.sendRequest(request, (res) -> {
             response.set(res);
@@ -38,7 +40,31 @@ public class StoreClient {
         }
     }
 
+    public static boolean deleteItem(NettyHandler handler,String itemName){
+        CountDownLatch latch=new CountDownLatch(1);
+        AtomicReference<Response> response=new AtomicReference();
+        Request request=new Request();
+        request.setUri("storeItem/deleteItem");
+        request.setParams(Map.of("itemName",itemName));
+        handler.sendRequest(request,(res)->{
+            response.set(res);
+            System.out.println(res);
+            latch.countDown();
+        });
 
+        try{
+            latch.await();
+        }catch (InterruptedException var6){
+            var6.printStackTrace();
+            return false;
+        }
+
+        if(response.get().getStatus().equals("success")){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     public static StoreItem searchItem(NettyHandler handler, String itemName) {
         CountDownLatch latch = new CountDownLatch(1);
@@ -93,4 +119,31 @@ public class StoreClient {
             return null;
         }
     }
+
+    public static StoreTransaction selectItem(NettyHandler handler,String itemName){
+        CountDownLatch latch=new CountDownLatch(1);
+        AtomicReference<Response> response=new AtomicReference();
+        Request request=new Request();
+        request.setUri("storeTransaction/selectItem");
+        request.setParams(Map.of("itemName",itemName));
+        handler.sendRequest(request,(res)->{
+            response.set(res);
+            System.out.println(res);
+            latch.countDown();
+        });
+
+        try{
+            latch.await();
+        }catch (InterruptedException var6){
+            var6.printStackTrace();
+            return null;
+        }
+        if((response.get()).getStatus().equals("success")){
+            Map<String,String> data=(Map)(response.get()).getData();
+            return StoreTransaction.fromMap(data);
+        }else{
+            return null;
+        }
+    }
+    
 }

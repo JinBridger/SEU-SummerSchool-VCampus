@@ -121,6 +121,7 @@ public class StoreController {
     @RouteMapping(uri="storeTransaction/pay")
     public Response pay(Request request,org.hibernate.Session database){
         try{
+            Transaction tx=database.beginTransaction();
             List<StoreTransaction> allItems= Database.loadAllData(StoreTransaction.class,database);
             Integer totalPrice=0;
             for(StoreTransaction storeTransaction:allItems){
@@ -137,6 +138,7 @@ public class StoreController {
                 return Response.Common.error("Incorrect card number or password");
             }
             //扣钱
+            tx.commit();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -151,6 +153,7 @@ public class StoreController {
                 return Response.Common.error("Empty report");
             }
             Collections.sort(allItems,(o1,o2)->o2.getSalesVolume()-o1.getSalesVolume());
+            Transaction tx = database.beginTransaction();
             int i=1;
             for(StoreItem itemInOrder:allItems){
                 StoreReport storeReport=new StoreReport();
@@ -165,8 +168,10 @@ public class StoreController {
                 storeReport.setStock(itemInOrder.getStock());
                 storeReport.setSalesVolume(itemInOrder.getSalesVolume());
                 storeReport.setDescription(itemInOrder.getDescription());
+                database.persist(storeReport);
                 i++;
             }
+            tx.commit();
         }catch (Exception e){
             e.printStackTrace();
         }
