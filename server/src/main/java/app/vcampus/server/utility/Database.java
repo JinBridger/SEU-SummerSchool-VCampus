@@ -20,6 +20,8 @@ public class Database {
                 .addAnnotatedClass(Course.class)
                 .addAnnotatedClass(LibraryBook.class)
                 .addAnnotatedClass(TeachingClass.class)
+                .addAnnotatedClass(StoreItem.class)
+                .addAnnotatedClass(StoreTransaction.class)
                 .buildSessionFactory().openSession();
     }
 
