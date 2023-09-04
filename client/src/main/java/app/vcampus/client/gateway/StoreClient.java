@@ -18,18 +18,73 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class StoreClient {
     public static boolean addItem(NettyHandler handler, StoreItem newStoreItem) {
-        Request request=new Request();
+        Request request = new Request();
         request.setUri("storeItem/addItem");
-        request.setParams(Map.of("item",newStoreItem.toJson()));
-        try{
-            Response response=BaseClient.sendRequest(handler,request);
+        request.setParams(Map.of("item", newStoreItem.toJson()));
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
             return response.getStatus().equals("success");
-        }catch (InterruptedException e){
-            log.warn("Fail to add item",e);
+        } catch (InterruptedException e) {
+            log.warn("Fail to add item", e);
             return false;
         }
     }
 
+    public static boolean deleteItem(NettyHandler handler, String uuid) {
+        Request request = new Request();
+        request.setUri("storeItem/deleteItem");
+        request.setParams(Map.of("uuid", uuid.toString()));
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to delete item", e);
+            return false;
+        }
+    }
+
+    public static Map<String, List<StoreItem>> searchItem(NettyHandler handler, String keyword) {
+        Request request = new Request();
+        request.setUri("storeItem/searchItem");
+        request.setParams(Map.of(
+                "keyword", keyword
+        ));
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            if (response.getStatus().equals("success")) {
+                Map<String, List<String>> raw_data = (Map<String, List<String>>) response.getData();
+                Map<String, List<StoreItem>> data = new HashMap<>();
+                raw_data.forEach((key, value) -> data.put(key, value.stream().map(json -> IEntity.fromJson(json, StoreItem.class)).toList()));
+                return data;
+            } else {
+                throw new RuntimeException("Failed to get item info");
+            }
+        } catch (InterruptedException e) {
+            log.warn("Fail to get item info", e);
+            return null;
+        }
+    }
+
+    public static List<StoreItem> getAll(NettyHandler handler) {
+        Request request = new Request();
+        request.setUri("storeItem/filter");
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            if (response.getStatus().equals("success")) {
+                List<String> raw_data = (List<String>) response.getData();
+                List<StoreItem> data = new LinkedList<>();
+                raw_data.forEach(json -> data.add(IEntity.fromJson(json, StoreItem.class)));
+                return data;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            log.warn(String.valueOf(e));
+            return null;
+        }
+
+    }
 //    public static boolean deleteItem(NettyHandler handler,String itemName){
 //        CountDownLatch latch=new CountDownLatch(1);
 //        AtomicReference<Response> response=new AtomicReference();
@@ -136,25 +191,6 @@ public class StoreClient {
 //        }
 //    }
 //
-    public static List<StoreItem> getAll(NettyHandler handler){
-        Request request=new Request();
-        request.setUri("storeItem/filter");
-        try {
-            Response response = BaseClient.sendRequest(handler, request);
-
-            if(response.getStatus().equals("success")){
-                List<String> raw_data = (List<String>) response.getData();
-                List<StoreItem> data = new LinkedList<>();
-                raw_data.forEach(json -> data.add(IEntity.fromJson(json, StoreItem.class)));
-                return data;
-            }else{
-                return null;
-            }
-        } catch (Exception e){
-            log.warn(String.valueOf(e));
-            return null;
-        }
-
-    }
-
 }
+
+

@@ -21,17 +21,21 @@ import java.util.stream.Collectors;
 public class StoreController {
     @RouteMapping(uri = "storeItem/searchItem")
     public Response searchItem(Request request, org.hibernate.Session database) {
-        String itemName = request.getParams().get("itemName");
-        if (itemName == null) {
-            return Response.Common.error("item name cannot be empty");
+        try {
+            String keyword = request.getParams().get("keyword");
+            if (keyword == null)
+                return Response.Common.error("Keyword cannot be empty");
+            List<StoreItem> items = Database.likeQuery(StoreItem.class,
+                    new String[]{"uuid", "itemName", "price", "pictureLink", "barcode", "description"}, keyword, database);
+            return Response.Common.ok(items.stream().collect(Collectors.groupingBy(w -> w.itemName)).entrySet().stream().collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    e -> e.getValue().stream().map(StoreItem::toJson).collect(Collectors.toList())
+            )));
+        } catch (Exception e) {
+            return Response.Common.error("Failed to search item");
         }
-        StoreItem storeItem = database.get(StoreItem.class, itemName);
-        if (storeItem == null) {
-            return Response.Common.error("no such item name");
-        }
-        System.out.println(storeItem);
-        return Response.Common.ok(Map.of("item", storeItem.toJson()));
     }
+
 
     @RouteMapping(uri = "storeItem/filter", role = "admin")
     public Response filter(Request request, org.hibernate.Session database) {
@@ -58,6 +62,21 @@ public class StoreController {
         return Response.Common.ok();
     }
 
+    @RouteMapping(uri = "storeItem/deleteItem",role="admin")
+    public Response deleteItem(Request request, org.hibernate.Session database) {
+        String id = request.getParams().get("uuid");
+        if (id == null) {
+            return Response.Common.error("item name cannot be empty");
+        }
+        UUID uuid=UUID.fromString(id);
+        StoreItem toDelete=database.get(StoreItem.class,uuid);
+        if(toDelete==null)
+            return Response.Common.error("No such item");
+        Transaction tx=database.beginTransaction();
+        database.remove(toDelete);
+        tx.commit();
+        return Response.Common.ok();
+    }
 //    @RouteMapping(uri = "storeItem/deleteItem",role="admin")
 //    public Response deleteItem(Request request, org.hibernate.Session database) {
 //        String itemName = request.getParams().get("itemName");
