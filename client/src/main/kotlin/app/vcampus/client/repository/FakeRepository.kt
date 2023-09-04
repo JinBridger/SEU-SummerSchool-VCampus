@@ -21,8 +21,10 @@ data class _GradeItem(
     val credit: Double, val courseId: String)
 
 
-data class _StoreItem(val itemName: String, val price: Int,
-                      val barcode: String, val stock: Int)
+data class _StoreItem(
+    val itemName: String, val price: Int,
+    val barcode: String, val stock: Int,
+    val description:String)
 
 data class _StoreOrder(val date: String, val order: List<_StoreItem>)
 
@@ -131,5 +133,12 @@ object FakeRepository {
 
     fun getStoreItemByUuid(uuid: String): StoreItem {
         return StoreClient.searchId(handler, uuid)
+    }
+
+    fun getOneNewStoreItem():_StoreItem {
+        return _StoreItem(
+            "索尼国行PS5主机PlayStation电视游戏机蓝光8K港版日版现货闪送",
+            279900,"",10,"你买不了吃亏买不了上当"
+        )
     }
 }

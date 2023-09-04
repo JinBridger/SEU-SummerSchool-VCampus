@@ -67,6 +67,8 @@ class ShopViewModel() : ViewModel() {
 
     val totalShopItems = FakeRepository.getAllStoreItems()
 
+    val oneNewShopItem = FakeRepository.getOneNewStoreItem()
+
     val chosenShopItems = totalShopItems.map {
         it.copy(stock = 0)
     }.toMutableList()
