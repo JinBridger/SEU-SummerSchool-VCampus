@@ -23,13 +23,11 @@ fun addShopItem(item: _StoreItem, viewModel: ShopViewModel,isEditable: Boolean =
     var myDescription by remember { mutableStateOf(item.description) }
 
 
-    Box(modifier = Modifier.fillMaxSize().padding(horizontal = 100.dp)) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Row(horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                    Spacer(Modifier.height(10.dp))
-                    Divider()
-                    Spacer(Modifier.height(10.dp))
+                    Spacer(Modifier.height(20.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
@@ -170,12 +168,12 @@ fun addShopItem(item: _StoreItem, viewModel: ShopViewModel,isEditable: Boolean =
                         )
 
                     }
+                Spacer(Modifier.height(10.dp))
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Spacer(Modifier.weight(1F))
                         Button(onClick = { }) {
                             Text("添加商品")
                         }
-                        Spacer(Modifier.width(15.dp))
                     }
                 }
             }
