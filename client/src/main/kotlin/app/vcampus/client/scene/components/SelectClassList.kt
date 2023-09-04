@@ -81,8 +81,14 @@ fun selectClassCard(isConflict: Boolean = false, isChosen: Boolean = false) {
             Spacer(Modifier.weight(1F))
             Row(Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End) {
-                Button(onClick = {}, enabled = (!isChosen && !isConflict)) {
-                    Text("选择")
+                if(isChosen) {
+                    Button(onClick = {}) {
+                        Text("退选")
+                    }
+                } else {
+                    Button(onClick = {}, enabled = !isConflict) {
+                        Text("选择")
+                    }
                 }
             }
         }
