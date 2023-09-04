@@ -19,9 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.vcampus.client.repository._StoreItem
 import app.vcampus.client.viewmodel.ShopViewModel
+import app.vcampus.server.entity.StoreItem
 
 @Composable
-fun shopTransactionListItem(item: _StoreItem, viewModel: ShopViewModel) {
+fun shopTransactionListItem(item: StoreItem, viewModel: ShopViewModel) {
     Column {
         Row(modifier = Modifier.fillMaxWidth().height(150.dp).padding(6.dp)) {
             Box(modifier = Modifier.aspectRatio(1F).fillMaxHeight().clip(

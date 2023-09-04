@@ -7,6 +7,7 @@ import app.vcampus.client.gateway.StudentStatusClient
 import app.vcampus.client.net.NettyHandler
 import app.vcampus.server.entity.LibraryBook
 import app.vcampus.server.entity.StoreItem
+import app.vcampus.server.entity.StoreTransaction
 import app.vcampus.server.entity.Student
 import app.vcampus.server.entity.User
 import app.vcampus.server.utility.Pair
@@ -126,50 +127,11 @@ object FakeRepository {
         )
     }
 
-    fun getAllOrder(): List<_StoreOrder> {
-        return listOf(
-                _StoreOrder("2023年9月1日", listOf(
-                        _StoreItem(
-                                "索尼国行PS5主机PlayStation电视游戏机蓝光8K港版日版现货闪送",
-                                279900, "thisisbarcode", 10),
-                        _StoreItem(
-                                "微软Xbox Series S/X 国行主机 XSS XSX 日欧版 次时代4K游戏主机",
-                                190000, "thisisbarcode", 10),
-                        _StoreItem(
-                                "任天堂Switch OLED日版主机NS续航港版健身朱紫塞尔达限定游戏机",
-                                163000, "thisisbarcode", 10),
-                        _StoreItem(
-                                "华硕RTX4090猛禽ROG玩家国度电竞特工台式机电脑游戏独立显卡",
-                                1414900, "thisisbarcode", 10),
-                )),
-                _StoreOrder("2023年8月1日", listOf(
-                        _StoreItem(
-                                "索尼国行PS5主机PlayStation电视游戏机蓝光8K港版日版现货闪送",
-                                279900, "thisisbarcode", 10),
-                        _StoreItem(
-                                "微软Xbox Series S/X 国行主机 XSS XSX 日欧版 次时代4K游戏主机",
-                                190000, "thisisbarcode", 10),
-                        _StoreItem(
-                                "任天堂Switch OLED日版主机NS续航港版健身朱紫塞尔达限定游戏机",
-                                163000, "thisisbarcode", 10),
-                        _StoreItem(
-                                "华硕RTX4090猛禽ROG玩家国度电竞特工台式机电脑游戏独立显卡",
-                                1414900, "thisisbarcode", 10),
-                )),
-                _StoreOrder("2023年7月1日", listOf(
-                        _StoreItem(
-                                "索尼国行PS5主机PlayStation电视游戏机蓝光8K港版日版现货闪送",
-                                279900, "thisisbarcode", 10),
-                        _StoreItem(
-                                "微软Xbox Series S/X 国行主机 XSS XSX 日欧版 次时代4K游戏主机",
-                                190000, "thisisbarcode", 10),
-                        _StoreItem(
-                                "任天堂Switch OLED日版主机NS续航港版健身朱紫塞尔达限定游戏机",
-                                163000, "thisisbarcode", 10),
-                        _StoreItem(
-                                "华硕RTX4090猛禽ROG玩家国度电竞特工台式机电脑游戏独立显卡",
-                                1414900, "thisisbarcode", 10),
-                ))
-        )
+    fun getAllOrder(): Map<String, List<StoreTransaction>> {
+        return StoreClient.getTransaction(handler)
+    }
+
+    fun getStoreItemByUuid(uuid: String): StoreItem {
+        return StoreClient.searchId(handler, uuid)
     }
 }

@@ -13,10 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.components.shopTransactionListItem
 import app.vcampus.client.viewmodel.ShopViewModel
+import app.vcampus.server.entity.StoreItem
 
 @Composable
 fun myOrderSubscene(viewModel: ShopViewModel) {
@@ -33,14 +35,14 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                 viewModel.totalOrderItems.forEach {
                     item {
                         val totalCost = mutableStateOf(0)
-                        it.order.forEach {
-                            totalCost.value += it.price * it.stock
+                        it.value.forEach {
+                            totalCost.value += it.amount * it.itemPrice
                         }
 
                         Column(modifier = Modifier.fillMaxWidth()) {
                             Row(Modifier.fillMaxWidth()) {
                                 Text(
-                                        text = it.date,
+                                        text = it.key,
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight(700)
                                 )
@@ -56,10 +58,10 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                             Card(modifier = Modifier.fillMaxWidth().border(1.dp,
                                     color = Color.LightGray, shape = RoundedCornerShape(4.dp))) {
                                 Column(modifier = Modifier.fillMaxWidth()) {
-                                    it.order.forEach {
-                                        if (it.stock != 0) {
-                                            shopTransactionListItem(it,
-                                                    viewModel)
+                                    it.value.forEach {
+                                        if(it.amount != 0) {
+                                            val item = FakeRepository.getStoreItemByUuid(it.itemUUID.toString())
+                                            shopTransactionListItem(item, viewModel)
                                         }
                                     }
                                 }

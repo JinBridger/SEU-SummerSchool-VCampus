@@ -88,6 +88,23 @@ public class StoreController {
             return Response.Common.error("Failed to get transaction records");
         }
     }
+
+    @RouteMapping(uri = "storeItem/searchId")
+    public Response searchId(Request request, org.hibernate.Session database) {
+        try {
+            String uuid = request.getParams().get("uuid");
+            if (uuid == null)
+                return Response.Common.error("UUID cannot be empty");
+            UUID id=UUID.fromString(uuid);
+            StoreItem storeItem=database.get(StoreItem.class,id);
+            if(storeItem==null){
+                return Response.Common.error("missing item information");
+            }
+            return Response.Common.ok(storeItem.toJson());
+        } catch (Exception e) {
+            return Response.Common.error("Failed to search item");
+        }
+    }
 //    @RouteMapping(uri = "storeItem/deleteItem",role="admin")
 //    public Response deleteItem(Request request, org.hibernate.Session database) {
 //        String itemName = request.getParams().get("itemName");
