@@ -17,7 +17,7 @@ import java.util.UUID;
 @Table(name = "store_transaction")
 @Slf4j
 
-public class StoreTransaction {
+public class StoreTransaction implements IEntity {
     @Id
     public UUID uuid;
 

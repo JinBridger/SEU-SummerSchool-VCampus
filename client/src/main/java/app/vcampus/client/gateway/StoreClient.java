@@ -83,8 +83,28 @@ public class StoreClient {
             log.warn(String.valueOf(e));
             return null;
         }
-
     }
+
+    public static Map<String,List<StoreTransaction>> getTransaction(NettyHandler handler){
+        Request request=new Request();
+        request.setUri("storeTransaction/getRecords");
+        try{
+            Response response=BaseClient.sendRequest(handler,request);
+            if(response.getStatus().equals("success")){
+                Map<String,List<String>> raw_data=(Map<String, List<String>>) response.getData();
+                Map<String,List<StoreTransaction>> data=new HashMap<>();
+                raw_data.forEach((key,value)->data.put(key,value.stream().map(
+                        json->IEntity.fromJson(json,StoreTransaction.class)).toList()));
+                return data;
+            }else{
+                throw new RuntimeException("Failed to get item info");
+            }
+        }catch (Exception e){
+            log.warn(String.valueOf(e));
+            return null;
+        }
+    }
+
 //    public static boolean deleteItem(NettyHandler handler,String itemName){
 //        CountDownLatch latch=new CountDownLatch(1);
 //        AtomicReference<Response> response=new AtomicReference();

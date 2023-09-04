@@ -10,10 +10,7 @@ import org.hibernate.Transaction;
 import javax.management.Query;
 import java.time.LocalDateTime;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -39,43 +36,57 @@ public class StoreController {
 
     @RouteMapping(uri = "storeItem/filter", role = "admin")
     public Response filter(Request request, org.hibernate.Session database) {
-        try{
+        try {
             List<StoreItem> allItems;
-            allItems=Database.loadAllData(StoreItem.class,database);
+            allItems = Database.loadAllData(StoreItem.class, database);
             return Response.Common.ok(allItems.stream().map(StoreItem::toJson).collect(Collectors.toList()));
-        }catch (Exception e){
-            log.warn("Failed to filter store items",e);
+        } catch (Exception e) {
+            log.warn("Failed to filter store items", e);
             return Response.Common.error("Failed to filter store items");
         }
     }
 
-    @RouteMapping(uri = "storeItem/addItem",role="admin")
+    @RouteMapping(uri = "storeItem/addItem", role = "admin")
     public Response addItem(Request request, org.hibernate.Session database) {
-        StoreItem newStoreItem=IEntity.fromJson(request.getParams().get("item"),StoreItem.class);
-        if(newStoreItem==null){
+        StoreItem newStoreItem = IEntity.fromJson(request.getParams().get("item"), StoreItem.class);
+        if (newStoreItem == null) {
             return Response.Common.badRequest();
         }
         newStoreItem.setUuid(UUID.randomUUID());
-        Transaction tx=database.beginTransaction();
+        Transaction tx = database.beginTransaction();
         database.persist(newStoreItem);
         tx.commit();
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "storeItem/deleteItem",role="admin")
+    @RouteMapping(uri = "storeItem/deleteItem", role = "admin")
     public Response deleteItem(Request request, org.hibernate.Session database) {
         String id = request.getParams().get("uuid");
         if (id == null) {
             return Response.Common.error("item name cannot be empty");
         }
-        UUID uuid=UUID.fromString(id);
-        StoreItem toDelete=database.get(StoreItem.class,uuid);
-        if(toDelete==null)
+        UUID uuid = UUID.fromString(id);
+        StoreItem toDelete = database.get(StoreItem.class, uuid);
+        if (toDelete == null)
             return Response.Common.error("No such item");
-        Transaction tx=database.beginTransaction();
+        Transaction tx = database.beginTransaction();
         database.remove(toDelete);
         tx.commit();
         return Response.Common.ok();
+    }
+
+    @RouteMapping(uri = "storeTransaction/getRecords", role = "admin")
+    public Response getRecords(Request request, org.hibernate.Session database) {
+        try {
+            List<StoreTransaction> allRecords = Database.loadAllData(StoreTransaction.class, database);
+            Collections.sort(allRecords, (o1, o2) -> o2.getTime().compareTo(o1.getTime()));
+            return Response.Common.ok(allRecords.stream().collect(Collectors.groupingBy(w -> DateUtility.fromDate(w.time))).entrySet().stream().collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    e -> e.getValue().stream().map(StoreTransaction::toJson).collect(Collectors.toList()))));
+        } catch (Exception e) {
+            log.warn("Failed to get transaction records", e);
+            return Response.Common.error("Failed to get transaction records");
+        }
     }
 //    @RouteMapping(uri = "storeItem/deleteItem",role="admin")
 //    public Response deleteItem(Request request, org.hibernate.Session database) {
