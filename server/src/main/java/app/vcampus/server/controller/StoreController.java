@@ -79,8 +79,9 @@ public class StoreController {
         Transaction tx = database.beginTransaction();
         storeItem.setItemName(newStoreItem.getItemName());
         storeItem.setPrice(newStoreItem.getPrice());
-        storeItem.setStock(newStoreItem.getStock());
+        storeItem.setPictureLink(newStoreItem.getPictureLink());
         storeItem.setBarcode(newStoreItem.getBarcode());
+        storeItem.setStock(newStoreItem.getStock());
         storeItem.setDescription(newStoreItem.getDescription());
         database.persist(storeItem);
         tx.commit();

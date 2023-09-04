@@ -24,6 +24,9 @@ public class StoreItem {
     public Integer price;
 
     @Column(nullable = false)
+    public String pictureLink;
+
+    @Column(nullable = false)
     public String barcode;
 
     @Column(nullable = false)
@@ -38,6 +41,7 @@ public class StoreItem {
             storeItem.setUuid(UUID.fromString(data.get("uuid")));
             storeItem.setItemName(data.get("itemName"));
             storeItem.setPrice(Integer.parseInt(data.get("price")));
+            storeItem.setPictureLink(data.get("pictureLink"));
             storeItem.setBarcode(data.get("barcode"));
             storeItem.setStock(Integer.parseInt(data.get("stock")));
             storeItem.setDescription(data.get("description"));
@@ -54,6 +58,7 @@ public class StoreItem {
                 Map.entry("uuid", getUuid().toString()),
                 Map.entry("itemName", getItemName()),
                 Map.entry("price", getPrice().toString()),
+                Map.entry("pictureLink",getPictureLink()),
                 Map.entry("barcode", getBarcode()),
                 Map.entry("stock", getStock().toString()),
                 Map.entry("description", getDescription())
