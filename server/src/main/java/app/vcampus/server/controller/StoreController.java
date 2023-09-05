@@ -4,15 +4,18 @@ import app.vcampus.server.entity.*;
 import app.vcampus.server.utility.*;
 import app.vcampus.server.utility.router.RouteMapping;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.util.Store;
 import org.hibernate.Transaction;
 
 import javax.management.Query;
+import java.awt.dnd.DropTarget;
 import java.time.LocalDateTime;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 
@@ -106,7 +109,76 @@ public class StoreController {
             return Response.Common.error("Failed to get transaction records");
         }
     }
-    
+
+    @RouteMapping(uri="storeTransaction/searchTransaction")
+    public Response searchTransaction(Request request,org.hibernate.Session database){
+        try{
+            String keyword=request.getParams().get("keyword");
+            if(keyword==null)
+                return Response.Common.error("Keyword cannot be empty");
+            List<StoreTransaction> transactions= Database.likeQuery(StoreTransaction.class,
+                    new String[]{"itemName","itemPrice","amount","remark","time"},keyword,database);
+            return Response.Common.ok(transactions.stream().collect(Collectors.groupingBy(w->w.uuid)).entrySet().stream().collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    e->e.getValue().stream().map(StoreTransaction::toJson).collect(Collectors.toList())
+            )));
+        }catch (Exception e){
+            return Response.Common.error("Failed to search transaction record");
+        }
+    }
+//    @RouteMapping(uri="storeTransaction/addTransaction")
+//    public Response addTransaction(Request request,org.hibernate.Session database){
+//        try{
+//            //List pairs=Database.loadAllData(List.class,database);
+//            //List<Pair<Integer,StoreItem>> pairs=new ArrayList<>();
+//
+//            //pairs=Database.loadAllData(List<Pair<Integer,StoreItem>>.class,database);
+//            List<Integer> amounts=pairs.stream().map(Pair::getFirst).collect(Collectors.toList());
+//            List<StoreItem> items=pairs.stream().map(Pair::getSecond).collect(Collectors.toList());
+////            List<Integer> amounts = pairs.stream()
+////                    .map(Pair::getFirst) // 提取整数部分
+////                    .collect(Collectors.toList());
+////
+////            List<StoreItem> storeItems = pairs.stream()
+////                    .map(Pair::getSecond) // 提取StoreItem部分
+////                    .collect(Collectors.toList());
+//            if(amounts==null||items==null){
+//                return Response.Common.badRequest();
+//            }
+//            Transaction tx=database.beginTransaction();
+//            for(int i=0;i<items.size();i++){
+//                StoreTransaction newStoreTransaction=new StoreTransaction();
+//                StoreItem newStoreItem=items.get(i);
+//                newStoreTransaction.setUuid(UUID.randomUUID());
+//                newStoreTransaction.setUuid(newStoreItem.getUuid());
+//                newStoreTransaction.setAmount(amounts.get(i));
+//                newStoreTransaction.setItemPrice(newStoreItem.getPrice());
+//                Date currentTime=new Date();
+//                newStoreTransaction.setTime(currentTime);
+//                newStoreTransaction.setRemark("");
+//                newStoreTransaction.setCardNumber(123456);
+//                database.persist(newStoreTransaction);
+//            }
+//            tx.commit();
+//            return Response.Common.ok();
+//        }catch (Exception e){
+//            log.warn("Failed to add transaction record",e);
+//            return Response.Common.error("Failed to add transaction record");
+//        }
+//    }
+//    @RouteMapping(uri = "storeItem/filter", role = "admin")
+//    public Response filter(Request request, org.hibernate.Session database) {
+//        try {
+//            List<StoreItem> allItems;
+//            allItems = Database.loadAllData(StoreItem.class, database);
+//            return Response.Common.ok(allItems.stream().map(StoreItem::toJson).collect(Collectors.toList()));
+//        } catch (Exception e) {
+//            log.warn("Failed to filter store items", e);
+//            return Response.Common.error("Failed to filter store items");
+//        }
+//    }
+
+
 //    @RouteMapping(uri = "storeItem/deleteItem",role="admin")
 //    public Response deleteItem(Request request, org.hibernate.Session database) {
 //        String itemName = request.getParams().get("itemName");
