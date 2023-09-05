@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.vcampus.client.scene.components.pageTitle
@@ -35,7 +36,15 @@ fun modifyBookSubscene(viewModel: LibraryViewModel) {
             item {
                 Spacer(Modifier.height(20.dp))
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .onPreviewKeyEvent {event: KeyEvent ->
+                            if(event.type== KeyEventType.KeyDown&&event.key== Key.Enter){
+                                viewModel.modifyBook.searchBook()
+                                true
+                            }else{
+                                false
+                            }
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
