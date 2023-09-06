@@ -163,8 +163,7 @@ fun addShopItem(item: _StoreItem, viewModel: ShopViewModel,isEditable: Boolean =
                                     tint = MaterialTheme.colors.error
                                 )
                             },
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth().height(120.dp)
                         )
 
                     }

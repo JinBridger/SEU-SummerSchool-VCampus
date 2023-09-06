@@ -3,18 +3,23 @@ package app.vcampus.client.viewmodel
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.*
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.repository._StoreItem
 import app.vcampus.client.repository.copy
 import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.StoreItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.viewModelScope
 
 class ShopViewModel() : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
+    val searchStoreItem = SearchStoreItem()
+    val searchStoreItems = mutableStateListOf<StoreItem>()
 
     val sideBarContent = (if (identity.contains("shop_user")) {
         listOf(SideBarItem(true, "购物", "", Icons.Default.Info, false))
@@ -82,4 +87,27 @@ class ShopViewModel() : ViewModel() {
     val chosenItemsPrice: MutableState<Int> = _chosenItemsPrice
 
     val totalOrderItems = FakeRepository.getAllOrder()
+
+    open class SearchStoreItem : ViewModel(){
+        val keyword = mutableStateOf("")
+        val StoreList = mutableStateMapOf<String,List<StoreItem>>()
+        var searched = mutableStateOf(false)
+
+        fun searchStoreItem(){
+            viewModelScope.launch {
+                withContext(Dispatchers.IO){
+                searchStoremItemInternal().collect{
+                    StoreList.clear()
+                    StoreList.putAll(it)
+
+                    searched.value = true
+                }
+                }
+            }
+        }
+
+        private  suspend fun searchStoremItemInternal() = flow{
+            emit(FakeRepository.searchStoreItem(keyword.value))
+        }
+    }
 }

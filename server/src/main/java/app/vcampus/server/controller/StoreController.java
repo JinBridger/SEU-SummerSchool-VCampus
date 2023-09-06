@@ -28,10 +28,11 @@ public class StoreController {
                 return Response.Common.error("Keyword cannot be empty");
             List<StoreItem> items = Database.likeQuery(StoreItem.class,
                     new String[]{"uuid", "itemName", "price", "pictureLink", "barcode", "description"}, keyword, database);
-            return Response.Common.ok(items.stream().collect(Collectors.groupingBy(w -> w.itemName)).entrySet().stream().collect(Collectors.toMap(
-                    Map.Entry::getKey,
-                    e -> e.getValue().stream().map(StoreItem::toJson).collect(Collectors.toList())
-            )));
+//            return Response.Common.ok(items.stream().collect(Collectors.groupingBy(w -> w.itemName)).entrySet().stream().collect(Collectors.toMap(
+//                    Map.Entry::getKey,
+//                    e -> e.getValue().stream().map(StoreItem::toJson).collect(Collectors.toList())
+//            )));
+            return Response.Common.ok(Map.of("items", items.stream().map(StoreItem::toJson).collect(Collectors.toList())));
         } catch (Exception e) {
             return Response.Common.error("Failed to search item");
         }

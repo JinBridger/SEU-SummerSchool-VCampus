@@ -98,6 +98,9 @@ object FakeRepository {
         return LibraryClient.deleteBook(handler, uuid)
     }
 
+    fun searchStoreItem(keyword: String): Map<String, List<StoreItem>>{
+        return StoreClient.searchItem(handler,keyword) ?: mapOf()
+    }
     fun getStudentGrade(): List<_GradeItem> {
         return listOf(
             _GradeItem(
