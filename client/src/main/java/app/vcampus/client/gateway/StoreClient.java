@@ -136,6 +136,21 @@ public class StoreClient {
             return null;
         }
     }
+
+    public static boolean updateItem(NettyHandler handler,StoreItem storeItem){
+        Request request=new Request();
+        request.setUri("storeItem/updateItem");
+        request.setParams(Map.of(
+                "storeItem",storeItem.toJson()
+        ));
+        try{
+            Response response=BaseClient.sendRequest(handler,request);
+            return response.getStatus().equals("success");
+        }catch (InterruptedException e){
+            log.warn("Fail to update item",e);
+            return false;
+        }
+    }
 //    public static boolean addTransaction(NettyHandler handler,List<Pair<Integer,StoreItem>> list){
 //        Request request=new Request();
 //        request.setUri("storeTransaction/addTransaction");

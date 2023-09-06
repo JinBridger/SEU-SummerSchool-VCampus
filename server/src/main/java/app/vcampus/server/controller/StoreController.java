@@ -126,6 +126,27 @@ public class StoreController {
             return Response.Common.error("Failed to search transaction record");
         }
     }
+
+    @RouteMapping(uri="storeItem/updateItem",role="admin")
+    public Response updateItem(Request request,org.hibernate.Session database){
+        StoreItem newItem=IEntity.fromJson(request.getParams().get("storeItem"),StoreItem.class);
+        StoreItem toUpdate=database.get(StoreItem.class,newItem.getUuid());
+        if(toUpdate==null){
+            return Response.Common.badRequest();
+        }
+        Transaction tx=database.beginTransaction();
+        toUpdate.setItemName(newItem.getItemName());
+        toUpdate.setPictureLink(newItem.getPictureLink());
+        toUpdate.setPrice(newItem.getPrice());
+        toUpdate.setStock(newItem.getStock());
+        toUpdate.setBarcode(newItem.getBarcode());
+        toUpdate.setDescription(newItem.getDescription());
+        toUpdate.setSalesVolume(newItem.getSalesVolume());
+        database.persist(toUpdate);
+        tx.commit();
+        return Response.Common.ok();
+    }
+
 //    @RouteMapping(uri="storeTransaction/addTransaction")
 //    public Response addTransaction(Request request,org.hibernate.Session database){
 //        try{
