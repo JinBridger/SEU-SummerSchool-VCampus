@@ -15,7 +15,6 @@ import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.blankSubscene
 import app.vcampus.client.scene.subscene.finance.manuallyRechargeSubscene
 import app.vcampus.client.scene.subscene.finance.myBillsSubscene
-import app.vcampus.client.scene.subscene.finance.selfServiceRechargeSubscene
 import app.vcampus.client.viewmodel.FinanceViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
@@ -48,9 +47,8 @@ fun FinanceScene(navi: Navigator) {
             Crossfade(currentSubscene.value){
                 when (it) {
                     "" -> blankSubscene()
-                    "一卡通" -> myBillsSubscene()
-                    "自助充值" -> selfServiceRechargeSubscene()
-                    "充值" -> manuallyRechargeSubscene()
+                    "一卡通" -> myBillsSubscene(viewModel)
+                    "一卡通管理" -> manuallyRechargeSubscene(viewModel)
                 }
             }
         }

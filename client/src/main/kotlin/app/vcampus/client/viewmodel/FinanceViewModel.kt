@@ -20,9 +20,7 @@ class FinanceViewModel() : ViewModel() {
         when (it) {
             "finance_user" -> listOf(
                     SideBarItem(false, "一卡通", "查看一卡通余额与账单",
-                            Icons.Default.CreditCard, false),
-                    SideBarItem(false, "自助充值", "自助充值校园卡",
-                            Icons.Default.AddCard, false))
+                            Icons.Default.CreditCard, false))
             else -> emptyList()
         }
     } + (if (identity.contains("finance_staff")) {
@@ -32,7 +30,7 @@ class FinanceViewModel() : ViewModel() {
     }) + identity.flatMap {
         when (it) {
             "finance_staff" -> listOf(
-                    SideBarItem(false, "充值", "手动修改一卡通余额",
+                    SideBarItem(false, "一卡通管理", "充值 / 冻结 / 挂失",
                             Icons.Default.RequestQuote, false))
             else -> emptyList()
         }
