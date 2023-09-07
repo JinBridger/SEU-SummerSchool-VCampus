@@ -4,10 +4,7 @@ package app.vcampus.server.entity;
 import app.vcampus.server.utility.Pair;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -34,6 +31,9 @@ public class TeachingClass implements IEntity {
 
     @Column(nullable = false)
     public Integer teacherId;
+
+    @Transient
+    public String teacherName;
 
     @Column(nullable = false)
     @JdbcTypeCode(SqlTypes.JSON)

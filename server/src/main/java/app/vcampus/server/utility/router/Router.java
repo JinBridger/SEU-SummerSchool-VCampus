@@ -69,8 +69,10 @@ public class Router {
                 return method.invoke(object, request, database);
             } catch (IllegalAccessException e) {
                 log.error("Router: Action: call: IllegalAccessException: {}", e.getMessage());
+                e.printStackTrace();
             } catch (InvocationTargetException e) {
                 log.error("Router: Action: call: InvocationTargetException: {}", e.getMessage());
+                e.printStackTrace();
             }
 
             return Response.Common.internalError();

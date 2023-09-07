@@ -15,18 +15,19 @@ import java.util.UUID;
 @Entity
 @Data
 @Slf4j
-@Table(name = "selectedClass")
-public class SelectedClass {
+@Table(name = "selected_class")
+public class SelectedClass implements IEntity {
     @Id
     public UUID uuid;
+
     public UUID classUuid;
 
-    @Column(name = "cardNumber")
+    @Column(nullable = false)
     public Integer cardNumber;
 
-    public Date selectTime;
-
     public Integer grade;
+
+    public Date selectTime;
 
     public static SelectedClass fromMap(Map<String, String> data) {
         try {

@@ -4,14 +4,16 @@ import app.vcampus.client.gateway.AuthClient
 import app.vcampus.client.gateway.LibraryClient
 import app.vcampus.client.gateway.StoreClient
 import app.vcampus.client.gateway.StudentStatusClient
+import app.vcampus.client.gateway.TeachingAffairsClient
 import app.vcampus.client.net.NettyHandler
 import app.vcampus.server.entity.LibraryBook
+import app.vcampus.server.entity.SelectedClass
 import app.vcampus.server.entity.StoreItem
 import app.vcampus.server.entity.StoreTransaction
 import app.vcampus.server.entity.Student
+import app.vcampus.server.entity.TeachingClass
 import app.vcampus.server.entity.User
 import app.vcampus.server.utility.Pair
-import moe.tlaster.precompose.viewmodel.ViewModel
 import mu.KotlinLogging
 import java.util.UUID
 
@@ -116,7 +118,7 @@ object FakeRepository {
         return StoreClient.getAll(handler)
     }
 
-    fun getAllSchedule(): List<_TeachingClass> {
+    fun getFakeSchedule(): List<_TeachingClass> {
         return listOf(
                 _TeachingClass(listOf(Pair(Pair(1, 16), Pair(1, Pair(2, 4)))),
                         "sig", 111, "九龙湖"),
@@ -128,6 +130,10 @@ object FakeRepository {
                         "os", 444, "九龙湖"),
 
         )
+    }
+
+    fun getSelectedClasses(): List<TeachingClass> {
+        return TeachingAffairsClient.getSelectedClasses(handler)
     }
 
     fun getAllOrder(): Map<String, List<StoreTransaction>> {

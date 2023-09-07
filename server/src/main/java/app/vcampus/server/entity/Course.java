@@ -25,9 +25,9 @@ public class Course {
     public String courseName;
 
     @Column(nullable = false)
-    public Integer school;//School offered
+    public String school;
 
-    public float credit;//credit
+    public float credit;
 
     public static Course fromMap(Map<String, String> data) {
         try {
@@ -35,7 +35,7 @@ public class Course {
             course.setUuid(UUID.fromString(data.get("uuid")));
             course.setCourseId(data.get("courseId"));
             course.setCourseName(data.get("courseName"));
-            course.setSchool(Integer.parseInt("school"));
+            course.setSchool(data.get("school"));
             course.setCredit(Float.parseFloat(data.get("credit")));
             return course;
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class Course {
                 Map.entry("uuid", getUuid().toString()),
                 Map.entry("courseId", getCourseId()),
                 Map.entry("courseName", getCourseName()),
-                Map.entry("school", getSchool().toString()),
+                Map.entry("school", getSchool()),
                 Map.entry("credit", Float.toString(getCredit()))
         );
     }

@@ -6,17 +6,37 @@ import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.router.RouteMapping;
-import jakarta.persistence.TypedQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
-import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 public class TeachingAffairsController {
-    @RouteMapping(uri = "course/addCourse",role="affairs_staff")
+    @RouteMapping(uri = "teachingAffairs/student/getSelectedClasses", role = "student")
+    public Response getSelectedClasses(Request request, org.hibernate.Session database) {
+        Integer cardNumber = request.getSession().getCardNum();
+
+        Student student = database.get(Student.class, cardNumber);
+
+        if (student == null) {
+            return Response.Common.error("no such card number");
+        }
+
+        List<SelectedClass> selectedClasses = Database.getWhere(SelectedClass.class, "cardNumber", cardNumber.toString(), database);
+        List<TeachingClass> teachingClasses = selectedClasses.stream().map((SelectedClass sc) -> database.get(TeachingClass.class, sc.getClassUuid())).toList();
+        List<TeachingClass> teachingClassesWithTeacherName = teachingClasses.stream().peek((TeachingClass tc) -> {
+            User teacher = database.get(User.class, tc.getTeacherId());
+            tc.setTeacherName(teacher.getName());
+        }).toList();
+
+        return Response.Common.ok(Map.of("classes", teachingClassesWithTeacherName.stream().map(TeachingClass::toJson).toList()));
+    }
+
+    @RouteMapping(uri = "course/addCourse", role = "affairs_staff")
     public Response addCourse(Request request, org.hibernate.Session database) {
         Course newCourse = Course.fromMap(request.getParams());
         if (newCourse == null) {
@@ -25,26 +45,26 @@ public class TeachingAffairsController {
 
         newCourse.setUuid(UUID.randomUUID());
         Transaction tx = database.beginTransaction();
-        Database.updateWhere(Course.class,"courseId", newCourse.getCourseId(), List.of(
-                new Pair<>("courseName",newCourse.getCourseName()),
-                new Pair<>("school",Integer.toString(newCourse.getSchool())),
-                new Pair<>("credit",Float.toString(newCourse.getCredit()))
-                ),database);
+        Database.updateWhere(Course.class, "courseId", newCourse.getCourseId(), List.of(
+                new Pair<>("courseName", newCourse.getCourseName()),
+//                new Pair<>("school", Integer.toString(newCourse.getSchool())),
+                new Pair<>("credit", Float.toString(newCourse.getCredit()))
+        ), database);
         database.persist(newCourse);
         tx.commit();
 
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri ="teachingAffairs/deleteCourse",role="affairs_staff")
-    public Response deleteCourse(Request request,org.hibernate.Session database){
-        String id=request.getParams().get("uuid");
+    @RouteMapping(uri = "teachingAffairs/deleteCourse", role = "affairs_staff")
+    public Response deleteCourse(Request request, org.hibernate.Session database) {
+        String id = request.getParams().get("uuid");
 
-        if(id==null)return Response.Common.error("Course UUID connot be empty");
+        if (id == null) return Response.Common.error("Course UUID connot be empty");
 
-        UUID uuid=UUID.fromString(id);
-        Course toDelete=database.get(Course.class,uuid);
-        if(toDelete==null)return Response.Common.error("No such course");
+        UUID uuid = UUID.fromString(id);
+        Course toDelete = database.get(Course.class, uuid);
+        if (toDelete == null) return Response.Common.error("No such course");
 
         Transaction tx = database.beginTransaction();
         database.remove(toDelete);
@@ -54,7 +74,7 @@ public class TeachingAffairsController {
     }
 
     /*This method is used to select courses for students*/
-    @RouteMapping(uri="selectedClass/selectClass",role="student")
+    @RouteMapping(uri = "selectedClass/selectClass", role = "student")
     public Response selectClass(Request request, org.hibernate.Session database) {
         SelectedClass newSelectedClass = SelectedClass.fromMap(request.getParams());
         if (newSelectedClass == null) {
@@ -72,17 +92,17 @@ public class TeachingAffairsController {
     }
 
     /*for student to search selectedClass information*/
-    @RouteMapping(uri="selectedClass/searchInfo",role="student")
-    public Response searchInfo(Request request,org.hibernate.Session database){
-        String cardNumber=request.getParams().get("cardNumber");
+    @RouteMapping(uri = "selectedClass/searchInfo", role = "student")
+    public Response searchInfo(Request request, org.hibernate.Session database) {
+        String cardNumber = request.getParams().get("cardNumber");
 
-        if(cardNumber==null){
+        if (cardNumber == null) {
             return Response.Common.error("card number cannot be empty");
         }
 
-        SelectedClass selectedClass=database.get(SelectedClass.class,Integer.parseInt(cardNumber));
+        SelectedClass selectedClass = database.get(SelectedClass.class, Integer.parseInt(cardNumber));
 
-        if(selectedClass==null){
+        if (selectedClass == null) {
             return Response.Common.error("no such card number");
         }
         System.out.println(selectedClass);
@@ -90,16 +110,16 @@ public class TeachingAffairsController {
     }
 
     /*for teacher to search teaching class information*/
-    @RouteMapping(uri="class/searchClass",role="teacher")
-    public Response searchClass(Request request,org.hibernate.Session database){
-        String cardNumber=request.getParams().get("cardNumber");
+    @RouteMapping(uri = "class/searchClass", role = "teacher")
+    public Response searchClass(Request request, org.hibernate.Session database) {
+        String cardNumber = request.getParams().get("cardNumber");
 
-        if(cardNumber==null){
+        if (cardNumber == null) {
             return Response.Common.error("card number cannot be empty");
         }
 
-        TeachingClass teachingClass=database.get(TeachingClass.class,Integer.parseInt(cardNumber));
-        if(teachingClass==null){
+        TeachingClass teachingClass = database.get(TeachingClass.class, Integer.parseInt(cardNumber));
+        if (teachingClass == null) {
             return Response.Common.error("no such card number");
         }
 
@@ -179,15 +199,13 @@ public class TeachingAffairsController {
 //    }
 
     @RouteMapping(uri = "TeachingEvaluaiotn/addEvaluation", role = "student")
-    public Response addEvaluaiton(Request request, org.hibernate.Session database)
-    {
-        TeachingEvaluation newTeachingEvaluation=IEntity.fromJson(request.getParams().get("evaluation"), TeachingEvaluation.class);
-        if(newTeachingEvaluation==null)
-        {
+    public Response addEvaluaiton(Request request, org.hibernate.Session database) {
+        TeachingEvaluation newTeachingEvaluation = IEntity.fromJson(request.getParams().get("evaluation"), TeachingEvaluation.class);
+        if (newTeachingEvaluation == null) {
             return Response.Common.badRequest();
         }
         newTeachingEvaluation.setUuid(UUID.randomUUID());
-        Transaction tx=database.beginTransaction();
+        Transaction tx = database.beginTransaction();
         database.persist(newTeachingEvaluation);
         tx.commit();
         return Response.Common.ok();

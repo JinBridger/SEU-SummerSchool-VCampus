@@ -11,4 +11,8 @@ public class Pair<F, S> {
         this.first = first;
         this.second = second;
     }
+
+    public Pair() {
+
+    }
 }

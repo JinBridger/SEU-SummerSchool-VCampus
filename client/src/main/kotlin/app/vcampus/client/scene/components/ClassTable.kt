@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.repository._TeachingClass
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
+import app.vcampus.server.entity.TeachingClass
 
 @Composable
 fun classItem(className: String, teacherName: String, position: String) {
@@ -28,8 +29,8 @@ fun classItem(className: String, teacherName: String, position: String) {
     }
 }
 
-fun isHereClass(allClass: List<_TeachingClass>, weekday: Int,
-                section: Int): _TeachingClass? {
+fun isHereClass(allClass: MutableList<TeachingClass>, weekday: Int,
+                section: Int): TeachingClass? {
     allClass.forEach {
         if (it.schedule[0].second.first == weekday) {
             if (it.schedule[0].second.second.first <= section && section <= it.schedule[0].second.second.second) {
@@ -126,15 +127,15 @@ fun classTable(viewModel: TeachingAffairsViewModel) {
                     }
                     var index = 1
                     while (index <= 13) {
-                        val classHere = isHereClass(viewModel.schedules,
+                        val classHere = isHereClass(viewModel.mySchedule!!.schedules,
                                 weekday, index)
                         if (classHere != null) {
                             Box(Modifier.fillMaxWidth().weight(
                                     (classHere.schedule[0].second.second.second - classHere.schedule[0].second.second.first + 1).toFloat()))
                             {
                                 classItem(classHere.courseName,
-                                        classHere.teacherId.toString(),
-                                        classHere.position)
+                                        classHere.teacherName,
+                                        classHere.place)
                             }
                             (1..(classHere.schedule[0].second.second.second - classHere.schedule[0].second.second.first + 1)).forEach {
                                 Divider(Modifier.fillMaxWidth(),
