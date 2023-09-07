@@ -103,6 +103,10 @@ object FakeRepository {
     fun searchStoreItem(keyword: String): Map<String, List<StoreItem>>{
         return StoreClient.searchItem(handler,keyword) ?: mapOf()
     }
+
+    fun updateStoreItem(storeItem: StoreItem):Boolean{
+        return StoreClient.updateItem(handler,storeItem)
+    }
     fun getStudentGrade(): List<_GradeItem> {
         return listOf(
             _GradeItem(

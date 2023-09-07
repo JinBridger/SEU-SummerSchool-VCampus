@@ -41,11 +41,11 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
                     Spacer(Modifier.height(20.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth()
-                            .onPreviewKeyEvent {event: KeyEvent ->
-                                if(event.type== KeyEventType.KeyDown&&event.key== Key.Enter){
-                                    viewModel.searchStoreItem.searchStoreItem()
+                            .onPreviewKeyEvent { event: KeyEvent ->
+                                if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
+                                    viewModel.modifyStoreItem.searchStoreItem()
                                     true
-                                }else{
+                                } else {
                                     false
                                 }
                             },
@@ -63,13 +63,19 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
                         Column {
                             Spacer(Modifier.height(8.dp))
                             Button(onClick = {
-                                viewModel.searchStoreItem.searchStoreItem()
+                                viewModel.modifyStoreItem.searchStoreItem()
                             }, modifier = Modifier.height(56.dp)) {
                                 Icon(Icons.Default.Search, "")
                             }
                         }
                     }
-                    viewModel.searchStoreItems.forEach{StoreItem ->
+                }
+                viewModel.modifyStoreItem.storeList.forEach{
+                    item {
+                        EditStoreItem(it.value,isEditable = true, onEdit = {storeItem,update ->
+
+                            viewModel.modifyStoreItem.updateStoreItem(storeItem)
+                        })
                     }
                 }
             }
