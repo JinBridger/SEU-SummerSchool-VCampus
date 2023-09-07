@@ -31,8 +31,8 @@ fun myGradeSubscene(viewModel: TeachingAffairsViewModel) {
                 Spacer(Modifier.height(20.dp))
             }
             item{
-                viewModel.StudentGradeItems.forEach{
-                    GradeListItem(it,viewModel)
+                viewModel.myScheduleAndGrades!!.myClasses.forEach{
+                    GradeListItem(it)
                     Spacer(Modifier.height(10.dp))
                 }
             }

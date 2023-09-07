@@ -2,6 +2,7 @@ package app.vcampus.server;
 
 import app.vcampus.server.controller.*;
 import app.vcampus.server.entity.Course;
+import app.vcampus.server.entity.Grades;
 import app.vcampus.server.entity.SelectedClass;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
@@ -65,6 +66,10 @@ public class Main {
 //        selectedClass.setCardNumber(123456);
 //        selectedClass.setClassUuid(UUID.fromString("c30d2d57-8edc-4471-b143-4d2df741b6e8"));
 //        selectedClass.setSelectTime(new Date());
+//        database.persist(selectedClass);
+
+//        SelectedClass selectedClass = database.get(SelectedClass.class, UUID.fromString("a010f8b1-ccfc-4900-98fd-72cb5b432dc0"));
+//        selectedClass.setGrade(new Grades(100, 100, 100, 100));
 //        database.persist(selectedClass);
 
 //        Transaction tx = database.beginTransaction();

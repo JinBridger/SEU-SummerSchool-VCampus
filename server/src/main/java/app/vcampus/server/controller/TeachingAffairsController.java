@@ -27,10 +27,26 @@ public class TeachingAffairsController {
         }
 
         List<SelectedClass> selectedClasses = Database.getWhere(SelectedClass.class, "cardNumber", cardNumber.toString(), database);
-        List<TeachingClass> teachingClasses = selectedClasses.stream().map((SelectedClass sc) -> database.get(TeachingClass.class, sc.getClassUuid())).toList();
+        List<TeachingClass> teachingClasses = selectedClasses.stream().map((SelectedClass sc) -> {
+            Grades grades = sc.getGrade();
+            // FIXME: unable to query where uuid
+            List<SelectedClass> classmates = Database.getWhere(SelectedClass.class, "classUuid", sc.getClassUuid().toString(), database);
+            List<Grades> gradesList = classmates.stream().map(SelectedClass::getGrade).toList();
+            grades.classAvg = gradesList.stream().mapToInt(Grades::getTotal).average().orElse(0);
+            grades.classMax = gradesList.stream().mapToInt(Grades::getTotal).max().orElse(0);
+            grades.classMin = gradesList.stream().mapToInt(Grades::getTotal).min().orElse(0);
+            sc.setGrade(grades);
+
+            TeachingClass teachingClass = database.get(TeachingClass.class, sc.getClassUuid());
+            teachingClass.setSelectedClass(sc);
+            return teachingClass;
+        }).toList();
         List<TeachingClass> teachingClassesWithTeacherName = teachingClasses.stream().peek((TeachingClass tc) -> {
             User teacher = database.get(User.class, tc.getTeacherId());
             tc.setTeacherName(teacher.getName());
+
+            Course course = database.get(Course.class, tc.getCourseUuid());
+            tc.setCourse(course);
         }).toList();
 
         return Response.Common.ok(Map.of("classes", teachingClassesWithTeacherName.stream().map(TeachingClass::toJson).toList()));
@@ -74,40 +90,40 @@ public class TeachingAffairsController {
     }
 
     /*This method is used to select courses for students*/
-    @RouteMapping(uri = "selectedClass/selectClass", role = "student")
-    public Response selectClass(Request request, org.hibernate.Session database) {
-        SelectedClass newSelectedClass = SelectedClass.fromMap(request.getParams());
-        if (newSelectedClass == null) {
-            return Response.Common.badRequest();
-        }
-        SelectedClass selectedClass = database.get(SelectedClass.class, newSelectedClass.getCardNumber());
-        if (selectedClass == null) {
-            return Response.Common.error("SelectedClass not found");
-        }
-
-        Transaction tx = database.beginTransaction();
-        database.persist(newSelectedClass);
-        tx.commit();
-        return Response.Common.ok();
-    }
+//    @RouteMapping(uri = "selectedClass/selectClass", role = "student")
+//    public Response selectClass(Request request, org.hibernate.Session database) {
+//        SelectedClass newSelectedClass = SelectedClass.fromMap(request.getParams());
+//        if (newSelectedClass == null) {
+//            return Response.Common.badRequest();
+//        }
+//        SelectedClass selectedClass = database.get(SelectedClass.class, newSelectedClass.getCardNumber());
+//        if (selectedClass == null) {
+//            return Response.Common.error("SelectedClass not found");
+//        }
+//
+//        Transaction tx = database.beginTransaction();
+//        database.persist(newSelectedClass);
+//        tx.commit();
+//        return Response.Common.ok();
+//    }
 
     /*for student to search selectedClass information*/
-    @RouteMapping(uri = "selectedClass/searchInfo", role = "student")
-    public Response searchInfo(Request request, org.hibernate.Session database) {
-        String cardNumber = request.getParams().get("cardNumber");
-
-        if (cardNumber == null) {
-            return Response.Common.error("card number cannot be empty");
-        }
-
-        SelectedClass selectedClass = database.get(SelectedClass.class, Integer.parseInt(cardNumber));
-
-        if (selectedClass == null) {
-            return Response.Common.error("no such card number");
-        }
-        System.out.println(selectedClass);
-        return Response.Common.ok(selectedClass.toMap());
-    }
+//    @RouteMapping(uri = "selectedClass/searchInfo", role = "student")
+//    public Response searchInfo(Request request, org.hibernate.Session database) {
+//        String cardNumber = request.getParams().get("cardNumber");
+//
+//        if (cardNumber == null) {
+//            return Response.Common.error("card number cannot be empty");
+//        }
+//
+//        SelectedClass selectedClass = database.get(SelectedClass.class, Integer.parseInt(cardNumber));
+//
+//        if (selectedClass == null) {
+//            return Response.Common.error("no such card number");
+//        }
+//        System.out.println(selectedClass);
+//        return Response.Common.ok(selectedClass.toMap());
+//    }
 
     /*for teacher to search teaching class information*/
     @RouteMapping(uri = "class/searchClass", role = "teacher")
@@ -129,35 +145,35 @@ public class TeachingAffairsController {
     }
 
 
-    @RouteMapping(uri = "selectedClass/recordGrade", role = "affairs_staff")
-    public Response recordGrade(Request request, org.hibernate.Session database) {
-        String uuidString = request.getParams().get("uuid");
-        String gradeString = request.getParams().get("grade");
-
-        if (uuidString == null || gradeString == null) {
-            return Response.Common.badRequest();
-        }
-
-        try {
-            UUID uuid = UUID.fromString(uuidString);
-            Integer grade = Integer.parseInt(gradeString);
-
-            SelectedClass selectedClass = database.get(SelectedClass.class, uuid);
-            if (selectedClass == null) {
-                return Response.Common.error("SelectedClass not found");
-            }
-
-            Transaction tx = database.beginTransaction();
-            selectedClass.setGrade(grade);
-            database.persist(selectedClass);
-            tx.commit();
-
-            return Response.Common.ok();
-        } catch (Exception e) {
-            log.warn("Failed to parse UUID or grade", e);
-            return Response.Common.badRequest();
-        }
-    }
+//    @RouteMapping(uri = "selectedClass/recordGrade", role = "affairs_staff")
+//    public Response recordGrade(Request request, org.hibernate.Session database) {
+//        String uuidString = request.getParams().get("uuid");
+//        String gradeString = request.getParams().get("grade");
+//
+//        if (uuidString == null || gradeString == null) {
+//            return Response.Common.badRequest();
+//        }
+//
+//        try {
+//            UUID uuid = UUID.fromString(uuidString);
+//            Integer grade = Integer.parseInt(gradeString);
+//
+//            SelectedClass selectedClass = database.get(SelectedClass.class, uuid);
+//            if (selectedClass == null) {
+//                return Response.Common.error("SelectedClass not found");
+//            }
+//
+//            Transaction tx = database.beginTransaction();
+//            selectedClass.setGrade(grade);
+//            database.persist(selectedClass);
+//            tx.commit();
+//
+//            return Response.Common.ok();
+//        } catch (Exception e) {
+//            log.warn("Failed to parse UUID or grade", e);
+//            return Response.Common.badRequest();
+//        }
+//    }
 
 
 //    @RouteMapping(uri = "selectedClass/grade", role = "student")

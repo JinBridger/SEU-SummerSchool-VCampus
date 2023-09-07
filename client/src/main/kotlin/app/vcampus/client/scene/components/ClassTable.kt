@@ -9,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import app.vcampus.client.repository._TeachingClass
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 import app.vcampus.server.entity.TeachingClass
 
@@ -127,7 +126,7 @@ fun classTable(viewModel: TeachingAffairsViewModel) {
                     }
                     var index = 1
                     while (index <= 13) {
-                        val classHere = isHereClass(viewModel.mySchedule!!.schedules,
+                        val classHere = isHereClass(viewModel.myScheduleAndGrades!!.myClasses,
                                 weekday, index)
                         if (classHere != null) {
                             Box(Modifier.fillMaxWidth().weight(

@@ -29,6 +29,12 @@ public class TeachingClass implements IEntity {
     @Column(nullable = false)
     public String courseName;
 
+    @Transient
+    public Course course;
+
+    @Transient
+    public SelectedClass selectedClass;
+
     @Column(nullable = false)
     public Integer teacherId;
 

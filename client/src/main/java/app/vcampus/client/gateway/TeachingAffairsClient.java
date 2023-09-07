@@ -62,32 +62,32 @@ public class TeachingAffairsClient {
 
 
     //This method is used for student to select teaching class.
-    public static SelectedClass selectClass(NettyHandler handler, String uuid, String classUuid, String cardNumber, String selectTime, String grade) {
-        CountDownLatch latch = new CountDownLatch(1);
-        AtomicReference<Response> response = new AtomicReference();
-        Request request = new Request();
-        request.setUri("selectedClass/selectClass");
-        request.setParams(Map.of("uuid", uuid, "classUuid", classUuid, "cardNumber", cardNumber, "selectTime", selectTime, "grade", grade));
-        handler.sendRequest(request, (res) -> {
-            response.set(res);
-            System.out.println(res);
-            latch.countDown();
-        });
-
-        try {
-            latch.await();
-        } catch (InterruptedException var16) {
-            var16.printStackTrace();
-            return null;
-        }
-        if ((response.get()).getStatus().equals("success")) {
-            Map<String, String> data = (Map) ((Map) ((Response) response.get()).getData()).get("selectedClass");
-            SelectedClass selectedClass = SelectedClass.fromMap(data);
-            return selectedClass;
-        } else {
-            return null;
-        }
-    }
+//    public static SelectedClass selectClass(NettyHandler handler, String uuid, String classUuid, String cardNumber, String selectTime, String grade) {
+//        CountDownLatch latch = new CountDownLatch(1);
+//        AtomicReference<Response> response = new AtomicReference();
+//        Request request = new Request();
+//        request.setUri("selectedClass/selectClass");
+//        request.setParams(Map.of("uuid", uuid, "classUuid", classUuid, "cardNumber", cardNumber, "selectTime", selectTime, "grade", grade));
+//        handler.sendRequest(request, (res) -> {
+//            response.set(res);
+//            System.out.println(res);
+//            latch.countDown();
+//        });
+//
+//        try {
+//            latch.await();
+//        } catch (InterruptedException var16) {
+//            var16.printStackTrace();
+//            return null;
+//        }
+//        if ((response.get()).getStatus().equals("success")) {
+//            Map<String, String> data = (Map) ((Map) ((Response) response.get()).getData()).get("selectedClass");
+//            SelectedClass selectedClass = SelectedClass.fromMap(data);
+//            return selectedClass;
+//        } else {
+//            return null;
+//        }
+//    }
 
     //Used to search course information.
     public static Course searchInfo(NettyHandler handler, String courseName) {
