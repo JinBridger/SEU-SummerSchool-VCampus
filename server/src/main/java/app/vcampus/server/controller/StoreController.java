@@ -158,6 +158,13 @@ public class StoreController {
         }
         StoreTransaction newStoreTransaction=new StoreTransaction();
         Transaction tx=database.beginTransaction();
+        Integer oldStock=storeItem.getStock();
+        if(oldStock<amount){
+            return Response.Common.error("Stock cannot be less than amount");
+        }
+        Integer oldSalesVolume=storeItem.getSalesVolume();
+        storeItem.setSalesVolume(oldSalesVolume+amount);
+        storeItem.setStock(oldStock-amount);
         newStoreTransaction.setUuid(UUID.randomUUID());
         newStoreTransaction.setItemUUID(storeItem.getUuid());
         newStoreTransaction.setItemPrice(storeItem.getPrice());
