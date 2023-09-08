@@ -30,7 +30,7 @@ fun myBillsSubscene(viewModel: FinanceViewModel) {
                 balanceCard(viewModel.mybills.myCard.value)
                 Spacer(Modifier.height(20.dp))
                 Text("账单", fontWeight = FontWeight(700), fontSize = 20.sp)
-                Spacer(Modifier.height(10.dp))
+//                Spacer(Modifier.height(10.dp))
             }
 
             val currentDate = mutableStateOf("")
@@ -38,6 +38,7 @@ fun myBillsSubscene(viewModel: FinanceViewModel) {
             viewModel.mybills.myBills.forEach { bill ->
                 if (DateUtility.fromDate(bill.time) != currentDate.value) {
                     item {
+                        Spacer(Modifier.height(10.dp))
                         Row(Modifier.fillMaxWidth()) {
                             Text(DateUtility.fromDate(bill.time, "yyyy年MM月dd日"), fontWeight = FontWeight(700))
                             Spacer(Modifier.weight(1F))
