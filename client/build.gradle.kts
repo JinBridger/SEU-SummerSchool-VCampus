@@ -95,5 +95,7 @@ tasks.withType<Jar> {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
+    isZip64 = true
+
     exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }
