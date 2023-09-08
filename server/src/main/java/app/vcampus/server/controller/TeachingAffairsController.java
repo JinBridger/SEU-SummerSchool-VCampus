@@ -9,9 +9,13 @@ import app.vcampus.server.utility.router.RouteMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static java.lang.Double.*;
 
 @Slf4j
 public class TeachingAffairsController {
@@ -74,7 +78,7 @@ public class TeachingAffairsController {
     public Response deleteCourse(Request request, org.hibernate.Session database) {
         String id = request.getParams().get("uuid");
 
-        if (id == null) return Response.Common.error("Course UUID connot be empty");
+        if (id == null) return Response.Common.error("Course UUID cannot be empty");
 
         UUID uuid = UUID.fromString(id);
         Course toDelete = database.get(Course.class, uuid);
@@ -233,8 +237,8 @@ public Response updateCourse(Request request, org.hibernate.Session database)
 ////        }
 //    }
 
-    @RouteMapping(uri = "TeachingEvaluaiotn/addEvaluation", role = "student")
-    public Response addEvaluaiton(Request request, org.hibernate.Session database) {
+    @RouteMapping(uri = "TeachingEvaluation/addEvaluation", role = "student")
+    public Response addEvaluation(Request request, org.hibernate.Session database) {
         TeachingEvaluation newTeachingEvaluation = IEntity.fromJson(request.getParams().get("evaluation"), TeachingEvaluation.class);
         if (newTeachingEvaluation == null) {
             return Response.Common.badRequest();
@@ -245,4 +249,54 @@ public Response updateCourse(Request request, org.hibernate.Session database)
         tx.commit();
         return Response.Common.ok();
     }
+
+    @RouteMapping(uri = "teachingAffairs/recordGrade", role = "affairs_staff")
+    public Response fakeRecordGrade(Request request, org.hibernate.Session database) {
+        String studentUuid = request.getParams().get("studentUuid");
+        String classUuid = request.getParams().get("classUuid");
+        String general = request.getParams().get("general");
+        String midterm = request.getParams().get("midterm");
+        String finalExam = request.getParams().get("finalExam");
+
+        if (studentUuid == null || classUuid == null ) {
+            return Response.Common.badRequest();
+        }
+
+        try {
+            UUID studentId = UUID.fromString(studentUuid);
+            UUID courseId = UUID.fromString(classUuid);
+            Integer generalGrade = Integer.parseInt(general);
+            Integer midtermGrade = Integer.parseInt(midterm);
+            Integer finalExamGrade = Integer.parseInt(finalExam);
+
+            SelectedClass selectedClass = database.get(SelectedClass.class, studentId);
+
+            if (selectedClass == null) {
+                return Response.Common.error("SelectedClass not found for student");
+            }
+
+            Grades grades = new Grades();
+            grades.setGeneral(generalGrade);
+            grades.setMidterm(midtermGrade);
+            grades.setFinalExam(finalExamGrade);
+            grades.setTotal ((int) (0.1*generalGrade + 0.3*midtermGrade + 0.6*finalExamGrade));
+            //fake setTotal method
+
+            List<SelectedClass> classmates = Database.getWhereUuid(SelectedClass.class, "classUuid", courseId, database);
+            List<Integer> totalGrades = classmates.stream().map(sc -> sc.getGrade().getTotal()).collect(Collectors.toList());
+
+            grades.setClassMax(Collections.max(totalGrades));
+            grades.setClassMin(Collections.min(totalGrades));
+            grades.setClassAvg(totalGrades.stream().mapToInt(Integer::intValue).average().orElse(0));
+
+            selectedClass.setGrade(grades);
+            database.update(selectedClass);
+
+            return Response.Common.ok();
+        } catch (Exception e) {
+            log.warn("Failed to record grades", e);
+            return Response.Common.error("Failed to record grades");
+        }
+    }
+
 }
