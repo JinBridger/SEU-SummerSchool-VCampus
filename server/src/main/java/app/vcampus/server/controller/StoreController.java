@@ -67,7 +67,7 @@ public class StoreController {
         }
     }
 
-    @RouteMapping(uri = "storeItem/addItem", role = "admin")
+    @RouteMapping(uri = "storeItem/addItem", role = "shop_staff")
     public Response addItem(Request request, org.hibernate.Session database) {
         StoreItem newStoreItem = IEntity.fromJson(request.getParams().get("item"), StoreItem.class);
         if (newStoreItem == null) {

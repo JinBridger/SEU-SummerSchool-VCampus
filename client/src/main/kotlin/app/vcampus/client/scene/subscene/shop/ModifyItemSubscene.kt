@@ -15,11 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
+import app.vcampus.client.scene.components.EditStoreItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.ShopViewModel
-import app.vcampus.client.scene.components.EditStoreItem
-import app.vcampus.server.entity.StoreItem
-import app.vcampus.client.scene.components.EditStoreItem
+
 @Composable
 fun modifyItemSubscene(viewModel: ShopViewModel) {
     var keyword by viewModel.searchStoreItem.keyword
@@ -72,9 +71,9 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
                     Spacer(modifier = Modifier.height(20.dp))
 
                 }
-                viewModel.modifyStoreItem.storeList.forEach{
+                viewModel.modifyStoreItem.storeList.forEach {
                     item {
-                        EditStoreItem(it.value,isEditable = true, onEdit = {storeItem,update ->
+                        EditStoreItem(it.value, isEditable = true, onEdit = { storeItem, update ->
 
                             viewModel.modifyStoreItem.updateStoreItem(storeItem)
                         })

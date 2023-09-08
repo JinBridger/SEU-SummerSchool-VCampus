@@ -3,18 +3,19 @@ package app.vcampus.client.viewmodel
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.repository.copy
 import app.vcampus.client.scene.components.SideBarItem
-import app.vcampus.client.scene.components.addShopItem
 import app.vcampus.server.entity.StoreItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
-import moe.tlaster.precompose.viewmodel.viewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 import java.util.*
 
@@ -26,10 +27,10 @@ data class MutableStoreItem(
     var pictureLink: MutableState<String> = mutableStateOf(""),
     var barcode: MutableState<String> = mutableStateOf(""),
     var stock: MutableState<Int> = mutableStateOf(0),
-    var salesVolume:MutableState<Int> = mutableStateOf(0),
-    var description:MutableState<String> = mutableStateOf("")
-){
-    fun toStoreItem():StoreItem{
+    var salesVolume: MutableState<Int> = mutableStateOf(0),
+    var description: MutableState<String> = mutableStateOf("")
+) {
+    fun toStoreItem(): StoreItem {
         val newStoreItem = StoreItem()
 
         newStoreItem.uuid = uuid
@@ -44,9 +45,9 @@ data class MutableStoreItem(
         return newStoreItem
     }
 
-    fun fromStoreItem(item:StoreItem){
+    fun fromStoreItem(item: StoreItem) {
         uuid = item.uuid ?: UUID.randomUUID()
-        itemName.value =item.itemName ?: ""
+        itemName.value = item.itemName ?: ""
         price.value = item.price ?: 0
         pictureLink.value = item.pictureLink ?: ""
         barcode.value = item.barcode ?: ""
@@ -172,43 +173,31 @@ class ShopViewModel() : ViewModel() {
             }
         }
 
-    private suspend fun updateStoreItemInternal(storeItem: StoreItem) = flow {
-        try {
-            emit(FakeRepository.updateStoreItem(storeItem))
-        } catch (e: Exception) {
-            e.printStackTrace()
+        private suspend fun updateStoreItemInternal(storeItem: StoreItem) = flow {
+            try {
+                emit(FakeRepository.updateStoreItem(storeItem))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
-    }
     }
 
     class AddStoreItem : ViewModel() {
-
-        val newStoreItem = mutableStateOf(run{
-            val temp = StoreItem()
-            temp.itemName = ""
-            temp.price = 0
-            temp.description = ""
-            temp.stock = 0
-            temp.barcode = ""
-            temp.pictureLink = ""
-            temp
-})
-
         var result = mutableStateOf(true)
         var showMessage = mutableStateOf(false)
 
-       fun addStoreItem(){
-           viewModelScope.launch {
-               withContext(Dispatchers.IO){
-                   addStoreItemInternal(newStoreItem.value).collect{
-                       result.value = it
-                       showMessage.value = it
-                   }
-               }
-           }
-       }
+        fun addStoreItem(newStoreItem: StoreItem) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    addStoreItemInternal(newStoreItem).collect {
+                        result.value = it
+                        showMessage.value = it
+                    }
+                }
+            }
+        }
 
-        private  suspend fun addStoreItemInternal(newItem: StoreItem) = flow {
+        private suspend fun addStoreItemInternal(newItem: StoreItem) = flow {
             emit(FakeRepository.addStoreItem(newItem))
         }
     }

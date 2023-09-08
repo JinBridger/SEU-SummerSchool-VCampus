@@ -14,17 +14,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.repository._StoreItem
 import app.vcampus.client.viewmodel.ShopViewModel
+import app.vcampus.server.entity.StoreItem
 import kotlinx.coroutines.launch
 
 @Composable
 fun addShopItem(viewModel: ShopViewModel) {
 
-    var myPrice by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.price.toString()) }
-    var myName by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.itemName)}
-    var myStock by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.stock.toString()) }
-    var myBarcode by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.barcode) }
-    var myPictureLink by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.pictureLink) }
-    var myDescription by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.description) }
+    var myPrice by remember { mutableStateOf("") }
+    var myName by remember { mutableStateOf("")}
+    var myStock by remember { mutableStateOf("") }
+    var myBarcode by remember { mutableStateOf("") }
+    var myPictureLink by remember { mutableStateOf("") }
+    var myDescription by remember { mutableStateOf("") }
 
 //    var myPrice by viewModel.addStoreItem.newStoreItem.value.price
     val scope = rememberCoroutineScope()
@@ -203,7 +204,15 @@ fun addShopItem(viewModel: ShopViewModel) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Spacer(Modifier.weight(1F))
                         Button(onClick = {
-                            viewModel.addStoreItem.addStoreItem()
+                            val newItem = StoreItem()
+                            newItem.itemName = myName
+                            newItem.price = (myPrice.toDouble() * 100).toInt()
+                            newItem.stock = myStock.toInt()
+                            newItem.barcode = myBarcode
+                            newItem.pictureLink = myPictureLink
+                            newItem.description = myDescription
+
+                            viewModel.addStoreItem.addStoreItem(newItem)
                         }) {
                             Text("添加商品")
                         }

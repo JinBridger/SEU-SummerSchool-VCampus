@@ -34,7 +34,7 @@ public class StoreItem implements IEntity {
     public Integer stock;
 
     @Column(nullable = false)
-    public Integer salesVolume;
+    public Integer salesVolume = 0;
 
     @Column(columnDefinition = "TEXT")
     public String description;

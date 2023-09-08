@@ -17,24 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import app.vcampus.client.viewmodel.MutableStudent
-import app.vcampus.client.repository._StoreItem
-import app.vcampus.client.viewmodel.MutableLibraryBook
 import app.vcampus.client.viewmodel.MutableStoreItem
-import app.vcampus.server.entity.IEntity
 import app.vcampus.server.entity.StoreItem
 import app.vcampus.server.utility.Pair
-import javax.swing.undo.StateEditable
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EditStoreItem(
-    _StoreItem : List<StoreItem>,
+    _StoreItem: List<StoreItem>,
     isEditable: Boolean = false,
-    onEdit: (StoreItem,Boolean) -> (Unit) = {_:StoreItem,_:Boolean ->}
+    onEdit: (StoreItem, Boolean) -> (Unit) = { _: StoreItem, _: Boolean -> }
 ) {
     var storeItemList = _StoreItem.toList()
     val primyStoreItem = storeItemList[0]
@@ -52,7 +45,7 @@ fun EditStoreItem(
 
     var modifiedItems = mutableListOf<Pair<MutableStoreItem, MutableState<Boolean>>>()
 
-    storeItemList.forEach{
+    storeItemList.forEach {
         val newItem = MutableStoreItem()
         newItem.fromStoreItem(it)
         modifiedItems.add(Pair(newItem, mutableStateOf(false)))
@@ -82,7 +75,7 @@ fun EditStoreItem(
                     )
                     Spacer(modifier = Modifier.weight(1F))
                     Text(
-                        "价格：${String.format("%.2f",myPrice.toInt() / 100.0)}￥ ",
+                        "价格：${String.format("%.2f", myPrice.toInt() / 100.0)}￥ ",
                         fontWeight = FontWeight(700),
                         color = Color.Black
                     )
@@ -120,7 +113,7 @@ fun EditStoreItem(
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.2F),
 //                                    value = myPrice,
-                                    value = String.format("%.2f",myPrice.toInt() / 100.0),
+                                    value = String.format("%.2f", myPrice.toInt() / 100.0),
                                     onValueChange = { myPrice = it },
                                     label = { Text("商品价格(￥)") },
                                     isError = myPrice == "",
@@ -237,7 +230,7 @@ fun EditStoreItem(
                             Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.2F),
-                                    value = String.format("%.2f",myPrice.toInt() / 100.0),
+                                    value = String.format("%.2f", myPrice.toInt() / 100.0),
                                     onValueChange = { myPrice = it },
                                     label = { Text("商品价格(￥)") },
                                     isError = myPrice == "",
@@ -354,25 +347,25 @@ fun EditStoreItem(
                                     onClick = {
                                         val i = modifiedItems.iterator()
 
-                                        while (i.hasNext()){
+                                        while (i.hasNext()) {
                                             val pair = i.next()
 
                                             pair.first.itemName.value = myName
                                             pair.first.stock.value = myStock.toInt()
-                                            pair.first.barcode.value=myBarcode
+                                            pair.first.barcode.value = myBarcode
                                             pair.first.description.value = myDescription
                                             pair.first.price.value = myPrice.toInt()
                                             pair.first.pictureLink.value = myPictureLink
 
-                                            onEdit(pair.first.toStoreItem(),pair.second.value)
+                                            onEdit(pair.first.toStoreItem(), pair.second.value)
 
-                                            if(pair.second.value){
+                                            if (pair.second.value) {
                                                 i.remove()
                                             }
                                         }
 
                                         storeItemList = modifiedItems.map { it.first.toStoreItem() }
-                                        isEditing=false
+                                        isEditing = false
                                     }
                                 ) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -388,7 +381,7 @@ fun EditStoreItem(
                                     myStock = primyStoreItem.stock.toString()
                                     myBarcode = primyStoreItem.barcode
                                     myDescription = primyStoreItem.description
-                                    myPrice =primyStoreItem.price.toString()
+                                    myPrice = primyStoreItem.price.toString()
                                     myPictureLink = primyStoreItem.pictureLink.toString()
 
                                     modifiedItems = mutableListOf()
