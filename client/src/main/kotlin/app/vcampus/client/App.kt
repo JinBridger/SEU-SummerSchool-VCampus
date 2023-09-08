@@ -77,6 +77,12 @@ fun App() {
                         FinanceScene(navigator)
                     }
                 }
+
+                scene("/admin") {
+                    enterAnimation {
+                        AdminScene(navigator)
+                    }
+                }
             }
         }
     }
