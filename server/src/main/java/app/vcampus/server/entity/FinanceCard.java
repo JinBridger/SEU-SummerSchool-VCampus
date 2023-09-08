@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @Table(name = "finance_card")
 @Slf4j
-public class FinanceCard {
+public class FinanceCard implements IEntity {
     @Id
     public Integer cardNumber;
 

@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @Table(name = "card_transaction")
 @Slf4j
-public class CardTransaction {
+public class CardTransaction implements IEntity {
     @Id
     public UUID uuid;
 
@@ -23,6 +23,8 @@ public class CardTransaction {
 
     @Enumerated(EnumType.STRING)
     public TransactionType type;
+
+    public String description;
 
     public Date time;
 }

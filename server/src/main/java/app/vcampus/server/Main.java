@@ -1,9 +1,11 @@
 package app.vcampus.server;
 
 import app.vcampus.server.controller.*;
+import app.vcampus.server.entity.CardTransaction;
 import app.vcampus.server.entity.Course;
 import app.vcampus.server.entity.Grades;
 import app.vcampus.server.entity.SelectedClass;
+import app.vcampus.server.enums.TransactionType;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.router.Router;
@@ -22,6 +24,7 @@ public class Main {
         router.addController(LibraryBookController.class);
         router.addController(StoreController.class);
         router.addController(TeachingAffairsController.class);
+        router.addController(FinanceController.class);
 
         Session database = Database.init();
 
@@ -71,6 +74,15 @@ public class Main {
 //        SelectedClass selectedClass = database.get(SelectedClass.class, UUID.fromString("a010f8b1-ccfc-4900-98fd-72cb5b432dc0"));
 //        selectedClass.setGrade(new Grades(100, 100, 100, 100));
 //        database.persist(selectedClass);
+
+        CardTransaction cardTransaction = new CardTransaction();
+        cardTransaction.setUuid(UUID.randomUUID());
+        cardTransaction.setCardNumber(123456);
+        cardTransaction.setAmount(-100);
+        cardTransaction.setType(TransactionType.payment);
+        cardTransaction.setDescription("商店消费");
+        cardTransaction.setTime(new Date());
+        database.persist(cardTransaction);
 
 //        Transaction tx = database.beginTransaction();
 //        Student student =new Student();

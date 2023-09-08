@@ -13,9 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.vcampus.server.entity.FinanceCard
 
 @Composable
-fun balanceCard() {
+fun balanceCard(card: FinanceCard) {
     Surface(modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
@@ -25,7 +26,10 @@ fun balanceCard() {
             Column {
                 Text("卡内余额", fontWeight = FontWeight(700))
                 Spacer(Modifier.height(4.dp))
-                Text("100.00 元", fontWeight = FontWeight(700), fontSize = 24.sp)
+                Text(String.format(
+                    "%.2f",
+                    card.balance / 100.0
+                ) + " 元", fontWeight = FontWeight(700), fontSize = 24.sp)
             }
             Spacer(Modifier.weight(1F))
             Button(onClick = {}) {

@@ -15,9 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.vcampus.server.entity.CardTransaction
+import app.vcampus.server.utility.DateUtility
 
 @Composable
-fun billCard() {
+fun billCard(bill: CardTransaction) {
     Surface(modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
@@ -29,13 +31,18 @@ fun billCard() {
             Icon(Icons.Default.LocalMall, "", tint = Color(0xff66626b))
             Spacer(Modifier.width(20.dp))
             Column {
-                Text("超市", fontWeight = FontWeight(700))
+                Text(bill.description, fontWeight = FontWeight(700))
                 Spacer(Modifier.height(4.dp))
-                Text("2023年9月7日 12:00:00")
+                Text(DateUtility.fromDate(bill.time, "yyyy年MM月dd日 HH:mm:ss"))
             }
             Spacer(Modifier.weight(1F))
-            Text("-100.00", fontWeight = FontWeight(700),
-                    color = Color(0xffce5442))
+            Text(
+                String.format(
+                    "%.2f",
+                    bill.amount / 100.0
+                ) + " 元",
+                fontWeight = FontWeight(700),
+                color = Color(bill.type.color))
             Spacer(Modifier.width(10.dp))
         }
     }

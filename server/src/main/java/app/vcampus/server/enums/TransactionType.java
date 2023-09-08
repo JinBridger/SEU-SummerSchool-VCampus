@@ -1,17 +1,17 @@
 package app.vcampus.server.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TransactionType implements LabelledEnum {
-    deposit("充值"),
-    payment("支出");
+    deposit("充值", 0xff508e54),
+    payment("支出", 0xffce5442);
 
     private final String label;
+    private final Integer color;
 
-    TransactionType(String label) {
+    TransactionType(String label, Integer color) {
         this.label = label;
-    }
-
-    @Override
-    public String getLabel() {
-        return label;
+        this.color = color;
     }
 }

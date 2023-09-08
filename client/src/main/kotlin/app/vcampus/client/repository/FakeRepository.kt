@@ -1,11 +1,14 @@
 package app.vcampus.client.repository
 
 import app.vcampus.client.gateway.AuthClient
+import app.vcampus.client.gateway.FinanceClient
 import app.vcampus.client.gateway.LibraryClient
 import app.vcampus.client.gateway.StoreClient
 import app.vcampus.client.gateway.StudentStatusClient
 import app.vcampus.client.gateway.TeachingAffairsClient
 import app.vcampus.client.net.NettyHandler
+import app.vcampus.server.entity.CardTransaction
+import app.vcampus.server.entity.FinanceCard
 import app.vcampus.server.entity.LibraryBook
 import app.vcampus.server.entity.SelectedClass
 import app.vcampus.server.entity.StoreItem
@@ -153,5 +156,13 @@ object FakeRepository {
             "索尼国行PS5主机PlayStation电视游戏机蓝光8K港版日版现货闪送",
             279900,"",10,"你买不了吃亏买不了上当"
         )
+    }
+
+    fun getMyCard(): FinanceCard {
+        return FinanceClient.getMyCard(handler)
+    }
+
+    fun getMyBills(): List<CardTransaction> {
+        return FinanceClient.getMyBills(handler)
     }
 }

@@ -16,11 +16,8 @@ import moe.tlaster.precompose.viewmodel.viewModelScope
 
 class TeachingAffairsViewModel() : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
-    val myScheduleAndGrades = if (identity.contains("student")) {
-        MyScheduleAndGrades()
-    } else {
-        null
-    }
+    val myScheduleAndGrades = MyScheduleAndGrades(identity.contains("student"))
+
 
     val sideBarContent = (if (identity.contains("student") || identity.contains(
             "teacher"
@@ -97,14 +94,14 @@ class TeachingAffairsViewModel() : ViewModel() {
 
     val StudentGradeItems = FakeRepository.getStudentGrade()
 
-    class MyScheduleAndGrades() : ViewModel() {
+    class MyScheduleAndGrades(init: Boolean) : ViewModel() {
         val myClasses = mutableListOf<TeachingClass>()
 
         init {
-            getSelectedClasses()
+            if (init) getSelectedClasses()
         }
 
-        fun getSelectedClasses() {
+        private fun getSelectedClasses() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     getSelectedClassesInternal().collect {
