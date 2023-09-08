@@ -1,12 +1,10 @@
 package app.vcampus.server.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -28,6 +26,9 @@ public class Course implements IEntity {
     public String school;
 
     public float credit;
+
+    @Transient
+    public List<TeachingClass> teachingClasses;
 
     public static Course fromMap(Map<String, String> data) {
         try {

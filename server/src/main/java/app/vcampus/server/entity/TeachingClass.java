@@ -22,7 +22,7 @@ import java.util.UUID;
 @Table(name = "class")
 public class TeachingClass implements IEntity {
     @Id
-    public UUID uuid;
+    public UUID uuid = UUID.randomUUID();
 
     @Column(nullable = false)
     public UUID courseUuid;

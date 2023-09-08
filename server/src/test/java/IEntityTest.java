@@ -1,3 +1,4 @@
+import app.vcampus.server.entity.Course;
 import app.vcampus.server.entity.TeachingClass;
 import app.vcampus.server.utility.Pair;
 import com.google.gson.Gson;
@@ -40,5 +41,37 @@ public class IEntityTest {
                         pair.getSecond().getSecond().getFirst().equals(4) &&
                         pair.getSecond().getSecond().getSecond().equals(5)
         );
+    }
+
+    @Test
+    public void course() {
+        Course course = new Course();
+        course.setUuid(java.util.UUID.randomUUID());
+        course.setCourseId("courseId");
+        course.setCourseName("courseName");
+        course.setSchool("school");
+        course.setCredit(1);
+
+        List<TeachingClass> teachingClasses = List.of(
+                new TeachingClass(),
+                new TeachingClass()
+        );
+        teachingClasses.get(0).setCourseUuid(course.getUuid());
+        teachingClasses.get(1).setCourseUuid(course.getUuid());
+
+        course.setTeachingClasses(teachingClasses);
+
+        Course newCourse = gson.fromJson(course.toJson(), Course.class);
+        assert newCourse != null;
+
+        assert course.getUuid().equals(newCourse.getUuid());
+        assert course.getCourseId().equals(newCourse.getCourseId());
+        assert course.getCourseName().equals(newCourse.getCourseName());
+        assert course.getSchool().equals(newCourse.getSchool());
+        assert course.getCredit() == newCourse.getCredit();
+
+        assert newCourse.getTeachingClasses().size() == 2;
+        assert newCourse.getTeachingClasses().get(0).getCourseUuid().equals(newCourse.getUuid());
+        assert newCourse.getTeachingClasses().get(1).getCourseUuid().equals(newCourse.getUuid());
     }
 }
