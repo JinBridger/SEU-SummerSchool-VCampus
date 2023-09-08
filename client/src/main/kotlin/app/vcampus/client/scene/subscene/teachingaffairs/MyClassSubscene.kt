@@ -20,9 +20,16 @@ fun myClassSubscene(viewModel: TeachingAffairsViewModel) {
                 Spacer(Modifier.height(20.dp))
             }
 
-            (0..3).forEach {
+//            (0..3).forEach {
+//                item {
+//                    myClassListItem()
+//                    Spacer(Modifier.height(10.dp))
+//                }
+//            }
+
+            viewModel.myTeachingClasses.myClasses.forEach {
                 item {
-                    myClassListItem()
+                    myClassListItem(it)
                     Spacer(Modifier.height(10.dp))
                 }
             }

@@ -43,7 +43,7 @@ public class TeachingAffairsController {
             teachingClass.setSelectedClass(sc);
             return teachingClass;
         }).toList();
-        List<TeachingClass> teachingClassesWithTeacherName = teachingClasses.stream().peek((TeachingClass tc) -> {
+        teachingClasses = teachingClasses.stream().peek((TeachingClass tc) -> {
             User teacher = database.get(User.class, tc.getTeacherId());
             tc.setTeacherName(teacher.getName());
 
@@ -51,7 +51,19 @@ public class TeachingAffairsController {
             tc.setCourse(course);
         }).toList();
 
-        return Response.Common.ok(Map.of("classes", teachingClassesWithTeacherName.stream().map(TeachingClass::toJson).toList()));
+        return Response.Common.ok(Map.of("classes", teachingClasses.stream().map(TeachingClass::toJson).toList()));
+    }
+
+    @RouteMapping(uri = "teachingAffairs/teacher/getMyClasses", role = "teacher")
+    public Response getMyClasses(Request request, org.hibernate.Session database) {
+        int cardNumber = request.getSession().getCardNum();
+        List<TeachingClass> teachingClasses = Database.getWhereString(TeachingClass.class, "teacherId", Integer.toString(cardNumber), database);
+        teachingClasses = teachingClasses.stream().peek((TeachingClass tc) -> {
+            Course course = database.get(Course.class, tc.getCourseUuid());
+            tc.setCourse(course);
+        }).toList();
+
+        return Response.Common.ok(Map.of("classes", teachingClasses.stream().map(TeachingClass::toJson).toList()));
     }
 
     @RouteMapping(uri = "course/addCourse", role = "affairs_staff")
@@ -128,23 +140,23 @@ public class TeachingAffairsController {
 //    }
 
     /*for teacher to search teaching class information*/
-    @RouteMapping(uri = "class/searchClass", role = "teacher")
-    public Response searchClass(Request request, org.hibernate.Session database) {
-        String cardNumber = request.getParams().get("cardNumber");
-
-        if (cardNumber == null) {
-            return Response.Common.error("card number cannot be empty");
-        }
-
-        TeachingClass teachingClass = database.get(TeachingClass.class, Integer.parseInt(cardNumber));
-        if (teachingClass == null) {
-            return Response.Common.error("no such card number");
-        }
-
-        System.out.println(teachingClass);
-
-        return Response.Common.ok(teachingClass.toMap());
-    }
+//    @RouteMapping(uri = "class/searchClass", role = "teacher")
+//    public Response searchClass(Request request, org.hibernate.Session database) {
+//        String cardNumber = request.getParams().get("cardNumber");
+//
+//        if (cardNumber == null) {
+//            return Response.Common.error("card number cannot be empty");
+//        }
+//
+//        TeachingClass teachingClass = database.get(TeachingClass.class, Integer.parseInt(cardNumber));
+//        if (teachingClass == null) {
+//            return Response.Common.error("no such card number");
+//        }
+//
+//        System.out.println(teachingClass);
+//
+//        return Response.Common.ok(teachingClass.toMap());
+//    }
 
 @RouteMapping(uri="teachingAffairs/updateCourse",role="affairs_staff")
 public Response updateCourse(Request request, org.hibernate.Session database)

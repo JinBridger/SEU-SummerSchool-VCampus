@@ -159,6 +159,10 @@ object FakeRepository {
         return TeachingAffairsClient.getSelectedClasses(handler)
     }
 
+    fun getMyTeachingClasses(): List<TeachingClass> {
+        return TeachingAffairsClient.getMyTeachingClasses(handler)
+    }
+
     fun getAllOrder(): Map<String, List<StoreTransaction>> {
         return StoreClient.getTransaction(handler)
     }

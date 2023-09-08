@@ -17,7 +17,7 @@ import moe.tlaster.precompose.viewmodel.viewModelScope
 class TeachingAffairsViewModel() : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
     val myScheduleAndGrades = MyScheduleAndGrades(identity.contains("student"))
-
+    val myTeachingClasses = MyTeachingClasses(identity.contains("teacher"))
 
     val sideBarContent = (if (identity.contains("student") || identity.contains(
             "teacher"
@@ -92,7 +92,7 @@ class TeachingAffairsViewModel() : ViewModel() {
     // class table
 //    val schedules = FakeRepository.getFakeSchedule()
 
-    val StudentGradeItems = FakeRepository.getStudentGrade()
+//    val StudentGradeItems = FakeRepository.getStudentGrade()
 
     class MyScheduleAndGrades(init: Boolean) : ViewModel() {
         val myClasses = mutableListOf<TeachingClass>()
@@ -115,6 +115,33 @@ class TeachingAffairsViewModel() : ViewModel() {
         private suspend fun getSelectedClassesInternal() = flow {
             try {
                 emit(FakeRepository.getSelectedClasses())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    class MyTeachingClasses(init: Boolean) : ViewModel() {
+        val myClasses = mutableListOf<TeachingClass>()
+
+        init {
+            if (init) getMyTeachingClasses()
+        }
+
+        private fun getMyTeachingClasses() {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    getMyTeachingClassesInternal().collect {
+                        myClasses.clear()
+                        myClasses.addAll(it)
+                    }
+                }
+            }
+        }
+
+        private suspend fun getMyTeachingClassesInternal() = flow {
+            try {
+                emit(FakeRepository.getMyTeachingClasses())
             } catch (e: Exception) {
                 e.printStackTrace()
             }

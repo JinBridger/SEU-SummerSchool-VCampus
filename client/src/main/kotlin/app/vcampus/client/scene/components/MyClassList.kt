@@ -13,10 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import app.vcampus.client.viewmodel.TeachingAffairsViewModel
+import app.vcampus.server.entity.TeachingClass
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun myClassListItem() {
+fun myClassListItem(tc: TeachingClass) {
     Surface(modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
@@ -32,18 +34,18 @@ fun myClassListItem() {
                         Column(modifier = Modifier.fillMaxHeight()) {
                             Row {
                                 Text(
-                                        text = "信号与系统",
+                                        text = tc.courseName,
                                         fontWeight = FontWeight(700)
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                        text = "B09G1010",
+                                        text = tc.course.courseId,
                                         color = Color.DarkGray
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                             }
-                            Text("1-16周 周一 1-13节 周二 1-13节 周三 1-13 节")
-                            Text("九龙湖")
+                            Text(tc.humanReadableSchedule())
+                            Text(tc.place)
                         }
                     }
                 }

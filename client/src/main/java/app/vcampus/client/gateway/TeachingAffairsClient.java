@@ -34,6 +34,25 @@ public class TeachingAffairsClient {
         }
     }
 
+    public static List<TeachingClass> getMyTeachingClasses(NettyHandler handler) {
+        Request request = new Request();
+        request.setUri("teachingAffairs/teacher/getMyClasses");
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            if (response.getStatus().equals("success")) {
+                List<String> raw_data = ((Map<String, List<String>>) response.getData()).get("classes");
+                return raw_data.stream().map((String s) -> IEntity.fromJson(s, TeachingClass.class)).toList();
+            } else {
+                throw new Exception(response.getMessage());
+            }
+        } catch (Exception e) {
+            log.warn("Fail to get teaching classes", e);
+            return null;
+        }
+    }
+
     public static Course addCourse(NettyHandler handler, String uuid, String courseName, String courseId, String school, String credit) {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicReference<Response> response = new AtomicReference();
