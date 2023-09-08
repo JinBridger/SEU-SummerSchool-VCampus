@@ -51,7 +51,8 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
                     "我的书籍" -> myBookSubscene(viewModel)
                     "添加图书" -> addBookSubscene(viewModel)
                     "修改图书" -> modifyBookSubscene(viewModel)
-                    "办理还书" -> borrowSubscene(viewModel)
+                    "办理还书" -> returnSubscene(viewModel)
+                    "办理借书" -> borrowSubscene(viewModel)
                 }
             }
         }

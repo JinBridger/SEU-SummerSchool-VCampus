@@ -21,7 +21,7 @@ import app.vcampus.client.scene.components.returnBookListItem
 import app.vcampus.client.viewmodel.LibraryViewModel
 
 @Composable
-fun borrowSubscene(viewModel: LibraryViewModel) {
+fun returnSubscene(viewModel: LibraryViewModel) {
     val isExpanded = remember { mutableStateOf(false) }
 
     Row(horizontalArrangement = Arrangement.Center,
@@ -29,21 +29,11 @@ fun borrowSubscene(viewModel: LibraryViewModel) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))
-                pageTitle("办理借书", "办理借书业务")
+                pageTitle("办理还书", "办理还书业务")
                 Spacer(Modifier.height(20.dp))
             }
 
             item {
-                OutlinedTextField(
-                        value = "",
-                        onValueChange = { },
-                        label = { Text("输入书籍条码号") },
-                        modifier = Modifier.padding(
-                                0.dp, 0.dp, 0.dp,
-                                0.dp
-                        ).fillMaxWidth()
-                )
-                Spacer(Modifier.height(10.dp))
                 Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
@@ -51,7 +41,7 @@ fun borrowSubscene(viewModel: LibraryViewModel) {
                     OutlinedTextField(
                             value = "",
                             onValueChange = { },
-                            label = { Text("输入借书人一卡通号") },
+                            label = { Text("搜索一卡通号") },
                             modifier = Modifier.padding(
                                     0.dp, 0.dp, 16.dp,
                                     0.dp
@@ -61,7 +51,7 @@ fun borrowSubscene(viewModel: LibraryViewModel) {
                         Spacer(Modifier.height(8.dp))
                         Button(onClick = { isExpanded.value = true },
                                 modifier = Modifier.height(56.dp)) {
-                            Text("借阅")
+                            Icon(Icons.Default.Search, "")
                         }
                     }
                 }

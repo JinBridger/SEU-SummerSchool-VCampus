@@ -107,6 +107,11 @@ class LibraryViewModel : ViewModel() {
                     false, "办理还书", "办理还书业务",
                     Icons.Default.Queue,
                     false
+                ),
+                SideBarItem(
+                    false, "办理借书", "办理借书业务",
+                    Icons.Default.Queue,
+                    false
                 )
             )
 
