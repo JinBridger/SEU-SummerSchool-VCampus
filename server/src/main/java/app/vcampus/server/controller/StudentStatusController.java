@@ -30,25 +30,26 @@ public class StudentStatusController {
             return Response.Common.badRequest();
         }
 
-        Student student = database.get(Student.class, newStudent.getCardNumber());
-        if (student == null) {
-            return Response.Common.error("Incorrect card number");
-        }
-
+//        Student student = database.get(Student.class, newStudent.getCardNumber());
+//        if (student == null) {
+//            return Response.Common.error("Incorrect card number");
+//        }
+//
         Transaction tx = database.beginTransaction();
-        student.setStudentNumber(newStudent.getStudentNumber());
-        student.setMajor(newStudent.getMajor());
-        student.setSchool(newStudent.getSchool());
-        student.setStatus(newStudent.getStatus());
-        student.setBirthPlace(newStudent.getBirthPlace());
-        student.setPoliticalStatus(newStudent.getPoliticalStatus());
-        student.setGivenName(newStudent.getGivenName());
-        student.setFamilyName(newStudent.getFamilyName());
-        student.setBirthDate(newStudent.getBirthDate());
-        database.persist(student);
+//        student.setStudentNumber(newStudent.getStudentNumber());
+//        student.setMajor(newStudent.getMajor());
+//        student.setSchool(newStudent.getSchool());
+//        student.setStatus(newStudent.getStatus());
+//        student.setBirthPlace(newStudent.getBirthPlace());
+//        student.setPoliticalStatus(newStudent.getPoliticalStatus());
+//        student.setGivenName(newStudent.getGivenName());
+//        student.setFamilyName(newStudent.getFamilyName());
+//        student.setBirthDate(newStudent.getBirthDate());
+//        database.persist(student);
+        database.merge(newStudent);
         tx.commit();
 
-        return Response.Common.ok(student.toMap());
+        return Response.Common.ok(newStudent.toMap());
     }
 
     /*

@@ -84,7 +84,7 @@ class StudentStatusViewModel() : ViewModel() {
                     SideBarItem(false, "我的学籍信息", "查看我的学籍信息",
                             Icons.Default.Info, false))
 
-            "teacher" -> listOf(
+            "affairs_staff" -> listOf(
                     SideBarItem(false, "修改学籍信息", "修改学籍信息",
                             Icons.Default.Info, false))
 

@@ -165,4 +165,16 @@ object FakeRepository {
     fun getMyBills(): List<CardTransaction> {
         return FinanceClient.getMyBills(handler)
     }
+
+    fun getByCardNumber(cardNumber: String): FinanceCard {
+        return FinanceClient.getByCardNumber(handler, cardNumber) ?: FinanceCard()
+    }
+
+    fun updateCard(card: FinanceCard): FinanceCard {
+        return FinanceClient.updateCard(handler, card) ?: FinanceCard()
+    }
+
+    fun rechargeCard(cardNumber: Int, amount: Int): FinanceCard {
+        return FinanceClient.rechargeCard(handler, cardNumber, amount) ?: FinanceCard()
+    }
 }

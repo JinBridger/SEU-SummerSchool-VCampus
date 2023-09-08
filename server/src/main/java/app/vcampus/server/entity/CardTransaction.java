@@ -14,7 +14,7 @@ import java.util.UUID;
 @Slf4j
 public class CardTransaction implements IEntity {
     @Id
-    public UUID uuid;
+    public UUID uuid = UUID.randomUUID();
 
     @Column(nullable = false)
     public Integer cardNumber;

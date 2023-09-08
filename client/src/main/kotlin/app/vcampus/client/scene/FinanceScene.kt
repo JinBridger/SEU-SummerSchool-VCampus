@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.SideBar
 import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.blankSubscene
-import app.vcampus.client.scene.subscene.finance.manuallyRechargeSubscene
+import app.vcampus.client.scene.subscene.finance.staffSubscene
 import app.vcampus.client.scene.subscene.finance.myBillsSubscene
 import app.vcampus.client.viewmodel.FinanceViewModel
 import moe.tlaster.precompose.navigation.Navigator
@@ -48,7 +48,7 @@ fun FinanceScene(navi: Navigator) {
                 when (it) {
                     "" -> blankSubscene()
                     "一卡通" -> myBillsSubscene(viewModel)
-                    "一卡通管理" -> manuallyRechargeSubscene(viewModel)
+                    "一卡通管理" -> staffSubscene(viewModel)
                 }
             }
         }

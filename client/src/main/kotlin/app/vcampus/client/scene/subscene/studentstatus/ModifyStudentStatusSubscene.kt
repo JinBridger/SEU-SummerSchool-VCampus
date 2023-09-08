@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -23,6 +24,10 @@ import app.vcampus.client.viewmodel.StudentStatusViewModel
 @Composable
 fun modifyStudentStatusSubscene(viewModel: StudentStatusViewModel) {
     var keyword by viewModel.searchKeyword
+
+    LaunchedEffect(Unit) {
+        viewModel.searchStudent()
+    }
 
     Row(
         horizontalArrangement = Arrangement.Center,

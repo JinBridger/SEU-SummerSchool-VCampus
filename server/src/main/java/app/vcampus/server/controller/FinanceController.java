@@ -2,6 +2,8 @@ package app.vcampus.server.controller;
 
 import app.vcampus.server.entity.CardTransaction;
 import app.vcampus.server.entity.FinanceCard;
+import app.vcampus.server.entity.IEntity;
+import app.vcampus.server.enums.TransactionType;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.DateUtility;
 import app.vcampus.server.utility.Request;
@@ -10,6 +12,7 @@ import app.vcampus.server.utility.router.RouteMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,6 +33,61 @@ public class FinanceController {
             database.persist(card);
             tx.commit();
         }
+
+        return Response.Common.ok(Map.of("card", card.toJson()));
+    }
+
+    @RouteMapping(uri = "finance/card/getByCardNumber", role = "finance_staff")
+    public Response getByCardNumber(Request request, org.hibernate.Session database) {
+        Integer cardNumber = Integer.parseInt(request.getParams().get("cardNumber"));
+
+        FinanceCard card = database.get(FinanceCard.class, cardNumber);
+
+        if (card == null) {
+            return Response.Common.error("卡号不存在");
+        }
+
+        return Response.Common.ok(Map.of("card", card.toJson()));
+    }
+
+    @RouteMapping(uri = "finance/card/update", role = "finance_staff")
+    public Response updateCard(Request request, org.hibernate.Session database) {
+        FinanceCard newCard = IEntity.fromJson(request.getParams().get("card"), FinanceCard.class);
+
+        if (newCard == null) {
+            return Response.Common.error("卡号不存在");
+        }
+
+        Transaction tx = database.beginTransaction();
+        database.merge(newCard);
+        tx.commit();
+
+        return Response.Common.ok(Map.of("card", newCard.toJson()));
+    }
+
+    @RouteMapping(uri = "finance/card/recharge", role = "finance_staff")
+    public Response rechargeCard(Request request, org.hibernate.Session database) {
+        Integer cardNumber = Integer.parseInt(request.getParams().get("cardNumber"));
+        Integer amount = Integer.parseInt(request.getParams().get("amount"));
+
+        FinanceCard card = database.get(FinanceCard.class, cardNumber);
+
+        if (card == null) {
+            return Response.Common.error("卡号不存在");
+        }
+
+        Transaction tx = database.beginTransaction();
+        card.setBalance(card.getBalance() + amount);
+        database.persist(card);
+
+        CardTransaction transaction = new CardTransaction();
+        transaction.setCardNumber(cardNumber);
+        transaction.setAmount(amount);
+        transaction.setTime(new Date());
+        transaction.setType(TransactionType.deposit);
+        transaction.setDescription("充值");
+        database.persist(transaction);
+        tx.commit();
 
         return Response.Common.ok(Map.of("card", card.toJson()));
     }

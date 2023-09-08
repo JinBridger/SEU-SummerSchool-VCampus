@@ -6,9 +6,9 @@ import lombok.Getter;
 public enum Gender implements LabelledEnum {
     male("男"),
     female("女"),
-    unspecified("未知");
+    unspecified("未指定");
 
-    private String label;
+    private final String label;
 
     Gender(String label) {
         this.label = label;

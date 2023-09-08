@@ -1,8 +1,7 @@
 package app.vcampus.server.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import app.vcampus.server.enums.CardStatus;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,4 +14,8 @@ public class FinanceCard implements IEntity {
     public Integer cardNumber = 0;
 
     public Integer balance = 0;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    public CardStatus status = CardStatus.normal;
 }
