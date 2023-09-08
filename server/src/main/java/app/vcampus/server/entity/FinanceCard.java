@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FinanceCard implements IEntity {
     @Id
-    public Integer cardNumber;
+    public Integer cardNumber = 0;
 
-    public Integer balance;
+    public Integer balance = 0;
 }

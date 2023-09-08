@@ -75,14 +75,14 @@ public class Main {
 //        selectedClass.setGrade(new Grades(100, 100, 100, 100));
 //        database.persist(selectedClass);
 
-        CardTransaction cardTransaction = new CardTransaction();
-        cardTransaction.setUuid(UUID.randomUUID());
-        cardTransaction.setCardNumber(123456);
-        cardTransaction.setAmount(-100);
-        cardTransaction.setType(TransactionType.payment);
-        cardTransaction.setDescription("商店消费");
-        cardTransaction.setTime(new Date());
-        database.persist(cardTransaction);
+//        CardTransaction cardTransaction = new CardTransaction();
+//        cardTransaction.setUuid(UUID.randomUUID());
+//        cardTransaction.setCardNumber(123456);
+//        cardTransaction.setAmount(-100);
+//        cardTransaction.setType(TransactionType.payment);
+//        cardTransaction.setDescription("商店消费");
+//        cardTransaction.setTime(new Date());
+//        database.persist(cardTransaction);
 
 //        Transaction tx = database.beginTransaction();
 //        Student student =new Student();
