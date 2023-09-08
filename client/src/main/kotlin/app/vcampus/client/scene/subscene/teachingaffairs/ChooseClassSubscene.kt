@@ -20,9 +20,9 @@ fun chooseClassSubscene(viewModel: TeachingAffairsViewModel) {
                 Spacer(Modifier.height(20.dp))
             }
 
-            (0..3).forEach {
+            viewModel.chooseClass.allCourses.forEach {
                 item {
-                    selectClassListItem(true)
+                    selectClassListItem(viewModel, it)
                     Spacer(Modifier.height(10.dp))
                 }
             }
