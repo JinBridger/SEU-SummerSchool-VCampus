@@ -73,10 +73,10 @@ class TeachingAffairsViewModel() : ViewModel() {
             )
 
             "affairs_staff" -> listOf(
-                SideBarItem(
-                    false, "排课", "进行排课",
-                    Icons.Default.EditCalendar, false
-                ),
+//                SideBarItem(
+//                    false, "排课", "进行排课",
+//                    Icons.Default.EditCalendar, false
+//                ),
                 SideBarItem(
                     false, "录入成绩", "录入课程成绩",
                     Icons.Default.HistoryEdu, false
