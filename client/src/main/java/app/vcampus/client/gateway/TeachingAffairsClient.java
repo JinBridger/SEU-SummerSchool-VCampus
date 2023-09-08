@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -60,6 +61,29 @@ public class TeachingAffairsClient {
         }
     }
 
+
+    public static Map<String,List<Course>> searchCourse(NettyHandler handler,String keyword){
+        Request request=new Request();
+        request.setUri("course/searchBook");
+        request.setParams(Map.of(
+                "keyword",keyword
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            if (response.getStatus().equals("success")) {
+                Map<String, List<String>> raw_data = (Map<String, List<String>>) response.getData();
+                Map<String, List<Course>> data = new HashMap<>();
+                raw_data.forEach((key, value) -> data.put(key, value.stream().map(json -> IEntity.fromJson(json, Course.class)).toList()));
+                return data;
+            } else {
+                throw new RuntimeException("Failed to get course info");
+            }
+        }catch (InterruptedException e){
+            log.warn("Fail to get course info",e);
+            return null;
+        }
+    }
 
     //This method is used for student to select teaching class.
 //    public static SelectedClass selectClass(NettyHandler handler, String uuid, String classUuid, String cardNumber, String selectTime, String grade) {
@@ -133,11 +157,44 @@ public class TeachingAffairsClient {
         }
     }
 
-    public static boolean addEvaluatoin(NettyHandler handler, TeachingEvaluation newEvaluation) {
+    public static boolean updateCourse(NettyHandler handler, LibraryBook book) {
+        Request request = new Request();
+        request.setUri("affairs_staff/updateCourse");
+        request.setParams(Map.of(
+                "course", book.toJson()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to update course", e);
+            return false;
+        }
+    }
+
+    public static boolean deleteCourse(NettyHandler handler, UUID uuid)
+    {
+        Request request=new Request();
+        request.setUri("affairs_staff/deleteCourse");
+        request.setParams(Map.of(
+                "uuid",uuid.toString()
+        ));
+
+        try{
+            Response response=BaseClient.sendRequest(handler,request);
+            return response.getStatus().equals("success");
+        }catch(InterruptedException e) {
+            log.warn("Fail to delete course",e);
+            return false;
+    }
+    }
+
+    public static boolean addEvaluation(NettyHandler handler, TeachingEvaluation newEvaluation) {
         Request request = new Request();
         request.setUri("teachingEvaluation/addEvaluation");
         request.setParams(Map.of(
-                "evaluaiton", newEvaluation.toJson()
+                "evaluation", newEvaluation.toJson()
         ));
 
         try {

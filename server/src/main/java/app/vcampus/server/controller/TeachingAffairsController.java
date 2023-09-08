@@ -142,6 +142,27 @@ public class TeachingAffairsController {
         return Response.Common.ok(teachingClass.toMap());
     }
 
+@RouteMapping(uri="teachingAffairs/updateCourse",role="affairs_staff")
+public Response updateCourse(Request request, org.hibernate.Session database)
+{
+    Course newCourse=IEntity.fromJson(request.getParams().get("course"), Course.class);
+    Course toUpdate=database.get(Course.class,newCourse.getUuid());
+    if(toUpdate==null)
+    {
+        return Response.Common.badRequest();
+    }
+
+    Transaction tx=database.beginTransaction();
+    toUpdate.setCourseId(newCourse.getCourseId());
+    toUpdate.setCourseName(newCourse.getCourseName());
+    toUpdate.setCredit(newCourse.getCredit());
+    toUpdate.setSchool(newCourse.getSchool());
+    database.persist(toUpdate);
+    tx.commit();
+
+    return Response.Common.ok();
+}
+
 
 //    @RouteMapping(uri = "selectedClass/recordGrade", role = "affairs_staff")
 //    public Response recordGrade(Request request, org.hibernate.Session database) {

@@ -14,7 +14,7 @@ import java.util.UUID;
 @Data
 @Table(name = "course")
 @Slf4j
-public class Course {
+public class Course implements IEntity {
     @Id
     public UUID uuid;
 
