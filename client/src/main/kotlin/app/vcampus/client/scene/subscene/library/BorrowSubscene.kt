@@ -22,7 +22,6 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 
 @Composable
 fun borrowSubscene(viewModel: LibraryViewModel) {
-    val isExpanded = remember { mutableStateOf(false) }
 
     Row(horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
@@ -59,32 +58,13 @@ fun borrowSubscene(viewModel: LibraryViewModel) {
                     )
                     Column {
                         Spacer(Modifier.height(8.dp))
-                        Button(onClick = { isExpanded.value = true },
+                        Button(onClick = { },
                                 modifier = Modifier.height(56.dp)) {
                             Text("借阅")
                         }
                     }
                 }
                 Spacer(Modifier.height(10.dp))
-            }
-
-            if (isExpanded.value) {
-                item {
-                    Row {
-                        Text("212212212", fontWeight = FontWeight(700),
-                                fontSize = 14.sp)
-                        Text(" 当前借阅：10 / 最大借阅：20",
-                                fontSize = 14.sp)
-                    }
-                    Spacer(Modifier.height(8.dp))
-                }
-
-                (0..10).forEach {
-                    item {
-                        returnBookListItem()
-                        Spacer(Modifier.height(10.dp))
-                    }
-                }
             }
 
             item {
