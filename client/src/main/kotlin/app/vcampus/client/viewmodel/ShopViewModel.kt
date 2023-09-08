@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.repository.copy
 import app.vcampus.client.scene.components.SideBarItem
+import app.vcampus.client.scene.components.addShopItem
 import app.vcampus.server.entity.StoreItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -54,11 +55,12 @@ data class MutableStoreItem(
         description.value = item.description ?: ""
     }
 }
+
 class ShopViewModel() : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
     val searchStoreItem = SearchStoreItem()
     val modifyStoreItem = ModifyStoreItem()
-
+    val addStoreItem = AddStoreItem()
 
     val sideBarContent = (if (identity.contains("shop_user")) {
         listOf(SideBarItem(true, "购物", "", Icons.Default.Info, false))
@@ -177,5 +179,37 @@ class ShopViewModel() : ViewModel() {
             e.printStackTrace()
         }
     }
-}
+    }
+
+    class AddStoreItem : ViewModel() {
+
+        val newStoreItem = mutableStateOf(run{
+            val temp = StoreItem()
+            temp.itemName = ""
+            temp.price = 0
+            temp.description = ""
+            temp.stock = 0
+            temp.barcode = ""
+            temp.pictureLink = ""
+            temp
+})
+
+        var result = mutableStateOf(true)
+        var showMessage = mutableStateOf(false)
+
+       fun addStoreItem(){
+           viewModelScope.launch {
+               withContext(Dispatchers.IO){
+                   addStoreItemInternal(newStoreItem.value).collect{
+                       result.value = it
+                       showMessage.value = it
+                   }
+               }
+           }
+       }
+
+        private  suspend fun addStoreItemInternal(newItem: StoreItem) = flow {
+            emit(FakeRepository.addStoreItem(newItem))
+        }
+    }
 }

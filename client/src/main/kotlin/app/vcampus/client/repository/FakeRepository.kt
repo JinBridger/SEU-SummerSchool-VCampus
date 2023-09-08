@@ -103,21 +103,29 @@ object FakeRepository {
         return LibraryClient.deleteBook(handler, uuid)
     }
 
-    fun searchStoreItem(keyword: String): Map<String, List<StoreItem>>{
-        return StoreClient.searchItem(handler,keyword) ?: mapOf()
+    fun searchStoreItem(keyword: String): Map<String, List<StoreItem>> {
+        return StoreClient.searchItem(handler, keyword) ?: mapOf()
     }
 
-    fun updateStoreItem(storeItem: StoreItem):Boolean{
-        return StoreClient.updateItem(handler,storeItem)
+    fun updateStoreItem(storeItem: StoreItem): Boolean {
+        return StoreClient.updateItem(handler, storeItem)
     }
+
+    fun addStoreItem(newStoreItem: StoreItem): Boolean {
+        return StoreClient.addItem(handler, newStoreItem)
+    }
+
     fun getStudentGrade(): List<_GradeItem> {
         return listOf(
             _GradeItem(
-                "信号与系统",60,4.000,"B09G1010"),
+                "信号与系统", 60, 4.000, "B09G1010"
+            ),
             _GradeItem(
-                "信号与系统",60,4.000,"B09G1010"),
+                "信号与系统", 60, 4.000, "B09G1010"
+            ),
             _GradeItem(
-                "信号与系统",60,4.000,"B09G1010"),
+                "信号与系统", 60, 4.000, "B09G1010"
+            ),
         )
     }
 
@@ -127,16 +135,24 @@ object FakeRepository {
 
     fun getFakeSchedule(): List<_TeachingClass> {
         return listOf(
-                _TeachingClass(listOf(Pair(Pair(1, 16), Pair(1, Pair(2, 4)))),
-                        "sig", 111, "九龙湖"),
-                _TeachingClass(listOf(Pair(Pair(1, 16), Pair(2, Pair(6, 7)))),
-                        "alg", 222, "九龙湖"),
-                _TeachingClass(listOf(Pair(Pair(1, 16), Pair(3, Pair(8, 10)))),
-                        "ds", 333, "九龙湖"),
-                _TeachingClass(listOf(Pair(Pair(1, 16), Pair(4, Pair(11, 13)))),
-                        "os", 444, "九龙湖"),
+            _TeachingClass(
+                listOf(Pair(Pair(1, 16), Pair(1, Pair(2, 4)))),
+                "sig", 111, "九龙湖"
+            ),
+            _TeachingClass(
+                listOf(Pair(Pair(1, 16), Pair(2, Pair(6, 7)))),
+                "alg", 222, "九龙湖"
+            ),
+            _TeachingClass(
+                listOf(Pair(Pair(1, 16), Pair(3, Pair(8, 10)))),
+                "ds", 333, "九龙湖"
+            ),
+            _TeachingClass(
+                listOf(Pair(Pair(1, 16), Pair(4, Pair(11, 13)))),
+                "os", 444, "九龙湖"
+            ),
 
-        )
+            )
     }
 
     fun getSelectedClasses(): List<TeachingClass> {
@@ -151,10 +167,10 @@ object FakeRepository {
         return StoreClient.searchId(handler, uuid)
     }
 
-    fun getOneNewStoreItem():_StoreItem {
+    fun getOneNewStoreItem(): _StoreItem {
         return _StoreItem(
             "索尼国行PS5主机PlayStation电视游戏机蓝光8K港版日版现货闪送",
-            279900,"",10,"你买不了吃亏买不了上当"
+            279900, "", 10, "你买不了吃亏买不了上当"
         )
     }
 
@@ -176,5 +192,8 @@ object FakeRepository {
 
     fun rechargeCard(cardNumber: Int, amount: Int): FinanceCard {
         return FinanceClient.rechargeCard(handler, cardNumber, amount) ?: FinanceCard()
+        fun createTransaction(uuid: String, amount: String): Boolean {
+            return StoreClient.createTransaction(handler, uuid, amount)
+        }
     }
 }

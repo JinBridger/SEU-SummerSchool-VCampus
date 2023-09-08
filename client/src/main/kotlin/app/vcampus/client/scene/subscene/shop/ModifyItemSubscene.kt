@@ -69,6 +69,8 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(20.dp))
+
                 }
                 viewModel.modifyStoreItem.storeList.forEach{
                     item {

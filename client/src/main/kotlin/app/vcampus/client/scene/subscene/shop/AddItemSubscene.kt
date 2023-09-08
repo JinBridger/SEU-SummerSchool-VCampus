@@ -13,6 +13,8 @@ import app.vcampus.client.viewmodel.ShopViewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 import app.vcampus.client.scene.components.addShopItem
 import java.util.*
@@ -29,8 +31,9 @@ fun addItemSubscene(viewModel: ShopViewModel) {
                 item {
                     Spacer(Modifier.height(80.dp))
                     pageTitle("添加商品", "添加新的商品")
-                    addShopItem(viewModel.oneNewShopItem,viewModel,true)
+                    addShopItem(viewModel)
                 }
+
             }
         }
     }

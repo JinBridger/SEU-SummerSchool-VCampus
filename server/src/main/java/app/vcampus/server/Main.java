@@ -1,14 +1,13 @@
 package app.vcampus.server;
 
 import app.vcampus.server.controller.*;
-import app.vcampus.server.entity.CardTransaction;
-import app.vcampus.server.entity.Course;
-import app.vcampus.server.entity.Grades;
-import app.vcampus.server.entity.SelectedClass;
+import app.vcampus.server.entity.*;
 import app.vcampus.server.enums.TransactionType;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
+import app.vcampus.server.utility.DateUtility;
 import app.vcampus.server.utility.router.Router;
+import org.bouncycastle.util.Store;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -108,6 +107,18 @@ public class Main {
 //        user.setRoles(new String[]{"admin"});
 //        user.setPhone("12345678901");
 //        database.persist(user);
+//
+//        StoreTransaction StoreTransaction = new StoreTransaction();
+//        StoreTransaction.setUuid(UUID.randomUUID());
+//        StoreTransaction.setItemUUID(UUID.randomUUID());
+//        StoreTransaction.setItemPrice(100);
+//        StoreTransaction.setAmount(10);
+//        StoreTransaction.setCardNumber(123456);
+//        String testString ="2023-09-04";
+//        StoreTransaction.setTime(DateUtility.toDate(testString));
+//        StoreTransaction.setRemark("test");
+//        database.persist(StoreTransaction);
+
         tx.commit();
         NettyServer server = new NettyServer(9091);
         server.run(router, database);

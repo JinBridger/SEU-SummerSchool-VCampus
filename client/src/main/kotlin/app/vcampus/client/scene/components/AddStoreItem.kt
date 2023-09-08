@@ -1,5 +1,6 @@
 package app.vcampus.client.scene.components
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -13,15 +14,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.repository._StoreItem
 import app.vcampus.client.viewmodel.ShopViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun addShopItem(item: _StoreItem, viewModel: ShopViewModel,isEditable: Boolean = true) {
-    var myName by remember { mutableStateOf(item.itemName) }
-    var myPrice by remember { mutableStateOf(item.price.toString())}
-    var myBarcode by remember { mutableStateOf(item.barcode) }
-    var myStock by remember { mutableStateOf(item.stock.toString()) }
-    var myDescription by remember { mutableStateOf(item.description) }
+fun addShopItem(viewModel: ShopViewModel) {
 
+    var myPrice by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.price.toString()) }
+    var myName by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.itemName)}
+    var myStock by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.stock.toString()) }
+    var myBarcode by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.barcode) }
+    var myPictureLink by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.pictureLink) }
+    var myDescription by remember { mutableStateOf(viewModel.addStoreItem.newStoreItem.value.description) }
+
+//    var myPrice by viewModel.addStoreItem.newStoreItem.value.price
+    val scope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Row(horizontalArrangement = Arrangement.Center,
@@ -41,7 +47,7 @@ fun addShopItem(item: _StoreItem, viewModel: ShopViewModel,isEditable: Boolean =
                         OutlinedTextField(
                             readOnly = false,
                             value =  myName,
-                            onValueChange = {  myName = it },
+                            onValueChange = { myName = it },
                             label = { Text("请填写您的商品名称") },
                             isError =  myName == "",
                             trailingIcon = {
@@ -68,7 +74,7 @@ fun addShopItem(item: _StoreItem, viewModel: ShopViewModel,isEditable: Boolean =
                         Spacer(modifier = Modifier.width(25.dp))
                         OutlinedTextField(
                             readOnly = false,
-                            value =  myPrice,
+                            value = myPrice,
                             onValueChange = {  myPrice = it },
                             label = { Text("请填写商品价格(单位：￥)") },
                             isError =  myPrice == " ",
@@ -146,6 +152,32 @@ fun addShopItem(item: _StoreItem, viewModel: ShopViewModel,isEditable: Boolean =
                     ) {
                         Spacer(modifier = Modifier.width(15.dp))
                         Text(
+                            "图片链接",
+                            fontWeight = FontWeight(700)
+                        )
+                        Spacer(modifier = Modifier.width(25.dp))
+                        OutlinedTextField(
+                        modifier = Modifier.weight(1F),
+                        value = myPictureLink,
+                        onValueChange = {myPictureLink = it },
+                        label = { Text("商品图片链接") },
+                        isError = myPictureLink == "",
+                        readOnly = false,
+                        trailingIcon = {
+                            if (myPictureLink == "") Icon(
+                                Icons.Filled.Error, "error",
+                                tint = MaterialTheme.colors.error
+                            )
+                        }
+                    )
+                    }
+                Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Spacer(modifier = Modifier.width(15.dp))
+                        Text(
                             "商品介绍",
                             fontWeight = FontWeight(700)
                         )
@@ -170,10 +202,13 @@ fun addShopItem(item: _StoreItem, viewModel: ShopViewModel,isEditable: Boolean =
                 Spacer(Modifier.height(10.dp))
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Spacer(Modifier.weight(1F))
-                        Button(onClick = { }) {
+                        Button(onClick = {
+                            viewModel.addStoreItem.addStoreItem()
+                        }) {
                             Text("添加商品")
                         }
                     }
+
                 }
             }
         }

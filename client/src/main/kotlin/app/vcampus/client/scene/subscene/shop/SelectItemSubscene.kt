@@ -136,7 +136,9 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                                 "已选择 ${viewModel.chosenItemsCount.value} 件商品")
                                     }
                                     Spacer(Modifier.weight(1F))
-                                    Button(onClick = {}) {
+                                    Button(onClick = {
+
+                                    }) {
                                         Text("立即支付")
                                     }
                                 }

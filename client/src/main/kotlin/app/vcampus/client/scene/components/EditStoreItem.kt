@@ -43,9 +43,11 @@ fun EditStoreItem(
     var myStock by remember { mutableStateOf(primyStoreItem.stock.toString()) }
     var myBarcode by remember { mutableStateOf(primyStoreItem.barcode) }
     var myName by remember { mutableStateOf(primyStoreItem.itemName) }
+
 //    var myPrice by remember { mutableStateOf(item.price.toString()) }
 //    var myBarcode by remember { mutableStateOf(item.barcode) }
 //    var myStock by remember { mutableStateOf(item.stock.toString()) }
+    var myPictureLink by remember { mutableStateOf(primyStoreItem.pictureLink) }
     var myDescription by remember { mutableStateOf(primyStoreItem.description) }
 
     var modifiedItems = mutableListOf<Pair<MutableStoreItem, MutableState<Boolean>>>()
@@ -80,7 +82,7 @@ fun EditStoreItem(
                     )
                     Spacer(modifier = Modifier.weight(1F))
                     Text(
-                        "价格：${myPrice}￥ ",
+                        "价格：${String.format("%.2f",myPrice.toInt() / 100.0)}￥ ",
                         fontWeight = FontWeight(700),
                         color = Color.Black
                     )
@@ -93,7 +95,7 @@ fun EditStoreItem(
                 }
                 if (expanded) {
                     if (!isEditing) {
-                        Spacer(Modifier.height(6.dp))
+                        Spacer(Modifier.height(20.dp))
                         Divider()
                         Spacer(Modifier.height(6.dp))
                         Column {
@@ -117,7 +119,8 @@ fun EditStoreItem(
                             Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.2F),
-                                    value = myPrice,
+//                                    value = myPrice,
+                                    value = String.format("%.2f",myPrice.toInt() / 100.0),
                                     onValueChange = { myPrice = it },
                                     label = { Text("商品价格(￥)") },
                                     isError = myPrice == "",
@@ -161,6 +164,23 @@ fun EditStoreItem(
                                 )
                             }
                             Spacer(modifier = Modifier.height(10.dp))
+                            Row {
+                                OutlinedTextField(
+                                    modifier = Modifier.weight(1F),
+                                    value = myPictureLink,
+                                    onValueChange = { myPictureLink = it },
+                                    label = { Text("商品图片链接") },
+                                    isError = myPictureLink == "",
+                                    readOnly = !isEditing,
+                                    trailingIcon = {
+                                        if (myPictureLink == "") Icon(
+                                            Icons.Filled.Error, "error",
+                                            tint = MaterialTheme.colors.error
+                                        )
+                                    }
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(20.dp))
                             Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(1F).height(120.dp),
@@ -193,7 +213,7 @@ fun EditStoreItem(
                             }
                         }
                     } else {
-                        Spacer(Modifier.height(6.dp))
+                        Spacer(Modifier.height(20.dp))
                         Divider()
                         Spacer(Modifier.height(6.dp))
                         Column {
@@ -217,7 +237,7 @@ fun EditStoreItem(
                             Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.2F),
-                                    value = myPrice,
+                                    value = String.format("%.2f",myPrice.toInt() / 100.0),
                                     onValueChange = { myPrice = it },
                                     label = { Text("商品价格(￥)") },
                                     isError = myPrice == "",
@@ -254,6 +274,23 @@ fun EditStoreItem(
                                     readOnly = !isEditing,
                                     trailingIcon = {
                                         if (myBarcode == "") Icon(
+                                            Icons.Filled.Error, "error",
+                                            tint = MaterialTheme.colors.error
+                                        )
+                                    }
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row {
+                                OutlinedTextField(
+                                    modifier = Modifier.weight(1F),
+                                    value = myPictureLink,
+                                    onValueChange = { myPictureLink = it },
+                                    label = { Text("商品图片链接") },
+                                    isError = myPictureLink == "",
+                                    readOnly = !isEditing,
+                                    trailingIcon = {
+                                        if (myPictureLink == "") Icon(
                                             Icons.Filled.Error, "error",
                                             tint = MaterialTheme.colors.error
                                         )
@@ -325,6 +362,7 @@ fun EditStoreItem(
                                             pair.first.barcode.value=myBarcode
                                             pair.first.description.value = myDescription
                                             pair.first.price.value = myPrice.toInt()
+                                            pair.first.pictureLink.value = myPictureLink
 
                                             onEdit(pair.first.toStoreItem(),pair.second.value)
 
@@ -351,6 +389,7 @@ fun EditStoreItem(
                                     myBarcode = primyStoreItem.barcode
                                     myDescription = primyStoreItem.description
                                     myPrice =primyStoreItem.price.toString()
+                                    myPictureLink = primyStoreItem.pictureLink.toString()
 
                                     modifiedItems = mutableListOf()
 
