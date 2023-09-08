@@ -15,10 +15,7 @@ import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.admin.addUserSubscene
 import app.vcampus.client.scene.subscene.admin.modifyUserSubscene
 import app.vcampus.client.scene.subscene.blankSubscene
-import app.vcampus.client.scene.subscene.finance.manuallyRechargeSubscene
-import app.vcampus.client.scene.subscene.finance.myBillsSubscene
 import app.vcampus.client.viewmodel.AdminViewModel
-import app.vcampus.client.viewmodel.FinanceViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
