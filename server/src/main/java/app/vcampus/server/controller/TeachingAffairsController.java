@@ -9,7 +9,6 @@ import app.vcampus.server.utility.router.RouteMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,11 +25,10 @@ public class TeachingAffairsController {
             return Response.Common.error("no such card number");
         }
 
-        List<SelectedClass> selectedClasses = Database.getWhere(SelectedClass.class, "cardNumber", cardNumber.toString(), database);
+        List<SelectedClass> selectedClasses = Database.getWhereString(SelectedClass.class, "cardNumber", cardNumber.toString(), database);
         List<TeachingClass> teachingClasses = selectedClasses.stream().map((SelectedClass sc) -> {
             Grades grades = sc.getGrade();
-            // FIXME: unable to query where uuid
-            List<SelectedClass> classmates = Database.getWhere(SelectedClass.class, "classUuid", sc.getClassUuid().toString(), database);
+            List<SelectedClass> classmates = Database.getWhereUuid(SelectedClass.class, "classUuid", sc.getClassUuid(), database);
             List<Grades> gradesList = classmates.stream().map(SelectedClass::getGrade).toList();
             grades.classAvg = gradesList.stream().mapToInt(Grades::getTotal).average().orElse(0);
             grades.classMax = gradesList.stream().mapToInt(Grades::getTotal).max().orElse(0);

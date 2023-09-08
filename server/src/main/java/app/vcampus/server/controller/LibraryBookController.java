@@ -113,7 +113,7 @@ public class LibraryBookController {
 
         if (isbn == null) return Response.Common.error("ISBN cannot be empty");
 
-        List<LibraryBook> searchedBook = Database.getWhere(LibraryBook.class, "isbn", isbn, database);
+        List<LibraryBook> searchedBook = Database.getWhereString(LibraryBook.class, "isbn", isbn, database);
         if (!searchedBook.isEmpty()) return Response.Common.ok(Map.of("book", searchedBook.get(0).toJson()));
 
         try {
