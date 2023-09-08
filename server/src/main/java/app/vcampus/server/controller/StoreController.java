@@ -171,6 +171,28 @@ public class StoreController {
         return Response.Common.ok();
     }
 
+//    @RouteMapping(uri = "storeItem/filter", role = "admin")
+//    public Response filter(Request request, org.hibernate.Session database) {
+//        try {
+//            List<StoreItem> allItems;
+//            allItems = Database.loadAllData(StoreItem.class, database);
+//            return Response.Common.ok(allItems.stream().map(StoreItem::toJson).collect(Collectors.toList()));
+//        } catch (Exception e) {
+//            log.warn("Failed to filter store items", e);
+//            return Response.Common.error("Failed to filter store items");
+//        }
+//    }
+    @RouteMapping(uri="storeItem/getReport")
+    public Response getReport(Request request,org.hibernate.Session database){
+        try{
+            List<StoreItem> items;
+            items=Database.loadAllData(StoreItem.class,database);
+            return Response.Common.ok(items.stream().map(StoreItem::toJson).collect(Collectors.toList()));
+        }catch (Exception e){
+            log.warn("Failed to get sales report",e);
+            return Response.Common.error("Failed to get sales report");
+        }
+    }
 //    @RouteMapping(uri="storeTransaction/addTransaction")
 //    public Response addTransaction(Request request,org.hibernate.Session database){
 //        try{

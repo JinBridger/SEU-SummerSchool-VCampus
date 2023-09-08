@@ -168,6 +168,47 @@ public class StoreClient {
             return false;
         }
     }
+
+//    public static Map<String,List<StoreTransaction>> searchTransaction(NettyHandler handler,String keyword){
+//        Request request=new Request();
+//        request.setUri("storeTransaction/searchTransaction");
+//        request.setParams(Map.of(
+//                "keyword",keyword
+//        ));
+//        try{
+//            Response response=BaseClient.sendRequest(handler,request);
+//            if(response.getStatus().equals("success")){
+//                Map<String,List<String>> raw_data=(Map<String,List<String>>) response.getData();
+//                Map<String,List<StoreTransaction>> data=new HashMap<>();
+//                raw_data.forEach((key,value)->data.put(key,value.stream().map(json->IEntity.fromJson(json,StoreTransaction.class)).toList()));
+//                return data;
+//            }else{
+//                throw new RuntimeException("Failed to get transaction info");
+//            }
+//        }catch (InterruptedException e){
+//            log.warn("Fail to get book info", e);
+//            return null;
+//        }
+//    }
+    public static List<StoreItem> getReport(NettyHandler handler){
+        Request request=new Request();
+        request.setUri("storeItem/getReport");
+        try{
+            Response response=BaseClient.sendRequest(handler,request);
+            if(response.getStatus().equals("success")){
+                List<String> raw_data=(List<String>) response.getData();
+                List<StoreItem> data=new LinkedList<>();
+                raw_data.forEach(json->data.add(IEntity.fromJson(json,StoreItem.class)));
+                Collections.sort(data,(o1,o2)->o2.getSalesVolume()-o1.getSalesVolume());
+                return data;
+            }else{
+                return null;
+            }
+        }catch (Exception e){
+            log.warn(String.valueOf(e));
+            return null;
+        }
+    }
 //    public static boolean addTransaction(NettyHandler handler,List<Pair<Integer,StoreItem>> list){
 //        Request request=new Request();
 //        request.setUri("storeTransaction/addTransaction");
