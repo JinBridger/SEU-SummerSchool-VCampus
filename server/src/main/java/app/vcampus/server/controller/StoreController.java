@@ -148,6 +148,29 @@ public class StoreController {
         return Response.Common.ok();
     }
 
+    @RouteMapping(uri="storeTransaction/createTransaction")
+    public Response createTransaction(Request request,org.hibernate.Session database){
+        UUID itemUUID= UUID.fromString(request.getParams().get("itemUUID"));
+        Integer amount= Integer.valueOf(request.getParams().get("amount"));
+        StoreItem storeItem=database.get(StoreItem.class,itemUUID);
+        if(storeItem==null){
+            return Response.Common.badRequest();
+        }
+        StoreTransaction newStoreTransaction=new StoreTransaction();
+        Transaction tx=database.beginTransaction();
+        newStoreTransaction.setUuid(UUID.randomUUID());
+        newStoreTransaction.setItemUUID(storeItem.getUuid());
+        newStoreTransaction.setItemPrice(storeItem.getPrice());
+        Date currentTime=new Date();
+        newStoreTransaction.setTime(currentTime);
+        newStoreTransaction.setAmount(amount);
+        newStoreTransaction.setCardNumber(0);
+        newStoreTransaction.setRemark("");
+        database.persist(newStoreTransaction);
+        tx.commit();
+        return Response.Common.ok();
+    }
+
 //    @RouteMapping(uri="storeTransaction/addTransaction")
 //    public Response addTransaction(Request request,org.hibernate.Session database){
 //        try{

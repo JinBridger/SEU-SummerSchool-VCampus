@@ -12,6 +12,26 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class StoreClient {
+    public static List<StoreItem> getAll(NettyHandler handler) {
+        Request request = new Request();
+        request.setUri("storeItem/filter");
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            if (response.getStatus().equals("success")) {
+                List<String> raw_data = (List<String>) response.getData();
+                List<StoreItem> data = new LinkedList<>();
+                raw_data.forEach(json -> data.add(IEntity.fromJson(json, StoreItem.class)));
+                return data;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            log.warn(String.valueOf(e));
+            return null;
+        }
+    }
+
     public static boolean addItem(NettyHandler handler, StoreItem newStoreItem) {
         Request request = new Request();
         request.setUri("storeItem/addItem");
@@ -34,6 +54,21 @@ public class StoreClient {
             return response.getStatus().equals("success");
         } catch (InterruptedException e) {
             log.warn("Fail to delete item", e);
+            return false;
+        }
+    }
+
+    public static boolean updateItem(NettyHandler handler,StoreItem storeItem){
+        Request request=new Request();
+        request.setUri("storeItem/updateItem");
+        request.setParams(Map.of(
+                "storeItem",storeItem.toJson()
+        ));
+        try{
+            Response response=BaseClient.sendRequest(handler,request);
+            return response.getStatus().equals("success");
+        }catch (InterruptedException e){
+            log.warn("Fail to update item",e);
             return false;
         }
     }
@@ -73,25 +108,6 @@ public class StoreClient {
             }
         } catch (InterruptedException e) {
             log.warn("Fail to get item", e);
-            return null;
-        }
-    }
-    public static List<StoreItem> getAll(NettyHandler handler) {
-        Request request = new Request();
-        request.setUri("storeItem/filter");
-        try {
-            Response response = BaseClient.sendRequest(handler, request);
-
-            if (response.getStatus().equals("success")) {
-                List<String> raw_data = (List<String>) response.getData();
-                List<StoreItem> data = new LinkedList<>();
-                raw_data.forEach(json -> data.add(IEntity.fromJson(json, StoreItem.class)));
-                return data;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            log.warn(String.valueOf(e));
             return null;
         }
     }
@@ -137,17 +153,18 @@ public class StoreClient {
         }
     }
 
-    public static boolean updateItem(NettyHandler handler,StoreItem storeItem){
+    public static boolean createTransaction(NettyHandler handler,String itemUUID,String amount){
         Request request=new Request();
-        request.setUri("storeItem/updateItem");
+        request.setUri("storeTransaction/createTransaction");
         request.setParams(Map.of(
-                "storeItem",storeItem.toJson()
+                "itemUUID",itemUUID,
+                "amount",amount
         ));
         try{
             Response response=BaseClient.sendRequest(handler,request);
             return response.getStatus().equals("success");
         }catch (InterruptedException e){
-            log.warn("Fail to update item",e);
+            log.warn("Fail to create transaction",e);
             return false;
         }
     }
