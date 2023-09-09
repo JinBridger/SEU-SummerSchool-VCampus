@@ -45,6 +45,10 @@ fun LoginScene(
         false -> {}
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.login("123456", "123456")
+    }
+
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Box(
             Modifier.size(1064.dp, 600.dp).shadowCustom(
