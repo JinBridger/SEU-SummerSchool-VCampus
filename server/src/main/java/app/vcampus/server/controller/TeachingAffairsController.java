@@ -9,17 +9,14 @@ import app.vcampus.server.utility.router.RouteMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Double.*;
 
 @Slf4j
 public class TeachingAffairsController {
-    @RouteMapping(uri = "teachingAffairs/student/getSelectedClasses", role = "student")
+    @RouteMapping(uri = "teachingAffairs/student/getMyClasses", role = "student")
     public Response getSelectedClasses(Request request, org.hibernate.Session database) {
         Integer cardNumber = request.getSession().getCardNum();
 
@@ -43,15 +40,61 @@ public class TeachingAffairsController {
             teachingClass.setSelectedClass(sc);
             return teachingClass;
         }).toList();
+
+        List<TeachingEvaluation> evaluations = Database.getWhereString(TeachingEvaluation.class, "studentId", cardNumber.toString(), database);
+
         teachingClasses = teachingClasses.stream().peek((TeachingClass tc) -> {
             User teacher = database.get(User.class, tc.getTeacherId());
             tc.setTeacherName(teacher.getName());
 
             Course course = database.get(Course.class, tc.getCourseUuid());
             tc.setCourse(course);
+
+            tc.setIsEvaluated(evaluations.stream().anyMatch((TeachingEvaluation te) -> te.classUuid.equals(tc.getUuid())));
         }).toList();
 
         return Response.Common.ok(Map.of("classes", teachingClasses.stream().map(TeachingClass::toJson).toList()));
+    }
+
+    @RouteMapping(uri = "teachingAffairs/student/getSelectableCourses", role = "student")
+    public Response getSelectableCourses(Request request, org.hibernate.Session database) {
+        Integer cardNumber = request.getSession().getCardNum();
+
+        Student student = database.get(Student.class, cardNumber);
+
+        if (student == null) {
+            return Response.Common.error("no such card number");
+        }
+
+        List<Course> courses = Database.loadAllData(Course.class, database);
+        courses = courses.stream().peek((Course course) -> {
+            List<TeachingClass> teachingClasses = Database.getWhereUuid(TeachingClass.class, "courseUuid", course.getUuid(), database);
+            teachingClasses = teachingClasses.stream().peek((TeachingClass tc) -> {
+                User teacher = database.get(User.class, tc.getTeacherId());
+                tc.setTeacherName(teacher.getName());
+            }).toList();
+            course.setTeachingClasses(teachingClasses);
+        }).toList();
+
+        return Response.Common.ok(Map.of("courses", courses.stream().map(Course::toJson).toList()));
+    }
+
+    @RouteMapping(uri = "teachingAffairs/student/evaluate", role = "student")
+    public Response evaluateClass(Request request, org.hibernate.Session database) {
+        int cardNumber = request.getSession().getCardNum();
+        TeachingEvaluation newTeachingEvaluation = IEntity.fromJson(request.getParams().get("evaluation"), TeachingEvaluation.class);
+
+        newTeachingEvaluation.studentId = cardNumber;
+
+        try {
+            Transaction tx = database.beginTransaction();
+            database.persist(newTeachingEvaluation);
+            tx.commit();
+            return Response.Common.ok();
+        } catch (Exception e) {
+            log.warn("Failed to add evaluation", e);
+            return Response.Common.badRequest();
+        }
     }
 
     @RouteMapping(uri = "teachingAffairs/teacher/getMyClasses", role = "teacher")
@@ -61,6 +104,23 @@ public class TeachingAffairsController {
         teachingClasses = teachingClasses.stream().peek((TeachingClass tc) -> {
             Course course = database.get(Course.class, tc.getCourseUuid());
             tc.setCourse(course);
+
+            List<TeachingEvaluation> evaluations = Database.getWhereUuid(TeachingEvaluation.class, "classUuid", tc.getUuid(), database);
+            List<List<Integer>> evaluationResult = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                evaluationResult.add(new ArrayList<>());
+                for (int j = 0; j < 10; j++) {
+                    evaluationResult.get(i).add(0);
+                }
+            }
+            evaluations.forEach((TeachingEvaluation te) -> {
+                final int[] index = {0};
+                te.result.forEach((Integer score) -> {
+                    evaluationResult.get(index[0]).set(score - 1, evaluationResult.get(index[0]).get(score - 1) + 1);
+                    index[0]++;
+                });
+            });
+            tc.setEvaluationResult(evaluationResult);
         }).toList();
 
         return Response.Common.ok(Map.of("classes", teachingClasses.stream().map(TeachingClass::toJson).toList()));
@@ -277,9 +337,9 @@ public Response updateCourse(Request request, org.hibernate.Session database)
         try {
             UUID studentId = UUID.fromString(studentUuid);
             UUID courseId = UUID.fromString(classUuid);
-            Integer generalGrade = Integer.parseInt(general);
-            Integer midtermGrade = Integer.parseInt(midterm);
-            Integer finalExamGrade = Integer.parseInt(finalExam);
+            int generalGrade = Integer.parseInt(general);
+            int midtermGrade = Integer.parseInt(midterm);
+            int finalExamGrade = Integer.parseInt(finalExam);
 
             SelectedClass selectedClass = database.get(SelectedClass.class, studentId);
 
@@ -295,14 +355,14 @@ public Response updateCourse(Request request, org.hibernate.Session database)
             //fake setTotal method
 
             List<SelectedClass> classmates = Database.getWhereUuid(SelectedClass.class, "classUuid", courseId, database);
-            List<Integer> totalGrades = classmates.stream().map(sc -> sc.getGrade().getTotal()).collect(Collectors.toList());
+            List<Integer> totalGrades = classmates.stream().map(sc -> sc.getGrade().getTotal()).toList();
 
             grades.setClassMax(Collections.max(totalGrades));
             grades.setClassMin(Collections.min(totalGrades));
             grades.setClassAvg(totalGrades.stream().mapToInt(Integer::intValue).average().orElse(0));
 
             selectedClass.setGrade(grades);
-            database.update(selectedClass);
+            database.merge(selectedClass);
 
             return Response.Common.ok();
         } catch (Exception e) {

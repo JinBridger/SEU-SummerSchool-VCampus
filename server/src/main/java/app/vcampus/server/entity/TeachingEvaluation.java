@@ -1,12 +1,12 @@
 package app.vcampus.server.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,36 +19,14 @@ public class TeachingEvaluation implements IEntity {
     public UUID uuid;
 
     @Column(nullable = false)
-    public UUID EvaluationUUID;
+    public UUID classUuid;
 
     @Column(nullable = false)
-    public String teachingEvaluation;
+    public Integer studentId;
 
-    @Column(nullable = false)
-    public Integer teacherId;
+    @JdbcTypeCode(SqlTypes.JSON)
+    public List<Integer> result;
 
-    public static TeachingEvaluation fromMap(Map<String, String> data) {
-        try{
-            TeachingEvaluation teachingEvaluation1=new TeachingEvaluation();
-            teachingEvaluation1.setUuid(UUID.fromString(data.get("uuid")));
-            teachingEvaluation1.setEvaluationUUID(UUID.fromString(data.get("evaluationUUID")));
-            teachingEvaluation1.setTeachingEvaluation(data.get("teachingEvaluation"));
-            teachingEvaluation1.setTeacherId(Integer.parseInt(data.get("teacherId")));
-
-            return teachingEvaluation1;
-        }catch(Exception e){
-            log.warn("Failed to parse evaluation from map:{}",data,e);
-            return null;
-        }
-    }
-
-    public Map<String, String> toMap()
-    {
-      return Map.ofEntries(
-        Map.entry("uuid",getUuid().toString()),
-        Map.entry("evaluationUUID",getEvaluationUUID().toString()),
-        Map.entry("teachingEvaluation",getTeachingEvaluation()),
-              Map.entry("teacherId",teacherId.toString())
-        );
-    }
+    @Column(nullable = false, columnDefinition = "TEXT")
+    public String comment;
 }

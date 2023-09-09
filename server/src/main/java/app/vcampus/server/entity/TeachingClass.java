@@ -53,6 +53,12 @@ public class TeachingClass implements IEntity {
     @Column(nullable = false)
     public Integer capacity;
 
+    @Transient
+    public Boolean isEvaluated;
+
+    @Transient
+    public List<List<Integer>> evaluationResult;
+
     public String humanReadableSchedule() {
         StringBuilder content = new StringBuilder();
         for (Pair<Pair<Integer, Integer>, Pair<Integer, Pair<Integer, Integer>>> pair : schedule) {

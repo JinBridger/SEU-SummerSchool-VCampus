@@ -1,21 +1,12 @@
 package app.vcampus.client.scene.subscene.teachingaffairs
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.GradeListItem
 import app.vcampus.client.scene.components.pageTitle
-import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
 @Composable
@@ -31,7 +22,7 @@ fun myGradeSubscene(viewModel: TeachingAffairsViewModel) {
                 Spacer(Modifier.height(20.dp))
             }
             item{
-                viewModel.myScheduleAndGrades.myClasses.forEach{
+                viewModel.myClasses.selected.forEach{
                     GradeListItem(it)
                     Spacer(Modifier.height(10.dp))
                 }

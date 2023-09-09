@@ -126,7 +126,7 @@ fun classTable(viewModel: TeachingAffairsViewModel) {
                     }
                     var index = 1
                     while (index <= 13) {
-                        val classHere = isHereClass(viewModel.myScheduleAndGrades.myClasses,
+                        val classHere = isHereClass(viewModel.myClasses.selected,
                                 weekday, index)
                         if (classHere != null) {
                             Box(Modifier.fillMaxWidth().weight(

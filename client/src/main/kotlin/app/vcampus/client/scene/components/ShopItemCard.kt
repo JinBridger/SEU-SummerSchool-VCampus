@@ -77,7 +77,7 @@ fun shopItemCard(item: StoreItem, viewModel: ShopViewModel) {
                     Button(
                         onClick = {
                             viewModel.chosenShopItems.forEachIndexed { index, it ->
-                                if (it.itemName == item.itemName) {
+                                if (it.uuid == item.uuid) {
                                     viewModel.chosenShopItems[index] = it.copy(
                                         stock = it.stock + 1
                                     )

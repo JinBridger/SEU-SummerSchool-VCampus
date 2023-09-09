@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class TeachingAffairsClient {
     public static List<TeachingClass> getSelectedClasses(NettyHandler handler) {
         Request request = new Request();
-        request.setUri("teachingAffairs/student/getSelectedClasses");
+        request.setUri("teachingAffairs/student/getMyClasses");
 
         try {
             Response response = BaseClient.sendRequest(handler, request);

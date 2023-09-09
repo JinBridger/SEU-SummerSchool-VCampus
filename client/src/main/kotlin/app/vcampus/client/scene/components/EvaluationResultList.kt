@@ -45,7 +45,7 @@ fun ratingResultBar(evaluateString: String, result: List<Int>) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun evaluateResultListItem(result: Pair<TeachingClass, List<List<Int>>>) {
+fun evaluateResultListItem(result: TeachingClass) {
     var expanded by remember { mutableStateOf(false) }
     Surface(modifier = Modifier.fillMaxWidth().border(
             1.dp,
@@ -66,12 +66,12 @@ fun evaluateResultListItem(result: Pair<TeachingClass, List<List<Int>>>) {
                     Column(modifier = Modifier.fillMaxHeight()) {
                         Row {
                             Text(
-                                    text = result.first.courseName,
+                                    text = result.courseName,
                                     fontWeight = FontWeight(700)
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                    text = result.first.course.courseId,
+                                    text = result.course.courseId,
                                     color = Color.DarkGray
                             )
                             Spacer(modifier = Modifier.width(8.dp))
@@ -84,7 +84,7 @@ fun evaluateResultListItem(result: Pair<TeachingClass, List<List<Int>>>) {
                     Divider()
                     Spacer(Modifier.height(8.dp))
                     (0..3).forEach {
-                        ratingResultBar(evaluateItem[it], result.second[it])
+                        ratingResultBar(evaluateItem[it], result.getEvaluationResult()[it])
                     }
                 }
             }

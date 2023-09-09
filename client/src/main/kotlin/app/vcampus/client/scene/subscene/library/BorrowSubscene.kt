@@ -8,9 +8,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -22,6 +20,8 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 
 @Composable
 fun borrowSubscene(viewModel: LibraryViewModel) {
+    var bookUuid by remember { mutableStateOf("") }
+    var cardId by remember { mutableStateOf("") }
 
     Row(horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
@@ -34,9 +34,9 @@ fun borrowSubscene(viewModel: LibraryViewModel) {
 
             item {
                 OutlinedTextField(
-                        value = "",
-                        onValueChange = { },
-                        label = { Text("输入书籍条码号") },
+                        value = bookUuid,
+                        onValueChange = { bookUuid = it },
+                        label = { Text("输入书籍标识号") },
                         modifier = Modifier.padding(
                                 0.dp, 0.dp, 0.dp,
                                 0.dp
@@ -48,8 +48,8 @@ fun borrowSubscene(viewModel: LibraryViewModel) {
                         verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
-                            value = "",
-                            onValueChange = { },
+                            value = cardId,
+                            onValueChange = { cardId = it },
                             label = { Text("输入借书人一卡通号") },
                             modifier = Modifier.padding(
                                     0.dp, 0.dp, 16.dp,
@@ -58,7 +58,9 @@ fun borrowSubscene(viewModel: LibraryViewModel) {
                     )
                     Column {
                         Spacer(Modifier.height(8.dp))
-                        Button(onClick = { },
+                        Button(onClick = {
+
+                        },
                                 modifier = Modifier.height(56.dp)) {
                             Text("借阅")
                         }

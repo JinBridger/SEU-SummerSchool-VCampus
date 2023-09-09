@@ -23,6 +23,7 @@ public class Database {
                 .addAnnotatedClass(SelectedClass.class)
                 .addAnnotatedClass(FinanceCard.class)
                 .addAnnotatedClass(CardTransaction.class)
+                .addAnnotatedClass(TeachingEvaluation.class)
                 .buildSessionFactory().openSession();
     }
 

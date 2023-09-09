@@ -33,7 +33,7 @@ import com.seanproctor.datatable.material.DataTable
 import java.util.stream.Collectors
 import app.vcampus.server.utility.Pair
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalStdlibApi::class)
 @Composable
 fun searchBookListItem(
     _bookList: List<LibraryBook>,
@@ -158,7 +158,7 @@ fun searchBookListItem(
                                     )
                                 ) {
                                     Text(
-                                        "条形码",
+                                        "标识码",
                                         fontWeight = FontWeight(
                                             700
                                         )
@@ -315,7 +315,7 @@ fun searchBookListItem(
                                     )
                                 ) {
                                     Text(
-                                        "条形码",
+                                        "标识码",
                                         fontWeight = FontWeight(
                                             700
                                         )

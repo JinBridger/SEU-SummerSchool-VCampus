@@ -20,10 +20,12 @@ fun evaluateTeacherSubscene(viewModel: TeachingAffairsViewModel) {
                 Spacer(Modifier.height(20.dp))
             }
 
-            viewModel.evaluateTeacher.unevaluatedClasses.forEach {
-                item {
-                    evaluateTeacherListItem(viewModel, it)
-                    Spacer(Modifier.height(10.dp))
+            viewModel.myClasses.selected.forEach {
+                if (!it.isEvaluated) {
+                    item {
+                        evaluateTeacherListItem(viewModel, it)
+                        Spacer(Modifier.height(10.dp))
+                    }
                 }
             }
 
