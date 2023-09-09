@@ -23,6 +23,7 @@ class TeachingAffairsViewModel() : ViewModel() {
     val myTeachingClasses = MyTeachingClasses(identity.contains("teacher"))
     val chooseClass = ChooseClass(identity.contains("student"))
     val evaluateTeacher = EvaluateTeacher(identity.contains("student"))
+    val evaluateResult = EvaluateResult(identity.contains("teacher"))
 
     val sideBarContent = (if (identity.contains("student") || identity.contains(
             "teacher"
@@ -244,7 +245,7 @@ class TeachingAffairsViewModel() : ViewModel() {
             }
         }
 
-        fun getUnevaluatedClasses() {
+        private fun getUnevaluatedClasses() {
             val tmpClass1 = TeachingClass()
             tmpClass1.uuid = UUID.fromString("1df17ad4-7a9c-4f14-83d6-28512aee2b33")
             tmpClass1.capacity = 100
@@ -296,6 +297,53 @@ class TeachingAffairsViewModel() : ViewModel() {
 
         fun sendEvaluationResult(result: Pair<UUID, Pair<List<Int>, String>>) {
             println(result)
+        }
+    }
+
+    class EvaluateResult(init: Boolean): ViewModel() {
+        // Result = <TeachingClass, [Q1.result, Q2.result, ..., Q4.result]>
+        // Q1.result = [numOf1pt, numOf2pt, ..., numOf10pt]
+        val evaluateResults = mutableListOf<Pair<TeachingClass, List<List<Int>>>>()
+
+        init {
+            getEvaluateResults()
+        }
+
+        private fun getEvaluateResults() {
+            val tmpClass1 = TeachingClass()
+            tmpClass1.uuid = UUID.fromString("1df17ad4-7a9c-4f14-83d6-28512aee2b33")
+            tmpClass1.capacity = 100
+            tmpClass1.courseName = "软件工程"
+            tmpClass1.courseUuid = UUID.fromString("e1386a64-dd0d-4422-967b-fdeadee68e30")
+            tmpClass1.place = "东九楼"
+            tmpClass1.schedule = listOf(Pair(Pair(1, 16), Pair(1, Pair(1, 2))))
+            tmpClass1.teacherId = 123456
+            tmpClass1.teacherName = "admin"
+
+            val tmpCourse = Course()
+            tmpCourse.courseId = "BJSL0081"
+            tmpCourse.uuid = UUID.fromString("e1386a64-dd0d-4422-967b-fdeadee68e30")
+            tmpCourse.courseName = "软件工程"
+            tmpCourse.credit = 4F
+            tmpCourse.school = "计算机科学与工程学院"
+            tmpCourse.teachingClasses = listOf(
+                    tmpClass1
+            )
+
+            tmpClass1.course = tmpCourse
+            evaluateResults.add(Pair(tmpClass1, List(4) { List(10) { when(it) {
+                0 -> 2
+                1 -> 1
+                2 -> 1
+                3 -> 1
+                4 -> 2
+                5 -> 9
+                6 -> 8
+                7 -> 10
+                8 -> 17
+                9 -> 29
+                else -> 0
+            } } }))
         }
     }
 }

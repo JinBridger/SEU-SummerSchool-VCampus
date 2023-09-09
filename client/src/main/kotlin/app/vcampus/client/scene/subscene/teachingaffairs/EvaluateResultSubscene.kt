@@ -21,9 +21,9 @@ fun evaluateResultSubscene(viewModel: TeachingAffairsViewModel) {
                 Spacer(Modifier.height(20.dp))
             }
 
-            (0..3).forEach {
+            viewModel.evaluateResult.evaluateResults.forEach {
                 item {
-                    evaluateResultListItem()
+                    evaluateResultListItem(it)
                     Spacer(Modifier.height(10.dp))
                 }
             }
