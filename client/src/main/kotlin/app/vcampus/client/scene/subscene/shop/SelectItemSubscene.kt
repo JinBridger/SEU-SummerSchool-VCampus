@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Paid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -149,9 +150,12 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                 Card(modifier = Modifier.fillMaxWidth().border(1.dp,
                                         color = Color.LightGray, shape = RoundedCornerShape(4.dp))) {
                                     Column(modifier = Modifier.fillMaxWidth()) {
+
                                         viewModel.chosenShopItems.forEach {
                                             if (it.stock != 0) {
-                                                shopCheckListItem(it, viewModel)
+                                                key(it.uuid) {
+                                                    shopCheckListItem(it, viewModel)
+                                                }
                                             }
                                         }
                                     }
