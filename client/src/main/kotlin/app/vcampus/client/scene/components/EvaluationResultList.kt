@@ -27,7 +27,7 @@ fun ratingResultBar() {
                 fontWeight = FontWeight(700))
         Spacer(Modifier.height(4.dp))
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("0")
+            Text("1")
             Spacer(Modifier.width(10.dp))
             (0..9).forEach {
                 Box(Modifier.weight(1F).background(colors[it]).height(10.dp))

@@ -13,21 +13,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import app.vcampus.client.viewmodel.TeachingAffairsViewModel
+import app.vcampus.server.entity.TeachingClass
+import app.vcampus.server.utility.Pair
 
+val evaluateItem = listOf(
+        "注重理论与应用的结合，激发学生的学习兴趣和主动性",
+        "讲课条理清楚，重点突出，详略得当",
+        "能根据教学内容恰当运用多种教学方法和手段",
+        "批改作业认真，课下指导、交流细致"
+)
 
 @Composable
-fun ratingBar() {
+fun ratingBar(evaluateString: String, ptList: List<MutableState<Boolean>>,
+              inx: Int) {
     Column(Modifier.fillMaxWidth()) {
-        Text("教学态度与课前准备：师德师风、备课情况、教材选用",
+        Text(evaluateString,
                 fontWeight = FontWeight(700))
         Row(Modifier.fillMaxWidth()) {
-            (0..10).forEach {
+            (0..9).forEach { idx ->
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Checkbox(
-                            checked = false,
-                            onCheckedChange = { }
+                            checked = ptList[inx * 10 + idx].value,
+                            onCheckedChange = {
+                                ((inx * 10)..(inx * 10 + 9)).forEach {
+                                    ptList[it].value = false
+                                }
+                                ptList[inx * 10 + idx].value = true
+                            }
                     )
-                    Text(it.toString())
+                    Text((idx + 1).toString())
                 }
             }
         }
@@ -37,8 +52,11 @@ fun ratingBar() {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun evaluateTeacherListItem() {
+fun evaluateTeacherListItem(viewModel: TeachingAffairsViewModel, teachingClass: TeachingClass) {
     var expanded by remember { mutableStateOf(false) }
+    val pointList = remember { List(40) { mutableStateOf(false) } }
+    var comment by remember { mutableStateOf("") }
+
     Surface(modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
@@ -58,18 +76,18 @@ fun evaluateTeacherListItem() {
                     Column(modifier = Modifier.fillMaxHeight()) {
                         Row {
                             Text(
-                                    text = "王世杰",
+                                    text = teachingClass.teacherName,
                                     fontWeight = FontWeight(700),
                             )
                         }
                         Spacer(Modifier.height(4.dp))
                         Row {
                             Text(
-                                    text = "信号与系统",
+                                    text = teachingClass.courseName,
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                    text = "B09G1010",
+                                    text = teachingClass.course.courseId,
                                     color = Color.DarkGray
                             )
                             Spacer(modifier = Modifier.width(8.dp))
@@ -86,17 +104,38 @@ fun evaluateTeacherListItem() {
                     Spacer(Modifier.height(8.dp))
                     Divider()
                     Spacer(Modifier.height(8.dp))
-                    (0..5).forEach {
-                        ratingBar()
+                    (0..<4).forEach {
+                        ratingBar(evaluateItem[it], pointList, it)
                     }
                     Text("其他想要评价的内容：", fontWeight = FontWeight(700))
                     Spacer(Modifier.height(10.dp))
-                    OutlinedTextField("", onValueChange = {}, maxLines = 5,
+                    OutlinedTextField(comment, onValueChange = {comment = it}, maxLines = 5,
                             modifier = Modifier.fillMaxWidth())
                     Spacer(Modifier.height(10.dp))
                     Row(Modifier.fillMaxWidth()) {
                         Spacer(Modifier.weight(1F))
-                        Button(onClick = {}) {
+                        Button(onClick = {
+                            // pack the result
+                            // <teachingClassUuid, <[Q1.point, Q2.point, ....], "Comment">>
+                            val resultList = List(4) { -1 }.toMutableList()
+
+                            (0..3).forEach { inx ->
+                                (0..9).forEach { idx ->
+                                    if(pointList[inx * 10 + idx].value) {
+                                        resultList[inx] = idx + 1
+                                    }
+                                }
+                            }
+                            val result = Pair(teachingClass.uuid, Pair(resultList.toList(), comment))
+
+                            resultList.forEach {
+                                if(it == -1) {
+                                    return@Button
+                                }
+                            }
+
+                            viewModel.evaluateTeacher.sendEvaluationResult(result)
+                        }) {
                             Text("提交")
                         }
                     }
