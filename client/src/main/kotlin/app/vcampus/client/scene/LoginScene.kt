@@ -106,7 +106,8 @@ fun LoginScene(
                                         } else {
                                             false
                                         }
-                                    }
+                                    },
+                                    singleLine = true
                                 )
 
                                 OutlinedTextField(
@@ -129,7 +130,8 @@ fun LoginScene(
                                             onClick = { passwordVisible = !passwordVisible }) {
                                             Icon(image, description)
                                         }
-                                    }
+                                    },
+                                    singleLine = true
                                 )
                             }
 
