@@ -57,7 +57,7 @@ public class TeachingClass implements IEntity {
     public Boolean isEvaluated;
 
     @Transient
-    public List<List<Integer>> evaluationResult;
+    public Pair<List<List<Integer>>, List<String>> evaluationResult;
 
     public String humanReadableSchedule() {
         StringBuilder content = new StringBuilder();

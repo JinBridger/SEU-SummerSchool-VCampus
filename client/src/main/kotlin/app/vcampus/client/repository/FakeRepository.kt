@@ -159,6 +159,10 @@ object FakeRepository {
         return TeachingAffairsClient.getSelectedClasses(handler)
     }
 
+    fun sendEvaluationResult(result: Pair<UUID, Pair<List<Int>, String>>): Boolean {
+        return TeachingAffairsClient.sendEvaluationResult(handler, result)
+    }
+
     fun getMyTeachingClasses(): List<TeachingClass> {
         return TeachingAffairsClient.getMyTeachingClasses(handler)
     }

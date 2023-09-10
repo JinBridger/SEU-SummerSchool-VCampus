@@ -140,7 +140,7 @@ fun evaluateTeacherListItem(viewModel: TeachingAffairsViewModel, teachingClass: 
                                 }
                             }
 
-//                            viewModel.myClasses.sendEvaluationResult(result)
+                            viewModel.myClasses.sendEvaluationResult(result)
                         }) {
                             Text("提交")
                         }

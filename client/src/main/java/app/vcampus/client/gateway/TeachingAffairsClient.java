@@ -2,8 +2,10 @@ package app.vcampus.client.gateway;
 
 import app.vcampus.client.net.NettyHandler;
 import app.vcampus.server.entity.*;
+import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -31,6 +33,23 @@ public class TeachingAffairsClient {
         } catch (Exception e) {
             log.warn("Fail to get selected classes", e);
             return null;
+        }
+    }
+
+    public static Boolean sendEvaluationResult(NettyHandler handler, Pair<UUID, Pair<List<Integer>, String>> evaluationResult) {
+        Request request = new Request();
+        request.setUri("teachingAffairs/student/submitEvaluation");
+        request.setParams(Map.of(
+                "evaluation", BaseClient.toJson(evaluationResult)
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            return response.getStatus().equals("success");
+        } catch (Exception e) {
+            log.warn("Fail to submit evaluation", e);
+            return false;
         }
     }
 

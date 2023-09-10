@@ -4,6 +4,7 @@ import app.vcampus.client.net.NettyHandler;
 import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
@@ -24,5 +25,9 @@ public class BaseClient {
         latch.await();
 
         return response.get();
+    }
+
+    public static String toJson(Object obj) {
+        return new Gson().toJson(obj);
     }
 }

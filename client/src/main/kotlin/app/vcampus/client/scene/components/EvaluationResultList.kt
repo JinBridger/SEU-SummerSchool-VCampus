@@ -3,6 +3,7 @@ package app.vcampus.client.scene.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import app.vcampus.server.entity.TeachingClass
 import app.vcampus.server.utility.Pair
 
@@ -84,7 +86,21 @@ fun evaluateResultListItem(result: TeachingClass) {
                     Divider()
                     Spacer(Modifier.height(8.dp))
                     (0..3).forEach {
-                        ratingResultBar(evaluateItem[it], result.getEvaluationResult()[it])
+                        ratingResultBar(evaluateItem[it], result.getEvaluationResult().first[it])
+                    }
+
+                    Divider()
+                    Spacer(Modifier.height(8.dp))
+
+                    Text("匿名评价：", fontWeight = FontWeight(700))
+
+                    result.getEvaluationResult().second.forEach {
+                        Row(Modifier.padding(8.dp),verticalAlignment = Alignment.CenterVertically) {
+                            Canvas(modifier = Modifier.padding(start = 8.dp,end = 8.dp).size(6.dp)){
+                                drawCircle(Color.Black)
+                            }
+                            Text(it)
+                        }
                     }
                 }
             }

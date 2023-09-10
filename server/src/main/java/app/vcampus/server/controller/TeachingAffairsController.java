@@ -6,9 +6,12 @@ import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.router.RouteMapping;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,15 +21,9 @@ import static java.lang.Double.*;
 public class TeachingAffairsController {
     @RouteMapping(uri = "teachingAffairs/student/getMyClasses", role = "student")
     public Response getSelectedClasses(Request request, org.hibernate.Session database) {
-        Integer cardNumber = request.getSession().getCardNum();
+        int cardNumber = request.getSession().getCardNum();
 
-        Student student = database.get(Student.class, cardNumber);
-
-        if (student == null) {
-            return Response.Common.error("no such card number");
-        }
-
-        List<SelectedClass> selectedClasses = Database.getWhereString(SelectedClass.class, "cardNumber", cardNumber.toString(), database);
+        List<SelectedClass> selectedClasses = Database.getWhereString(SelectedClass.class, "cardNumber", Integer.toString(cardNumber), database);
         List<TeachingClass> teachingClasses = selectedClasses.stream().map((SelectedClass sc) -> {
             Grades grades = sc.getGrade();
             List<SelectedClass> classmates = Database.getWhereUuid(SelectedClass.class, "classUuid", sc.getClassUuid(), database);
@@ -41,7 +38,7 @@ public class TeachingAffairsController {
             return teachingClass;
         }).toList();
 
-        List<TeachingEvaluation> evaluations = Database.getWhereString(TeachingEvaluation.class, "studentId", cardNumber.toString(), database);
+        List<TeachingEvaluation> evaluations = Database.getWhereString(TeachingEvaluation.class, "studentId", Integer.toString(cardNumber), database);
 
         teachingClasses = teachingClasses.stream().peek((TeachingClass tc) -> {
             User teacher = database.get(User.class, tc.getTeacherId());
@@ -56,16 +53,31 @@ public class TeachingAffairsController {
         return Response.Common.ok(Map.of("classes", teachingClasses.stream().map(TeachingClass::toJson).toList()));
     }
 
+    @RouteMapping(uri = "teachingAffairs/student/submitEvaluation", role = "student")
+    public Response submitEvaluation(Request request, org.hibernate.Session database) {
+        int cardNumber = request.getSession().getCardNum();
+        Type type = new TypeToken<Pair<UUID, Pair<List<Integer>, String>>>(){}.getType();
+        Pair<UUID, Pair<List<Integer>, String>> evaluationResult = new Gson().fromJson(request.getParams().get("evaluation"), type);
+
+        try {
+            Transaction tx = database.beginTransaction();
+            TeachingEvaluation newTeachingEvaluation = new TeachingEvaluation();
+            newTeachingEvaluation.setUuid(UUID.randomUUID());
+            newTeachingEvaluation.setClassUuid(evaluationResult.getFirst());
+            newTeachingEvaluation.setStudentId(cardNumber);
+            newTeachingEvaluation.setResult(evaluationResult.getSecond().getFirst());
+            newTeachingEvaluation.setComment(evaluationResult.getSecond().getSecond());
+            database.persist(newTeachingEvaluation);
+            tx.commit();
+            return Response.Common.ok();
+        } catch (Exception e) {
+            log.warn("Failed to add evaluation", e);
+            return Response.Common.badRequest();
+        }
+    }
+
     @RouteMapping(uri = "teachingAffairs/student/getSelectableCourses", role = "student")
     public Response getSelectableCourses(Request request, org.hibernate.Session database) {
-        Integer cardNumber = request.getSession().getCardNum();
-
-        Student student = database.get(Student.class, cardNumber);
-
-        if (student == null) {
-            return Response.Common.error("no such card number");
-        }
-
         List<Course> courses = Database.loadAllData(Course.class, database);
         courses = courses.stream().peek((Course course) -> {
             List<TeachingClass> teachingClasses = Database.getWhereUuid(TeachingClass.class, "courseUuid", course.getUuid(), database);
@@ -106,21 +118,24 @@ public class TeachingAffairsController {
             tc.setCourse(course);
 
             List<TeachingEvaluation> evaluations = Database.getWhereUuid(TeachingEvaluation.class, "classUuid", tc.getUuid(), database);
-            List<List<Integer>> evaluationResult = new ArrayList<>();
+            List<List<Integer>> evaluationRatings = new ArrayList<>();
+            List<String> evaluationComments = new ArrayList<>();
             for (int i = 0; i < 4; i++) {
-                evaluationResult.add(new ArrayList<>());
+                evaluationRatings.add(new ArrayList<>());
                 for (int j = 0; j < 10; j++) {
-                    evaluationResult.get(i).add(0);
+                    evaluationRatings.get(i).add(0);
                 }
             }
             evaluations.forEach((TeachingEvaluation te) -> {
                 final int[] index = {0};
                 te.result.forEach((Integer score) -> {
-                    evaluationResult.get(index[0]).set(score - 1, evaluationResult.get(index[0]).get(score - 1) + 1);
+                    evaluationRatings.get(index[0]).set(score - 1, evaluationRatings.get(index[0]).get(score - 1) + 1);
                     index[0]++;
                 });
+
+                evaluationComments.add(te.comment);
             });
-            tc.setEvaluationResult(evaluationResult);
+            tc.setEvaluationResult(new Pair<>(evaluationRatings, evaluationComments));
         }).toList();
 
         return Response.Common.ok(Map.of("classes", teachingClasses.stream().map(TeachingClass::toJson).toList()));

@@ -3,6 +3,7 @@ package app.vcampus.client.viewmodel
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
@@ -101,7 +102,7 @@ class TeachingAffairsViewModel() : ViewModel() {
 //    val StudentGradeItems = FakeRepository.getStudentGrade()
 
     class MyClasses(init: Boolean) : ViewModel() {
-        val selected = mutableListOf<TeachingClass>()
+        val selected = mutableStateListOf<TeachingClass>()
 
         init {
             if (init) getSelectedClasses()
@@ -121,6 +122,24 @@ class TeachingAffairsViewModel() : ViewModel() {
         private suspend fun getSelectedClassesInternal() = flow {
             try {
                 emit(FakeRepository.getSelectedClasses())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        fun sendEvaluationResult(result: Pair<UUID, Pair<List<Int>, String>>) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    sendEvaluationResultInternal(result).collect {
+                        getSelectedClasses()
+                    }
+                }
+            }
+        }
+
+        private suspend fun sendEvaluationResultInternal(result: Pair<UUID, Pair<List<Int>, String>>) = flow {
+            try {
+                emit(FakeRepository.sendEvaluationResult(result))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -154,12 +173,12 @@ class TeachingAffairsViewModel() : ViewModel() {
         }
     }
 
-    class ChooseClass(init: Boolean): ViewModel() {
+    class ChooseClass(init: Boolean) : ViewModel() {
         val allCourses = mutableListOf<Course>()
         val selectedClasses = mutableListOf<TeachingClass>()
 
         init {
-            if(init) {
+            if (init) {
                 getSelectedClasses()
                 getAllCourses()
             }
@@ -203,7 +222,7 @@ class TeachingAffairsViewModel() : ViewModel() {
             tmpCourse.credit = 4F
             tmpCourse.school = "计算机科学与工程学院"
             tmpCourse.teachingClasses = listOf(
-                    tmpClass1, tmpClass2, tmpClass3
+                tmpClass1, tmpClass2, tmpClass3
             )
             allCourses.add(tmpCourse)
         }
