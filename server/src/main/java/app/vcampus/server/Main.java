@@ -7,8 +7,8 @@ import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.router.Router;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -24,11 +24,11 @@ public class Main {
         router.addController(TeachingAffairsController.class);
         router.addController(FinanceController.class);
 
-        Session database = Database.init();
+        SessionFactory database = Database.init();
 
 //        String text = formatter.format(date);
 //        System.out.println(text);
-        Transaction tx = database.beginTransaction();
+//        Transaction tx = database.beginTransaction();
 //        User user = new User();
 //        user.setCardNum(123456);
 //        user.setName("admin");
@@ -127,7 +127,7 @@ public class Main {
 //        StoreTransaction.setRemark("test");
 //        database.persist(StoreTransaction);
 
-        tx.commit();
+//        tx.commit();
         NettyServer server = new NettyServer(9091);
         server.run(router, database);
     }

@@ -11,10 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Paid
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +35,10 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
     val coroutineScope = rememberCoroutineScope()
 
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        viewModel.selectItem.getAllItems()
+    }
 
     BottomSheetScaffold(
             scaffoldState = openState,
@@ -147,29 +148,30 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                     }
                                     SnackbarHost(hostState = state)
                                     Button(onClick = {
-                                        val cardNumber = FakeRepository.getMyCard()
-                                        if(cardNumber.balance >= (viewModel.chosenItemsPrice.value/100.0)) {
-                                            viewModel.chosenShopItems.forEach {
-                                                if (it.stock != 0) {
-                                                    val UUID = it.uuid.toString()
-                                                    val myAmount = it.stock.toString()
-                                                    FakeRepository.createTransaction(UUID, myAmount)
-                                                }
-                                                viewModel.manuallyUpdate()
-                                            }
-                                            FakeRepository.rechargeCard(cardNumber.cardNumber,-((viewModel.chosenItemsPrice.value/100.0).toInt()))
-                                            scope.launch {
-                                                state.showSnackbar(
-                                                    "成功购买", "关闭"
-                                                )
-                                            }
-                                        }else {
-                                            scope.launch {
-                                                state.showSnackbar(
-                                                    "余额不足", "关闭"
-                                                )
-                                            }
-                                        }
+                                        viewModel.selectItem.checkout()
+//                                        val cardNumber = FakeRepository.getMyCard()
+//                                        if(cardNumber.balance >= (viewModel.chosenItemsPrice.value/100.0)) {
+//                                            viewModel.chosenShopItems.forEach {
+//                                                if (it.stock != 0) {
+//                                                    val UUID = it.uuid.toString()
+//                                                    val myAmount = it.stock.toString()
+//                                                    FakeRepository.createTransaction(UUID, myAmount)
+//                                                }
+//                                                viewModel.manuallyUpdate()
+//                                            }
+//                                            FakeRepository.rechargeCard(cardNumber.cardNumber,-((viewModel.chosenItemsPrice.value/100.0).toInt()))
+//                                            scope.launch {
+//                                                state.showSnackbar(
+//                                                    "成功购买", "关闭"
+//                                                )
+//                                            }
+//                                        }else {
+//                                            scope.launch {
+//                                                state.showSnackbar(
+//                                                    "余额不足", "关闭"
+//                                                )
+//                                            }
+//                                        }
                                     }) {
                                         Text("立即支付")
                                     }
@@ -182,7 +184,7 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                         color = Color.LightGray, shape = RoundedCornerShape(4.dp))) {
                                     Column(modifier = Modifier.fillMaxWidth()) {
 
-                                        viewModel.chosenShopItems.forEach {
+                                        viewModel.selectItem.chosenShopItems.forEach {
                                             if (it.stock != 0) {
                                                 key(it.uuid) {
                                                     shopCheckListItem(it, viewModel)
@@ -192,7 +194,6 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                     }
                                 }
                             }
-
 
                             item {
                                 Spacer(modifier = Modifier.height(80.dp))
@@ -212,44 +213,44 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                         pageTitle("购物", "选择商品")
                     }
 
-                    (0..<viewModel.totalShopItems.size.floorDiv(3)).forEach {
+                    (0..<viewModel.selectItem.totalShopItems.size.floorDiv(3)).forEach {
                         item {
                             Spacer(modifier = Modifier.height(20.dp))
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 Column {
                                     shopItemCard(
-                                            viewModel.totalShopItems[it * 3],
+                                            viewModel.selectItem.totalShopItems[it * 3],
                                             viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))
                                 Column {
                                     shopItemCard(
-                                            viewModel.totalShopItems[it * 3 + 1],
+                                            viewModel.selectItem.totalShopItems[it * 3 + 1],
                                             viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))
                                 Column {
                                     shopItemCard(
-                                            viewModel.totalShopItems[it * 3 + 2],
+                                            viewModel.selectItem.totalShopItems[it * 3 + 2],
                                             viewModel)
                                 }
                             }
                         }
                     }
 
-                    if (viewModel.totalShopItems.size.mod(3) == 2) {
+                    if (viewModel.selectItem.totalShopItems.size.mod(3) == 2) {
                         item {
                             Spacer(modifier = Modifier.height(20.dp))
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 Column {
                                     shopItemCard(
-                                            viewModel.totalShopItems[viewModel.totalShopItems.size - 2],
+                                            viewModel.selectItem.totalShopItems[viewModel.selectItem.totalShopItems.size - 2],
                                             viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))
                                 Column {
                                     shopItemCard(
-                                            viewModel.totalShopItems[viewModel.totalShopItems.size - 1],
+                                            viewModel.selectItem.totalShopItems[viewModel.selectItem.totalShopItems.size - 1],
                                             viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))
@@ -260,13 +261,13 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                         }
                     }
 
-                    if (viewModel.totalShopItems.size.mod(3) == 1) {
+                    if (viewModel.selectItem.totalShopItems.size.mod(3) == 1) {
                         item {
                             Spacer(modifier = Modifier.height(20.dp))
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 Column {
                                     shopItemCard(
-                                            viewModel.totalShopItems[viewModel.totalShopItems.size - 1],
+                                            viewModel.selectItem.totalShopItems[viewModel.selectItem.totalShopItems.size - 1],
                                             viewModel)
                                 }
                                 Spacer(Modifier.weight(1F))

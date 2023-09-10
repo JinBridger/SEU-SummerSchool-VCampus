@@ -54,9 +54,9 @@ fun shopCheckListItem(item: StoreItem, viewModel: ShopViewModel) {
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically) {
                     TextButton(onClick = {
-                        viewModel.chosenShopItems.forEachIndexed { index, it ->
+                        viewModel.selectItem.chosenShopItems.forEachIndexed { index, it ->
                             if (it.uuid == item.uuid) {
-                                viewModel.chosenShopItems[index] = it.copy(
+                                viewModel.selectItem.chosenShopItems[index] = it.copy(
                                         stock = it.stock - 1)
                                 viewModel.chosenItemsCount.value -= 1
                                 viewModel.chosenItemsPrice.value -= it.price
@@ -77,9 +77,9 @@ fun shopCheckListItem(item: StoreItem, viewModel: ShopViewModel) {
                     }
                     Spacer(modifier = Modifier.width(6.dp))
                     TextButton(onClick = {
-                        viewModel.chosenShopItems.forEachIndexed { index, it ->
+                        viewModel.selectItem.chosenShopItems.forEachIndexed { index, it ->
                             if (it.uuid == item.uuid) {
-                                viewModel.chosenShopItems[index] = it.copy(
+                                viewModel.selectItem.chosenShopItems[index] = it.copy(
                                         stock = it.stock + 1)
                                 viewModel.chosenItemsCount.value += 1
                                 viewModel.chosenItemsPrice.value += it.price

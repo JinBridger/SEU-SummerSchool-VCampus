@@ -136,6 +136,10 @@ object FakeRepository {
         return StoreClient.getAll(handler)
     }
 
+    fun buyItems(items: List<Pair<UUID, Int>>): Boolean {
+        return StoreClient.buyItems(handler, items)
+    }
+
     fun getFakeSchedule(): List<_TeachingClass> {
         return listOf(
             _TeachingClass(

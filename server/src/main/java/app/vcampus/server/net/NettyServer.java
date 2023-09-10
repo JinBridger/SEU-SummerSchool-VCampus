@@ -12,6 +12,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.json.JsonObjectDecoder;
 import lombok.NonNull;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class NettyServer {
     private final int port;
@@ -20,7 +21,7 @@ public class NettyServer {
         this.port = port;
     }
 
-    public void run(Router router, Session session) throws Exception {
+    public void run(Router router, SessionFactory session) throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {

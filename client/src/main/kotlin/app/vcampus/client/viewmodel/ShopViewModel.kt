@@ -3,10 +3,7 @@ package app.vcampus.client.viewmodel
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.*
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.repository.copy
 import app.vcampus.client.scene.components.SideBarItem
@@ -19,6 +16,7 @@ import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 import java.util.*
+import app.vcampus.server.utility.Pair
 
 
 data class MutableStoreItem(
@@ -60,6 +58,7 @@ data class MutableStoreItem(
 
 class ShopViewModel() : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
+    val selectItem = SelectItem()
     val searchStoreItem = SearchStoreItem()
     val modifyStoreItem = ModifyStoreItem()
     val addStoreItem = AddStoreItem()
@@ -124,13 +123,7 @@ class ShopViewModel() : ViewModel() {
 
     // SelectItemSubscene
 
-    val totalShopItems = FakeRepository.getAllStoreItems()
 
-    val oneNewShopItem = FakeRepository.getOneNewStoreItem()
-
-    val chosenShopItems = totalShopItems.map {
-        it.copy(stock = 0)
-    }.toMutableList()
 
 //    val chosenShopItems: List<_StoreItem> = _chosenShopItems
 
@@ -144,6 +137,61 @@ class ShopViewModel() : ViewModel() {
 
     fun manuallyUpdate() {
         totalOrderItems = FakeRepository.getAllOrder()
+    }
+
+    class SelectItem(): ViewModel() {
+        val totalShopItems = mutableStateListOf<StoreItem>()
+
+        val chosenShopItems = mutableListOf<StoreItem>()
+
+        fun getAllItems() {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    getAllItemsInternal().collect {
+                        totalShopItems.clear()
+                        totalShopItems.addAll(it)
+
+                        chosenShopItems.clear()
+                        chosenShopItems.addAll(totalShopItems.map { ti ->
+                            ti.copy(stock = 0)
+                        })
+                    }
+                }
+            }
+        }
+
+        private suspend fun getAllItemsInternal() = flow {
+            try {
+                emit(FakeRepository.getAllStoreItems())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        fun checkout() {
+            val items = chosenShopItems.map { Pair(it.uuid, it.stock) }.filter { it.second > 0 }
+
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    checkoutInternal(items).collect {
+                        if (it) {
+                            chosenShopItems.clear()
+                            chosenShopItems.addAll(totalShopItems.map { ti ->
+                                ti.copy(stock = 0)
+                            })
+                        }
+                    }
+                }
+            }
+        }
+
+        private suspend fun checkoutInternal(items: List<Pair<UUID, Int>>) = flow {
+            try {
+                emit(FakeRepository.buyItems(items))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     open class SearchStoreTransaction: ViewModel(){
@@ -176,7 +224,7 @@ class ShopViewModel() : ViewModel() {
         fun searchStoreItem() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    searchStoremItemInternal().collect {
+                    searchStoreItemInternal().collect {
                         storeList.clear()
                         storeList.putAll(it)
 
@@ -186,7 +234,7 @@ class ShopViewModel() : ViewModel() {
             }
         }
 
-        private suspend fun searchStoremItemInternal() = flow {
+        private suspend fun searchStoreItemInternal() = flow {
             emit(FakeRepository.searchStoreItem(keyword.value))
         }
     }

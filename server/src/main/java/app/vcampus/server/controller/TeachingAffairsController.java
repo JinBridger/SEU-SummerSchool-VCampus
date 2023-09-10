@@ -21,7 +21,6 @@ import java.util.*;
 public class TeachingAffairsController {
     @RouteMapping(uri = "teaching/student/getMyClasses", role = "student")
     public Response getSelectedClasses(Request request, org.hibernate.Session database) {
-        database.clear();
         int cardNumber = request.getSession().getCardNum();
 
         List<SelectRecord> selectRecords = Database.getWhereString(SelectRecord.class, "cardNumber", Integer.toString(cardNumber), database);
@@ -81,7 +80,6 @@ public class TeachingAffairsController {
 
     @RouteMapping(uri = "teaching/student/getSelectableCourses", role = "student")
     public Response getSelectableCourses(Request request, org.hibernate.Session database) {
-        database.clear();
         List<Course> courses = Database.loadAllData(Course.class, database);
         courses = courses.stream().peek((Course course) -> {
             List<TeachingClass> teachingClasses = Database.getWhereUuid(TeachingClass.class, "courseUuid", course.getUuid(), database);
@@ -167,7 +165,6 @@ public class TeachingAffairsController {
 
     @RouteMapping(uri = "teaching/teacher/getMyClasses", role = "teacher")
     public Response getMyClasses(Request request, org.hibernate.Session database) {
-        database.clear();
         int cardNumber = request.getSession().getCardNum();
         List<TeachingClass> teachingClasses = Database.getWhereString(TeachingClass.class, "teacherId", Integer.toString(cardNumber), database);
         teachingClasses = teachingClasses.stream().peek((TeachingClass tc) -> {
@@ -200,8 +197,6 @@ public class TeachingAffairsController {
 
     @RouteMapping(uri = "teaching/teacher/exportStudentList", role = "teacher")
     public Response exportStudentList(Request request, org.hibernate.Session database) {
-        database.clear();
-
         try {
             UUID classUuid = UUID.fromString(request.getParams().get("classUuid"));
             List<SelectRecord> selectRecords = Database.getWhereUuid(SelectRecord.class, "classUuid", classUuid, database);
@@ -224,8 +219,6 @@ public class TeachingAffairsController {
 
     @RouteMapping(uri = "teaching/teacher/exportGradeTemplate", role = "teacher")
     public Response getGradeTemplate(Request request, org.hibernate.Session database) {
-        database.clear();
-
         try {
             UUID classUuid = UUID.fromString(request.getParams().get("classUuid"));
             List<SelectRecord> selectRecords = Database.getWhereUuid(SelectRecord.class, "classUuid", classUuid, database);
@@ -248,8 +241,6 @@ public class TeachingAffairsController {
 
     @RouteMapping(uri = "teaching/teacher/importGrade", role = "teacher")
     public Response importGrade(Request request, org.hibernate.Session database) {
-        database.clear();
-
         try {
             UUID classUuid = UUID.fromString(request.getParams().get("classUuid"));
             String file = request.getParams().get("file");

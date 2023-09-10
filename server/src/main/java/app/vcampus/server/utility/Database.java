@@ -3,6 +3,7 @@ package app.vcampus.server.utility;
 import app.vcampus.server.entity.*;
 import jakarta.persistence.criteria.*;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Database {
-    public static Session init() {
+    public static SessionFactory init() {
         Configuration configuration = new Configuration().configure();
         return configuration
                 .addAnnotatedClass(User.class)
@@ -24,7 +25,7 @@ public class Database {
                 .addAnnotatedClass(FinanceCard.class)
                 .addAnnotatedClass(CardTransaction.class)
                 .addAnnotatedClass(TeachingEvaluation.class)
-                .buildSessionFactory().openSession();
+                .buildSessionFactory();
     }
 
     public static <T> List<T> loadAllData(Class<T> type, Session session) {

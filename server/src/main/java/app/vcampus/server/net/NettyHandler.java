@@ -13,15 +13,16 @@ import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.SessionFactory;
 
 @Slf4j
 public class NettyHandler extends ChannelInboundHandlerAdapter {
     private final Gson gson = new Gson();
     private final Router router;
     private Session session;
-    private org.hibernate.Session database;
+    private final SessionFactory database;
 
-    public NettyHandler(Router router, org.hibernate.Session database) {
+    public NettyHandler(Router router, SessionFactory database) {
         this.router = router;
         this.database = database;
     }
@@ -54,7 +55,7 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
                 log.info("[{}] Permission denied: {}", ctx.channel().id(), request.getUri());
                 response = Response.Common.permissionDenied();
             } else {
-                response = router.invoke(request, database);
+                response = router.invoke(request, database.openSession());
             }
 
             if (response.getSession() != null) {

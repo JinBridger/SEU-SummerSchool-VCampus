@@ -3,6 +3,8 @@ package app.vcampus.server.controller;
 import app.vcampus.server.entity.*;
 import app.vcampus.server.utility.*;
 import app.vcampus.server.utility.router.RouteMapping;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,7 @@ import org.hibernate.Transaction;
 
 import javax.management.Query;
 import java.awt.dnd.DropTarget;
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 
 import java.util.*;
@@ -20,6 +23,62 @@ import java.util.stream.IntStream;
 @Slf4j
 
 public class StoreController {
+    @RouteMapping(uri = "store/buy", role = "shop_user")
+    public Response buy(Request request, org.hibernate.Session database) {
+        try {
+            FinanceCard financeCard = database.get(FinanceCard.class, request.getSession().getCardNum());
+            if (financeCard == null)
+                return Response.Common.error("No such finance card");
+
+            Type type = new TypeToken<List<Pair<UUID, Integer>>>(){}.getType();
+            List<Pair<UUID, Integer>> items = new Gson().fromJson(request.getParams().get("items"), type);
+            if (items == null)
+                return Response.Common.error("Items cannot be empty");
+
+            int totalPrice = 0;
+            Transaction tx = database.beginTransaction();
+
+            for (Pair<UUID, Integer> item : items) {
+                StoreItem storeItem = database.get(StoreItem.class, item.getFirst());
+                if (storeItem == null)
+                    return Response.Common.error("No such item");
+                totalPrice += storeItem.getPrice() * item.getSecond();
+                if (storeItem.getStock() < item.getSecond())
+                    return Response.Common.error("Stock cannot be less than amount");
+                storeItem.setStock(storeItem.getStock() - item.getSecond());
+                storeItem.setSalesVolume(storeItem.getSalesVolume() + item.getSecond());
+                database.persist(storeItem);
+
+                StoreTransaction storeTransaction = new StoreTransaction();
+                storeTransaction.setUuid(UUID.randomUUID());
+                storeTransaction.setItemUUID(storeItem.getUuid());
+                storeTransaction.setItemPrice(storeItem.getPrice());
+                storeTransaction.setAmount(item.getSecond());
+                storeTransaction.setCardNumber(financeCard.getCardNumber());
+                storeTransaction.setTime(new Date());
+                storeTransaction.setRemark("");
+                database.persist(storeTransaction);
+            }
+            if (financeCard.getBalance() < totalPrice)
+                return Response.Common.error("Balance is not enough");
+            financeCard.setBalance(financeCard.getBalance() - totalPrice);
+            database.persist(financeCard);
+
+            CardTransaction cardTransaction = new CardTransaction();
+            cardTransaction.setUuid(UUID.randomUUID());
+            cardTransaction.setCardNumber(financeCard.getCardNumber());
+            cardTransaction.setAmount(totalPrice);
+            cardTransaction.setTime(new Date());
+            cardTransaction.setDescription("商店消费");
+
+            tx.commit();
+
+            return Response.Common.ok();
+        } catch (Exception e) {
+            return Response.Common.error("Failed to buy item");
+        }
+    }
+
     @RouteMapping(uri = "storeItem/searchItem")
     public Response searchItem(Request request, org.hibernate.Session database) {
         try {
@@ -55,7 +114,7 @@ public class StoreController {
         }
     }
 
-    @RouteMapping(uri = "storeItem/filter", role = "admin")
+    @RouteMapping(uri = "store/filter", role = "shop_user")
     public Response filter(Request request, org.hibernate.Session database) {
         try {
             List<StoreItem> allItems;
@@ -179,7 +238,7 @@ public class StoreController {
         return Response.Common.ok();
     }
 
-//    @RouteMapping(uri = "storeItem/filter", role = "admin")
+//    @RouteMapping(uri = "store/filter", role = "admin")
 //    public Response filter(Request request, org.hibernate.Session database) {
 //        try {
 //            List<StoreItem> allItems;
@@ -241,7 +300,7 @@ public class StoreController {
 //            return Response.Common.error("Failed to add transaction record");
 //        }
 //    }
-//    @RouteMapping(uri = "storeItem/filter", role = "admin")
+//    @RouteMapping(uri = "store/filter", role = "admin")
 //    public Response filter(Request request, org.hibernate.Session database) {
 //        try {
 //            List<StoreItem> allItems;

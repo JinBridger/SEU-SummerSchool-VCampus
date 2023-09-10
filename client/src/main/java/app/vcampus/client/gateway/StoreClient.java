@@ -12,15 +12,28 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class StoreClient {
+    public static Boolean buyItems(NettyHandler handler, List<Pair<UUID, Integer>> items) {
+        Request request = new Request();
+        request.setUri("store/buy");
+        request.setParams(Map.of("items", BaseClient.toJson(items)));
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to buy items", e);
+            return false;
+        }
+    }
+
     public static List<StoreItem> getAll(NettyHandler handler) {
         Request request = new Request();
-        request.setUri("storeItem/filter");
+        request.setUri("store/filter");
         try {
             Response response = BaseClient.sendRequest(handler, request);
 
             if (response.getStatus().equals("success")) {
                 List<String> raw_data = (List<String>) response.getData();
-                List<StoreItem> data = new LinkedList<>();
+                List<StoreItem> data = new ArrayList<>();
                 raw_data.forEach(json -> data.add(IEntity.fromJson(json, StoreItem.class)));
                 return data;
             } else {
