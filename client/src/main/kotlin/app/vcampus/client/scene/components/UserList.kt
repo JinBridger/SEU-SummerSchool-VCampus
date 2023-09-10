@@ -59,17 +59,8 @@ fun userListItem() {
                 Spacer(Modifier.height(8.dp))
                 Divider(Modifier.fillMaxWidth())
                 Spacer(Modifier.height(12.dp))
-                Text("新的一卡通号与新的密码", fontWeight = FontWeight(700))
+                Text("新的密码", fontWeight = FontWeight(700))
                 Row(Modifier.fillMaxWidth()) {
-                    OutlinedTextField(
-                            value = "",
-                            onValueChange = { },
-                            label = { Text("输入新的一卡通号") },
-                            modifier = Modifier.padding(
-                                    0.dp, 0.dp, 16.dp,
-                                    0.dp
-                            ).weight(1F)
-                    )
                     OutlinedTextField(
                             value = "",
                             onValueChange = { },
