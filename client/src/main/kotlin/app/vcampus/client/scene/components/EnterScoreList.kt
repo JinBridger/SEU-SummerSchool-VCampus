@@ -7,15 +7,50 @@ import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import app.vcampus.server.entity.TeachingClass
+import java.io.File
 
 @Composable
-fun enterScoreListItem() {
+fun enterScoreListItem(tc: TeachingClass, exportTemplate: (TeachingClass, File) -> Unit, importScore: (TeachingClass, File) -> Unit) {
+    var showTemplateDialog by remember { mutableStateOf(false) }
+    var showImportDialog by remember { mutableStateOf(false) }
+
+    if (showTemplateDialog) {
+        FileDialog(
+            title = "下载成绩模板",
+            mode = FileDialogMode.SAVE,
+            saveFileName = "${tc.course.courseName}-${tc.uuid}.xlsx",
+            onResult = {
+                exportTemplate(tc, it)
+                showTemplateDialog = false
+            },
+            onClose = {
+                showTemplateDialog = false
+            }
+        )
+    }
+
+    if (showImportDialog) {
+        FileDialog(
+            title = "导入成绩",
+            mode = FileDialogMode.LOAD,
+            loadExtension = "xlsx",
+            onResult = {
+                importScore(tc, it)
+                showImportDialog = false
+            },
+            onClose = {
+                showImportDialog = false
+            }
+        )
+    }
+
     Surface(modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
@@ -31,27 +66,31 @@ fun enterScoreListItem() {
                         Column(modifier = Modifier.fillMaxHeight()) {
                             Row {
                                 Text(
-                                        text = "信号与系统",
+                                        text = tc.course.courseName,
                                         fontWeight = FontWeight(700)
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                        text = "B09G1010",
+                                        text = tc.course.courseId,
                                         color = Color.DarkGray
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                             }
-                            Text("1-16周 周一 1-13节 周二 1-13节 周三 1-13 节")
-                            Text("九龙湖")
+                            Text(tc.humanReadableSchedule())
+                            Text(tc.place)
                         }
                     }
                 }
                 Spacer(Modifier.weight(1F))
-                TextButton(onClick = {}) {
+                TextButton(onClick = {
+                    showTemplateDialog = true
+                }) {
                     Text("下载导入模板")
                 }
                 Spacer(Modifier.width(8.dp))
-                Button(onClick = {}) {
+                Button(onClick = {
+                    showImportDialog = true
+                }) {
                     Text("从文件导入成绩")
                 }
             }

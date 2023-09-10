@@ -144,6 +144,45 @@ public class TeachingAffairsClient {
         }
     }
 
+    public static String exportGradeTemplate(NettyHandler handler, UUID classUuid) {
+        Request request = new Request();
+        request.setUri("teaching/teacher/exportGradeTemplate");
+        request.setParams(Map.of(
+                "classUuid", classUuid.toString()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            if (response.getStatus().equals("success")) {
+                return ((Map<String, String>) response.getData()).get("file");
+            } else {
+                throw new Exception(response.getMessage());
+            }
+        } catch (Exception e) {
+            log.warn("Fail to export grade template", e);
+            return null;
+        }
+    }
+
+    public static Boolean importGrade(NettyHandler handler, UUID classUuid, String file) {
+        Request request = new Request();
+        request.setUri("teaching/teacher/importGrade");
+        request.setParams(Map.of(
+                "classUuid", classUuid.toString(),
+                "file", file
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            return response.getStatus().equals("success");
+        } catch (Exception e) {
+            log.warn("Fail to import grade", e);
+            return false;
+        }
+    }
+
 //    public static Course addCourse(NettyHandler handler, String uuid, String courseName, String courseId, String school, String credit) {
 //        CountDownLatch latch = new CountDownLatch(1);
 //        AtomicReference<Response> response = new AtomicReference();

@@ -20,9 +20,16 @@ fun enterScoreSubscene(viewModel: TeachingAffairsViewModel) {
                 Spacer(Modifier.height(20.dp))
             }
 
-            (0..3).forEach {
+//            (0..3).forEach {
+//                item {
+//                    enterScoreListItem()
+//                    Spacer(Modifier.height(10.dp))
+//                }
+//            }
+
+            viewModel.myTeachingClasses.myClasses.forEach {
                 item {
-                    enterScoreListItem()
+                    enterScoreListItem(it, viewModel.myTeachingClasses::gradeTemplate, viewModel.myTeachingClasses::importGrade)
                     Spacer(Modifier.height(10.dp))
                 }
             }

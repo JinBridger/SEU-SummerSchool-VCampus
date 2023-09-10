@@ -248,5 +248,41 @@ class TeachingAffairsViewModel() : ViewModel() {
                 e.printStackTrace()
             }
         }
+
+        fun gradeTemplate(teachingClass: TeachingClass, file: File) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    gradeTemplateInternal(teachingClass).collect {
+                        file.writeBytes(Base64.getDecoder().decode(it))
+                    }
+                }
+            }
+        }
+
+        private suspend fun gradeTemplateInternal(teachingClass: TeachingClass) = flow {
+            try {
+                emit(FakeRepository.exportGradeTemplate(teachingClass))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        fun importGrade(teachingClass: TeachingClass, file: File) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    importGradeInternal(teachingClass, Base64.getEncoder().encodeToString(file.readBytes())).collect {
+
+                    }
+                }
+            }
+        }
+
+        private suspend fun importGradeInternal(teachingClass: TeachingClass, file: String) = flow {
+            try {
+                emit(FakeRepository.importGrade(teachingClass, file))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }

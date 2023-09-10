@@ -186,6 +186,14 @@ object FakeRepository {
         return TeachingAffairsClient.exportStudentList(handler, tc.uuid)
     }
 
+    fun exportGradeTemplate(tc: TeachingClass): String {
+        return TeachingAffairsClient.exportGradeTemplate(handler, tc.uuid)
+    }
+
+    fun importGrade(tc: TeachingClass, file: String): Boolean {
+        return TeachingAffairsClient.importGrade(handler, tc.uuid, file)
+    }
+
     fun getAllOrder(): Map<String, List<StoreTransaction>> {
         return StoreClient.getTransaction(handler)
     }

@@ -10,6 +10,7 @@ fun FileDialog(
     title: String,
     mode: FileDialogMode = FileDialogMode.LOAD,
     saveFileName: String = "file",
+    loadExtension: String = "",
     onResult: (result: File) -> Unit,
     onClose: () -> Unit
 ) {
@@ -18,6 +19,12 @@ fun FileDialog(
 
     if (mode == FileDialogMode.SAVE) {
         fileChooser.file = saveFileName
+    }
+
+    if (mode == FileDialogMode.LOAD && loadExtension != "") {
+        fileChooser.filenameFilter = java.io.FilenameFilter { _, name ->
+            name.endsWith(loadExtension)
+        }
     }
 
     fileChooser.isVisible = true

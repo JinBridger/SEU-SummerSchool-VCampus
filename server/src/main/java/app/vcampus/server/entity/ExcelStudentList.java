@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ExportStudentList {
+public class ExcelStudentList {
     @ExcelProperty("学号")
-    private String studentNumber;
+    public String studentNumber;
 
     @ExcelProperty("姓名")
-    private String name;
+    public String name;
 }

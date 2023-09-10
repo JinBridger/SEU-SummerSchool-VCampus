@@ -207,17 +207,88 @@ public class TeachingAffairsController {
             List<SelectRecord> selectRecords = Database.getWhereUuid(SelectRecord.class, "classUuid", classUuid, database);
 
             Path tmpFile = Files.createTempFile("studentList", ".xlsx");
-            EasyExcel.write(tmpFile.toFile(), ExportStudentList.class)
+            tmpFile.toFile().deleteOnExit();
+            EasyExcel.write(tmpFile.toFile(), ExcelStudentList.class)
                     .sheet()
                     .doWrite(selectRecords.stream().map((SelectRecord sr) -> {
                         Student student = database.get(Student.class, sr.getCardNumber());
-                        return new ExportStudentList(student.getStudentNumber(), student.getFamilyName() + student.getGivenName());
+                        return new ExcelStudentList(student.getStudentNumber(), student.getFamilyName() + student.getGivenName());
                     }).toList());
 
             return Response.Common.ok(Map.of("file", Base64.getEncoder().encodeToString(Files.readAllBytes(tmpFile))));
         } catch (Exception e) {
             log.warn("Failed to create Excel", e);
             return Response.Common.error("Failed to export");
+        }
+    }
+
+    @RouteMapping(uri = "teaching/teacher/exportGradeTemplate", role = "teacher")
+    public Response getGradeTemplate(Request request, org.hibernate.Session database) {
+        database.clear();
+
+        try {
+            UUID classUuid = UUID.fromString(request.getParams().get("classUuid"));
+            List<SelectRecord> selectRecords = Database.getWhereUuid(SelectRecord.class, "classUuid", classUuid, database);
+
+            Path tmpFile = Files.createTempFile("gradeTemplate", ".xlsx");
+            tmpFile.toFile().deleteOnExit();
+            EasyExcel.write(tmpFile.toFile(), ExcelStudentGrade.class)
+                    .sheet()
+                    .doWrite(selectRecords.stream().map((SelectRecord sr) -> {
+                        Student student = database.get(Student.class, sr.getCardNumber());
+                        return new ExcelStudentGrade(student.getStudentNumber(), student.getFamilyName() + student.getGivenName());
+                    }).toList());
+
+            return Response.Common.ok(Map.of("file", Base64.getEncoder().encodeToString(Files.readAllBytes(tmpFile))));
+        } catch (Exception e) {
+            log.warn("Failed to create Excel", e);
+            return Response.Common.error("Failed to export");
+        }
+    }
+
+    @RouteMapping(uri = "teaching/teacher/importGrade", role = "teacher")
+    public Response importGrade(Request request, org.hibernate.Session database) {
+        database.clear();
+
+        try {
+            UUID classUuid = UUID.fromString(request.getParams().get("classUuid"));
+            String file = request.getParams().get("file");
+            byte[] fileBytes = Base64.getDecoder().decode(file);
+            Path tmpFile = Files.createTempFile("gradeTemplate", ".xlsx");
+            tmpFile.toFile().deleteOnExit();
+            Files.write(tmpFile, fileBytes);
+
+            List<ExcelStudentGrade> studentGrades = EasyExcel.read(tmpFile.toFile()).head(ExcelStudentGrade.class).sheet().doReadSync();
+
+            Transaction tx = database.beginTransaction();
+            for (ExcelStudentGrade studentGrade : studentGrades) {
+                Student student = Database.getWhereString(Student.class, "studentNumber", studentGrade.getStudentNumber(), database).stream().findFirst().orElse(null);
+                if (student == null) {
+                    return Response.Common.error("No such student");
+                }
+                SelectRecord selectRecord = Database.getWhereUuid(SelectRecord.class, "classUuid", classUuid, database).stream()
+                        .filter((SelectRecord sr) -> sr.getCardNumber().equals(student.getCardNumber()))
+                        .findFirst().orElse(null);
+
+                if (selectRecord == null) {
+                    return Response.Common.error("No such student");
+                }
+
+                Grades grades = new Grades();
+                grades.setGeneral(studentGrade.getGeneral());
+                grades.setMidterm(studentGrade.getMidterm());
+                grades.setFinalExam(studentGrade.getFinalExam());
+                grades.setTotal(studentGrade.getTotal());
+
+                selectRecord.setGrade(grades);
+                database.merge(selectRecord);
+            }
+            tx.commit();
+
+            return Response.Common.ok();
+        } catch (Exception e) {
+            log.warn("Failed to create Excel", e);
+            return Response.Common.error("Failed to import");
         }
     }
 
