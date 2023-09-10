@@ -94,11 +94,7 @@ class StudentStatusViewModel() : ViewModel() {
 
     val studentStatusSideBarItem = sideBarContent.toMutableStateList()
 
-    init {
-        if (identity.contains("student")) getStudentStatus()
-    }
-
-    private fun getStudentStatus() {
+    fun getStudentStatus() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 getStudentStatusInternal().collect {

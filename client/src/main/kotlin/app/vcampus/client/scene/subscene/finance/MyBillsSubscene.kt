@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -17,6 +18,10 @@ import app.vcampus.server.utility.DateUtility
 
 @Composable
 fun myBillsSubscene(viewModel: FinanceViewModel) {
+    LaunchedEffect(Unit) {
+        viewModel.mybills.init()
+    }
+
     Row(horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {

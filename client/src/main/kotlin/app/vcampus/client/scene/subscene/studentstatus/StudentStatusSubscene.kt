@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,6 +31,9 @@ fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
     var politicalStatus by viewModel.student.value.politicalStatus
     var status by viewModel.student.value.status
 
+    LaunchedEffect(Unit) {
+        viewModel.getStudentStatus()
+    }
 
     Row(
         horizontalArrangement = Arrangement.Center,

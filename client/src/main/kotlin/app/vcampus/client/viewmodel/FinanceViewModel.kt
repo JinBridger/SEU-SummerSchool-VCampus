@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.RequestQuote
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import app.vcampus.client.repository.FakeRepository
@@ -21,7 +22,7 @@ import moe.tlaster.precompose.viewmodel.viewModelScope
 class FinanceViewModel() : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
 
-    val mybills = MyBillsViewModel(identity.contains("finance_user"))
+    val mybills = MyBillsViewModel()
     val staff = StaffViewModel()
 
     val sideBarContent = (if (identity.contains("finance_user")) {
@@ -58,15 +59,17 @@ class FinanceViewModel() : ViewModel() {
 
     val financeSideBarItem = sideBarContent.toMutableStateList()
 
-    class MyBillsViewModel(init: Boolean) : ViewModel() {
+    class MyBillsViewModel() : ViewModel() {
         val myCard = mutableStateOf(FinanceCard())
-        val myBills = mutableListOf<CardTransaction>()
+        val myBills = mutableStateListOf<CardTransaction>()
 
-        init {
-            if (init) {
-                getMyCard()
-                getMyBills()
-            }
+        private var inited = false
+
+        fun init() {
+            if (inited) return
+            inited = true
+            getMyCard()
+            getMyBills()
         }
 
         private fun getMyCard() {
@@ -177,7 +180,12 @@ class FinanceViewModel() : ViewModel() {
 
         private suspend fun rechargeCardInternal() = flow {
             try {
-                emit(FakeRepository.rechargeCard(searchedCard.value.cardNumber, (rechargeAmount.value.toDouble() * 100).toInt()))
+                emit(
+                    FakeRepository.rechargeCard(
+                        searchedCard.value.cardNumber,
+                        (rechargeAmount.value.toDouble() * 100).toInt()
+                    )
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
             }

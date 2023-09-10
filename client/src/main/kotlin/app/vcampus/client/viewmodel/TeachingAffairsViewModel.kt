@@ -21,8 +21,8 @@ import java.util.*
 
 class TeachingAffairsViewModel() : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
-    val myClasses = MyClasses(identity.contains("student"))
-    val myTeachingClasses = MyTeachingClasses(identity.contains("teacher"))
+    val myClasses = MyClasses()
+    val myTeachingClasses = MyTeachingClasses()
 
     val sideBarContent = (if (identity.contains("student") || identity.contains(
             "teacher"
@@ -99,15 +99,17 @@ class TeachingAffairsViewModel() : ViewModel() {
 
 //    val StudentGradeItems = FakeRepository.getStudentGrade()
 
-    class MyClasses(init: Boolean) : ViewModel() {
+    class MyClasses() : ViewModel() {
         val selected = mutableStateListOf<TeachingClass>()
         val allCourses = mutableStateListOf<Course>()
 
-        init {
-            if (init) {
-                getSelectedClasses()
-                getSelectableCourses()
-            }
+        private var inited = false
+
+        fun init() {
+            if (inited) return
+            inited = true
+            getSelectedClasses()
+            getSelectableCourses()
         }
 
         fun getSelectedClasses() {
@@ -205,14 +207,18 @@ class TeachingAffairsViewModel() : ViewModel() {
         }
     }
 
-    class MyTeachingClasses(init: Boolean) : ViewModel() {
+    class MyTeachingClasses() : ViewModel() {
         val myClasses = mutableStateListOf<TeachingClass>()
 
-        init {
-            if (init) getMyTeachingClasses()
+        private var inited = false
+
+        fun init() {
+            if (inited) return
+            inited = true
+            getMyTeachingClasses()
         }
 
-        private fun getMyTeachingClasses() {
+        fun getMyTeachingClasses() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     getMyTeachingClassesInternal().collect {
