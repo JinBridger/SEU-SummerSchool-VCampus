@@ -41,7 +41,7 @@ public class StoreController {
     @RouteMapping(uri = "storeItem/searchId")
     public Response searchId(Request request, org.hibernate.Session database) {
         try {
-            String uuid=request.getParams().toString();
+            String uuid=request.getParams().get("uuid");
             if (uuid == null)
                 return Response.Common.error("UUID cannot be empty");
             UUID id=UUID.fromString(uuid);
@@ -154,8 +154,9 @@ public class StoreController {
         Integer amount= Integer.valueOf(request.getParams().get("amount"));
         StoreItem storeItem=database.get(StoreItem.class,itemUUID);
         if(storeItem==null){
-            return Response.Common.badRequest();
+            return Response.Common.error("No such store item");
         }
+
         StoreTransaction newStoreTransaction=new StoreTransaction();
         Transaction tx=database.beginTransaction();
         Integer oldStock=storeItem.getStock();

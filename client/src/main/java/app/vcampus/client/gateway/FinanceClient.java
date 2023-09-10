@@ -20,6 +20,7 @@ public class FinanceClient {
         Request request = new Request();
         request.setUri("finance/card/getSelf");
 
+
         try {
             Response response = BaseClient.sendRequest(handler, request);
             if (response.getStatus().equals("success")) {

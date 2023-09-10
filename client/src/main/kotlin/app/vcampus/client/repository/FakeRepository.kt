@@ -115,6 +115,9 @@ object FakeRepository {
         return StoreClient.addItem(handler, newStoreItem)
     }
 
+    fun searchTransaction(keyword: String):Map<String,List<StoreTransaction>>{
+        return StoreClient.searchTransaction(handler,keyword) ?: mapOf()
+    }
     fun getStudentGrade(): List<_GradeItem> {
         return listOf(
             _GradeItem(
@@ -208,4 +211,10 @@ object FakeRepository {
             return StoreClient.createTransaction(handler, uuid, amount)
         }
     }
+
+    fun createTransaction(uuid: String, amount: String): Boolean {
+        return StoreClient.createTransaction(handler,uuid,amount)
+    }
+
+
 }

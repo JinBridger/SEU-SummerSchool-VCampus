@@ -101,7 +101,7 @@ public class StoreClient {
         try {
             Response response = BaseClient.sendRequest(handler, request);
             if (response.getStatus().equals("success")) {
-                StoreItem data=(StoreItem) response.getData();
+                StoreItem data= IEntity.fromJson((String) response.getData(), StoreItem.class);
                 return data;
             } else {
                 throw new RuntimeException("Failed to get item");

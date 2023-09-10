@@ -19,12 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.pageTitle
-import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.components.shopCheckListItem
 import app.vcampus.client.scene.components.shopItemCard
 import app.vcampus.client.viewmodel.ShopViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
@@ -138,6 +139,16 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                     }
                                     Spacer(Modifier.weight(1F))
                                     Button(onClick = {
+                                            viewModel.chosenShopItems.forEach{
+                                                if (it.stock != 0) {
+                                                    val UUID = it.uuid.toString()
+                                                    val myAmount = it.stock.toString()
+                                                    FakeRepository.createTransaction(UUID, myAmount)
+                                                }
+                                                viewModel.manuallyUpdate()
+                                        }
+
+
 
                                     }) {
                                         Text("立即支付")

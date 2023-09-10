@@ -11,6 +11,7 @@ import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.repository.copy
 import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.StoreItem
+import app.vcampus.server.entity.StoreTransaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -62,6 +63,7 @@ class ShopViewModel() : ViewModel() {
     val searchStoreItem = SearchStoreItem()
     val modifyStoreItem = ModifyStoreItem()
     val addStoreItem = AddStoreItem()
+    val searchTransaction = SearchStoreTransaction()
 
     val sideBarContent = (if (identity.contains("shop_user")) {
         listOf(SideBarItem(true, "购物", "", Icons.Default.Info, false))
@@ -138,8 +140,34 @@ class ShopViewModel() : ViewModel() {
     private val _chosenItemsPrice = mutableStateOf(0)
     val chosenItemsPrice: MutableState<Int> = _chosenItemsPrice
 
-    val totalOrderItems = FakeRepository.getAllOrder()
+    var totalOrderItems = FakeRepository.getAllOrder()
 
+    fun manuallyUpdate() {
+        totalOrderItems = FakeRepository.getAllOrder()
+    }
+
+    open class SearchStoreTransaction: ViewModel(){
+        val keyword = mutableStateOf("")
+        val Transactions = mutableStateMapOf<String,List<StoreTransaction>>()
+        val searched = mutableStateOf(false)
+
+        fun searchStoreTransaction(){
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    searchStoreTransactionInternal().collect{
+                        Transactions.clear()
+                        Transactions.putAll(it)
+
+                        searched.value = true
+                    }
+                }
+            }
+        }
+
+        private suspend fun searchStoreTransactionInternal() = flow {
+            emit(FakeRepository.searchTransaction(keyword.value))
+        }
+    }
     open class SearchStoreItem : ViewModel() {
         val keyword = mutableStateOf("")
         val storeList = mutableStateMapOf<String, List<StoreItem>>()
@@ -200,5 +228,11 @@ class ShopViewModel() : ViewModel() {
         private suspend fun addStoreItemInternal(newItem: StoreItem) = flow {
             emit(FakeRepository.addStoreItem(newItem))
         }
+    }
+
+    class CreateStoreItemTransaction : ViewModel(){
+//        private suspend fun createStoreItemTransaction(newStoreTransaction: StoreTransaction) = flow {
+//            emit(FakeRepository.createTransaction(StoreTransaction))
+//        }
     }
 }

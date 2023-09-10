@@ -59,9 +59,7 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                                     color = Color.LightGray, shape = RoundedCornerShape(4.dp))) {
                                 Column(modifier = Modifier.fillMaxWidth()) {
                                     it.value.forEach {
-                                        if(it.amount != 0) {
-                                            val item = FakeRepository.getStoreItemByUuid(it.itemUUID.toString())
-                                            shopTransactionListItem(item, viewModel)
+                                            shopTransactionListItem(it, viewModel)
                                         }
                                     }
                                 }
@@ -71,10 +69,24 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                     }
                 }
 
-                item {
-                    Spacer(modifier = Modifier.height(80.dp))
-                }
+//                item{
+//                    viewModel.searchTransaction.Transactions.forEach{
+//                        Spacer(Modifier.height(20.dp))
+//                        Card(modifier = Modifier.fillMaxWidth().border(1.dp,
+//                            color = Color.LightGray, shape = RoundedCornerShape(4.dp))) {
+//                            Column(modifier = Modifier.fillMaxWidth()) {
+//                                it.value.forEach {
+//                                    shopTransactionListItem(it,viewModel)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    Spacer(Modifier.height(40.dp))
+//                }
+//                item {
+//                    Spacer(modifier = Modifier.height(80.dp))
+//                }
+//            }
             }
         }
     }
-}
