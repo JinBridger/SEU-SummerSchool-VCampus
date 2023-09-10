@@ -45,6 +45,41 @@ public class StoreClient {
         }
     }
 
+    public static List<StoreTransaction> getAllTransaction(NettyHandler handler) {
+        Request request = new Request();
+        request.setUri("store/user/getAllTransactions");
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            if (response.getStatus().equals("success")) {
+                List<String> raw_data = (List<String>) response.getData();
+                List<StoreTransaction> data = new ArrayList<>();
+                raw_data.forEach(json -> data.add(IEntity.fromJson(json, StoreTransaction.class)));
+                return data;
+            } else {
+                throw new RuntimeException("Failed to get transaction info");
+            }
+        } catch (Exception e) {
+            log.warn(String.valueOf(e));
+            return null;
+        }
+    }
+
+    public static Integer getTodaySalesVolume(NettyHandler handler) {
+        Request request = new Request();
+        request.setUri("store/staff/getTodaySales");
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            if (response.getStatus().equals("success")) {
+                return Integer.valueOf(((Map<String, String>) response.getData()).get("salesVolume"));
+            } else {
+                throw new RuntimeException("Failed to get transaction info");
+            }
+        } catch (Exception e) {
+            log.warn(String.valueOf(e));
+            return null;
+        }
+    }
+
     public static boolean addItem(NettyHandler handler, StoreItem newStoreItem) {
         Request request = new Request();
         request.setUri("storeItem/addItem");

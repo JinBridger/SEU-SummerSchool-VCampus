@@ -79,6 +79,35 @@ public class StoreController {
         }
     }
 
+    @RouteMapping(uri = "store/user/getAllTransactions", role = "shop_user")
+    public Response getAllTransactions(Request request, org.hibernate.Session database) {
+        try {
+            List<StoreTransaction> allTransactions = Database.loadAllData(StoreTransaction.class, database);
+            Collections.sort(allTransactions, (o1, o2) -> o2.getTime().compareTo(o1.getTime()));
+            return Response.Common.ok(allTransactions.stream().map(StoreTransaction::toJson).collect(Collectors.toList()));
+        } catch (Exception e) {
+            log.warn("Failed to get transaction records", e);
+            return Response.Common.error("Failed to get transaction records");
+        }
+    }
+
+    @RouteMapping(uri = "store/staff/getTodaySales", role = "shop_staff")
+    public Response getTodaySales(Request request, org.hibernate.Session database) {
+        try {
+            List<StoreTransaction> allTransactions = Database.loadAllData(StoreTransaction.class, database);
+            int salesVolume = 0;
+            for (StoreTransaction storeTransaction : allTransactions) {
+                if (DateUtility.fromDate(storeTransaction.getTime()).equals(DateUtility.fromDate(new Date())))
+                    salesVolume += storeTransaction.getAmount() * storeTransaction.getItemPrice();
+            }
+
+            return Response.Common.ok(Map.of("salesVolume", Integer.toString(salesVolume)));
+        } catch (Exception e) {
+            log.warn("Failed to get transaction records", e);
+            return Response.Common.error("Failed to get transaction records");
+        }
+    }
+
     @RouteMapping(uri = "storeItem/searchItem")
     public Response searchItem(Request request, org.hibernate.Session database) {
         try {

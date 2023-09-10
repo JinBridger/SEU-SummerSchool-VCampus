@@ -28,7 +28,6 @@ import app.vcampus.server.entity.StoreTransaction
 @Composable
 fun shopTransactionListItem(
     _StoreTransactions: StoreTransaction,
-    viewModel: ShopViewModel
 ) {
     val subStoreItem = FakeRepository.getStoreItemByUuid(_StoreTransactions.itemUUID.toString())
     Column {

@@ -58,7 +58,10 @@ data class MutableStoreItem(
 
 class ShopViewModel() : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
-    val selectItem = SelectItem()
+    val selectItem = SelectItem(this)
+    val myOrders = MyOrders()
+    val dashboard = Dashboard()
+
     val searchStoreItem = SearchStoreItem()
     val modifyStoreItem = ModifyStoreItem()
     val addStoreItem = AddStoreItem()
@@ -133,15 +136,14 @@ class ShopViewModel() : ViewModel() {
     private val _chosenItemsPrice = mutableStateOf(0)
     val chosenItemsPrice: MutableState<Int> = _chosenItemsPrice
 
-    var totalOrderItems = FakeRepository.getAllOrder()
+//    var totalOrderItems = FakeRepository.getAllOrder()
+//
+//    fun manuallyUpdate() {
+//        totalOrderItems = FakeRepository.getAllOrder()
+//    }
 
-    fun manuallyUpdate() {
-        totalOrderItems = FakeRepository.getAllOrder()
-    }
-
-    class SelectItem(): ViewModel() {
+    class SelectItem(private val parent: ShopViewModel): ViewModel() {
         val totalShopItems = mutableStateListOf<StoreItem>()
-
         val chosenShopItems = mutableListOf<StoreItem>()
 
         fun getAllItems() {
@@ -174,12 +176,7 @@ class ShopViewModel() : ViewModel() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     checkoutInternal(items).collect {
-                        if (it) {
-                            chosenShopItems.clear()
-                            chosenShopItems.addAll(totalShopItems.map { ti ->
-                                ti.copy(stock = 0)
-                            })
-                        }
+
                     }
                 }
             }
@@ -194,7 +191,30 @@ class ShopViewModel() : ViewModel() {
         }
     }
 
-    open class SearchStoreTransaction: ViewModel(){
+    class MyOrders(): ViewModel() {
+        var orders = mutableStateListOf<StoreTransaction>()
+
+        fun getOrders() {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    getOrdersInternal().collect {
+                        orders.clear()
+                        orders.addAll(it)
+                    }
+                }
+            }
+        }
+
+        private suspend fun getOrdersInternal() = flow {
+            try {
+                emit(FakeRepository.getAllStoreTransactions())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    open class SearchStoreTransaction: ViewModel() {
         val keyword = mutableStateOf("")
         val Transactions = mutableStateMapOf<String,List<StoreTransaction>>()
         val searched = mutableStateOf(false)
@@ -278,9 +298,27 @@ class ShopViewModel() : ViewModel() {
         }
     }
 
-    class CreateStoreItemTransaction : ViewModel(){
+    class Dashboard : ViewModel() {
+        var todaySales = mutableStateOf(0)
+
+        fun getTodaySales() {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    getTodaySalesInternal().collect {
+                        todaySales.value = it
+                    }
+                }
+            }
+        }
+
+        private suspend fun getTodaySalesInternal() = flow {
+            emit(FakeRepository.getTodaySalesVolume())
+        }
+    }
+
+//    class CreateStoreItemTransaction : ViewModel(){
 //        private suspend fun createStoreItemTransaction(newStoreTransaction: StoreTransaction) = flow {
 //            emit(FakeRepository.createTransaction(StoreTransaction))
 //        }
-    }
+//    }
 }

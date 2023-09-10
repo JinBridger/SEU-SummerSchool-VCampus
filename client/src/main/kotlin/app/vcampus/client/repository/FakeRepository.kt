@@ -202,8 +202,16 @@ object FakeRepository {
         return StoreClient.getTransaction(handler)
     }
 
+    fun getAllStoreTransactions(): List<StoreTransaction> {
+        return StoreClient.getAllTransaction(handler)
+    }
+
     fun getStoreItemByUuid(uuid: String): StoreItem {
         return StoreClient.searchId(handler, uuid)
+    }
+
+    fun getTodaySalesVolume(): Int {
+        return StoreClient.getTodaySalesVolume(handler)
     }
 
     fun getOneNewStoreItem(): _StoreItem {

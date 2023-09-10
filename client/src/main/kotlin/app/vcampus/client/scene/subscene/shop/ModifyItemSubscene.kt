@@ -74,7 +74,6 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
                 viewModel.modifyStoreItem.storeList.forEach {
                     item {
                         EditStoreItem(it.value, isEditable = true, onEdit = { storeItem, update ->
-
                             viewModel.modifyStoreItem.updateStoreItem(storeItem)
                         })
                     }
