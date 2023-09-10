@@ -20,7 +20,7 @@ public class Database {
                 .addAnnotatedClass(TeachingClass.class)
                 .addAnnotatedClass(StoreItem.class)
                 .addAnnotatedClass(StoreTransaction.class)
-                .addAnnotatedClass(SelectedClass.class)
+                .addAnnotatedClass(SelectRecord.class)
                 .addAnnotatedClass(FinanceCard.class)
                 .addAnnotatedClass(CardTransaction.class)
                 .addAnnotatedClass(TeachingEvaluation.class)

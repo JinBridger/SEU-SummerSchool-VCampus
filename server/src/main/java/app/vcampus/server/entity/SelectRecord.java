@@ -1,6 +1,5 @@
 package app.vcampus.server.entity;
 
-import app.vcampus.server.utility.DateUtility;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -11,14 +10,13 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 @Entity
 @Data
 @Slf4j
-@Table(name = "selected_class")
-public class SelectedClass implements IEntity {
+@Table(name = "select_record")
+public class SelectRecord implements IEntity {
     @Id
     public UUID uuid;
 

@@ -13,28 +13,26 @@ import org.hibernate.Transaction;
 
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.lang.Double.*;
 
 @Slf4j
 public class TeachingAffairsController {
     @RouteMapping(uri = "teachingAffairs/student/getMyClasses", role = "student")
     public Response getSelectedClasses(Request request, org.hibernate.Session database) {
+        database.clear();
         int cardNumber = request.getSession().getCardNum();
 
-        List<SelectedClass> selectedClasses = Database.getWhereString(SelectedClass.class, "cardNumber", Integer.toString(cardNumber), database);
-        List<TeachingClass> teachingClasses = selectedClasses.stream().map((SelectedClass sc) -> {
+        List<SelectRecord> selectRecords = Database.getWhereString(SelectRecord.class, "cardNumber", Integer.toString(cardNumber), database);
+        List<TeachingClass> teachingClasses = selectRecords.stream().map((SelectRecord sc) -> {
             Grades grades = sc.getGrade();
-            List<SelectedClass> classmates = Database.getWhereUuid(SelectedClass.class, "classUuid", sc.getClassUuid(), database);
-            List<Grades> gradesList = classmates.stream().map(SelectedClass::getGrade).toList();
+            List<SelectRecord> classmates = Database.getWhereUuid(SelectRecord.class, "classUuid", sc.getClassUuid(), database);
+            List<Grades> gradesList = classmates.stream().map(SelectRecord::getGrade).toList();
             grades.classAvg = gradesList.stream().mapToInt(Grades::getTotal).average().orElse(0);
             grades.classMax = gradesList.stream().mapToInt(Grades::getTotal).max().orElse(0);
             grades.classMin = gradesList.stream().mapToInt(Grades::getTotal).min().orElse(0);
             sc.setGrade(grades);
 
             TeachingClass teachingClass = database.get(TeachingClass.class, sc.getClassUuid());
-            teachingClass.setSelectedClass(sc);
+            teachingClass.setSelectRecord(sc);
             return teachingClass;
         }).toList();
 
@@ -78,12 +76,15 @@ public class TeachingAffairsController {
 
     @RouteMapping(uri = "teachingAffairs/student/getSelectableCourses", role = "student")
     public Response getSelectableCourses(Request request, org.hibernate.Session database) {
+        database.clear();
         List<Course> courses = Database.loadAllData(Course.class, database);
         courses = courses.stream().peek((Course course) -> {
             List<TeachingClass> teachingClasses = Database.getWhereUuid(TeachingClass.class, "courseUuid", course.getUuid(), database);
             teachingClasses = teachingClasses.stream().peek((TeachingClass tc) -> {
                 User teacher = database.get(User.class, tc.getTeacherId());
                 tc.setTeacherName(teacher.getName());
+
+                tc.setSelectedCount(Database.getWhereUuid(SelectRecord.class, "classUuid", tc.getUuid(), database).size());
             }).toList();
             course.setTeachingClasses(teachingClasses);
         }).toList();
@@ -111,6 +112,7 @@ public class TeachingAffairsController {
 
     @RouteMapping(uri = "teachingAffairs/teacher/getMyClasses", role = "teacher")
     public Response getMyClasses(Request request, org.hibernate.Session database) {
+        database.clear();
         int cardNumber = request.getSession().getCardNum();
         List<TeachingClass> teachingClasses = Database.getWhereString(TeachingClass.class, "teacherId", Integer.toString(cardNumber), database);
         teachingClasses = teachingClasses.stream().peek((TeachingClass tc) -> {
@@ -356,9 +358,9 @@ public Response updateCourse(Request request, org.hibernate.Session database)
             int midtermGrade = Integer.parseInt(midterm);
             int finalExamGrade = Integer.parseInt(finalExam);
 
-            SelectedClass selectedClass = database.get(SelectedClass.class, studentId);
+            SelectRecord selectRecord = database.get(SelectRecord.class, studentId);
 
-            if (selectedClass == null) {
+            if (selectRecord == null) {
                 return Response.Common.error("SelectedClass not found for student");
             }
 
@@ -369,15 +371,15 @@ public Response updateCourse(Request request, org.hibernate.Session database)
             grades.setTotal ((int) (0.1*generalGrade + 0.3*midtermGrade + 0.6*finalExamGrade));
             //fake setTotal method
 
-            List<SelectedClass> classmates = Database.getWhereUuid(SelectedClass.class, "classUuid", courseId, database);
+            List<SelectRecord> classmates = Database.getWhereUuid(SelectRecord.class, "classUuid", courseId, database);
             List<Integer> totalGrades = classmates.stream().map(sc -> sc.getGrade().getTotal()).toList();
 
             grades.setClassMax(Collections.max(totalGrades));
             grades.setClassMin(Collections.min(totalGrades));
             grades.setClassAvg(totalGrades.stream().mapToInt(Integer::intValue).average().orElse(0));
 
-            selectedClass.setGrade(grades);
-            database.merge(selectedClass);
+            selectRecord.setGrade(grades);
+            database.merge(selectRecord);
 
             return Response.Common.ok();
         } catch (Exception e) {

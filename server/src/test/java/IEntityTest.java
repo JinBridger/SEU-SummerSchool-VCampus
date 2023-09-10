@@ -15,7 +15,6 @@ public class IEntityTest {
         TeachingClass teachingClass = new TeachingClass();
         teachingClass.setUuid(java.util.UUID.randomUUID());
         teachingClass.setCourseUuid(java.util.UUID.randomUUID());
-        teachingClass.setCourseName("courseName");
         teachingClass.setTeacherId(1);
         teachingClass.setPlace("place");
         teachingClass.setCapacity(1);
@@ -31,7 +30,6 @@ public class IEntityTest {
 
         assert teachingClass.getUuid().equals(newTeachingClass.getUuid());
         assert teachingClass.getCourseUuid().equals(newTeachingClass.getCourseUuid());
-        assert teachingClass.getCourseName().equals(newTeachingClass.getCourseName());
         assert teachingClass.getTeacherId().equals(newTeachingClass.getTeacherId());
         assert teachingClass.getPlace().equals(newTeachingClass.getPlace());
         assert newTeachingClass.getSchedule().stream().allMatch(

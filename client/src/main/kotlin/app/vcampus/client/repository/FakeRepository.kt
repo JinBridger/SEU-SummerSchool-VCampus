@@ -8,9 +8,9 @@ import app.vcampus.client.gateway.StudentStatusClient
 import app.vcampus.client.gateway.TeachingAffairsClient
 import app.vcampus.client.net.NettyHandler
 import app.vcampus.server.entity.CardTransaction
+import app.vcampus.server.entity.Course
 import app.vcampus.server.entity.FinanceCard
 import app.vcampus.server.entity.LibraryBook
-import app.vcampus.server.entity.SelectedClass
 import app.vcampus.server.entity.StoreItem
 import app.vcampus.server.entity.StoreTransaction
 import app.vcampus.server.entity.Student
@@ -161,6 +161,10 @@ object FakeRepository {
 
     fun sendEvaluationResult(result: Pair<UUID, Pair<List<Int>, String>>): Boolean {
         return TeachingAffairsClient.sendEvaluationResult(handler, result)
+    }
+
+    fun getSelectableCourses(): List<Course> {
+        return TeachingAffairsClient.getSelectableCourses(handler)
     }
 
     fun getMyTeachingClasses(): List<TeachingClass> {

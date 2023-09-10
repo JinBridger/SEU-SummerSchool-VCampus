@@ -25,7 +25,7 @@ import app.vcampus.server.entity.TeachingClass
 
 fun getIsChosenTeachingClass(viewModel: TeachingAffairsViewModel,
                              teachingClass: TeachingClass): Boolean {
-    viewModel.chooseClass.selectedClasses.forEach {
+    viewModel.myClasses.selected.forEach {
         if (it.uuid == teachingClass.uuid) {
             return true
         }
@@ -34,7 +34,7 @@ fun getIsChosenTeachingClass(viewModel: TeachingAffairsViewModel,
 }
 
 fun getIsConflict(viewModel: TeachingAffairsViewModel, teachingClass: TeachingClass): Boolean {
-    viewModel.chooseClass.selectedClasses.forEach {
+    viewModel.myClasses.selected.forEach {
         val thisSchedule = teachingClass.schedule
         val itSchedule = it.schedule
         thisSchedule.forEach { thisPair ->
@@ -60,24 +60,8 @@ fun selectClassCard(viewModel: TeachingAffairsViewModel,
 
     isChosen.value = getIsChosenTeachingClass(viewModel, teachingClass)
     isConflict.value = getIsConflict(viewModel, teachingClass)
-    scheduleString.value = run {
-        var ret = ""
-        teachingClass.schedule.forEach {
-            ret += "${it.first.first}-${it.first.second}周 周${
-                when (it.second.first) {
-                    1 -> "一"
-                    2 -> "二"
-                    3 -> "三"
-                    4 -> "四"
-                    5 -> "五"
-                    6 -> "六"
-                    7 -> "日"
-                    else -> "null"
-                }
-            } ${it.second.second.first}-${it.second.second.second}节 "
-        }
-        ret
-    }
+    scheduleString.value = teachingClass.humanReadableSchedule()
+
 
     Surface(modifier = Modifier.border(1.dp, color = Color.LightGray,
             shape = RoundedCornerShape(4.dp)).width(250.dp).padding(10.dp)) {
@@ -142,7 +126,7 @@ fun selectClassCard(viewModel: TeachingAffairsViewModel,
 }
 
 fun getIsChosenCourse(viewModel: TeachingAffairsViewModel, course: Course): Boolean {
-    viewModel.chooseClass.selectedClasses.forEach {
+    viewModel.myClasses.selected.forEach {
         if (it.courseUuid == course.uuid) {
             return true
         }

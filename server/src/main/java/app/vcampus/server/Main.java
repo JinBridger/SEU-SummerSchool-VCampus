@@ -1,17 +1,16 @@
 package app.vcampus.server;
 
 import app.vcampus.server.controller.*;
-import app.vcampus.server.entity.*;
-import app.vcampus.server.enums.TransactionType;
+import app.vcampus.server.entity.Course;
+import app.vcampus.server.entity.TeachingClass;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
-import app.vcampus.server.utility.DateUtility;
+import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.router.Router;
-import org.bouncycastle.util.Store;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class Main {
@@ -45,23 +44,32 @@ public class Main {
 //        TeachingClass teachingClass = new TeachingClass();
 //        teachingClass.setUuid(UUID.randomUUID());
 //        teachingClass.setCourseUuid(UUID.randomUUID());
-//        teachingClass.setSchedule(List.of(new Pair<>(new Pair<>(1, 16), new Pair<>(1, new Pair<>(1, 2)))));
-//        teachingClass.setCourseName("软件工程");
+//        teachingClass.setSchedule(List.of(new Pair<>(new Pair<>(1, 16), new Pair<>(3, new Pair<>(1, 4)))));
+//        teachingClass.setCourseName("Kotlin 101");
 //        teachingClass.setTeacherId(123456);
-//        teachingClass.setPlace("东九楼");
+//        teachingClass.setPlace("教八 303");
 //        teachingClass.setCapacity(100);
 //        database.persist(teachingClass);
 //        tx.commit();
 
 //        Transaction tx = database.beginTransaction();
 //        Course course = new Course();
-//        course.setUuid(UUID.fromString("e1386a64-dd0d-4422-967b-fdeadee68e30"));
-//        course.setCourseId("BJSL0081");
-//        course.setCourseName("软件工程");
+//        course.setUuid(UUID.randomUUID());
+//        course.setCourseId("BJSL0123");
+//        course.setCourseName("Kotlin 101");
 //        course.setSchool("计算机科学与工程学院");
 //        course.setCredit(4);
 //        database.persist(course);
 //        tx.commit();
+
+//        TeachingClass teachingClass = new TeachingClass();
+//        teachingClass.setUuid(UUID.randomUUID());
+//        teachingClass.setCourseUuid(course.getUuid());
+//        teachingClass.setSchedule(List.of(new Pair<>(new Pair<>(1, 16), new Pair<>(3, new Pair<>(1, 4)))));
+//        teachingClass.setTeacherId(123456);
+//        teachingClass.setPlace("教八 303");
+//        teachingClass.setCapacity(100);
+//        database.persist(teachingClass);
 
 //        SelectedClass selectedClass = new SelectedClass();
 //        selectedClass.setUuid(UUID.randomUUID());

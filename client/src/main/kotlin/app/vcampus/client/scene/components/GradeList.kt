@@ -74,7 +74,7 @@ fun GradeListItem(
                     Column(modifier = Modifier.fillMaxHeight()) {
                         Row {
                             Text(
-                                text = item.courseName,
+                                text = item.course.courseName,
                                 fontWeight = FontWeight(700),
                             )
                             Spacer(modifier = Modifier.width(10.dp))
@@ -133,7 +133,7 @@ fun GradeListItem(
                     }
                     Spacer(modifier = Modifier.weight(1F))
                     Text(
-                        item.selectedClass.grade.total.toString() + " 分",
+                        item.selectRecord.grade.total.toString() + " 分",
                         fontWeight = FontWeight(700),
                     )
                 }
@@ -228,19 +228,19 @@ fun GradeListItem(
                         )
                     ) {
                         row {
-                            cell { Text(item.selectedClass.grade.general.toString()) }
-                            cell { Text(item.selectedClass.grade.midterm.toString()) }
-                            cell { Text(item.selectedClass.grade.finalExam.toString()) }
-                            cell { Text(item.selectedClass.grade.classMin.toString()) }
+                            cell { Text(item.selectRecord.grade.general.toString()) }
+                            cell { Text(item.selectRecord.grade.midterm.toString()) }
+                            cell { Text(item.selectRecord.grade.finalExam.toString()) }
+                            cell { Text(item.selectRecord.grade.classMin.toString()) }
                             cell {
                                 Text(
                                     String.format(
                                         "%.2f",
-                                        item.selectedClass.grade.classAvg
+                                        item.selectRecord.grade.classAvg
                                     )
                                 )
                             }
-                            cell { Text(item.selectedClass.grade.classMax.toString()) }
+                            cell { Text(item.selectRecord.grade.classMax.toString()) }
                         }
                     }
                 }

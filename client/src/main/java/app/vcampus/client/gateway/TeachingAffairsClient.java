@@ -53,6 +53,25 @@ public class TeachingAffairsClient {
         }
     }
 
+    public static List<Course> getSelectableCourses(NettyHandler handler) {
+        Request request = new Request();
+        request.setUri("teachingAffairs/student/getSelectableCourses");
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            if (response.getStatus().equals("success")) {
+                List<String> raw_data = ((Map<String, List<String>>) response.getData()).get("courses");
+                return raw_data.stream().map((String s) -> IEntity.fromJson(s, Course.class)).toList();
+            } else {
+                throw new Exception(response.getMessage());
+            }
+        } catch (Exception e) {
+            log.warn("Fail to get selectable courses", e);
+            return null;
+        }
+    }
+
     public static List<TeachingClass> getMyTeachingClasses(NettyHandler handler) {
         Request request = new Request();
         request.setUri("teachingAffairs/teacher/getMyClasses");
@@ -227,22 +246,4 @@ public class TeachingAffairsClient {
             return false;
     }
     }
-
-    public static boolean addEvaluation(NettyHandler handler, TeachingEvaluation newEvaluation) {
-        Request request = new Request();
-        request.setUri("teachingEvaluation/addEvaluation");
-        request.setParams(Map.of(
-                "evaluation", newEvaluation.toJson()
-        ));
-
-        try {
-            Response response = BaseClient.sendRequest(handler, request);
-            return response.getStatus().equals(("success"));
-        } catch (InterruptedException e) {
-            log.warn("Fail to add teaching evaluation", e);
-            return false;
-        }
-    }
-
-
 }

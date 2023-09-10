@@ -132,7 +132,7 @@ fun classTable(viewModel: TeachingAffairsViewModel) {
                             Box(Modifier.fillMaxWidth().weight(
                                     (classHere.schedule[0].second.second.second - classHere.schedule[0].second.second.first + 1).toFloat()))
                             {
-                                classItem(classHere.courseName,
+                                classItem(classHere.course.courseName,
                                         classHere.teacherName,
                                         classHere.place)
                             }

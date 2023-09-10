@@ -68,7 +68,7 @@ fun evaluateResultListItem(result: TeachingClass) {
                     Column(modifier = Modifier.fillMaxHeight()) {
                         Row {
                             Text(
-                                    text = result.courseName,
+                                    text = result.course.courseName,
                                     fontWeight = FontWeight(700)
                             )
                             Spacer(modifier = Modifier.width(10.dp))
@@ -96,7 +96,7 @@ fun evaluateResultListItem(result: TeachingClass) {
 
                     result.getEvaluationResult().second.forEach {
                         Row(Modifier.padding(8.dp),verticalAlignment = Alignment.CenterVertically) {
-                            Canvas(modifier = Modifier.padding(start = 8.dp,end = 8.dp).size(6.dp)){
+                            Canvas(modifier = Modifier.padding(start = 8.dp, end = 8.dp).size(6.dp)){
                                 drawCircle(Color.Black)
                             }
                             Text(it)

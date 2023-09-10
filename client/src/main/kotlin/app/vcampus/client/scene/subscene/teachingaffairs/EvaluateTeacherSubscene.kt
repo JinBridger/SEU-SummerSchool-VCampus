@@ -2,7 +2,9 @@ package app.vcampus.client.scene.subscene.teachingaffairs
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.evaluateTeacherListItem
@@ -11,6 +13,8 @@ import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
 @Composable
 fun evaluateTeacherSubscene(viewModel: TeachingAffairsViewModel) {
+    val isAny = mutableStateOf(false)
+
     Row(horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -22,10 +26,17 @@ fun evaluateTeacherSubscene(viewModel: TeachingAffairsViewModel) {
 
             viewModel.myClasses.selected.forEach {
                 if (!it.isEvaluated) {
+                    isAny.value = true
                     item {
                         evaluateTeacherListItem(viewModel, it)
                         Spacer(Modifier.height(10.dp))
                     }
+                }
+            }
+
+            if (!isAny.value) {
+                item {
+                    Text("所有课程均已完成评教")
                 }
             }
 

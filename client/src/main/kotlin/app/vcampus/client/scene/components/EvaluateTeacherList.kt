@@ -87,7 +87,7 @@ fun evaluateTeacherListItem(viewModel: TeachingAffairsViewModel, teachingClass: 
                         Spacer(Modifier.height(4.dp))
                         Row {
                             Text(
-                                text = teachingClass.courseName,
+                                text = teachingClass.course.courseName,
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(

@@ -34,7 +34,7 @@ fun myClassListItem(tc: TeachingClass) {
                         Column(modifier = Modifier.fillMaxHeight()) {
                             Row {
                                 Text(
-                                        text = tc.courseName,
+                                        text = tc.course.courseName,
                                         fontWeight = FontWeight(700)
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
