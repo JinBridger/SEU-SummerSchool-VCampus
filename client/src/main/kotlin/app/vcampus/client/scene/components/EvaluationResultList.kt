@@ -76,6 +76,16 @@ fun evaluateResultListItem(result: TeachingClass) {
                                     text = result.course.courseId,
                                     color = Color.DarkGray
                             )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                    text = result.humanReadableSchedule(),
+                                    color = Color.DarkGray
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = result.place,
+                                color = Color.DarkGray
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                         }
                     }

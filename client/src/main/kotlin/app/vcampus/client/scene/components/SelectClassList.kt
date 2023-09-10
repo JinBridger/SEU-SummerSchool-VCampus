@@ -102,20 +102,20 @@ fun selectClassCard(viewModel: TeachingAffairsViewModel,
             }
             Row {
                 Text("已选人数：", fontWeight = FontWeight(700))
-                Text("99人")
+                Text("${teachingClass.selectedCount}人")
             }
             Spacer(Modifier.weight(1F))
             Row(Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End) {
                 if (isChosen.value) {
                     Button(onClick = {
-                        viewModel.chooseClass.returnClass(teachingClass.uuid)
+                        viewModel.myClasses.dropClass(teachingClass.uuid)
                     }) {
                         Text("退选")
                     }
                 } else {
                     Button(onClick = {
-                        viewModel.chooseClass.chooseClass(teachingClass.uuid)
+                        viewModel.myClasses.chooseClass(teachingClass.uuid)
                     }, enabled = !isConflict.value) {
                         Text("选择")
                     }

@@ -16,7 +16,7 @@ import java.util.*;
 
 @Slf4j
 public class TeachingAffairsController {
-    @RouteMapping(uri = "teachingAffairs/student/getMyClasses", role = "student")
+    @RouteMapping(uri = "teaching/student/getMyClasses", role = "student")
     public Response getSelectedClasses(Request request, org.hibernate.Session database) {
         database.clear();
         int cardNumber = request.getSession().getCardNum();
@@ -24,12 +24,14 @@ public class TeachingAffairsController {
         List<SelectRecord> selectRecords = Database.getWhereString(SelectRecord.class, "cardNumber", Integer.toString(cardNumber), database);
         List<TeachingClass> teachingClasses = selectRecords.stream().map((SelectRecord sc) -> {
             Grades grades = sc.getGrade();
-            List<SelectRecord> classmates = Database.getWhereUuid(SelectRecord.class, "classUuid", sc.getClassUuid(), database);
-            List<Grades> gradesList = classmates.stream().map(SelectRecord::getGrade).toList();
-            grades.classAvg = gradesList.stream().mapToInt(Grades::getTotal).average().orElse(0);
-            grades.classMax = gradesList.stream().mapToInt(Grades::getTotal).max().orElse(0);
-            grades.classMin = gradesList.stream().mapToInt(Grades::getTotal).min().orElse(0);
-            sc.setGrade(grades);
+            if (grades != null) {
+                List<SelectRecord> classmates = Database.getWhereUuid(SelectRecord.class, "classUuid", sc.getClassUuid(), database);
+                List<Grades> gradesList = classmates.stream().map(SelectRecord::getGrade).toList();
+                grades.classAvg = gradesList.stream().mapToInt(Grades::getTotal).average().orElse(0);
+                grades.classMax = gradesList.stream().mapToInt(Grades::getTotal).max().orElse(0);
+                grades.classMin = gradesList.stream().mapToInt(Grades::getTotal).min().orElse(0);
+                sc.setGrade(grades);
+            }
 
             TeachingClass teachingClass = database.get(TeachingClass.class, sc.getClassUuid());
             teachingClass.setSelectRecord(sc);
@@ -51,7 +53,7 @@ public class TeachingAffairsController {
         return Response.Common.ok(Map.of("classes", teachingClasses.stream().map(TeachingClass::toJson).toList()));
     }
 
-    @RouteMapping(uri = "teachingAffairs/student/submitEvaluation", role = "student")
+    @RouteMapping(uri = "teaching/student/submitEvaluation", role = "student")
     public Response submitEvaluation(Request request, org.hibernate.Session database) {
         int cardNumber = request.getSession().getCardNum();
         Type type = new TypeToken<Pair<UUID, Pair<List<Integer>, String>>>(){}.getType();
@@ -74,7 +76,7 @@ public class TeachingAffairsController {
         }
     }
 
-    @RouteMapping(uri = "teachingAffairs/student/getSelectableCourses", role = "student")
+    @RouteMapping(uri = "teaching/student/getSelectableCourses", role = "student")
     public Response getSelectableCourses(Request request, org.hibernate.Session database) {
         database.clear();
         List<Course> courses = Database.loadAllData(Course.class, database);
@@ -92,7 +94,7 @@ public class TeachingAffairsController {
         return Response.Common.ok(Map.of("courses", courses.stream().map(Course::toJson).toList()));
     }
 
-    @RouteMapping(uri = "teachingAffairs/student/evaluate", role = "student")
+    @RouteMapping(uri = "teaching/student/evaluate", role = "student")
     public Response evaluateClass(Request request, org.hibernate.Session database) {
         int cardNumber = request.getSession().getCardNum();
         TeachingEvaluation newTeachingEvaluation = IEntity.fromJson(request.getParams().get("evaluation"), TeachingEvaluation.class);
@@ -110,7 +112,57 @@ public class TeachingAffairsController {
         }
     }
 
-    @RouteMapping(uri = "teachingAffairs/teacher/getMyClasses", role = "teacher")
+    @RouteMapping(uri = "teaching/student/chooseClass", role = "student")
+    public Response selectClass(Request request, org.hibernate.Session database) {
+        int cardNumber = request.getSession().getCardNum();
+        UUID classUuid = UUID.fromString(request.getParams().get("classUuid"));
+
+        SelectRecord selectRecord = new SelectRecord();
+        selectRecord.setUuid(UUID.randomUUID());
+        selectRecord.setCardNumber(cardNumber);
+        selectRecord.setClassUuid(classUuid);
+        selectRecord.setSelectTime(new Date());
+
+        try {
+            Transaction tx = database.beginTransaction();
+            database.persist(selectRecord);
+            tx.commit();
+            return Response.Common.ok();
+        } catch (Exception e) {
+            log.warn("Failed to select class", e);
+            return Response.Common.badRequest();
+        }
+    }
+
+    @RouteMapping(uri = "teaching/student/dropClass", role = "student")
+    public Response dropClass(Request request, org.hibernate.Session database) {
+        int cardNumber = request.getSession().getCardNum();
+        UUID classUuid = UUID.fromString(request.getParams().get("classUuid"));
+
+        SelectRecord selectRecord = Database.getWhereUuid(SelectRecord.class, "classUuid", classUuid, database).stream()
+                .filter((SelectRecord sr) -> sr.getCardNumber().equals(cardNumber))
+                .findFirst().orElse(null);
+
+        if (selectRecord == null) {
+            return Response.Common.error("No such class");
+        }
+
+        if (selectRecord.getGrade() != null) {
+            return Response.Common.error("Cannot drop class after grades are recorded");
+        }
+
+        try {
+            Transaction tx = database.beginTransaction();
+            database.remove(selectRecord);
+            tx.commit();
+            return Response.Common.ok();
+        } catch (Exception e) {
+            log.warn("Failed to drop class", e);
+            return Response.Common.badRequest();
+        }
+    }
+
+    @RouteMapping(uri = "teaching/teacher/getMyClasses", role = "teacher")
     public Response getMyClasses(Request request, org.hibernate.Session database) {
         database.clear();
         int cardNumber = request.getSession().getCardNum();
@@ -135,7 +187,7 @@ public class TeachingAffairsController {
                     index[0]++;
                 });
 
-                evaluationComments.add(te.comment);
+                if (!te.comment.isBlank()) evaluationComments.add(te.comment);
             });
             tc.setEvaluationResult(new Pair<>(evaluationRatings, evaluationComments));
         }).toList();
@@ -163,7 +215,7 @@ public class TeachingAffairsController {
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "teachingAffairs/deleteCourse", role = "affairs_staff")
+    @RouteMapping(uri = "teaching/deleteCourse", role = "affairs_staff")
     public Response deleteCourse(Request request, org.hibernate.Session database) {
         String id = request.getParams().get("uuid");
 
@@ -235,7 +287,7 @@ public class TeachingAffairsController {
 //        return Response.Common.ok(teachingClass.toMap());
 //    }
 
-@RouteMapping(uri="teachingAffairs/updateCourse",role="affairs_staff")
+@RouteMapping(uri="teaching/updateCourse",role="affairs_staff")
 public Response updateCourse(Request request, org.hibernate.Session database)
 {
     Course newCourse=IEntity.fromJson(request.getParams().get("course"), Course.class);
@@ -339,7 +391,7 @@ public Response updateCourse(Request request, org.hibernate.Session database)
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "teachingAffairs/recordGrade", role = "affairs_staff")
+    @RouteMapping(uri = "teaching/recordGrade", role = "affairs_staff")
     public Response fakeRecordGrade(Request request, org.hibernate.Session database) {
         String studentUuid = request.getParams().get("studentUuid");
         String classUuid = request.getParams().get("classUuid");

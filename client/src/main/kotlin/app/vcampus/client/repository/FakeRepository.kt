@@ -170,6 +170,14 @@ object FakeRepository {
         return TeachingAffairsClient.getSelectableCourses(handler)
     }
 
+    fun chooseClass(uuid: UUID): Boolean {
+        return TeachingAffairsClient.chooseClass(handler, uuid)
+    }
+
+    fun dropClass(uuid: UUID): Boolean {
+        return TeachingAffairsClient.dropClass(handler, uuid)
+    }
+
     fun getMyTeachingClasses(): List<TeachingClass> {
         return TeachingAffairsClient.getMyTeachingClasses(handler)
     }

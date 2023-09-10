@@ -64,11 +64,11 @@ public class Main {
 
 //        TeachingClass teachingClass = new TeachingClass();
 //        teachingClass.setUuid(UUID.randomUUID());
-//        teachingClass.setCourseUuid(course.getUuid());
-//        teachingClass.setSchedule(List.of(new Pair<>(new Pair<>(1, 16), new Pair<>(3, new Pair<>(1, 4)))));
+//        teachingClass.setCourseUuid(UUID.fromString("b2a1bce1-a65d-407b-bcbe-08bf941ae144"));
+//        teachingClass.setSchedule(List.of(new Pair<>(new Pair<>(1, 16), new Pair<>(1, new Pair<>(1, 4)))));
 //        teachingClass.setTeacherId(123456);
-//        teachingClass.setPlace("教八 303");
-//        teachingClass.setCapacity(100);
+//        teachingClass.setPlace("教八 201");
+//        teachingClass.setCapacity(15);
 //        database.persist(teachingClass);
 
 //        SelectedClass selectedClass = new SelectedClass();

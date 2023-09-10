@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class TeachingAffairsClient {
     public static List<TeachingClass> getSelectedClasses(NettyHandler handler) {
         Request request = new Request();
-        request.setUri("teachingAffairs/student/getMyClasses");
+        request.setUri("teaching/student/getMyClasses");
 
         try {
             Response response = BaseClient.sendRequest(handler, request);
@@ -38,7 +38,7 @@ public class TeachingAffairsClient {
 
     public static Boolean sendEvaluationResult(NettyHandler handler, Pair<UUID, Pair<List<Integer>, String>> evaluationResult) {
         Request request = new Request();
-        request.setUri("teachingAffairs/student/submitEvaluation");
+        request.setUri("teaching/student/submitEvaluation");
         request.setParams(Map.of(
                 "evaluation", BaseClient.toJson(evaluationResult)
         ));
@@ -55,7 +55,7 @@ public class TeachingAffairsClient {
 
     public static List<Course> getSelectableCourses(NettyHandler handler) {
         Request request = new Request();
-        request.setUri("teachingAffairs/student/getSelectableCourses");
+        request.setUri("teaching/student/getSelectableCourses");
 
         try {
             Response response = BaseClient.sendRequest(handler, request);
@@ -72,9 +72,43 @@ public class TeachingAffairsClient {
         }
     }
 
+    public static Boolean chooseClass(NettyHandler handler, UUID classUuid) {
+        Request request = new Request();
+        request.setUri("teaching/student/chooseClass");
+        request.setParams(Map.of(
+                "classUuid", classUuid.toString()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            return response.getStatus().equals("success");
+        } catch (Exception e) {
+            log.warn("Fail to choose class", e);
+            return false;
+        }
+    }
+
+    public static Boolean dropClass(NettyHandler handler, UUID classUuid) {
+        Request request = new Request();
+        request.setUri("teaching/student/dropClass");
+        request.setParams(Map.of(
+                "classUuid", classUuid.toString()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+
+            return response.getStatus().equals("success");
+        } catch (Exception e) {
+            log.warn("Fail to drop class", e);
+            return false;
+        }
+    }
+
     public static List<TeachingClass> getMyTeachingClasses(NettyHandler handler) {
         Request request = new Request();
-        request.setUri("teachingAffairs/teacher/getMyClasses");
+        request.setUri("teaching/teacher/getMyClasses");
 
         try {
             Response response = BaseClient.sendRequest(handler, request);

@@ -22,9 +22,11 @@ fun myGradeSubscene(viewModel: TeachingAffairsViewModel) {
                 Spacer(Modifier.height(20.dp))
             }
             item{
-                viewModel.myClasses.selected.forEach{
-                    GradeListItem(it)
-                    Spacer(Modifier.height(10.dp))
+                viewModel.myClasses.selected.forEach {
+                    if (it.selectRecord.grade != null) {
+                        GradeListItem(it)
+                        Spacer(Modifier.height(10.dp))
+                    }
                 }
             }
 

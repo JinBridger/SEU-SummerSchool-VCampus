@@ -27,6 +27,6 @@ public class TeachingEvaluation implements IEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     public List<Integer> result;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     public String comment;
 }
