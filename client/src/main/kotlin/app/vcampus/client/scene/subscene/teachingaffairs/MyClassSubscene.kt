@@ -29,7 +29,7 @@ fun myClassSubscene(viewModel: TeachingAffairsViewModel) {
 
             viewModel.myTeachingClasses.myClasses.forEach {
                 item {
-                    myClassListItem(it)
+                    myClassListItem(it, viewModel.myTeachingClasses::saveStudentList)
                     Spacer(Modifier.height(10.dp))
                 }
             }

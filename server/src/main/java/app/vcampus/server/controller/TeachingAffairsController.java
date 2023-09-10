@@ -6,12 +6,15 @@ import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.router.RouteMapping;
+import com.alibaba.excel.EasyExcel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 @Slf4j
@@ -195,42 +198,65 @@ public class TeachingAffairsController {
         return Response.Common.ok(Map.of("classes", teachingClasses.stream().map(TeachingClass::toJson).toList()));
     }
 
-    @RouteMapping(uri = "course/addCourse", role = "affairs_staff")
-    public Response addCourse(Request request, org.hibernate.Session database) {
-        Course newCourse = Course.fromMap(request.getParams());
-        if (newCourse == null) {
-            return Response.Common.badRequest();
+    @RouteMapping(uri = "teaching/teacher/exportStudentList", role = "teacher")
+    public Response exportStudentList(Request request, org.hibernate.Session database) {
+        database.clear();
+
+        try {
+            UUID classUuid = UUID.fromString(request.getParams().get("classUuid"));
+            List<SelectRecord> selectRecords = Database.getWhereUuid(SelectRecord.class, "classUuid", classUuid, database);
+
+            Path tmpFile = Files.createTempFile("studentList", ".xlsx");
+            EasyExcel.write(tmpFile.toFile(), ExportStudentList.class)
+                    .sheet()
+                    .doWrite(selectRecords.stream().map((SelectRecord sr) -> {
+                        Student student = database.get(Student.class, sr.getCardNumber());
+                        return new ExportStudentList(student.getStudentNumber(), student.getFamilyName() + student.getGivenName());
+                    }).toList());
+
+            return Response.Common.ok(Map.of("file", Base64.getEncoder().encodeToString(Files.readAllBytes(tmpFile))));
+        } catch (Exception e) {
+            log.warn("Failed to create Excel", e);
+            return Response.Common.error("Failed to export");
         }
-
-        newCourse.setUuid(UUID.randomUUID());
-        Transaction tx = database.beginTransaction();
-        Database.updateWhere(Course.class, "courseId", newCourse.getCourseId(), List.of(
-                new Pair<>("courseName", newCourse.getCourseName()),
-//                new Pair<>("school", Integer.toString(newCourse.getSchool())),
-                new Pair<>("credit", Float.toString(newCourse.getCredit()))
-        ), database);
-        database.persist(newCourse);
-        tx.commit();
-
-        return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "teaching/deleteCourse", role = "affairs_staff")
-    public Response deleteCourse(Request request, org.hibernate.Session database) {
-        String id = request.getParams().get("uuid");
-
-        if (id == null) return Response.Common.error("Course UUID cannot be empty");
-
-        UUID uuid = UUID.fromString(id);
-        Course toDelete = database.get(Course.class, uuid);
-        if (toDelete == null) return Response.Common.error("No such course");
-
-        Transaction tx = database.beginTransaction();
-        database.remove(toDelete);
-        tx.commit();
-
-        return Response.Common.ok();
-    }
+//    @RouteMapping(uri = "course/addCourse", role = "affairs_staff")
+//    public Response addCourse(Request request, org.hibernate.Session database) {
+//        Course newCourse = Course.fromMap(request.getParams());
+//        if (newCourse == null) {
+//            return Response.Common.badRequest();
+//        }
+//
+//        newCourse.setUuid(UUID.randomUUID());
+//        Transaction tx = database.beginTransaction();
+//        Database.updateWhere(Course.class, "courseId", newCourse.getCourseId(), List.of(
+//                new Pair<>("courseName", newCourse.getCourseName()),
+////                new Pair<>("school", Integer.toString(newCourse.getSchool())),
+//                new Pair<>("credit", Float.toString(newCourse.getCredit()))
+//        ), database);
+//        database.persist(newCourse);
+//        tx.commit();
+//
+//        return Response.Common.ok();
+//    }
+//
+//    @RouteMapping(uri = "teaching/deleteCourse", role = "affairs_staff")
+//    public Response deleteCourse(Request request, org.hibernate.Session database) {
+//        String id = request.getParams().get("uuid");
+//
+//        if (id == null) return Response.Common.error("Course UUID cannot be empty");
+//
+//        UUID uuid = UUID.fromString(id);
+//        Course toDelete = database.get(Course.class, uuid);
+//        if (toDelete == null) return Response.Common.error("No such course");
+//
+//        Transaction tx = database.beginTransaction();
+//        database.remove(toDelete);
+//        tx.commit();
+//
+//        return Response.Common.ok();
+//    }
 
     /*This method is used to select courses for students*/
 //    @RouteMapping(uri = "selectedClass/selectClass", role = "student")
@@ -287,26 +313,26 @@ public class TeachingAffairsController {
 //        return Response.Common.ok(teachingClass.toMap());
 //    }
 
-@RouteMapping(uri="teaching/updateCourse",role="affairs_staff")
-public Response updateCourse(Request request, org.hibernate.Session database)
-{
-    Course newCourse=IEntity.fromJson(request.getParams().get("course"), Course.class);
-    Course toUpdate=database.get(Course.class,newCourse.getUuid());
-    if(toUpdate==null)
-    {
-        return Response.Common.badRequest();
-    }
-
-    Transaction tx=database.beginTransaction();
-    toUpdate.setCourseId(newCourse.getCourseId());
-    toUpdate.setCourseName(newCourse.getCourseName());
-    toUpdate.setCredit(newCourse.getCredit());
-    toUpdate.setSchool(newCourse.getSchool());
-    database.persist(toUpdate);
-    tx.commit();
-
-    return Response.Common.ok();
-}
+//@RouteMapping(uri="teaching/updateCourse",role="affairs_staff")
+//public Response updateCourse(Request request, org.hibernate.Session database)
+//{
+//    Course newCourse=IEntity.fromJson(request.getParams().get("course"), Course.class);
+//    Course toUpdate=database.get(Course.class,newCourse.getUuid());
+//    if(toUpdate==null)
+//    {
+//        return Response.Common.badRequest();
+//    }
+//
+//    Transaction tx=database.beginTransaction();
+//    toUpdate.setCourseId(newCourse.getCourseId());
+//    toUpdate.setCourseName(newCourse.getCourseName());
+//    toUpdate.setCredit(newCourse.getCredit());
+//    toUpdate.setSchool(newCourse.getSchool());
+//    database.persist(toUpdate);
+//    tx.commit();
+//
+//    return Response.Common.ok();
+//}
 
 
 //    @RouteMapping(uri = "selectedClass/recordGrade", role = "affairs_staff")
@@ -378,66 +404,53 @@ public Response updateCourse(Request request, org.hibernate.Session database)
 ////        }
 //    }
 
-    @RouteMapping(uri = "TeachingEvaluation/addEvaluation", role = "student")
-    public Response addEvaluation(Request request, org.hibernate.Session database) {
-        TeachingEvaluation newTeachingEvaluation = IEntity.fromJson(request.getParams().get("evaluation"), TeachingEvaluation.class);
-        if (newTeachingEvaluation == null) {
-            return Response.Common.badRequest();
-        }
-        newTeachingEvaluation.setUuid(UUID.randomUUID());
-        Transaction tx = database.beginTransaction();
-        database.persist(newTeachingEvaluation);
-        tx.commit();
-        return Response.Common.ok();
-    }
-
-    @RouteMapping(uri = "teaching/recordGrade", role = "affairs_staff")
-    public Response fakeRecordGrade(Request request, org.hibernate.Session database) {
-        String studentUuid = request.getParams().get("studentUuid");
-        String classUuid = request.getParams().get("classUuid");
-        String general = request.getParams().get("general");
-        String midterm = request.getParams().get("midterm");
-        String finalExam = request.getParams().get("finalExam");
-
-        if (studentUuid == null || classUuid == null ) {
-            return Response.Common.badRequest();
-        }
-
-        try {
-            UUID studentId = UUID.fromString(studentUuid);
-            UUID courseId = UUID.fromString(classUuid);
-            int generalGrade = Integer.parseInt(general);
-            int midtermGrade = Integer.parseInt(midterm);
-            int finalExamGrade = Integer.parseInt(finalExam);
-
-            SelectRecord selectRecord = database.get(SelectRecord.class, studentId);
-
-            if (selectRecord == null) {
-                return Response.Common.error("SelectedClass not found for student");
-            }
-
-            Grades grades = new Grades();
-            grades.setGeneral(generalGrade);
-            grades.setMidterm(midtermGrade);
-            grades.setFinalExam(finalExamGrade);
-            grades.setTotal ((int) (0.1*generalGrade + 0.3*midtermGrade + 0.6*finalExamGrade));
-            //fake setTotal method
-
-            List<SelectRecord> classmates = Database.getWhereUuid(SelectRecord.class, "classUuid", courseId, database);
-            List<Integer> totalGrades = classmates.stream().map(sc -> sc.getGrade().getTotal()).toList();
-
-            grades.setClassMax(Collections.max(totalGrades));
-            grades.setClassMin(Collections.min(totalGrades));
-            grades.setClassAvg(totalGrades.stream().mapToInt(Integer::intValue).average().orElse(0));
-
-            selectRecord.setGrade(grades);
-            database.merge(selectRecord);
-
-            return Response.Common.ok();
-        } catch (Exception e) {
-            log.warn("Failed to record grades", e);
-            return Response.Common.error("Failed to record grades");
-        }
-    }
+//    @RouteMapping(uri = "teaching/recordGrade", role = "affairs_staff")
+//    public Response fakeRecordGrade(Request request, org.hibernate.Session database) {
+//        String studentUuid = request.getParams().get("studentUuid");
+//        String classUuid = request.getParams().get("classUuid");
+//        String general = request.getParams().get("general");
+//        String midterm = request.getParams().get("midterm");
+//        String finalExam = request.getParams().get("finalExam");
+//
+//        if (studentUuid == null || classUuid == null ) {
+//            return Response.Common.badRequest();
+//        }
+//
+//        try {
+//            UUID studentId = UUID.fromString(studentUuid);
+//            UUID courseId = UUID.fromString(classUuid);
+//            int generalGrade = Integer.parseInt(general);
+//            int midtermGrade = Integer.parseInt(midterm);
+//            int finalExamGrade = Integer.parseInt(finalExam);
+//
+//            SelectRecord selectRecord = database.get(SelectRecord.class, studentId);
+//
+//            if (selectRecord == null) {
+//                return Response.Common.error("SelectedClass not found for student");
+//            }
+//
+//            Grades grades = new Grades();
+//            grades.setGeneral(generalGrade);
+//            grades.setMidterm(midtermGrade);
+//            grades.setFinalExam(finalExamGrade);
+//            grades.setTotal ((int) (0.1*generalGrade + 0.3*midtermGrade + 0.6*finalExamGrade));
+//            //fake setTotal method
+//
+//            List<SelectRecord> classmates = Database.getWhereUuid(SelectRecord.class, "classUuid", courseId, database);
+//            List<Integer> totalGrades = classmates.stream().map(sc -> sc.getGrade().getTotal()).toList();
+//
+//            grades.setClassMax(Collections.max(totalGrades));
+//            grades.setClassMin(Collections.min(totalGrades));
+//            grades.setClassAvg(totalGrades.stream().mapToInt(Integer::intValue).average().orElse(0));
+//
+//            selectRecord.setGrade(grades);
+//            database.merge(selectRecord);
+//
+//            return Response.Common.ok();
+//        } catch (Exception e) {
+//            log.warn("Failed to record grades", e);
+//            return Response.Common.error("Failed to record grades");
+//        }
+//    }
 
 }

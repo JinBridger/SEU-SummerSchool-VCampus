@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
+import java.io.File
 import java.util.*
 
 class TeachingAffairsViewModel() : ViewModel() {
@@ -225,6 +226,24 @@ class TeachingAffairsViewModel() : ViewModel() {
         private suspend fun getMyTeachingClassesInternal() = flow {
             try {
                 emit(FakeRepository.getMyTeachingClasses())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        fun saveStudentList(teachingClass: TeachingClass, file: File) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    saveStudentListInternal(teachingClass).collect {
+                        file.writeBytes(Base64.getDecoder().decode(it))
+                    }
+                }
+            }
+        }
+
+        private suspend fun saveStudentListInternal(teachingClass: TeachingClass) = flow {
+            try {
+                emit(FakeRepository.exportStudentList(teachingClass))
             } catch (e: Exception) {
                 e.printStackTrace()
             }

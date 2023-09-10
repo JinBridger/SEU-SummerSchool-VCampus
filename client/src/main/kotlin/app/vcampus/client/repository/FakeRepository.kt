@@ -182,6 +182,10 @@ object FakeRepository {
         return TeachingAffairsClient.getMyTeachingClasses(handler)
     }
 
+    fun exportStudentList(tc: TeachingClass): String {
+        return TeachingAffairsClient.exportStudentList(handler, tc.uuid)
+    }
+
     fun getAllOrder(): Map<String, List<StoreTransaction>> {
         return StoreClient.getTransaction(handler)
     }

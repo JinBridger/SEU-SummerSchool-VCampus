@@ -7,40 +7,61 @@ import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 import app.vcampus.server.entity.TeachingClass
+import java.io.File
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun myClassListItem(tc: TeachingClass) {
-    Surface(modifier = Modifier.fillMaxWidth().border(
+fun myClassListItem(tc: TeachingClass, saveCallback: (TeachingClass, File) -> Unit) {
+    var showFileDialog by remember { mutableStateOf(false) }
+
+    if (showFileDialog) {
+        FileDialog(
+            title = "导出学生名单",
+            mode = FileDialogMode.SAVE,
+            saveFileName = "${tc.course.courseName}-${tc.uuid}.xlsx",
+            onResult = {
+                saveCallback(tc, it)
+                showFileDialog = false
+            },
+            onClose = {
+                showFileDialog = false
+            }
+        )
+    }
+
+    Surface(
+        modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
             shape = RoundedCornerShape(4.dp)
-    )) {
+        )
+    ) {
         Box(Modifier.fillMaxSize().padding(10.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Column {
                     Row(
-                            verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.fillMaxHeight()) {
                             Row {
                                 Text(
-                                        text = tc.course.courseName,
-                                        fontWeight = FontWeight(700)
+                                    text = tc.course.courseName,
+                                    fontWeight = FontWeight(700)
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                        text = tc.course.courseId,
-                                        color = Color.DarkGray
+                                    text = tc.course.courseId,
+                                    color = Color.DarkGray
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                             }
@@ -50,7 +71,9 @@ fun myClassListItem(tc: TeachingClass) {
                     }
                 }
                 Spacer(Modifier.weight(1F))
-                Button(onClick = {}) {
+                Button(onClick = {
+                    showFileDialog = true
+                }) {
                     Text("导出学生名单")
                 }
             }

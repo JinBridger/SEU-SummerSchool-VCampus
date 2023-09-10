@@ -25,7 +25,7 @@ fun evaluateTeacherSubscene(viewModel: TeachingAffairsViewModel) {
             }
 
             viewModel.myClasses.selected.forEach {
-                if (!it.isEvaluated) {
+                if (it.selectRecord.grade != null && !it.isEvaluated) {
                     isAny.value = true
                     item {
                         evaluateTeacherListItem(viewModel, it)
@@ -36,7 +36,7 @@ fun evaluateTeacherSubscene(viewModel: TeachingAffairsViewModel) {
 
             if (!isAny.value) {
                 item {
-                    Text("所有课程均已完成评教")
+                    Text("所有已完成课程均已评教。")
                 }
             }
 
