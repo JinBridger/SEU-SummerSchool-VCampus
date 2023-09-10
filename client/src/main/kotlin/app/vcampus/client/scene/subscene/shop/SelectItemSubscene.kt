@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Paid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,7 @@ import app.vcampus.client.viewmodel.ShopViewModel
 import kotlinx.coroutines.launch
 import java.util.*
 
+
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun selectItemSubscene(viewModel: ShopViewModel) {
@@ -34,6 +36,8 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
             bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
     val coroutineScope = rememberCoroutineScope()
+
+    val scope = rememberCoroutineScope()
 
     BottomSheetScaffold(
             scaffoldState = openState,
@@ -138,18 +142,34 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                                 "已选择 ${viewModel.chosenItemsCount.value} 件商品")
                                     }
                                     Spacer(Modifier.weight(1F))
+                                    val state = remember {
+                                        SnackbarHostState()
+                                    }
+                                    SnackbarHost(hostState = state)
                                     Button(onClick = {
-                                            viewModel.chosenShopItems.forEach{
+                                        val cardNumber = FakeRepository.getMyCard()
+                                        if(cardNumber.balance >= (viewModel.chosenItemsPrice.value/100.0)) {
+                                            viewModel.chosenShopItems.forEach {
                                                 if (it.stock != 0) {
                                                     val UUID = it.uuid.toString()
                                                     val myAmount = it.stock.toString()
                                                     FakeRepository.createTransaction(UUID, myAmount)
                                                 }
                                                 viewModel.manuallyUpdate()
+                                            }
+                                            FakeRepository.rechargeCard(cardNumber.cardNumber,-((viewModel.chosenItemsPrice.value/100.0).toInt()))
+                                            scope.launch {
+                                                state.showSnackbar(
+                                                    "成功购买", "关闭"
+                                                )
+                                            }
+                                        }else {
+                                            scope.launch {
+                                                state.showSnackbar(
+                                                    "余额不足", "关闭"
+                                                )
+                                            }
                                         }
-
-
-
                                     }) {
                                         Text("立即支付")
                                     }
