@@ -68,6 +68,8 @@ class LibraryViewModel : ViewModel() {
     val modifyBook = ModifyBook()
     val myBook = MyBook()
     val returnBook = ReturnBook()
+    var borrowResult= mutableStateOf(false)
+    var showBorrowMessage= mutableStateOf(false)
 
     val sideBarContent = (if (identity.contains("library_user")) {
         listOf(SideBarItem(true, "查询", "", Icons.Default.Info, false))
@@ -128,7 +130,8 @@ class LibraryViewModel : ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 borrowBookInternal(bookUuid, cardId).collect {
-
+                    borrowResult.value=it
+                    showBorrowMessage.value=true
                 }
             }
         }
