@@ -23,8 +23,10 @@ public class Main {
         router.addController(StoreController.class);
         router.addController(TeachingAffairsController.class);
         router.addController(FinanceController.class);
+        router.addController(AdminController.class);
 
-        SessionFactory database = Database.init();
+        SessionFactory databaseFactory = Database.init();
+        org.hibernate.Session database = databaseFactory.openSession();
 
 //        String text = formatter.format(date);
 //        System.out.println(text);
@@ -129,6 +131,6 @@ public class Main {
 
 //        tx.commit();
         NettyServer server = new NettyServer(9091);
-        server.run(router, database);
+        server.run(router, databaseFactory);
     }
 }

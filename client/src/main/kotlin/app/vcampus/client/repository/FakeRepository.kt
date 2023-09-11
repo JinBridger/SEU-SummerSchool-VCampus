@@ -1,5 +1,6 @@
 package app.vcampus.client.repository
 
+import app.vcampus.client.gateway.AdminClient
 import app.vcampus.client.gateway.AuthClient
 import app.vcampus.client.gateway.FinanceClient
 import app.vcampus.client.gateway.LibraryClient
@@ -224,11 +225,11 @@ object FakeRepository {
     }
 
     fun getAllOrder(): Map<String, List<StoreTransaction>> {
-        return StoreClient.getTransaction(handler)
+        return StoreClient.getTransaction(handler) ?: mapOf()
     }
 
     fun getAllStoreTransactions(): List<StoreTransaction> {
-        return StoreClient.getAllTransaction(handler)
+        return StoreClient.getAllTransaction(handler) ?: listOf()
     }
 
     fun getStoreItemByUuid(uuid: String): StoreItem {
@@ -264,14 +265,13 @@ object FakeRepository {
 
     fun rechargeCard(cardNumber: Int, amount: Int): FinanceCard {
         return FinanceClient.rechargeCard(handler, cardNumber, amount) ?: FinanceCard()
-        fun createTransaction(uuid: String, amount: String): Boolean {
-            return StoreClient.createTransaction(handler, uuid, amount)
-        }
     }
 
-    fun createTransaction(uuid: String, amount: String): Boolean {
-        return StoreClient.createTransaction(handler,uuid,amount)
+    fun searchUser(keyword: String): List<User> {
+        return AdminClient.searchUser(handler, keyword) ?: listOf()
     }
 
-
+    fun modifyUser(cardNumber: Int, password: String, roles: List<String>): Boolean {
+        return AdminClient.modifyUser(handler, cardNumber, password, roles)
+    }
 }
