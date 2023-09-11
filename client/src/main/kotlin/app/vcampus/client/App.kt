@@ -1,6 +1,6 @@
 package app.vcampus.client
 
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -17,6 +17,7 @@ import app.vcampus.client.scene.components.enterAnimation
 import app.vcampus.client.scene.components.sarasaTypography
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.rememberNavigator
+import moe.tlaster.precompose.navigation.transition.NavTransition
 
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
@@ -29,12 +30,22 @@ fun App() {
         Row(modifier = Modifier.background(Color(0xFFEEEEEE))) {
             if (currentPos != null) {
                 if (currentPos!!.path != "/login")
-                    NavRail(navigator = navigator,
-                            currentPos = currentPos!!.path)
+                    NavRail(
+                        navigator = navigator,
+                        currentPos = currentPos!!.path
+                    )
             }
             NavHost(
-                    navigator = navigator,
-                    initialRoute = "/login",
+                navigator = navigator,
+                initialRoute = "/login",
+                navTransition = NavTransition(
+                    createTransition = fadeIn(),
+                    destroyTransition = fadeOut(),
+                    pauseTransition = fadeOut(),
+                    resumeTransition = fadeIn(),
+                    enterTargetContentZIndex = 0f,
+                    exitTargetContentZIndex = 0f,
+                )
             ) {
                 scene("/login") {
                     LoginScene(onLogin = {
