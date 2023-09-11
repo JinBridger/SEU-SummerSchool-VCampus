@@ -8,6 +8,8 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun blankSubscene() {
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {}
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {}
 }

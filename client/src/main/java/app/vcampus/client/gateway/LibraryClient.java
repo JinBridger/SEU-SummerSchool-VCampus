@@ -1,8 +1,9 @@
 package app.vcampus.client.gateway;
 
 import app.vcampus.client.net.NettyHandler;
-import app.vcampus.server.entity.*;
-import app.vcampus.server.utility.Pair;
+import app.vcampus.server.entity.IEntity;
+import app.vcampus.server.entity.LibraryBook;
+import app.vcampus.server.entity.LibraryTransaction;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 public class LibraryClient {

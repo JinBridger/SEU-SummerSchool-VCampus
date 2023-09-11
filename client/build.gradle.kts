@@ -37,7 +37,8 @@ dependencies {
 
     val precompose_version = "1.5.0"
     implementation(
-            "org.jetbrains.compose.material:material-icons-extended-desktop:1.5.0")
+        "org.jetbrains.compose.material:material-icons-extended-desktop:1.5.0"
+    )
     implementation("com.seanproctor:data-table-material:0.5.1")
     implementation("org.jetbrains.compose.material3:material3-desktop:1.5.0")
 

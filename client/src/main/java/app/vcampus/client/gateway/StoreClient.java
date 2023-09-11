@@ -94,19 +94,6 @@ public class StoreClient {
         }
     }
 
-    public static boolean deleteItem(NettyHandler handler, String uuid) {
-        Request request = new Request();
-        request.setUri("storeItem/deleteItem");
-        request.setParams(Map.of("uuid", uuid.toString()));
-        try {
-            Response response = BaseClient.sendRequest(handler, request);
-            return response.getStatus().equals("success");
-        } catch (InterruptedException e) {
-            log.warn("Fail to delete item", e);
-            return false;
-        }
-    }
-
     public static boolean updateItem(NettyHandler handler, StoreItem storeItem) {
         Request request = new Request();
         request.setUri("storeItem/updateItem");
@@ -202,22 +189,6 @@ public class StoreClient {
         }
     }
 
-    public static boolean createTransaction(NettyHandler handler, String itemUUID, String amount) {
-        Request request = new Request();
-        request.setUri("storeTransaction/createTransaction");
-        request.setParams(Map.of(
-                "itemUUID", itemUUID,
-                "amount", amount
-        ));
-        try {
-            Response response = BaseClient.sendRequest(handler, request);
-            return response.getStatus().equals("success");
-        } catch (InterruptedException e) {
-            log.warn("Fail to create transaction", e);
-            return false;
-        }
-    }
-
     //    public static Map<String,List<StoreTransaction>> searchTransaction(NettyHandler handler,String keyword){
 //        Request request=new Request();
 //        request.setUri("storeTransaction/searchTransaction");
@@ -239,25 +210,6 @@ public class StoreClient {
 //            return null;
 //        }
 //    }
-    public static List<StoreItem> getReport(NettyHandler handler) {
-        Request request = new Request();
-        request.setUri("storeItem/getReport");
-        try {
-            Response response = BaseClient.sendRequest(handler, request);
-            if (response.getStatus().equals("success")) {
-                List<String> raw_data = (List<String>) response.getData();
-                List<StoreItem> data = new LinkedList<>();
-                raw_data.forEach(json -> data.add(IEntity.fromJson(json, StoreItem.class)));
-                Collections.sort(data, (o1, o2) -> o2.getSalesVolume() - o1.getSalesVolume());
-                return data;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            log.warn(String.valueOf(e));
-            return null;
-        }
-    }
 //    public static boolean addTransaction(NettyHandler handler,List<Pair<Integer,StoreItem>> list){
 //        Request request=new Request();
 //        request.setUri("storeTransaction/addTransaction");

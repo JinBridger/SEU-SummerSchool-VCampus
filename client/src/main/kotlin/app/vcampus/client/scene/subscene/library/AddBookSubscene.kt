@@ -48,11 +48,11 @@ fun addBookSubscene(viewModel: LibraryViewModel) {
                     Spacer(Modifier.height(20.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth()
-                            .onPreviewKeyEvent {event: KeyEvent ->
-                                if(event.type== KeyEventType.KeyDown&&event.key== Key.Enter){
+                            .onPreviewKeyEvent { event: KeyEvent ->
+                                if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
                                     viewModel.addBook.preAddBook()
                                     true
-                                }else{
+                                } else {
                                     false
                                 }
                             },

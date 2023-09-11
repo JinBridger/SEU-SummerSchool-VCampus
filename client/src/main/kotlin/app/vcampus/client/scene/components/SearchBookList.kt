@@ -27,11 +27,11 @@ import androidx.compose.ui.unit.sp
 import app.vcampus.client.viewmodel.MutableLibraryBook
 import app.vcampus.server.entity.LibraryBook
 import app.vcampus.server.enums.BookStatus
+import app.vcampus.server.utility.Pair
 import com.seanproctor.datatable.DataColumn
 import com.seanproctor.datatable.TableColumnWidth
 import com.seanproctor.datatable.material.DataTable
 import java.util.stream.Collectors
-import app.vcampus.server.utility.Pair
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalStdlibApi::class)
 @Composable
@@ -202,7 +202,10 @@ fun searchBookListItem(
                                         Text(it.first.place.value)
                                     }
                                     cell {
-                                        Text(it.first.bookStatus.value.label, color = Color(it.first.bookStatus.value.color))
+                                        Text(
+                                            it.first.bookStatus.value.label,
+                                            color = Color(it.first.bookStatus.value.color)
+                                        )
                                     }
                                 }
                             }
@@ -433,7 +436,7 @@ fun searchBookListItem(
                                 Spacer(Modifier.weight(1F))
                                 Button(onClick = {
 
-                                    val i  = modifiedBooks.iterator()
+                                    val i = modifiedBooks.iterator()
 
                                     while (i.hasNext()) {
                                         val pair = i.next()

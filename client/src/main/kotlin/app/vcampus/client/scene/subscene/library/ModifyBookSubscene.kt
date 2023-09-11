@@ -25,8 +25,10 @@ fun modifyBookSubscene(viewModel: LibraryViewModel) {
     var keyword by viewModel.modifyBook.keyword
     val searched by viewModel.modifyBook.searched
 
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))
@@ -37,11 +39,11 @@ fun modifyBookSubscene(viewModel: LibraryViewModel) {
                 Spacer(Modifier.height(20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth()
-                        .onPreviewKeyEvent {event: KeyEvent ->
-                            if(event.type== KeyEventType.KeyDown&&event.key== Key.Enter){
+                        .onPreviewKeyEvent { event: KeyEvent ->
+                            if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
                                 viewModel.modifyBook.searchBook()
                                 true
-                            }else{
+                            } else {
                                 false
                             }
                         },

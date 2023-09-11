@@ -33,16 +33,22 @@ fun AdminScene(navi: Navigator) {
         SideBar(adminSideBarItem) {
             (0..<adminSideBarItem.size).forEach { i ->
                 adminSideBarItem[i] = adminSideBarItem[i].copy(
-                        isChosen = false)
+                    isChosen = false
+                )
             }
             adminSideBarItem[it] = adminSideBarItem[it].copy(
-                    isChosen = true)
+                isChosen = true
+            )
             currentSubscene.value = adminSideBarItem[it].heading
         }
-        Box(modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
-                offsetX = 3.dp, blurRadius = 10.dp).background(
-                Color.White).padding(horizontal = 100.dp)) {
-            Crossfade(currentSubscene.value){
+        Box(
+            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                offsetX = 3.dp, blurRadius = 10.dp
+            ).background(
+                Color.White
+            ).padding(horizontal = 100.dp)
+        ) {
+            Crossfade(currentSubscene.value) {
                 when (it) {
                     "" -> blankSubscene()
                     "添加账户" -> addUserSubscene(viewModel)

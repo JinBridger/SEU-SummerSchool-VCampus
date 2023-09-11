@@ -17,7 +17,11 @@ import app.vcampus.server.entity.TeachingClass
 import java.io.File
 
 @Composable
-fun enterScoreListItem(tc: TeachingClass, exportTemplate: (TeachingClass, File) -> Unit, importScore: (TeachingClass, File) -> Unit) {
+fun enterScoreListItem(
+    tc: TeachingClass,
+    exportTemplate: (TeachingClass, File) -> Unit,
+    importScore: (TeachingClass, File) -> Unit
+) {
     var showTemplateDialog by remember { mutableStateOf(false) }
     var showImportDialog by remember { mutableStateOf(false) }
 
@@ -51,28 +55,32 @@ fun enterScoreListItem(tc: TeachingClass, exportTemplate: (TeachingClass, File) 
         )
     }
 
-    Surface(modifier = Modifier.fillMaxWidth().border(
+    Surface(
+        modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
             shape = RoundedCornerShape(4.dp)
-    )) {
+        )
+    ) {
         Box(Modifier.fillMaxSize().padding(10.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Column {
                     Row(
-                            verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.fillMaxHeight()) {
                             Row {
                                 Text(
-                                        text = tc.course.courseName,
-                                        fontWeight = FontWeight(700)
+                                    text = tc.course.courseName,
+                                    fontWeight = FontWeight(700)
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                        text = tc.course.courseId,
-                                        color = Color.DarkGray
+                                    text = tc.course.courseId,
+                                    color = Color.DarkGray
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                             }

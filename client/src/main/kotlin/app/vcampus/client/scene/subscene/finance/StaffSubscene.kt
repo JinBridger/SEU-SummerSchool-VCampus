@@ -123,6 +123,7 @@ fun staffSubscene(viewModel: FinanceViewModel) {
                                                 Text("挂失")
                                             }
                                         }
+
                                         CardStatus.frozen -> {
                                             Button(onClick = {
                                                 viewModel.staff.unfreezeCard()
@@ -130,6 +131,7 @@ fun staffSubscene(viewModel: FinanceViewModel) {
                                                 Text("解冻")
                                             }
                                         }
+
                                         CardStatus.lost -> {
                                             Button(onClick = {
                                                 viewModel.staff.unfreezeCard()
@@ -137,6 +139,7 @@ fun staffSubscene(viewModel: FinanceViewModel) {
                                                 Text("解挂")
                                             }
                                         }
+
                                         else -> {}
                                     }
                                 }

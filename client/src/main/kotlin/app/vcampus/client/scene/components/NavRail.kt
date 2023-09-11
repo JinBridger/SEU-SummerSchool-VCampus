@@ -18,26 +18,29 @@ fun NavRail(navigator: Navigator, currentPos: String) {
     NavigationRail {
         Navis.forEach {
             if (it.permission.intersect(
-                            FakeRepository.user.roles.toList()).isNotEmpty())
+                    FakeRepository.user.roles.toList()
+                ).isNotEmpty()
+            )
                 NavigationRailItem(
-                        selected = currentPos == it.path,
-                        onClick = {
-                            if (currentPos != it.path) navigator.navigate(
-                                    it.path)
-                        },
-                        icon = { Icon(it.icon, "") },
-                        label = { Text(it.name) },
-                        alwaysShowLabel = false
+                    selected = currentPos == it.path,
+                    onClick = {
+                        if (currentPos != it.path) navigator.navigate(
+                            it.path
+                        )
+                    },
+                    icon = { Icon(it.icon, "") },
+                    label = { Text(it.name) },
+                    alwaysShowLabel = false
                 )
         }
         Spacer(Modifier.weight(1F))
         NavigationRailItem(
-                selected = false,
-                onClick = {
-                    FakeRepository.isConnected = false
-                    navigator.navigate("/login")
-                },
-                icon = { Icon(Icons.Default.ExitToApp, "") }
+            selected = false,
+            onClick = {
+                FakeRepository.isConnected = false
+                navigator.navigate("/login")
+            },
+            icon = { Icon(Icons.Default.ExitToApp, "") }
         )
     }
 }

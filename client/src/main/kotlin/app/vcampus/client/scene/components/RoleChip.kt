@@ -2,8 +2,9 @@ package app.vcampus.client.scene.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.onClick
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -22,18 +23,20 @@ fun roleChip(roles: List<String> = listOf(), onChange: (List<String>) -> Unit = 
     val selectedFinanceStaff = remember { mutableStateOf(roles.contains("finance_staff")) }
 
     val callback = {
-        onChange(listOfNotNull(
-            if (selectedAdmin.value) "admin" else null,
-            if (selectedStudent.value) "student" else null,
-            if (selectedTeacher.value) "teacher" else null,
-            if (selectedTeachingAffair.value) "affairs_staff" else null,
-            if (selectedLibraryUser.value) "library_user" else null,
-            if (selectedLibraryStaff.value) "library_staff" else null,
-            if (selectedShopUser.value) "shop_user" else null,
-            if (selectedShopStaff.value) "shop_staff" else null,
-            if (selectedFinanceUser.value) "finance_user" else null,
-            if (selectedFinanceStaff.value) "finance_staff" else null,
-        ))
+        onChange(
+            listOfNotNull(
+                if (selectedAdmin.value) "admin" else null,
+                if (selectedStudent.value) "student" else null,
+                if (selectedTeacher.value) "teacher" else null,
+                if (selectedTeachingAffair.value) "affairs_staff" else null,
+                if (selectedLibraryUser.value) "library_user" else null,
+                if (selectedLibraryStaff.value) "library_staff" else null,
+                if (selectedShopUser.value) "shop_user" else null,
+                if (selectedShopStaff.value) "shop_staff" else null,
+                if (selectedFinanceUser.value) "finance_user" else null,
+                if (selectedFinanceStaff.value) "finance_staff" else null,
+            )
+        )
     }
 
     FlowRow(Modifier.fillMaxWidth()) {

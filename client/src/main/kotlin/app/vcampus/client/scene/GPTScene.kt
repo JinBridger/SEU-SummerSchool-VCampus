@@ -10,7 +10,7 @@ import moe.tlaster.precompose.navigation.Navigator
 
 @Composable
 fun GPTScene(
-        navi: Navigator,
+    navi: Navigator,
 ) {
     Box(Modifier.fillMaxSize()) {
         ComposeJFXPanel(FakeRepository.gptJfxPanel)

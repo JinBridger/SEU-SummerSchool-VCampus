@@ -68,9 +68,9 @@ public class LibraryBook implements IEntity {
         }
     }
 
-    public static LibraryBook fromMap(Map<String,String>data){
+    public static LibraryBook fromMap(Map<String, String> data) {
         try {
-            LibraryBook book=new LibraryBook();
+            LibraryBook book = new LibraryBook();
             book.setUuid(UUID.fromString(data.get("uuid")));
             book.setName(data.get("name"));
             book.setIsbn(data.get("isbn"));
@@ -86,16 +86,16 @@ public class LibraryBook implements IEntity {
         }
     }
 
-    public Map<String,String>toMap(){
+    public Map<String, String> toMap() {
         return Map.ofEntries(
-                Map.entry("uuid",getUuid().toString()),
-                Map.entry("name",getName()),
-                Map.entry("place",getName()),
-                Map.entry("press",getPress()),
-                Map.entry("isbn",getIsbn()),
-                Map.entry("description",getDescription()),
-                Map.entry("bookStatus",getBookStatus().toString()),
-                Map.entry("author",getAuthor())
+                Map.entry("uuid", getUuid().toString()),
+                Map.entry("name", getName()),
+                Map.entry("place", getName()),
+                Map.entry("press", getPress()),
+                Map.entry("isbn", getIsbn()),
+                Map.entry("description", getDescription()),
+                Map.entry("bookStatus", getBookStatus().toString()),
+                Map.entry("author", getAuthor())
         );
     }
 }

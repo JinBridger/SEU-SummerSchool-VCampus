@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import app.vcampus.server.entity.User
 
 @Composable
@@ -22,19 +21,23 @@ fun userListItem(user: User, onEdit: (Int, String, List<String>) -> Unit = { _, 
     var password by remember { mutableStateOf("") }
     var roles by remember { mutableStateOf(user.roles.toList()) }
 
-    Surface(modifier = Modifier.fillMaxWidth().border(
+    Surface(
+        modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
             shape = RoundedCornerShape(4.dp)
-    ).animateContentSize(
+        ).animateContentSize(
             animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
+                durationMillis = 300,
+                easing = LinearOutSlowInEasing
             )
-    ).padding(10.dp)) {
+        ).padding(10.dp)
+    ) {
         Column(Modifier.fillMaxWidth()) {
-            Row(Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Column {
                     Text(user.name, fontWeight = FontWeight(700))
                     Text(user.cardNum.toString(), fontWeight = FontWeight(700))
@@ -53,10 +56,10 @@ fun userListItem(user: User, onEdit: (Int, String, List<String>) -> Unit = { _, 
                 Spacer(Modifier.height(8.dp))
                 Row(Modifier.fillMaxWidth()) {
                     OutlinedTextField(
-                            value = password,
-                            onValueChange = { password = it },
-                            label = { Text("输入新的密码（留空则不修改）") },
-                            modifier = Modifier.weight(1F)
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text("输入新的密码（留空则不修改）") },
+                        modifier = Modifier.weight(1F)
                     )
                 }
                 Spacer(Modifier.height(16.dp))

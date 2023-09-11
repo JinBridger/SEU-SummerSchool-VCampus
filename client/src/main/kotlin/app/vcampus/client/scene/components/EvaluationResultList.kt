@@ -8,33 +8,38 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import app.vcampus.server.entity.TeachingClass
-import app.vcampus.server.utility.Pair
 
 
 @Composable
 fun ratingResultBar(evaluateString: String, result: List<Int>) {
-    val colors = listOf(Color(0xffd65745), Color(0xffc45c24), Color(0xffd8833b),
-            Color(0xffe7a03c), Color(0xffeac645), Color(0xff65c97a),
-            Color(0xff55ac68), Color(0xff58b99d), Color(0xff4a9e86),
-            Color(0xff326b5a))
+    val colors = listOf(
+        Color(0xffd65745), Color(0xffc45c24), Color(0xffd8833b),
+        Color(0xffe7a03c), Color(0xffeac645), Color(0xff65c97a),
+        Color(0xff55ac68), Color(0xff58b99d), Color(0xff4a9e86),
+        Color(0xff326b5a)
+    )
     Column(Modifier.fillMaxWidth()) {
-        Text(evaluateString,
-                fontWeight = FontWeight(700))
+        Text(
+            evaluateString,
+            fontWeight = FontWeight(700)
+        )
         Spacer(Modifier.height(4.dp))
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text("1")
             Spacer(Modifier.width(10.dp))
             (0..9).forEach {
-                if(result[it] != 0)
+                if (result[it] != 0)
                     Box(Modifier.weight(result[it].toFloat()).background(colors[it]).height(10.dp))
             }
             Box(Modifier.weight(0.001F).background(Color.LightGray).height(10.dp))
@@ -50,36 +55,36 @@ fun ratingResultBar(evaluateString: String, result: List<Int>) {
 fun evaluateResultListItem(result: TeachingClass) {
     var expanded by remember { mutableStateOf(false) }
     Surface(modifier = Modifier.fillMaxWidth().border(
-            1.dp,
-            color = Color.LightGray,
-            shape = RoundedCornerShape(4.dp)
+        1.dp,
+        color = Color.LightGray,
+        shape = RoundedCornerShape(4.dp)
     ).animateContentSize(
-            animationSpec = tween(
-                    durationMillis = 300,
-                    easing = LinearOutSlowInEasing
-            )
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = LinearOutSlowInEasing
+        )
     ), onClick = { expanded = !expanded }) {
         Box(Modifier.fillMaxSize().padding(10.dp)) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Row(
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                        verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.fillMaxHeight()) {
                         Row {
                             Text(
-                                    text = result.course.courseName,
-                                    fontWeight = FontWeight(700)
+                                text = result.course.courseName,
+                                fontWeight = FontWeight(700)
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                    text = result.course.courseId,
-                                    color = Color.DarkGray
+                                text = result.course.courseId,
+                                color = Color.DarkGray
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                    text = result.humanReadableSchedule(),
-                                    color = Color.DarkGray
+                                text = result.humanReadableSchedule(),
+                                color = Color.DarkGray
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
@@ -105,8 +110,8 @@ fun evaluateResultListItem(result: TeachingClass) {
                     Text("匿名评价：", fontWeight = FontWeight(700))
 
                     result.getEvaluationResult().second.forEach {
-                        Row(Modifier.padding(8.dp),verticalAlignment = Alignment.CenterVertically) {
-                            Canvas(modifier = Modifier.padding(start = 8.dp, end = 8.dp).size(6.dp)){
+                        Row(Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Canvas(modifier = Modifier.padding(start = 8.dp, end = 8.dp).size(6.dp)) {
                                 drawCircle(Color.Black)
                             }
                             Text(it)

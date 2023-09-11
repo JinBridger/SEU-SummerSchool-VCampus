@@ -6,12 +6,9 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import app.vcampus.client.net.NettyHandler
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.TopBar
 import javafx.application.Platform
-import javafx.scene.Scene
-import javafx.scene.web.WebView
 import moe.tlaster.precompose.PreComposeWindow
 
 fun main() {
@@ -21,12 +18,12 @@ fun main() {
     application {
         val state = rememberWindowState(size = DpSize(1400.dp, 800.dp))
         PreComposeWindow(
-                title = "PreCompose Sample",
-                onCloseRequest = {
-                    exitApplication()
-                },
-                state = state,
-                undecorated = true,
+            title = "PreCompose Sample",
+            onCloseRequest = {
+                exitApplication()
+            },
+            state = state,
+            undecorated = true,
         ) {
             FakeRepository.window = window
             Column {

@@ -1,6 +1,5 @@
 package app.vcampus.client.scene.components
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -16,23 +15,23 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun TopBar(heading: String, onClose: () -> Unit) {
     TopAppBar(
-            title = {
-                Text(
-                        text = heading,
-                        style = TextStyle(
-                                fontSize = 20.sp,
-                                lineHeight = 24.sp,
-                                fontWeight = FontWeight(600),
-                                color = Color(0xFFFFFFFF),
-                                letterSpacing = 0.15.sp,
-                                fontFamily = sarasaUiSc
-                        )
+        title = {
+            Text(
+                text = heading,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    lineHeight = 24.sp,
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFFFFFFFF),
+                    letterSpacing = 0.15.sp,
+                    fontFamily = sarasaUiSc
                 )
-            },
-            actions = {
-                IconButton(onClick = { onClose() }) {
-                    Icon(Icons.Default.Close, contentDescription = null)
-                }
-            },
+            )
+        },
+        actions = {
+            IconButton(onClick = { onClose() }) {
+                Icon(Icons.Default.Close, contentDescription = null)
+            }
+        },
     )
 }

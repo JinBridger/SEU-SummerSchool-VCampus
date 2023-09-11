@@ -5,7 +5,6 @@ import app.vcampus.server.entity.LibraryBook;
 import app.vcampus.server.entity.LibraryTransaction;
 import app.vcampus.server.entity.User;
 import app.vcampus.server.enums.BookStatus;
-import app.vcampus.server.enums.LibraryAction;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
@@ -72,7 +71,8 @@ public class LibraryBookController {
         try {
             String bookUuid = request.getParams().get("bookUuid");
             int cardNumber = Integer.parseInt(request.getParams().get("cardNumber"));
-            if (bookUuid == null || cardNumber == 0) return Response.Common.error("Book UUID or user UUID cannot be empty");
+            if (bookUuid == null || cardNumber == 0)
+                return Response.Common.error("Book UUID or user UUID cannot be empty");
 
             UUID uuid = UUID.fromString(bookUuid);
             LibraryBook toBorrow = database.get(LibraryBook.class, uuid);
@@ -197,7 +197,8 @@ public class LibraryBookController {
             LibraryTransaction toRenew = database.get(LibraryTransaction.class, bookUuid);
             if (toRenew == null) return Response.Common.error("No such record");
 
-            if (toRenew.getUserId() != request.getSession().getCardNum()) return Response.Common.error("You cannot renew this book");
+            if (toRenew.getUserId() != request.getSession().getCardNum())
+                return Response.Common.error("You cannot renew this book");
 
             LibraryBook book = database.get(LibraryBook.class, toRenew.getBookUuid());
             if (book == null) return Response.Common.error("No such book");

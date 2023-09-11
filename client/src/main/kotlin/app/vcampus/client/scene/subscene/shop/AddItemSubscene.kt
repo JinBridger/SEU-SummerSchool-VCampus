@@ -2,22 +2,12 @@ package app.vcampus.client.scene.subscene.shop
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
-import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import app.vcampus.client.repository._StoreItem
+import app.vcampus.client.scene.components.addShopItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.ShopViewModel
-import androidx.compose.ui.Alignment
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.font.FontWeight
-import app.vcampus.client.scene.components.addShopItem
-import java.util.*
 
 @Composable
 fun addItemSubscene(viewModel: ShopViewModel) {

@@ -7,7 +7,6 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -38,7 +37,6 @@ public class StoreItem implements IEntity {
 
     @Column(columnDefinition = "TEXT")
     public String description;
-
 
 
 //    public static StoreItem fromMap(Map<String, String> data) {

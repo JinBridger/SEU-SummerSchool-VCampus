@@ -30,19 +30,22 @@ fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
         SideBar(teachingAffairsSideBarItem) {
             (0..<teachingAffairsSideBarItem.size).forEach { i ->
                 teachingAffairsSideBarItem[i] = teachingAffairsSideBarItem[i].copy(
-                        isChosen = false)
+                    isChosen = false
+                )
             }
             teachingAffairsSideBarItem[it] = teachingAffairsSideBarItem[it].copy(
-                    isChosen = true)
+                isChosen = true
+            )
             currentSubscene.value = teachingAffairsSideBarItem[it].heading
         }
         Box(
-                modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
-                        offsetX = 3.dp, blurRadius = 10.dp)
-                        .background(
-                                Color.White
-                        )
-                        .padding(horizontal = 100.dp)
+            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                offsetX = 3.dp, blurRadius = 10.dp
+            )
+                .background(
+                    Color.White
+                )
+                .padding(horizontal = 100.dp)
         ) {
             Crossfade(currentSubscene.value) {
                 when (it) {
@@ -73,7 +76,7 @@ fun TeachingAffairsStatusForUser(viewModel: TeachingAffairsViewModel) {
 @ExperimentalMaterialApi
 @Composable
 fun TeachingAffairsScene(
-        navi: Navigator
+    navi: Navigator
 ) {
     val viewModel = viewModel(TeachingAffairsViewModel::class, listOf()) {
         TeachingAffairsViewModel()

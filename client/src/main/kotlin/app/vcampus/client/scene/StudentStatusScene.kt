@@ -1,10 +1,13 @@
 package app.vcampus.client.scene
 
-import androidx.compose.animation.*
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -28,16 +31,22 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
         SideBar(studentStatusSideBarItem) {
             (0..<studentStatusSideBarItem.size).forEach { i ->
                 studentStatusSideBarItem[i] = studentStatusSideBarItem[i].copy(
-                        isChosen = false)
+                    isChosen = false
+                )
             }
             studentStatusSideBarItem[it] = studentStatusSideBarItem[it].copy(
-                    isChosen = true)
+                isChosen = true
+            )
             currentSubscene.value = studentStatusSideBarItem[it].heading
         }
-        Box(modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
-                offsetX = 3.dp, blurRadius = 10.dp).background(
-                Color.White).padding(horizontal = 100.dp)) {
-            Crossfade(currentSubscene.value){
+        Box(
+            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                offsetX = 3.dp, blurRadius = 10.dp
+            ).background(
+                Color.White
+            ).padding(horizontal = 100.dp)
+        ) {
+            Crossfade(currentSubscene.value) {
                 when (it) {
                     "" -> blankSubscene()
                     "我的学籍信息" -> studentStatusSubscene(viewModel)

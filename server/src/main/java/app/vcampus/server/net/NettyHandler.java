@@ -19,8 +19,8 @@ import org.hibernate.SessionFactory;
 public class NettyHandler extends ChannelInboundHandlerAdapter {
     private final Gson gson = new Gson();
     private final Router router;
-    private Session session;
     private final SessionFactory database;
+    private Session session;
 
     public NettyHandler(Router router, SessionFactory database) {
         this.router = router;

@@ -3,7 +3,6 @@ package app.vcampus.client.viewmodel
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import app.vcampus.client.gateway.LibraryClient
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.LibraryBook
@@ -15,8 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
-import java.util.UUID
-import javax.swing.text.View
+import java.util.*
 
 data class MutableLibraryBook(
     var uuid: UUID = UUID.randomUUID(),
@@ -68,8 +66,8 @@ class LibraryViewModel : ViewModel() {
     val modifyBook = ModifyBook()
     val myBook = MyBook()
     val returnBook = ReturnBook()
-    var borrowResult= mutableStateOf(false)
-    var showBorrowMessage= mutableStateOf(false)
+    var borrowResult = mutableStateOf(false)
+    var showBorrowMessage = mutableStateOf(false)
 
     val sideBarContent = (if (identity.contains("library_user")) {
         listOf(SideBarItem(true, "查询", "", Icons.Default.Info, false))
@@ -130,8 +128,8 @@ class LibraryViewModel : ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 borrowBookInternal(bookUuid, cardId).collect {
-                    borrowResult.value=it
-                    showBorrowMessage.value=true
+                    borrowResult.value = it
+                    showBorrowMessage.value = true
                 }
             }
         }

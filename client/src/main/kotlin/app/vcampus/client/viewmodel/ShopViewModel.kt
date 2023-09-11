@@ -9,6 +9,7 @@ import app.vcampus.client.repository.copy
 import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.StoreItem
 import app.vcampus.server.entity.StoreTransaction
+import app.vcampus.server.utility.Pair
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -16,7 +17,6 @@ import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 import java.util.*
-import app.vcampus.server.utility.Pair
 
 
 data class MutableStoreItem(
@@ -127,7 +127,6 @@ class ShopViewModel() : ViewModel() {
     // SelectItemSubscene
 
 
-
 //    val chosenShopItems: List<_StoreItem> = _chosenShopItems
 
     private val _chosenItemsCount = mutableStateOf(0)
@@ -142,7 +141,7 @@ class ShopViewModel() : ViewModel() {
 //        totalOrderItems = FakeRepository.getAllOrder()
 //    }
 
-    class SelectItem(private val parent: ShopViewModel): ViewModel() {
+    class SelectItem(private val parent: ShopViewModel) : ViewModel() {
         val totalShopItems = mutableStateListOf<StoreItem>()
         val chosenShopItems = mutableListOf<StoreItem>()
 
@@ -198,7 +197,7 @@ class ShopViewModel() : ViewModel() {
         }
     }
 
-    class MyOrders(): ViewModel() {
+    class MyOrders() : ViewModel() {
         var orders = mutableStateMapOf<String, List<StoreTransaction>>()
 
         fun getOrders() {
@@ -221,15 +220,15 @@ class ShopViewModel() : ViewModel() {
         }
     }
 
-    open class SearchStoreTransaction: ViewModel() {
+    open class SearchStoreTransaction : ViewModel() {
         val keyword = mutableStateOf("")
-        val Transactions = mutableStateMapOf<String,List<StoreTransaction>>()
+        val Transactions = mutableStateMapOf<String, List<StoreTransaction>>()
         val searched = mutableStateOf(false)
 
-        fun searchStoreTransaction(){
+        fun searchStoreTransaction() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    searchStoreTransactionInternal().collect{
+                    searchStoreTransactionInternal().collect {
                         Transactions.clear()
                         Transactions.putAll(it)
 
@@ -243,6 +242,7 @@ class ShopViewModel() : ViewModel() {
             emit(FakeRepository.searchTransaction(keyword.value))
         }
     }
+
     open class SearchStoreItem : ViewModel() {
         val storeList = mutableStateListOf<StoreItem>()
         var searched = mutableStateOf(false)

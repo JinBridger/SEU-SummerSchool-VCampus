@@ -1,17 +1,10 @@
 package app.vcampus.server;
 
 import app.vcampus.server.controller.*;
-import app.vcampus.server.entity.Course;
-import app.vcampus.server.entity.TeachingClass;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
-import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.router.Router;
 import org.hibernate.SessionFactory;
-
-
-import java.util.List;
-import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) throws Exception {

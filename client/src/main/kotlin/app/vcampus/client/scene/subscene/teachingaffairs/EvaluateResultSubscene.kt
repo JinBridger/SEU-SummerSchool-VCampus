@@ -7,7 +7,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.evaluateResultListItem
-import app.vcampus.client.scene.components.evaluateTeacherListItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
@@ -17,8 +16,10 @@ fun evaluateResultSubscene(viewModel: TeachingAffairsViewModel) {
         viewModel.myTeachingClasses.init()
     }
 
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))

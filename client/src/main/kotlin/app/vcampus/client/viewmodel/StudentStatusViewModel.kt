@@ -74,19 +74,27 @@ class StudentStatusViewModel() : ViewModel() {
     val searchedStudents = mutableStateListOf<Student>()
 
     val sideBarContent = (if (identity.contains("student") || identity.contains(
-                    "teacher")) {
+            "teacher"
+        )
+    ) {
         listOf(SideBarItem(true, "学籍信息", "", Icons.Default.Info, false))
     } else {
         emptyList()
     }) + identity.flatMap {
         when (it) {
             "student" -> listOf(
-                    SideBarItem(false, "我的学籍信息", "查看我的学籍信息",
-                            Icons.Default.Info, false))
+                SideBarItem(
+                    false, "我的学籍信息", "查看我的学籍信息",
+                    Icons.Default.Info, false
+                )
+            )
 
             "affairs_staff" -> listOf(
-                    SideBarItem(false, "修改学籍信息", "修改学籍信息",
-                            Icons.Default.Info, false))
+                SideBarItem(
+                    false, "修改学籍信息", "修改学籍信息",
+                    Icons.Default.Info, false
+                )
+            )
 
             else -> emptyList()
         }

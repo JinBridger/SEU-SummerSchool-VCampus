@@ -14,19 +14,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import app.vcampus.server.entity.CardTransaction
 import app.vcampus.server.utility.DateUtility
 
 @Composable
 fun billCard(bill: CardTransaction) {
-    Surface(modifier = Modifier.fillMaxWidth().border(
+    Surface(
+        modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
             shape = RoundedCornerShape(4.dp)
-    )) {
-        Row(Modifier.fillMaxWidth().padding(10.dp),
-                verticalAlignment = Alignment.CenterVertically) {
+        )
+    ) {
+        Row(
+            Modifier.fillMaxWidth().padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Spacer(Modifier.width(10.dp))
             Icon(Icons.Default.LocalMall, "", tint = Color(0xff66626b))
             Spacer(Modifier.width(20.dp))
@@ -42,7 +45,8 @@ fun billCard(bill: CardTransaction) {
                     bill.amount / 100.0
                 ) + " 元",
                 fontWeight = FontWeight(700),
-                color = Color(bill.type.color))
+                color = Color(bill.type.color)
+            )
             Spacer(Modifier.width(10.dp))
         }
     }

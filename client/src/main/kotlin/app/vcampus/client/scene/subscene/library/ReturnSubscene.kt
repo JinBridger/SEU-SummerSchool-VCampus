@@ -8,7 +8,9 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -22,8 +24,10 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 fun returnSubscene(viewModel: LibraryViewModel) {
     var keyword by viewModel.returnBook.cardNumber
 
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))
@@ -33,22 +37,24 @@ fun returnSubscene(viewModel: LibraryViewModel) {
 
             item {
                 Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
-                            value = keyword,
-                            onValueChange = { keyword = it },
-                            label = { Text("搜索一卡通号") },
-                            modifier = Modifier.padding(
-                                    0.dp, 0.dp, 16.dp,
-                                    0.dp
-                            ).weight(1F)
+                        value = keyword,
+                        onValueChange = { keyword = it },
+                        label = { Text("搜索一卡通号") },
+                        modifier = Modifier.padding(
+                            0.dp, 0.dp, 16.dp,
+                            0.dp
+                        ).weight(1F)
                     )
                     Column {
                         Spacer(Modifier.height(8.dp))
-                        Button(onClick = { viewModel.returnBook.getRecords() },
-                                modifier = Modifier.height(56.dp)) {
+                        Button(
+                            onClick = { viewModel.returnBook.getRecords() },
+                            modifier = Modifier.height(56.dp)
+                        ) {
                             Icon(Icons.Default.Search, "")
                         }
                     }
@@ -59,10 +65,14 @@ fun returnSubscene(viewModel: LibraryViewModel) {
             if (viewModel.returnBook.currentBorrowed.isNotEmpty()) {
                 item {
                     Row {
-                        Text(keyword, fontWeight = FontWeight(700),
-                                fontSize = 14.sp)
-                        Text(" 当前借阅：${viewModel.returnBook.currentBorrowed.size} / 最大借阅：20",
-                                fontSize = 14.sp)
+                        Text(
+                            keyword, fontWeight = FontWeight(700),
+                            fontSize = 14.sp
+                        )
+                        Text(
+                            " 当前借阅：${viewModel.returnBook.currentBorrowed.size} / 最大借阅：20",
+                            fontSize = 14.sp
+                        )
                     }
                     Spacer(Modifier.height(8.dp))
                 }

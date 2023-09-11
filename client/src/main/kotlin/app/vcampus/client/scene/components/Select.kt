@@ -113,9 +113,15 @@ fun <T> Select(
                 },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     disabledTextColor = defaultTextFieldColors.textColor(true).value,
-                    disabledBorderColor = defaultTextFieldColors.indicatorColor(true, false, remember { MutableInteractionSource() }).value,
+                    disabledBorderColor = defaultTextFieldColors.indicatorColor(
+                        true,
+                        false,
+                        remember { MutableInteractionSource() }).value,
                     disabledPlaceholderColor = defaultTextFieldColors.placeholderColor(true).value,
-                    disabledLabelColor = defaultTextFieldColors.labelColor(true, false, remember { MutableInteractionSource() }).value,
+                    disabledLabelColor = defaultTextFieldColors.labelColor(
+                        true,
+                        false,
+                        remember { MutableInteractionSource() }).value,
                     disabledLeadingIconColor = defaultTextFieldColors.leadingIconColor(true, false).value,
                     disabledTrailingIconColor = defaultTextFieldColors.trailingIconColor(true, false).value
                 )
@@ -128,7 +134,7 @@ fun <T> Select(
                 dropExpand = false
                 callBack(selected, false)
             },
-            modifier = Modifier.width(with(LocalDensity.current){dropDownWidth.toDp()})
+            modifier = Modifier.width(with(LocalDensity.current) { dropDownWidth.toDp() })
         ) {
             SelectOption(callBack, selectList)
         }

@@ -30,19 +30,22 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
         SideBar(librarySideBarItem) {
             (0..<librarySideBarItem.size).forEach { i ->
                 librarySideBarItem[i] = librarySideBarItem[i].copy(
-                        isChosen = false)
+                    isChosen = false
+                )
             }
             librarySideBarItem[it] = librarySideBarItem[it].copy(
-                    isChosen = true)
+                isChosen = true
+            )
             currentSubscene.value = librarySideBarItem[it].heading
         }
         Box(
-                modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
-                        offsetX = 3.dp, blurRadius = 10.dp)
-                        .background(
-                                Color.White
-                        )
-                        .padding(horizontal = 100.dp)
+            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                offsetX = 3.dp, blurRadius = 10.dp
+            )
+                .background(
+                    Color.White
+                )
+                .padding(horizontal = 100.dp)
         ) {
             Crossfade(currentSubscene.value) {
                 when (it) {
@@ -62,7 +65,7 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
 @ExperimentalMaterialApi
 @Composable
 fun LibraryScene(
-        navi: Navigator
+    navi: Navigator
 ) {
     val viewModel = viewModel(LibraryViewModel::class, listOf()) {
         LibraryViewModel()

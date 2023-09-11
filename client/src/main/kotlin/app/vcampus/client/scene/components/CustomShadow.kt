@@ -16,11 +16,11 @@ import org.jetbrains.skia.FilterBlurMode
 import org.jetbrains.skia.MaskFilter
 
 fun Modifier.shadowCustom(
-        color: Color = Color.Gray,
-        offsetX: Dp = 0.dp,
-        offsetY: Dp = 0.dp,
-        blurRadius: Dp = 0.dp,
-        shapeRadius: Dp = 0.dp,
+    color: Color = Color.Gray,
+    offsetX: Dp = 0.dp,
+    offsetY: Dp = 0.dp,
+    blurRadius: Dp = 0.dp,
+    shapeRadius: Dp = 0.dp,
 ) = composed {
     val paint: Paint = remember { Paint() }
     val blurRadiusPx = blurRadius.px(LocalDensity.current)
@@ -43,21 +43,21 @@ fun Modifier.shadowCustom(
             if (shapeRadius > 0.dp) {
                 val radiusPx = shapeRadius.toPx()
                 canvas.drawRoundRect(
-                        left = leftPixel,
-                        top = topPixel,
-                        right = rightPixel,
-                        bottom = bottomPixel,
-                        radiusX = radiusPx,
-                        radiusY = radiusPx,
-                        paint = paint,
+                    left = leftPixel,
+                    top = topPixel,
+                    right = rightPixel,
+                    bottom = bottomPixel,
+                    radiusX = radiusPx,
+                    radiusY = radiusPx,
+                    paint = paint,
                 )
             } else {
                 canvas.drawRect(
-                        left = leftPixel,
-                        top = topPixel,
-                        right = rightPixel,
-                        bottom = bottomPixel,
-                        paint = paint,
+                    left = leftPixel,
+                    top = topPixel,
+                    right = rightPixel,
+                    bottom = bottomPixel,
+                    paint = paint,
                 )
             }
         }
@@ -65,4 +65,4 @@ fun Modifier.shadowCustom(
 }
 
 private fun Dp.px(density: Density): Float =
-        with(density) { toPx() }
+    with(density) { toPx() }

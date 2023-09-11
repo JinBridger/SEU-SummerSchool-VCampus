@@ -13,12 +13,11 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.SideBar
 import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.scene.subscene.blankSubscene
-import app.vcampus.client.scene.subscene.finance.staffSubscene
 import app.vcampus.client.scene.subscene.finance.myBillsSubscene
+import app.vcampus.client.scene.subscene.finance.staffSubscene
 import app.vcampus.client.viewmodel.FinanceViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
-
 
 
 @ExperimentalMaterialApi
@@ -35,16 +34,22 @@ fun FinanceScene(navi: Navigator) {
         SideBar(financeSideBarItem) {
             (0..<financeSideBarItem.size).forEach { i ->
                 financeSideBarItem[i] = financeSideBarItem[i].copy(
-                        isChosen = false)
+                    isChosen = false
+                )
             }
             financeSideBarItem[it] = financeSideBarItem[it].copy(
-                    isChosen = true)
+                isChosen = true
+            )
             currentSubscene.value = financeSideBarItem[it].heading
         }
-        Box(modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
-                offsetX = 3.dp, blurRadius = 10.dp).background(
-                Color.White).padding(horizontal = 100.dp)) {
-            Crossfade(currentSubscene.value){
+        Box(
+            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                offsetX = 3.dp, blurRadius = 10.dp
+            ).background(
+                Color.White
+            ).padding(horizontal = 100.dp)
+        ) {
+            Crossfade(currentSubscene.value) {
                 when (it) {
                     "" -> blankSubscene()
                     "一卡通" -> myBillsSubscene(viewModel)

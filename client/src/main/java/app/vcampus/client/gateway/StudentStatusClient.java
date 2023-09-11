@@ -9,13 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 public class StudentStatusClient {
     public static List<Student> searchInfo(NettyHandler handler,
-                                  String keyword) {
+                                           String keyword) {
         Request request = new Request();
         request.setUri("student/filter");
         request.setParams(Map.of(

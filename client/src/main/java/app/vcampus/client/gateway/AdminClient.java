@@ -2,13 +2,11 @@ package app.vcampus.client.gateway;
 
 import app.vcampus.client.net.NettyHandler;
 import app.vcampus.server.entity.IEntity;
-import app.vcampus.server.entity.LibraryBook;
 import app.vcampus.server.entity.User;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

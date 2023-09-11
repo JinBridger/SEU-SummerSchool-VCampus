@@ -23,8 +23,10 @@ import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 import app.vcampus.server.entity.Course
 import app.vcampus.server.entity.TeachingClass
 
-fun getIsChosenTeachingClass(viewModel: TeachingAffairsViewModel,
-                             teachingClass: TeachingClass): Boolean {
+fun getIsChosenTeachingClass(
+    viewModel: TeachingAffairsViewModel,
+    teachingClass: TeachingClass
+): Boolean {
     viewModel.myClasses.selected.forEach {
         if (it.uuid == teachingClass.uuid) {
             return true
@@ -52,8 +54,10 @@ fun getIsConflict(viewModel: TeachingAffairsViewModel, teachingClass: TeachingCl
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun selectClassCard(viewModel: TeachingAffairsViewModel,
-                    teachingClass: TeachingClass) {
+fun selectClassCard(
+    viewModel: TeachingAffairsViewModel,
+    teachingClass: TeachingClass
+) {
     val isChosen = remember { mutableStateOf(false) }
     val isConflict = remember { mutableStateOf(false) }
     val scheduleString = remember { mutableStateOf("") }
@@ -63,30 +67,38 @@ fun selectClassCard(viewModel: TeachingAffairsViewModel,
     scheduleString.value = teachingClass.humanReadableSchedule()
 
 
-    Surface(modifier = Modifier.border(1.dp, color = Color.LightGray,
-            shape = RoundedCornerShape(4.dp)).width(250.dp).padding(10.dp)) {
+    Surface(
+        modifier = Modifier.border(
+            1.dp, color = Color.LightGray,
+            shape = RoundedCornerShape(4.dp)
+        ).width(250.dp).padding(10.dp)
+    ) {
         Column {
-            Row(Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(teachingClass.teacherName, fontWeight = FontWeight(700))
                 Spacer(Modifier.width(16.dp))
                 Column {
                     if (isChosen.value) {
                         Chip(onClick = {}, modifier = Modifier.height(22.dp),
-                                border = ChipDefaults.outlinedBorder,
-                                colors = ChipDefaults.outlinedChipColors(
-                                        Color(0xff508e54)), content = {
-                            Text("已选", color = Color.White)
-                        })
+                            border = ChipDefaults.outlinedBorder,
+                            colors = ChipDefaults.outlinedChipColors(
+                                Color(0xff508e54)
+                            ), content = {
+                                Text("已选", color = Color.White)
+                            })
                     } else {
                         if (isConflict.value) {
                             Chip(onClick = {},
-                                    modifier = Modifier.height(22.dp),
-                                    border = ChipDefaults.outlinedBorder,
-                                    colors = ChipDefaults.outlinedChipColors(
-                                            Color(0xffe74c3c)), content = {
-                                Text("课程冲突", color = Color.White)
-                            })
+                                modifier = Modifier.height(22.dp),
+                                border = ChipDefaults.outlinedBorder,
+                                colors = ChipDefaults.outlinedChipColors(
+                                    Color(0xffe74c3c)
+                                ), content = {
+                                    Text("课程冲突", color = Color.White)
+                                })
                         }
                     }
                     Spacer(Modifier.height(2.dp))
@@ -105,8 +117,10 @@ fun selectClassCard(viewModel: TeachingAffairsViewModel,
                 Text("${teachingClass.selectedCount}人")
             }
             Spacer(Modifier.weight(1F))
-            Row(Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
                 if (isChosen.value) {
                     Button(onClick = {
                         viewModel.myClasses.dropClass(teachingClass.uuid)
@@ -142,21 +156,28 @@ fun selectClassListItem(viewModel: TeachingAffairsViewModel, course: Course) {
     isChosen.value = getIsChosenCourse(viewModel, course)
 
     var expanded by remember { mutableStateOf(false) }
-    Surface(modifier = Modifier.fillMaxWidth().border(1.dp,
-            color = Color.LightGray,
-            shape = RoundedCornerShape(4.dp)).animateContentSize(
-            animationSpec = tween(durationMillis = 300,
-                    easing = LinearOutSlowInEasing)),
-            onClick = { expanded = !expanded }) {
+    Surface(modifier = Modifier.fillMaxWidth().border(
+        1.dp,
+        color = Color.LightGray,
+        shape = RoundedCornerShape(4.dp)
+    ).animateContentSize(
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = LinearOutSlowInEasing
+        )
+    ),
+        onClick = { expanded = !expanded }) {
         Box(Modifier.fillMaxSize().padding(10.dp)) {
             Column(modifier = Modifier.fillMaxWidth()) {
-                Row(modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                        verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Column(modifier = Modifier.fillMaxHeight()) {
                         Row {
                             Text(
-                                    text = course.courseName,
-                                    fontWeight = FontWeight(700),
+                                text = course.courseName,
+                                fontWeight = FontWeight(700),
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(text = course.courseId, color = Color.DarkGray)
@@ -165,30 +186,35 @@ fun selectClassListItem(viewModel: TeachingAffairsViewModel, course: Course) {
                         Spacer(Modifier.height(4.dp))
                         Row {
                             Chip(onClick = {},
-                                    modifier = Modifier.height(22.dp),
-                                    border = ChipDefaults.outlinedBorder,
-                                    colors = ChipDefaults.outlinedChipColors(
-                                            Color(0xff16a085)), content = {
-                                Text("限选", color = Color.White)
-                            })
+                                modifier = Modifier.height(22.dp),
+                                border = ChipDefaults.outlinedBorder,
+                                colors = ChipDefaults.outlinedChipColors(
+                                    Color(0xff16a085)
+                                ), content = {
+                                    Text("限选", color = Color.White)
+                                })
                             Spacer(modifier = Modifier.width(4.dp))
                             Chip(onClick = {},
-                                    modifier = Modifier.height(22.dp),
-                                    border = ChipDefaults.outlinedBorder,
-                                    colors = ChipDefaults.outlinedChipColors(
-                                            Color(0xff3498db)), content = {
-                                Text("学分: ${
-                                    String.format("%.2f", course.credit / 1.0)
-                                } ", color = Color.White)
-                            })
+                                modifier = Modifier.height(22.dp),
+                                border = ChipDefaults.outlinedBorder,
+                                colors = ChipDefaults.outlinedChipColors(
+                                    Color(0xff3498db)
+                                ), content = {
+                                    Text(
+                                        "学分: ${
+                                            String.format("%.2f", course.credit / 1.0)
+                                        } ", color = Color.White
+                                    )
+                                })
                             Spacer(modifier = Modifier.width(4.dp))
                             Chip(onClick = {},
-                                    modifier = Modifier.height(22.dp),
-                                    border = ChipDefaults.outlinedBorder,
-                                    colors = ChipDefaults.chipColors(
-                                            Color(0xff34495e)), content = {
-                                Text("首修", color = Color.White)
-                            })
+                                modifier = Modifier.height(22.dp),
+                                border = ChipDefaults.outlinedBorder,
+                                colors = ChipDefaults.chipColors(
+                                    Color(0xff34495e)
+                                ), content = {
+                                    Text("首修", color = Color.White)
+                                })
                         }
                     }
                     Spacer(modifier = Modifier.weight(1F))
@@ -196,8 +222,8 @@ fun selectClassListItem(viewModel: TeachingAffairsViewModel, course: Course) {
                         Icon(Icons.Default.Done, "")
                         Spacer(Modifier.width(4.dp))
                         Text(
-                                "已选",
-                                fontWeight = FontWeight(700),
+                            "已选",
+                            fontWeight = FontWeight(700),
                         )
                     }
                 }
@@ -217,10 +243,13 @@ fun selectClassListItem(viewModel: TeachingAffairsViewModel, course: Course) {
                     }
                     Spacer(Modifier.height(4.dp))
                     HorizontalScrollbar(
-                            modifier = Modifier.fillMaxWidth().padding(
-                                    end = 12.dp),
-                            adapter = rememberScrollbarAdapter(
-                                    scrollState = state))
+                        modifier = Modifier.fillMaxWidth().padding(
+                            end = 12.dp
+                        ),
+                        adapter = rememberScrollbarAdapter(
+                            scrollState = state
+                        )
+                    )
                 }
             }
         }

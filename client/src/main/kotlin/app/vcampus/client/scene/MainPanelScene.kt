@@ -17,7 +17,7 @@ import moe.tlaster.precompose.viewmodel.viewModel
 @ExperimentalMaterialApi
 @Composable
 fun MainPanelScene(
-        navi: Navigator,
+    navi: Navigator,
 ) {
     val viewModel = viewModel(MainPanelViewModel::class, listOf()) {
         MainPanelViewModel()
@@ -28,8 +28,10 @@ fun MainPanelScene(
             LazyColumn {
                 item {
                     Spacer(Modifier.height(50.dp))
-                    pageTitle("晚上好，${FakeRepository.user.name}",
-                            "今天想做些什么？")
+                    pageTitle(
+                        "晚上好，${FakeRepository.user.name}",
+                        "今天想做些什么？"
+                    )
                 }
             }
         }

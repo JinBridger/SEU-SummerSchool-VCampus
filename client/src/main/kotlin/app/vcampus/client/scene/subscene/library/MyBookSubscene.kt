@@ -20,8 +20,10 @@ fun myBookSubscene(viewModel: LibraryViewModel) {
         viewModel.myBook.init()
     }
 
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))

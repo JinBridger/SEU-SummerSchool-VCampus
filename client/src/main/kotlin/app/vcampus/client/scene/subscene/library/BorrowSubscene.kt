@@ -22,7 +22,7 @@ fun borrowSubscene(viewModel: LibraryViewModel) {
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Box(modifier = Modifier.fillMaxSize()){
+        Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 item {
                     Spacer(Modifier.height(80.dp))

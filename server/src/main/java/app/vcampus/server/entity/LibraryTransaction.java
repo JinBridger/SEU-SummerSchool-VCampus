@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @Slf4j
 @Table(name = "library_transaction")
-public class LibraryTransaction implements IEntity{
+public class LibraryTransaction implements IEntity {
     @Id
     public UUID uuid = UUID.randomUUID();
 

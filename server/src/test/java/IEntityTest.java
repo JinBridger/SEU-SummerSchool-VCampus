@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 
 public class IEntityTest {
     private final Gson gson = new Gson();

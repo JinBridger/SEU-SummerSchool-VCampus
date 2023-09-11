@@ -20,8 +20,10 @@ fun evaluateTeacherSubscene(viewModel: TeachingAffairsViewModel) {
 
     val isAny = mutableStateOf(false)
 
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))

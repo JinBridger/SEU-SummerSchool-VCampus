@@ -3,13 +3,11 @@ package app.vcampus.server.controller;
 import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.Student;
 import app.vcampus.server.entity.User;
-import app.vcampus.server.enums.StudentStatus;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Password;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import app.vcampus.server.utility.router.RouteMapping;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 
@@ -23,7 +21,7 @@ public class AdminController {
         try {
             User user = IEntity.fromJson(request.getParams().get("user"), User.class);
             user.setPassword(Password.hash(user.password));
-            
+
             Transaction tx = database.beginTransaction();
             database.persist(user);
 

@@ -16,8 +16,10 @@ fun enterScoreSubscene(viewModel: TeachingAffairsViewModel) {
         viewModel.myTeachingClasses.init()
     }
 
-    Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
                 Spacer(Modifier.height(80.dp))
@@ -34,7 +36,11 @@ fun enterScoreSubscene(viewModel: TeachingAffairsViewModel) {
 
             viewModel.myTeachingClasses.myClasses.forEach {
                 item(it.uuid) {
-                    enterScoreListItem(it, viewModel.myTeachingClasses::gradeTemplate, viewModel.myTeachingClasses::importGrade)
+                    enterScoreListItem(
+                        it,
+                        viewModel.myTeachingClasses::gradeTemplate,
+                        viewModel.myTeachingClasses::importGrade
+                    )
                     Spacer(Modifier.height(10.dp))
                 }
             }

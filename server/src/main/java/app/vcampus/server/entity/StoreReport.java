@@ -68,14 +68,14 @@ public class StoreReport {
     public Map<String, String> toMap() {
         return Map.ofEntries(
                 Map.entry("uuid", getUuid().toString()),
-                Map.entry("itemUUID",getItemUUID().toString()),
-                Map.entry("rank",getRank().toString()),
+                Map.entry("itemUUID", getItemUUID().toString()),
+                Map.entry("rank", getRank().toString()),
                 Map.entry("itemName", getItemName()),
                 Map.entry("price", getPrice().toString()),
-                Map.entry("pictureLink",getPictureLink()),
+                Map.entry("pictureLink", getPictureLink()),
                 Map.entry("barcode", getBarcode()),
                 Map.entry("stock", getStock().toString()),
-                Map.entry("salesVolume",getSalesVolume().toString()),
+                Map.entry("salesVolume", getSalesVolume().toString()),
                 Map.entry("description", getDescription())
         );
     }

@@ -22,34 +22,47 @@ import app.vcampus.server.entity.StoreItem
 
 @Composable
 fun shopItemSellListItem(item: StoreItem, viewModel: ShopViewModel) {
-    Surface(modifier = Modifier.fillMaxWidth().border(
+    Surface(
+        modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
             shape = RoundedCornerShape(4.dp)
-    )) {
+        )
+    ) {
         Column {
-            Row(modifier = Modifier.fillMaxWidth().height(150.dp).padding(
-                    6.dp)) {
-                Box(modifier = Modifier.aspectRatio(1F).fillMaxHeight().clip(
-                        RoundedCornerShape(4.dp))) {
+            Row(
+                modifier = Modifier.fillMaxWidth().height(150.dp).padding(
+                    6.dp
+                )
+            ) {
+                Box(
+                    modifier = Modifier.aspectRatio(1F).fillMaxHeight().clip(
+                        RoundedCornerShape(4.dp)
+                    )
+                ) {
                     AsyncImage(
-                            load = { loadImageBitmap(item.pictureLink) },
-                            painterFor = { remember { BitmapPainter(it) } },
-                            contentDescription = "",
-                            contentScale = ContentScale.FillBounds)
+                        load = { loadImageBitmap(item.pictureLink) },
+                        painterFor = { remember { BitmapPainter(it) } },
+                        contentDescription = "",
+                        contentScale = ContentScale.FillBounds
+                    )
 //                    Image(painterResource("test_image.png"), "",
 //                            modifier = Modifier.fillMaxSize(),
 //                            contentScale = ContentScale.FillBounds)
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = item.itemName,
-                            fontWeight = FontWeight(700), maxLines = 1,
-                            overflow = TextOverflow.Ellipsis)
+                    Text(
+                        text = item.itemName,
+                        fontWeight = FontWeight(700), maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                     Spacer(modifier = Modifier.weight(1F))
-                    Row(modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Column {
                             Row {
@@ -66,15 +79,19 @@ fun shopItemSellListItem(item: StoreItem, viewModel: ShopViewModel) {
                     Spacer(modifier = Modifier.width(6.dp))
 
                     Spacer(modifier = Modifier.weight(1F))
-                    Row(modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.Bottom) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.Bottom
+                    ) {
                         Column {
                             Text("￥", fontSize = 14.sp)
                             Spacer(modifier = Modifier.height(10.dp))
                         }
-                        Text(String.format("%.2f", item.price / 100.0),
-                                fontWeight = FontWeight(700),
-                                fontSize = 24.sp)
+                        Text(
+                            String.format("%.2f", item.price / 100.0),
+                            fontWeight = FontWeight(700),
+                            fontSize = 24.sp
+                        )
                         Spacer(modifier = Modifier.weight(1F))
                     }
                 }

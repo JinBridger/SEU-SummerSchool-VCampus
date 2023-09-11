@@ -26,7 +26,7 @@ fun myGradeSubscene(viewModel: TeachingAffairsViewModel) {
                 pageTitle("我的成绩", "查看个人成绩单")
                 Spacer(Modifier.height(20.dp))
             }
-            item{
+            item {
                 viewModel.myClasses.selected.forEach {
                     if (it.selectRecord.grade != null) {
                         GradeListItem(it)

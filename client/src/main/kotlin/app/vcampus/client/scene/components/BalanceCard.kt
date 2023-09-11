@@ -17,19 +17,23 @@ import app.vcampus.server.entity.FinanceCard
 
 @Composable
 fun balanceCard(card: FinanceCard) {
-    Surface(modifier = Modifier.fillMaxWidth().border(
+    Surface(
+        modifier = Modifier.fillMaxWidth().border(
             1.dp,
             color = Color.LightGray,
             shape = RoundedCornerShape(4.dp)
-    )) {
+        )
+    ) {
         Row(Modifier.fillMaxWidth().padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
             Column {
                 Text("卡内余额", fontWeight = FontWeight(700))
                 Spacer(Modifier.height(4.dp))
-                Text(String.format(
-                    "%.2f",
-                    card.balance / 100.0
-                ) + " 元", fontWeight = FontWeight(700), fontSize = 24.sp)
+                Text(
+                    String.format(
+                        "%.2f",
+                        card.balance / 100.0
+                    ) + " 元", fontWeight = FontWeight(700), fontSize = 24.sp
+                )
             }
             Spacer(Modifier.weight(1F))
             Button(onClick = {}) {

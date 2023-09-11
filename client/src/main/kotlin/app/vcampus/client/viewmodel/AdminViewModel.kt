@@ -1,9 +1,7 @@
 package app.vcampus.client.viewmodel
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.RequestQuote
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
@@ -18,7 +16,7 @@ import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
-class AdminViewModel: ViewModel() {
+class AdminViewModel : ViewModel() {
     val identity = FakeRepository.user.roles.toList()
 
     val addUser = AddUser()
@@ -31,17 +29,23 @@ class AdminViewModel: ViewModel() {
     }) + identity.flatMap {
         when (it) {
             "admin" -> listOf(
-                    SideBarItem(false, "添加账户", "添加登录账户",
-                            Icons.Default.Info, false),
-                    SideBarItem(false, "修改账户", "修改账户权限 / 密码",
-                            Icons.Default.Info, false))
+                SideBarItem(
+                    false, "添加账户", "添加登录账户",
+                    Icons.Default.Info, false
+                ),
+                SideBarItem(
+                    false, "修改账户", "修改账户权限 / 密码",
+                    Icons.Default.Info, false
+                )
+            )
+
             else -> emptyList()
         }
     }
 
     val adminSideBarItem = sideBarContent.toMutableStateList()
 
-    class AddUser: ViewModel() {
+    class AddUser : ViewModel() {
         val cardNum = mutableStateOf("")
         val name = mutableStateOf("")
         val password = mutableStateOf("")
@@ -70,7 +74,7 @@ class AdminViewModel: ViewModel() {
         }
     }
 
-    class ModifyUser: ViewModel() {
+    class ModifyUser : ViewModel() {
         val keyword = mutableStateOf("")
         val userList = mutableStateListOf<User>()
 

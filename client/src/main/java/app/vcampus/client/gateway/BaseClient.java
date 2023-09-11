@@ -1,7 +1,6 @@
 package app.vcampus.client.gateway;
 
 import app.vcampus.client.net.NettyHandler;
-import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
 import com.google.gson.Gson;
