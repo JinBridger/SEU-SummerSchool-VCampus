@@ -74,7 +74,7 @@ fun dashboardSubscene(viewModel: ShopViewModel) {
 //                    }
 //                }
                 viewModel.selectItem.totalShopItems.forEach {
-                    item {
+                    item(it.uuid) {
                         shopItemSellListItem(it, viewModel)
                         Spacer(Modifier.height(10.dp))
                     }

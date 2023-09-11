@@ -116,6 +116,18 @@ object FakeRepository {
         return LibraryClient.userRenewBook(handler, uuid)
     }
 
+    fun staffGetRecords(cardNumber: String): List<LibraryTransaction> {
+        return LibraryClient.staffGetRecords(handler, cardNumber)
+    }
+
+    fun staffReturnBook(uuid: UUID): Boolean {
+        return LibraryClient.returnBook(handler, uuid)
+    }
+
+    fun staffRenewBook(uuid: UUID): Boolean {
+        return LibraryClient.staffRenewBook(handler, uuid)
+    }
+
     fun searchStoreItem(keyword: String): List<StoreItem> {
         return StoreClient.searchItem(handler, keyword) ?: listOf()
     }

@@ -32,7 +32,7 @@ fun evaluateTeacherSubscene(viewModel: TeachingAffairsViewModel) {
             viewModel.myClasses.selected.forEach {
                 if (it.selectRecord.grade != null && !it.isEvaluated) {
                     isAny.value = true
-                    item {
+                    item(it.uuid) {
                         evaluateTeacherListItem(viewModel, it)
                         Spacer(Modifier.height(10.dp))
                     }

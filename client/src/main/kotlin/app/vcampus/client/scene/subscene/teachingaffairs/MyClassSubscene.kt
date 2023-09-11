@@ -33,7 +33,7 @@ fun myClassSubscene(viewModel: TeachingAffairsViewModel) {
 //            }
 
             viewModel.myTeachingClasses.myClasses.forEach {
-                item {
+                item(it.uuid) {
                     myClassListItem(it, viewModel.myTeachingClasses::saveStudentList)
                     Spacer(Modifier.height(10.dp))
                 }

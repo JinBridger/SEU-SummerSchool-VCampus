@@ -33,7 +33,7 @@ fun enterScoreSubscene(viewModel: TeachingAffairsViewModel) {
 //            }
 
             viewModel.myTeachingClasses.myClasses.forEach {
-                item {
+                item(it.uuid) {
                     enterScoreListItem(it, viewModel.myTeachingClasses::gradeTemplate, viewModel.myTeachingClasses::importGrade)
                     Spacer(Modifier.height(10.dp))
                 }

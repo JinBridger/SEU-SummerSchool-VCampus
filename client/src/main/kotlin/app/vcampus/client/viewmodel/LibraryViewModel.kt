@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 import java.util.UUID
+import javax.swing.text.View
 
 data class MutableLibraryBook(
     var uuid: UUID = UUID.randomUUID(),
@@ -66,6 +67,7 @@ class LibraryViewModel : ViewModel() {
     val searchBook = SearchBook()
     val modifyBook = ModifyBook()
     val myBook = MyBook()
+    val returnBook = ReturnBook()
 
     val sideBarContent = (if (identity.contains("library_user")) {
         listOf(SideBarItem(true, "查询", "", Icons.Default.Info, false))
@@ -283,6 +285,58 @@ class LibraryViewModel : ViewModel() {
 
         private suspend fun renewBookInternal(uuid: UUID) = flow {
             emit(FakeRepository.userRenewBook(uuid))
+        }
+    }
+
+    class ReturnBook() : ViewModel() {
+        val cardNumber = mutableStateOf("")
+        val transactions = mutableStateListOf<LibraryTransaction>()
+        val currentBorrowed = mutableStateListOf<LibraryTransaction>()
+
+        fun getRecords() {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    getMyRecordsInternal().collect {
+                        transactions.clear()
+                        transactions.addAll(it)
+
+                        currentBorrowed.clear()
+                        currentBorrowed.addAll(it.filter { it.returnTime == null })
+                    }
+                }
+            }
+        }
+
+        private suspend fun getMyRecordsInternal() = flow {
+            emit(FakeRepository.staffGetRecords(cardNumber.value))
+        }
+
+        fun renewBook(uuid: UUID) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    renewBookInternal(uuid).collect {
+                        getRecords()
+                    }
+                }
+            }
+        }
+
+        private suspend fun renewBookInternal(uuid: UUID) = flow {
+            emit(FakeRepository.staffRenewBook(uuid))
+        }
+
+        fun returnBook(uuid: UUID) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    returnBookInternal(uuid).collect {
+                        getRecords()
+                    }
+                }
+            }
+        }
+
+        private suspend fun returnBookInternal(uuid: UUID) = flow {
+            emit(FakeRepository.staffReturnBook(uuid))
         }
     }
 }

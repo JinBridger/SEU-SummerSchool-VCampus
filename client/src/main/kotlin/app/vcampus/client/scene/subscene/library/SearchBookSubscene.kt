@@ -37,13 +37,13 @@ fun searchBookSubscene(viewModel: LibraryViewModel) {
                 Spacer(Modifier.height(20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth()
-                        .onPreviewKeyEvent {event:KeyEvent  ->
-                                           if(event.type== KeyEventType.KeyDown&&event.key==Key.Enter){
-                                               viewModel.searchBook.searchBook()
-                                               true
-                                           }else{
-                                               false
-                                           }
+                        .onPreviewKeyEvent { event: KeyEvent ->
+                            if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
+                                viewModel.searchBook.searchBook()
+                                true
+                            } else {
+                                false
+                            }
                         },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -84,7 +84,7 @@ fun searchBookSubscene(viewModel: LibraryViewModel) {
             }
 
             viewModel.searchBook.bookList.forEach {
-                item {
+                item(it.key) {
                     searchBookListItem(it.value)
                 }
             }

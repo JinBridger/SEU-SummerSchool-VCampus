@@ -38,7 +38,7 @@ fun myBookSubscene(viewModel: LibraryViewModel) {
 //                }
 //            }
             viewModel.myBook.currentBorrowed.forEach {
-                item {
+                item(it.uuid) {
                     bookList(it, viewModel.myBook::renewBook)
                     Spacer(Modifier.height(10.dp))
                 }

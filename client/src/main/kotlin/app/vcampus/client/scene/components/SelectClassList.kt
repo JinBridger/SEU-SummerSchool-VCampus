@@ -209,7 +209,7 @@ fun selectClassListItem(viewModel: TeachingAffairsViewModel, course: Course) {
                     Spacer(Modifier.height(8.dp))
                     LazyRow(Modifier.fillMaxWidth(), state) {
                         course.teachingClasses.forEach {
-                            item {
+                            item(it.uuid) {
                                 selectClassCard(viewModel, it)
                                 Spacer(Modifier.width(10.dp))
                             }

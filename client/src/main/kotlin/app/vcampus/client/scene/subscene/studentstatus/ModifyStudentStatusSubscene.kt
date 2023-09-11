@@ -77,7 +77,7 @@ fun modifyStudentStatusSubscene(viewModel: StudentStatusViewModel) {
             }
 
             viewModel.searchedStudents.forEach { student ->
-                item {
+                item(student.cardNumber) {
                     SearchStudentStatusItem(student, true) {
                         viewModel.updateStudent(it)
                     }

@@ -215,4 +215,72 @@ public class LibraryBookController {
             return Response.Common.error("Failed to renew book");
         }
     }
+
+    @RouteMapping(uri = "library/staff/records", role = "library_staff")
+    public Response staffRecords(Request request, org.hibernate.Session database) {
+        try {
+            int cardNumber = Integer.parseInt(request.getParams().get("cardNumber"));
+
+            List<LibraryTransaction> records = Database.getWhereString(LibraryTransaction.class, "userId", Integer.toString(cardNumber), database);
+            records = records.stream().peek(w -> w.setBook(database.get(LibraryBook.class, w.getBookUuid()))).collect(Collectors.toList());
+            records.sort((a, b) -> b.getBorrowTime().compareTo(a.getBorrowTime()));
+            return Response.Common.ok(records.stream().map(LibraryTransaction::toJson).collect(Collectors.toList()));
+        } catch (Exception e) {
+            return Response.Common.error("Failed to get staff records");
+        }
+    }
+
+    @RouteMapping(uri = "library/staff/renew", role = "library_staff")
+    public Response staffRenew(Request request, org.hibernate.Session database) {
+        try {
+            String uuid = request.getParams().get("uuid");
+            if (uuid == null) return Response.Common.error("UUID cannot be empty");
+
+            UUID bookUuid = UUID.fromString(uuid);
+            LibraryTransaction toRenew = database.get(LibraryTransaction.class, bookUuid);
+            if (toRenew == null) return Response.Common.error("No such record");
+
+            LibraryBook book = database.get(LibraryBook.class, toRenew.getBookUuid());
+            if (book == null) return Response.Common.error("No such book");
+
+            if (toRenew.getReturnTime() != null) return Response.Common.error("Book has been returned");
+
+            Transaction tx = database.beginTransaction();
+            toRenew.setDueTime(Date.from(toRenew.getDueTime().toInstant().plusSeconds(60 * 60 * 24 * 30)));
+            database.persist(toRenew);
+            tx.commit();
+
+            return Response.Common.ok();
+        } catch (Exception e) {
+            return Response.Common.error("Failed to renew book");
+        }
+    }
+
+    @RouteMapping(uri = "library/staff/return", role = "library_staff")
+    public Response returnBook(Request request, org.hibernate.Session database) {
+        try {
+            String uuid = request.getParams().get("uuid");
+            if (uuid == null) return Response.Common.error("UUID cannot be empty");
+
+            UUID bookUuid = UUID.fromString(uuid);
+            LibraryTransaction toReturn = database.get(LibraryTransaction.class, bookUuid);
+            if (toReturn == null) return Response.Common.error("No such record");
+
+            if (toReturn.getReturnTime() != null) return Response.Common.error("Book has been returned");
+
+            LibraryBook book = database.get(LibraryBook.class, toReturn.getBookUuid());
+            if (book == null) return Response.Common.error("No such book");
+
+            Transaction tx = database.beginTransaction();
+            toReturn.setReturnTime(new Date());
+            book.setBookStatus(BookStatus.available);
+            database.persist(toReturn);
+            database.persist(book);
+            tx.commit();
+
+            return Response.Common.ok();
+        } catch (Exception e) {
+            return Response.Common.error("Failed to return book");
+        }
+    }
 }

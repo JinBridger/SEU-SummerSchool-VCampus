@@ -8,9 +8,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -22,7 +20,7 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 
 @Composable
 fun returnSubscene(viewModel: LibraryViewModel) {
-    val isExpanded = remember { mutableStateOf(false) }
+    var keyword by viewModel.returnBook.cardNumber
 
     Row(horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
@@ -39,8 +37,8 @@ fun returnSubscene(viewModel: LibraryViewModel) {
                         verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
-                            value = "",
-                            onValueChange = { },
+                            value = keyword,
+                            onValueChange = { keyword = it },
                             label = { Text("搜索一卡通号") },
                             modifier = Modifier.padding(
                                     0.dp, 0.dp, 16.dp,
@@ -49,7 +47,7 @@ fun returnSubscene(viewModel: LibraryViewModel) {
                     )
                     Column {
                         Spacer(Modifier.height(8.dp))
-                        Button(onClick = { isExpanded.value = true },
+                        Button(onClick = { viewModel.returnBook.getRecords() },
                                 modifier = Modifier.height(56.dp)) {
                             Icon(Icons.Default.Search, "")
                         }
@@ -58,15 +56,22 @@ fun returnSubscene(viewModel: LibraryViewModel) {
                 Spacer(Modifier.height(10.dp))
             }
 
-            if (isExpanded.value) {
+            if (viewModel.returnBook.currentBorrowed.isNotEmpty()) {
                 item {
                     Row {
-                        Text("212212212", fontWeight = FontWeight(700),
+                        Text(keyword, fontWeight = FontWeight(700),
                                 fontSize = 14.sp)
-                        Text(" 当前借阅：10 / 最大借阅：20",
+                        Text(" 当前借阅：${viewModel.returnBook.currentBorrowed.size} / 最大借阅：20",
                                 fontSize = 14.sp)
                     }
                     Spacer(Modifier.height(8.dp))
+                }
+
+                viewModel.returnBook.currentBorrowed.forEach {
+                    item(it.uuid) {
+                        bookList(it, viewModel.returnBook::renewBook, viewModel.returnBook::returnBook)
+                        Spacer(Modifier.height(10.dp))
+                    }
                 }
 
 //                (0..10).forEach {

@@ -84,7 +84,7 @@ fun modifyBookSubscene(viewModel: LibraryViewModel) {
             }
 
             viewModel.modifyBook.bookList.forEach {
-                item {
+                item(it.key) {
                     searchBookListItem(it.value, isEditable = true, onEdit = { book, delete ->
                         if (delete) {
                             viewModel.modifyBook.deleteBook(book.uuid)

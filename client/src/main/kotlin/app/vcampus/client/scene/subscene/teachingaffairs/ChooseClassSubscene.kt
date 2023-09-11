@@ -26,7 +26,7 @@ fun chooseClassSubscene(viewModel: TeachingAffairsViewModel) {
             }
 
             viewModel.myClasses.allCourses.forEach {
-                item {
+                item(it.uuid) {
                     selectClassListItem(viewModel, it)
                     Spacer(Modifier.height(10.dp))
                 }

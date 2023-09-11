@@ -27,7 +27,7 @@ fun evaluateResultSubscene(viewModel: TeachingAffairsViewModel) {
             }
 
             viewModel.myTeachingClasses.myClasses.forEach {
-                item {
+                item(it.uuid) {
                     evaluateResultListItem(it)
                     Spacer(Modifier.height(10.dp))
                 }

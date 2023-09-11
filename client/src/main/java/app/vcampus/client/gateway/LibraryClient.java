@@ -143,6 +143,27 @@ public class LibraryClient {
         }
     }
 
+    public static List<LibraryTransaction> staffGetRecords(NettyHandler handler, String cardNumber) {
+        Request request = new Request();
+        request.setUri("library/staff/records");
+        request.setParams(Map.of(
+                "cardNumber", cardNumber
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            if (response.getStatus().equals("success")) {
+                List<String> raw_data = (List<String>) response.getData();
+                return raw_data.stream().map(json -> IEntity.fromJson(json, LibraryTransaction.class)).toList();
+            } else {
+                throw new RuntimeException("Failed to get book info");
+            }
+        } catch (InterruptedException e) {
+            log.warn("Fail to get book info", e);
+            return null;
+        }
+    }
+
     public static Boolean userRenewBook(NettyHandler handler, UUID uuid) {
         Request request = new Request();
         request.setUri("library/user/renew");
@@ -155,6 +176,38 @@ public class LibraryClient {
             return response.getStatus().equals("success");
         } catch (InterruptedException e) {
             log.warn("Fail to renew book", e);
+            return false;
+        }
+    }
+
+    public static Boolean staffRenewBook(NettyHandler handler, UUID uuid) {
+        Request request = new Request();
+        request.setUri("library/staff/renew");
+        request.setParams(Map.of(
+                "uuid", uuid.toString()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to renew book", e);
+            return false;
+        }
+    }
+
+    public static Boolean returnBook(NettyHandler handler, UUID uuid) {
+        Request request = new Request();
+        request.setUri("library/staff/return");
+        request.setParams(Map.of(
+                "uuid", uuid.toString()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to return book", e);
             return false;
         }
     }
