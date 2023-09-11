@@ -237,16 +237,15 @@ class ShopViewModel() : ViewModel() {
         }
     }
     open class SearchStoreItem : ViewModel() {
-        val keyword = mutableStateOf("")
-        val storeList = mutableStateMapOf<String, List<StoreItem>>()
+        val storeList = mutableStateListOf<StoreItem>()
         var searched = mutableStateOf(false)
 
-        fun searchStoreItem() {
+        fun searchStoreItem(keyword: String) {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    searchStoreItemInternal().collect {
+                    searchStoreItemInternal(keyword).collect {
                         storeList.clear()
-                        storeList.putAll(it)
+                        storeList.addAll(it)
 
                         searched.value = true
                     }
@@ -254,8 +253,8 @@ class ShopViewModel() : ViewModel() {
             }
         }
 
-        private suspend fun searchStoreItemInternal() = flow {
-            emit(FakeRepository.searchStoreItem(keyword.value))
+        private suspend fun searchStoreItemInternal(keyword: String) = flow {
+            emit(FakeRepository.searchStoreItem(keyword))
         }
     }
 

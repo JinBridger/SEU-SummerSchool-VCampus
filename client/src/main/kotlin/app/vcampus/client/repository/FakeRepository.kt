@@ -116,8 +116,8 @@ object FakeRepository {
         return LibraryClient.userRenewBook(handler, uuid)
     }
 
-    fun searchStoreItem(keyword: String): Map<String, List<StoreItem>> {
-        return StoreClient.searchItem(handler, keyword) ?: mapOf()
+    fun searchStoreItem(keyword: String): List<StoreItem> {
+        return StoreClient.searchItem(handler, keyword) ?: listOf()
     }
 
     fun updateStoreItem(storeItem: StoreItem): Boolean {

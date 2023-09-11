@@ -6,20 +6,12 @@ import app.vcampus.server.utility.*;
 import app.vcampus.server.utility.router.RouteMapping;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.util.Store;
 import org.hibernate.Transaction;
 
-import javax.management.Query;
-import java.awt.dnd.DropTarget;
 import java.lang.reflect.Type;
-import java.time.LocalDateTime;
-
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Slf4j
 
@@ -31,7 +23,8 @@ public class StoreController {
             if (financeCard == null)
                 return Response.Common.error("No such finance card");
 
-            Type type = new TypeToken<List<Pair<UUID, Integer>>>(){}.getType();
+            Type type = new TypeToken<List<Pair<UUID, Integer>>>() {
+            }.getType();
             List<Pair<UUID, Integer>> items = new Gson().fromJson(request.getParams().get("items"), type);
             if (items == null)
                 return Response.Common.error("Items cannot be empty");
@@ -132,12 +125,12 @@ public class StoreController {
     @RouteMapping(uri = "storeItem/searchId")
     public Response searchId(Request request, org.hibernate.Session database) {
         try {
-            String uuid=request.getParams().get("uuid");
+            String uuid = request.getParams().get("uuid");
             if (uuid == null)
                 return Response.Common.error("UUID cannot be empty");
-            UUID id=UUID.fromString(uuid);
-            StoreItem storeItem=database.get(StoreItem.class,id);
-            if(storeItem==null){
+            UUID id = UUID.fromString(uuid);
+            StoreItem storeItem = database.get(StoreItem.class, id);
+            if (storeItem == null) {
                 return Response.Common.error("missing item information");
             }
             return Response.Common.ok(storeItem.toJson());
@@ -206,65 +199,56 @@ public class StoreController {
         }
     }
 
-    @RouteMapping(uri="storeTransaction/searchTransaction")
-    public Response searchTransaction(Request request,org.hibernate.Session database){
-        try{
-            String keyword=request.getParams().get("keyword");
-            if(keyword==null)
+    @RouteMapping(uri = "storeTransaction/searchTransaction")
+    public Response searchTransaction(Request request, org.hibernate.Session database) {
+        try {
+            String keyword = request.getParams().get("keyword");
+            if (keyword == null)
                 return Response.Common.error("Keyword cannot be empty");
-            List<StoreTransaction> transactions= Database.likeQuery(StoreTransaction.class,
-                    new String[]{"itemName","itemPrice","amount","remark","time"},keyword,database);
-            return Response.Common.ok(transactions.stream().collect(Collectors.groupingBy(w->w.uuid)).entrySet().stream().collect(Collectors.toMap(
+            List<StoreTransaction> transactions = Database.likeQuery(StoreTransaction.class,
+                    new String[]{"itemName", "itemPrice", "amount", "remark", "time"}, keyword, database);
+            return Response.Common.ok(transactions.stream().collect(Collectors.groupingBy(w -> w.uuid)).entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getKey,
-                    e->e.getValue().stream().map(StoreTransaction::toJson).collect(Collectors.toList())
+                    e -> e.getValue().stream().map(StoreTransaction::toJson).collect(Collectors.toList())
             )));
-        }catch (Exception e){
+        } catch (Exception e) {
             return Response.Common.error("Failed to search transaction record");
         }
     }
 
-    @RouteMapping(uri="storeItem/updateItem",role="admin")
-    public Response updateItem(Request request,org.hibernate.Session database){
-        StoreItem newItem=IEntity.fromJson(request.getParams().get("storeItem"),StoreItem.class);
-        StoreItem toUpdate=database.get(StoreItem.class,newItem.getUuid());
-        if(toUpdate==null){
-            return Response.Common.badRequest();
-        }
-        Transaction tx=database.beginTransaction();
-        toUpdate.setItemName(newItem.getItemName());
-        toUpdate.setPictureLink(newItem.getPictureLink());
-        toUpdate.setPrice(newItem.getPrice());
-        toUpdate.setStock(newItem.getStock());
-        toUpdate.setBarcode(newItem.getBarcode());
-        toUpdate.setDescription(newItem.getDescription());
-        toUpdate.setSalesVolume(newItem.getSalesVolume());
-        database.persist(toUpdate);
+    @RouteMapping(uri = "storeItem/updateItem", role = "shop_staff")
+    public Response updateItem(Request request, org.hibernate.Session database) {
+        StoreItem newItem = IEntity.fromJson(request.getParams().get("storeItem"), StoreItem.class);
+
+        Transaction tx = database.beginTransaction();
+        database.merge(newItem);
         tx.commit();
+
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri="storeTransaction/createTransaction")
-    public Response createTransaction(Request request,org.hibernate.Session database){
-        UUID itemUUID= UUID.fromString(request.getParams().get("itemUUID"));
-        Integer amount= Integer.valueOf(request.getParams().get("amount"));
-        StoreItem storeItem=database.get(StoreItem.class,itemUUID);
-        if(storeItem==null){
+    @RouteMapping(uri = "storeTransaction/createTransaction")
+    public Response createTransaction(Request request, org.hibernate.Session database) {
+        UUID itemUUID = UUID.fromString(request.getParams().get("itemUUID"));
+        Integer amount = Integer.valueOf(request.getParams().get("amount"));
+        StoreItem storeItem = database.get(StoreItem.class, itemUUID);
+        if (storeItem == null) {
             return Response.Common.error("No such store item");
         }
 
-        StoreTransaction newStoreTransaction=new StoreTransaction();
-        Transaction tx=database.beginTransaction();
-        Integer oldStock=storeItem.getStock();
-        if(oldStock<amount){
+        StoreTransaction newStoreTransaction = new StoreTransaction();
+        Transaction tx = database.beginTransaction();
+        Integer oldStock = storeItem.getStock();
+        if (oldStock < amount) {
             return Response.Common.error("Stock cannot be less than amount");
         }
-        Integer oldSalesVolume=storeItem.getSalesVolume();
-        storeItem.setSalesVolume(oldSalesVolume+amount);
-        storeItem.setStock(oldStock-amount);
+        Integer oldSalesVolume = storeItem.getSalesVolume();
+        storeItem.setSalesVolume(oldSalesVolume + amount);
+        storeItem.setStock(oldStock - amount);
         newStoreTransaction.setUuid(UUID.randomUUID());
         newStoreTransaction.setItemUUID(storeItem.getUuid());
         newStoreTransaction.setItemPrice(storeItem.getPrice());
-        Date currentTime=new Date();
+        Date currentTime = new Date();
         newStoreTransaction.setTime(currentTime);
         newStoreTransaction.setAmount(amount);
         newStoreTransaction.setCardNumber(0);
@@ -274,7 +258,7 @@ public class StoreController {
         return Response.Common.ok();
     }
 
-//    @RouteMapping(uri = "store/filter", role = "admin")
+    //    @RouteMapping(uri = "store/filter", role = "admin")
 //    public Response filter(Request request, org.hibernate.Session database) {
 //        try {
 //            List<StoreItem> allItems;
@@ -285,14 +269,14 @@ public class StoreController {
 //            return Response.Common.error("Failed to filter store items");
 //        }
 //    }
-    @RouteMapping(uri="storeItem/getReport")
-    public Response getReport(Request request,org.hibernate.Session database){
-        try{
+    @RouteMapping(uri = "storeItem/getReport")
+    public Response getReport(Request request, org.hibernate.Session database) {
+        try {
             List<StoreItem> items;
-            items=Database.loadAllData(StoreItem.class,database);
+            items = Database.loadAllData(StoreItem.class, database);
             return Response.Common.ok(items.stream().map(StoreItem::toJson).collect(Collectors.toList()));
-        }catch (Exception e){
-            log.warn("Failed to get sales report",e);
+        } catch (Exception e) {
+            log.warn("Failed to get sales report", e);
             return Response.Common.error("Failed to get sales report");
         }
     }

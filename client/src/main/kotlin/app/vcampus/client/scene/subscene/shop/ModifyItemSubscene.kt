@@ -8,9 +8,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.*
@@ -21,7 +19,7 @@ import app.vcampus.client.viewmodel.ShopViewModel
 
 @Composable
 fun modifyItemSubscene(viewModel: ShopViewModel) {
-    var keyword by viewModel.searchStoreItem.keyword
+    var keyword by remember { mutableStateOf("") }
 
     Box(modifier = Modifier.fillMaxSize().padding(horizontal = 100.dp)) {
         Row(
@@ -42,7 +40,7 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
                         modifier = Modifier.fillMaxWidth()
                             .onPreviewKeyEvent { event: KeyEvent ->
                                 if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
-                                    viewModel.modifyStoreItem.searchStoreItem()
+                                    viewModel.modifyStoreItem.searchStoreItem(keyword)
                                     true
                                 } else {
                                     false
@@ -62,7 +60,7 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
                         Column {
                             Spacer(Modifier.height(8.dp))
                             Button(onClick = {
-                                viewModel.modifyStoreItem.searchStoreItem()
+                                viewModel.modifyStoreItem.searchStoreItem(keyword)
                             }, modifier = Modifier.height(56.dp)) {
                                 Icon(Icons.Default.Search, "")
                             }
@@ -72,8 +70,8 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
 
                 }
                 viewModel.modifyStoreItem.storeList.forEach {
-                    item {
-                        EditStoreItem(it.value, isEditable = true, onEdit = { storeItem, update ->
+                    item(key = it.uuid) {
+                        EditStoreItem(it, isEditable = true, onEdit = { storeItem ->
                             viewModel.modifyStoreItem.updateStoreItem(storeItem)
                         })
                     }

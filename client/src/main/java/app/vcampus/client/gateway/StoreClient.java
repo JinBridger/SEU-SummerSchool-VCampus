@@ -121,7 +121,7 @@ public class StoreClient {
         }
     }
 
-    public static Map<String, List<StoreItem>> searchItem(NettyHandler handler, String keyword) {
+    public static List<StoreItem> searchItem(NettyHandler handler, String keyword) {
         Request request = new Request();
         request.setUri("storeItem/searchItem");
         request.setParams(Map.of(
@@ -130,10 +130,8 @@ public class StoreClient {
         try {
             Response response = BaseClient.sendRequest(handler, request);
             if (response.getStatus().equals("success")) {
-                Map<String, List<String>> raw_data = (Map<String, List<String>>) response.getData();
-                Map<String, List<StoreItem>> data = new HashMap<>();
-                raw_data.forEach((key, value) -> data.put(key, value.stream().map(json -> IEntity.fromJson(json, StoreItem.class)).toList()));
-                return data;
+                List<String> raw_data = ((Map<String, List<String>>) response.getData()).get("items");
+                return raw_data.stream().map(json -> IEntity.fromJson(json, StoreItem.class)).toList();
             } else {
                 throw new RuntimeException("Failed to get item info");
             }

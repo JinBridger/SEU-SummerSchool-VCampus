@@ -18,38 +18,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import app.vcampus.client.viewmodel.MutableStoreItem
 import app.vcampus.server.entity.StoreItem
-import app.vcampus.server.utility.Pair
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EditStoreItem(
-    _StoreItem: List<StoreItem>,
+    storeItem: StoreItem,
     isEditable: Boolean = false,
-    onEdit: (StoreItem, Boolean) -> (Unit) = { _: StoreItem, _: Boolean -> }
+    onEdit: (StoreItem) -> (Unit) = { _: StoreItem -> }
 ) {
-    var storeItemList = _StoreItem.toList()
-    val primyStoreItem = storeItemList[0]
+    var myPrice by remember { mutableStateOf(storeItem.price.toString()) }
+    var myStock by remember { mutableStateOf(storeItem.stock.toString()) }
+    var myBarcode by remember { mutableStateOf(storeItem.barcode) }
+    var myName by remember { mutableStateOf(storeItem.itemName) }
+    var myPictureLink by remember { mutableStateOf(storeItem.pictureLink) }
+    var myDescription by remember { mutableStateOf(storeItem.description) }
 
-    var myPrice by remember { mutableStateOf(primyStoreItem.price.toString()) }
-    var myStock by remember { mutableStateOf(primyStoreItem.stock.toString()) }
-    var myBarcode by remember { mutableStateOf(primyStoreItem.barcode) }
-    var myName by remember { mutableStateOf(primyStoreItem.itemName) }
+//    var modifiedItems = mutableListOf<Pair<MutableStoreItem, MutableState<Boolean>>>()
 
-//    var myPrice by remember { mutableStateOf(item.price.toString()) }
-//    var myBarcode by remember { mutableStateOf(item.barcode) }
-//    var myStock by remember { mutableStateOf(item.stock.toString()) }
-    var myPictureLink by remember { mutableStateOf(primyStoreItem.pictureLink) }
-    var myDescription by remember { mutableStateOf(primyStoreItem.description) }
-
-    var modifiedItems = mutableListOf<Pair<MutableStoreItem, MutableState<Boolean>>>()
-
-    storeItemList.forEach {
-        val newItem = MutableStoreItem()
-        newItem.fromStoreItem(it)
-        modifiedItems.add(Pair(newItem, mutableStateOf(false)))
-    }
+//    storeItemList.forEach {
+//        val newItem = MutableStoreItem()
+//        newItem.fromStoreItem(it)
+//        modifiedItems.add(Pair(newItem, mutableStateOf(false)))
+//    }
     var expanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
     Surface(modifier = Modifier.fillMaxWidth().border(
@@ -345,26 +336,36 @@ fun EditStoreItem(
                                 Spacer(Modifier.weight(1F))
                                 Button(
                                     onClick = {
-                                        val i = modifiedItems.iterator()
+//                                        val i = modifiedItems.iterator()
+//
+//                                        while (i.hasNext()) {
+//                                            val pair = i.next()
+//
+//                                            pair.first.itemName.value = myName
+//                                            pair.first.stock.value = myStock.toInt()
+//                                            pair.first.barcode.value = myBarcode
+//                                            pair.first.description.value = myDescription
+//                                            pair.first.price.value = myPrice.toInt()
+//                                            pair.first.pictureLink.value = myPictureLink
+//
+//                                            onEdit(pair.first.toStoreItem(), pair.second.value)
+//
+//                                            if (pair.second.value) {
+//                                                i.remove()
+//                                            }
+//                                        }
 
-                                        while (i.hasNext()) {
-                                            val pair = i.next()
+                                        val modifiedStoreItem = StoreItem()
+                                        modifiedStoreItem.uuid = storeItem.uuid
+                                        modifiedStoreItem.barcode = myBarcode
+                                        modifiedStoreItem.itemName = myName
+                                        modifiedStoreItem.stock = myStock.toInt()
+                                        modifiedStoreItem.description = myDescription
+                                        modifiedStoreItem.price = myPrice.toInt()
+                                        modifiedStoreItem.pictureLink = myPictureLink
+                                        onEdit(modifiedStoreItem)
 
-                                            pair.first.itemName.value = myName
-                                            pair.first.stock.value = myStock.toInt()
-                                            pair.first.barcode.value = myBarcode
-                                            pair.first.description.value = myDescription
-                                            pair.first.price.value = myPrice.toInt()
-                                            pair.first.pictureLink.value = myPictureLink
-
-                                            onEdit(pair.first.toStoreItem(), pair.second.value)
-
-                                            if (pair.second.value) {
-                                                i.remove()
-                                            }
-                                        }
-
-                                        storeItemList = modifiedItems.map { it.first.toStoreItem() }
+//                                        storeItemList = modifiedItems.map { it.first.toStoreItem() }
                                         isEditing = false
                                     }
                                 ) {
@@ -376,21 +377,21 @@ fun EditStoreItem(
                                 }
                                 Spacer(Modifier.width(8.dp))
                                 Button(onClick = {
-                                    myName = primyStoreItem.itemName
-                                    myBarcode = primyStoreItem.barcode
-                                    myStock = primyStoreItem.stock.toString()
-                                    myBarcode = primyStoreItem.barcode
-                                    myDescription = primyStoreItem.description
-                                    myPrice = primyStoreItem.price.toString()
-                                    myPictureLink = primyStoreItem.pictureLink.toString()
+                                    myName = storeItem.itemName
+                                    myBarcode = storeItem.barcode
+                                    myStock = storeItem.stock.toString()
+                                    myBarcode = storeItem.barcode
+                                    myDescription = storeItem.description
+                                    myPrice = storeItem.price.toString()
+                                    myPictureLink = storeItem.pictureLink.toString()
 
-                                    modifiedItems = mutableListOf()
+//                                    modifiedItems = mutableListOf()
 
-                                    storeItemList.forEach {
-                                        val newItem = MutableStoreItem()
-                                        newItem.fromStoreItem(it)
-                                        modifiedItems.add(Pair(newItem, mutableStateOf(false)))
-                                    }
+//                                    storeItemList.forEach {
+//                                        val newItem = MutableStoreItem()
+//                                        newItem.fromStoreItem(it)
+//                                        modifiedItems.add(Pair(newItem, mutableStateOf(false)))
+//                                    }
 
                                     isEditing = false
                                 }) {
