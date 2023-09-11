@@ -29,6 +29,7 @@ fun Browser() {
 
             jfxPanel.scene = Scene(view)
             engine?.load("https://gpt.seumsc.com")
+            engine?.userStyleSheetLocation = "data:,body { font-family: 'Microsoft YaHei'; }"
         }
     }
 

@@ -94,6 +94,12 @@ fun App() {
                         AdminScene(navigator)
                     }
                 }
+
+                scene("/GPT") {
+                    enterAnimation {
+                        GPTScene(navigator)
+                    }
+                }
             }
         }
     }
