@@ -1,10 +1,14 @@
 package app.vcampus.client.scene.components
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.Icon
 import androidx.compose.material.NavigationRail
 import androidx.compose.material.NavigationRailItem
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import app.vcampus.client.Navis
 import app.vcampus.client.repository.FakeRepository
 import moe.tlaster.precompose.navigation.Navigator
@@ -26,5 +30,13 @@ fun NavRail(navigator: Navigator, currentPos: String) {
                         alwaysShowLabel = false
                 )
         }
+        Spacer(Modifier.weight(1F))
+        NavigationRailItem(
+                selected = false,
+                onClick = {
+                    navigator.navigate("/login")
+                },
+                icon = { Icon(Icons.Default.ExitToApp, "") }
+        )
     }
 }

@@ -19,5 +19,5 @@ val Navis = arrayListOf(
         NaviItem("超市", "/shop", Icons.Default.LocalMall, listOf("shop_user", "shop_staff")),
         NaviItem("财务", "/finance", Icons.Default.Savings, listOf("finance_user", "finance_staff")),
         NaviItem("管理员", "/admin", Icons.Default.ManageAccounts, listOf("admin")),
-        NaviItem("GPT", "/GPT", Icons.Default.Assistant, listOf("user"))
+        NaviItem("GPT", "/GPT", Icons.Default.Assistant, listOf("user")),
 )
