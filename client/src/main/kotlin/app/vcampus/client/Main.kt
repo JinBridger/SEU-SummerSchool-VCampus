@@ -9,10 +9,16 @@ import androidx.compose.ui.window.rememberWindowState
 import app.vcampus.client.net.NettyHandler
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.TopBar
+import javafx.application.Platform
+import javafx.scene.Scene
+import javafx.scene.web.WebView
 import moe.tlaster.precompose.PreComposeWindow
 
 fun main(handler: NettyHandler) {
     FakeRepository.setHandler(handler)
+    Platform.setImplicitExit(false)
+    FakeRepository.initGptWebview()
+
     application {
         val state = rememberWindowState(size = DpSize(1400.dp, 800.dp))
         PreComposeWindow(

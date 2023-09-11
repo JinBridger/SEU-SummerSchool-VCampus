@@ -20,6 +20,10 @@ import app.vcampus.server.entity.Student
 import app.vcampus.server.entity.TeachingClass
 import app.vcampus.server.entity.User
 import app.vcampus.server.utility.Pair
+import javafx.application.Platform
+import javafx.embed.swing.JFXPanel
+import javafx.scene.Scene
+import javafx.scene.web.WebView
 import mu.KotlinLogging
 import java.util.UUID
 
@@ -58,6 +62,20 @@ object FakeRepository {
     lateinit var user: User;
     private val logger = KotlinLogging.logger {}
     lateinit var window: ComposeWindow
+
+    val gptJfxPanel = JFXPanel()
+
+    fun initGptWebview() {
+        Platform.runLater {
+            val view = WebView()
+
+            gptJfxPanel.scene = Scene(view)
+            view.engine.load("https://gpt.seumsc.com")
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                view.engine.userStyleSheetLocation = "data:,body { font-family: 'Microsoft YaHei'; }"
+            }
+        }
+    }
 
     fun setHandler(handler: NettyHandler) {
         this.handler = handler
