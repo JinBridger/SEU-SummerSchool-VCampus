@@ -284,9 +284,9 @@ class ShopViewModel() : ViewModel() {
         fun addStoreItem(newStoreItem: StoreItem) {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    showMessage.value = true
                     addStoreItemInternal(newStoreItem).collect {
                         result.value = it
+                        showMessage.value = true
                     }
                 }
             }
