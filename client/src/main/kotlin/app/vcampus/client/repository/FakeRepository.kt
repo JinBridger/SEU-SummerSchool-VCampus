@@ -56,6 +56,7 @@ object FakeRepository {
     private lateinit var handler: NettyHandler;
     lateinit var user: User;
     private val logger = KotlinLogging.logger {}
+    lateinit var window: ComposeWindow
 
     fun setHandler(handler: NettyHandler) {
         this.handler = handler

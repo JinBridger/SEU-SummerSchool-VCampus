@@ -1,19 +1,21 @@
 package app.vcampus.client.scene
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import app.vcampus.client.repository.FakeRepository
-import app.vcampus.client.scene.components.pageTitle
+import app.vcampus.client.scene.components.Browser
 import app.vcampus.client.viewmodel.MainPanelViewModel
+import javafx.application.Platform
+import javafx.concurrent.Worker
+import javafx.embed.swing.JFXPanel
+import javafx.scene.Scene
+import javafx.scene.web.WebView
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
+import netscape.javascript.JSObject
 
 
 @ExperimentalMaterialApi
@@ -37,16 +39,6 @@ fun MainPanelScene(
 //            NavRail(navi, "/home")
 
     Box(Modifier.fillMaxSize()) {
-        Box(Modifier.width(800.dp).align(Alignment.TopCenter)) {
-            LazyColumn {
-                item {
-                    Spacer(Modifier.height(50.dp))
-                    pageTitle("晚上好，${FakeRepository.user.name}",
-                            "今天想做些什么？")
-                }
-            }
-        }
+        Browser()
     }
-//        }
-//    }
 }
