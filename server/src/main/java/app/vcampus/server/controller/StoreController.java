@@ -79,7 +79,6 @@ public class StoreController {
     public Response getAllTransactions(Request request, org.hibernate.Session database) {
         try {
             List<StoreTransaction> allTransactions = Database.loadAllData(StoreTransaction.class, database);
-            Collections.sort(allTransactions, (o1, o2) -> o2.getTime().compareTo(o1.getTime()));
             return Response.Common.ok(allTransactions.stream().map(StoreTransaction::toJson).collect(Collectors.toList()));
         } catch (Exception e) {
             log.warn("Failed to get transaction records", e);

@@ -176,7 +176,14 @@ class ShopViewModel() : ViewModel() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     checkoutInternal(items).collect {
-
+                        if (it) {
+                            chosenShopItems.clear()
+                            chosenShopItems.addAll(totalShopItems.map { ti ->
+                                ti.copy(stock = 0)
+                            })
+                            parent.chosenItemsCount.value = 0
+                            parent.chosenItemsPrice.value = 0
+                        }
                     }
                 }
             }

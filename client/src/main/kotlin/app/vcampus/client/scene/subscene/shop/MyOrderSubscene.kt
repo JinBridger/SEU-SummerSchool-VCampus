@@ -8,8 +8,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -18,8 +16,6 @@ import androidx.compose.ui.unit.sp
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.scene.components.shopTransactionListItem
 import app.vcampus.client.viewmodel.ShopViewModel
-import app.vcampus.server.entity.StoreTransaction
-import app.vcampus.server.utility.DateUtility
 
 @Composable
 fun myOrderSubscene(viewModel: ShopViewModel) {
@@ -39,11 +35,13 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                     Spacer(Modifier.height(40.dp))
                 }
 
-                viewModel.myOrders.orders.forEach() {
+                viewModel.myOrders.orders.toList().sortedByDescending {
+                    it.first
+                }.forEach {
                     item {
                         Row(Modifier.fillMaxWidth()) {
                             Text(
-                                text = it.key,
+                                text = it.first,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight(700)
                             )
@@ -51,7 +49,7 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                             Text(
                                 text = "共 " + String.format(
                                     "%.2f",
-                                    it.value.sumOf {
+                                    it.second.sumOf {
                                         it.itemPrice * it.amount
                                     }.toDouble() / 100.0
                                 ) + " 元",
@@ -71,7 +69,9 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                             )
                         ) {
                             Column(modifier = Modifier.fillMaxWidth()) {
-                                it.value.forEach {
+                                it.second.sortedByDescending {
+                                    it.time
+                                }.forEach {
                                     shopTransactionListItem(it)
                                 }
                             }
