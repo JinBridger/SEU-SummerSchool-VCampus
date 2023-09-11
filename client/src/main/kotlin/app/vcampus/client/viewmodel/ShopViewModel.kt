@@ -278,15 +278,15 @@ class ShopViewModel() : ViewModel() {
     }
 
     class AddStoreItem : ViewModel() {
-        var result = mutableStateOf(true)
+        var result = mutableStateOf(false)
         var showMessage = mutableStateOf(false)
 
         fun addStoreItem(newStoreItem: StoreItem) {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
+                    showMessage.value = true
                     addStoreItemInternal(newStoreItem).collect {
                         result.value = it
-                        showMessage.value = it
                     }
                 }
             }

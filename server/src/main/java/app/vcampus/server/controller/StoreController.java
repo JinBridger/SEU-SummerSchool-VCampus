@@ -154,10 +154,25 @@ public class StoreController {
     @RouteMapping(uri = "storeItem/addItem", role = "shop_staff")
     public Response addItem(Request request, org.hibernate.Session database) {
         StoreItem newStoreItem = IEntity.fromJson(request.getParams().get("item"), StoreItem.class);
+        newStoreItem.setUuid(UUID.randomUUID());
         if (newStoreItem == null) {
             return Response.Common.badRequest();
         }
-        newStoreItem.setUuid(UUID.randomUUID());
+        if(Objects.equals(newStoreItem.itemName, "")) {
+            return Response.Common.badRequest();
+        }
+        if(newStoreItem.barcode == "") {
+            return Response.Common.badRequest();
+        }
+        if(newStoreItem.price <= 0) {
+            return Response.Common.badRequest();
+        }
+        if(newStoreItem.stock <= 0) {
+            return Response.Common.badRequest();
+        }
+        if(newStoreItem.pictureLink == "") {
+            return Response.Common.badRequest();
+        }
         Transaction tx = database.beginTransaction();
         database.persist(newStoreItem);
         tx.commit();
