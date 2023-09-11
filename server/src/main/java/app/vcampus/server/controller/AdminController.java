@@ -1,6 +1,9 @@
 package app.vcampus.server.controller;
 
+import app.vcampus.server.entity.IEntity;
+import app.vcampus.server.entity.Student;
 import app.vcampus.server.entity.User;
+import app.vcampus.server.enums.StudentStatus;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Password;
 import app.vcampus.server.utility.Request;
@@ -10,14 +13,30 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
 public class AdminController {
     @RouteMapping(uri = "admin/user/add", role = "admin")
     public Response addUser(Request request, org.hibernate.Session database) {
-        // TODO: implement
-        return Response.Common.ok();
+        try {
+            User user = IEntity.fromJson(request.getParams().get("user"), User.class);
+            user.setPassword(Password.hash(user.password));
+            
+            Transaction tx = database.beginTransaction();
+            database.persist(user);
+
+            if (Arrays.stream(user.getRoles()).toList().contains("student")) {
+                Student student = Student.getStudent(user);
+                database.persist(student);
+            }
+            tx.commit();
+
+            return Response.Common.ok();
+        } catch (Exception e) {
+            return Response.Common.error(e.getMessage());
+        }
     }
 
     @RouteMapping(uri = "admin/user/search", role = "admin")

@@ -10,6 +10,7 @@ import androidx.compose.runtime.toMutableStateList
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.User
+import app.vcampus.server.enums.Gender
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ import moe.tlaster.precompose.viewmodel.viewModelScope
 class AdminViewModel: ViewModel() {
     val identity = FakeRepository.user.roles.toList()
 
+    val addUser = AddUser()
     val modifyUser = ModifyUser()
 
     val sideBarContent = (if (identity.contains("admin")) {
@@ -38,6 +40,35 @@ class AdminViewModel: ViewModel() {
     }
 
     val adminSideBarItem = sideBarContent.toMutableStateList()
+
+    class AddUser: ViewModel() {
+        val cardNum = mutableStateOf("")
+        val name = mutableStateOf("")
+        val password = mutableStateOf("")
+        val gender = mutableStateOf(Gender.unspecified)
+        val phone = mutableStateOf("")
+        val email = mutableStateOf("")
+
+        val roles = mutableStateOf(listOf<String>())
+
+        fun addUser(user: User) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    addUserInternal(user).collect {
+
+                    }
+                }
+            }
+        }
+
+        private suspend fun addUserInternal(user: User) = flow {
+            try {
+                emit(FakeRepository.addUser(user))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
     class ModifyUser: ViewModel() {
         val keyword = mutableStateOf("")

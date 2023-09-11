@@ -43,11 +43,11 @@ fun modifyStudentStatusSubscene(viewModel: StudentStatusViewModel) {
                 Spacer(Modifier.height(20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth()
-                        .onPreviewKeyEvent {event: KeyEvent ->
-                            if(event.type== KeyEventType.KeyDown&&event.key== Key.Enter){
+                        .onPreviewKeyEvent { event: KeyEvent ->
+                            if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
                                 viewModel.searchStudent()
                                 true
-                            }else{
+                            } else {
                                 false
                             }
                         },
@@ -81,6 +81,8 @@ fun modifyStudentStatusSubscene(viewModel: StudentStatusViewModel) {
                     SearchStudentStatusItem(student, true) {
                         viewModel.updateStudent(it)
                     }
+
+                    Spacer(Modifier.height(8.dp))
                 }
             }
 

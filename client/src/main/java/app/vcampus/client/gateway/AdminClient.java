@@ -14,6 +14,22 @@ import java.util.Map;
 
 @Slf4j
 public class AdminClient {
+    public static Boolean addUser(NettyHandler handler, User user) {
+        Request request = new Request();
+        request.setUri("admin/user/add");
+        request.setParams(Map.of(
+                "user", user.toJson()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to add user", e);
+            return false;
+        }
+    }
+
     public static List<User> searchUser(NettyHandler handler, String keyword) {
         Request request = new Request();
         request.setUri("admin/user/search");

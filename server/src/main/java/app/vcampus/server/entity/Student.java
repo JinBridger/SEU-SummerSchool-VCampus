@@ -49,6 +49,22 @@ public class Student implements IEntity {
     @Column(nullable = false)
     public PoliticalStatus politicalStatus;
 
+    public static Student getStudent(User user) {
+        Student student = new Student();
+        student.setCardNumber(user.getCardNum());
+        student.setStudentNumber("");
+        student.setFamilyName("");
+        student.setGivenName("");
+        student.setGender(user.getGender());
+        student.setBirthDate(null);
+        student.setMajor("");
+        student.setSchool("");
+        student.setStatus(StudentStatus.inSchool);
+        student.setBirthPlace("");
+        student.setPoliticalStatus(PoliticalStatus.Masses);
+        return student;
+    }
+
     public static Student fromMap(Map<String, String> data) {
         try {
             Student student = new Student();

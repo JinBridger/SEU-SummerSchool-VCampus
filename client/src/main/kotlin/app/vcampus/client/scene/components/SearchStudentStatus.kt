@@ -245,7 +245,21 @@ fun SearchStudentStatusItem(
                         Spacer(modifier = Modifier.height(8.dp))
                         Row {
                             OutlinedTextField(
-                                modifier = Modifier.weight(0.5F),
+                                modifier = Modifier.weight(0.32F),
+                                value = mutableStudent.studentNumber.value,
+                                onValueChange = { mutableStudent.studentNumber.value = it },
+                                label = { Text("学号") },
+                                isError = mutableStudent.studentNumber.value == "",
+                                readOnly = !isEditing,
+                                trailingIcon = {
+                                    if (mutableStudent.studentNumber.value == "") Icon(
+                                        Icons.Filled.Error, "error",
+                                        tint = MaterialTheme.colors.error
+                                    )
+                                })
+                            Spacer(modifier = Modifier.width(8.dp))
+                            OutlinedTextField(
+                                modifier = Modifier.weight(0.32F),
                                 value = mutableStudent.major.value,
                                 onValueChange = { mutableStudent.major.value = it },
                                 label = { Text("专业") },
@@ -259,7 +273,7 @@ fun SearchStudentStatusItem(
                                 })
                             Spacer(modifier = Modifier.width(8.dp))
                             OutlinedTextField(
-                                modifier = Modifier.weight(0.5F),
+                                modifier = Modifier.weight(0.32F),
                                 value = mutableStudent.school.value,
                                 onValueChange = { mutableStudent.school.value = it },
                                 label = { Text("学院") },

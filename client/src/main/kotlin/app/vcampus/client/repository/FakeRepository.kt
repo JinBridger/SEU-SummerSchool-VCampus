@@ -267,6 +267,10 @@ object FakeRepository {
         return FinanceClient.rechargeCard(handler, cardNumber, amount) ?: FinanceCard()
     }
 
+    fun addUser(user: User): Boolean {
+        return AdminClient.addUser(handler, user)
+    }
+
     fun searchUser(keyword: String): List<User> {
         return AdminClient.searchUser(handler, keyword) ?: listOf()
     }
