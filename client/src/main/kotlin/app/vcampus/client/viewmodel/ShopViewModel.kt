@@ -192,14 +192,14 @@ class ShopViewModel() : ViewModel() {
     }
 
     class MyOrders(): ViewModel() {
-        var orders = mutableStateListOf<StoreTransaction>()
+        var orders = mutableStateMapOf<String, List<StoreTransaction>>()
 
         fun getOrders() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     getOrdersInternal().collect {
                         orders.clear()
-                        orders.addAll(it)
+                        orders.putAll(it)
                     }
                 }
             }
@@ -207,7 +207,7 @@ class ShopViewModel() : ViewModel() {
 
         private suspend fun getOrdersInternal() = flow {
             try {
-                emit(FakeRepository.getAllStoreTransactions())
+                emit(FakeRepository.getAllOrder())
             } catch (e: Exception) {
                 e.printStackTrace()
             }

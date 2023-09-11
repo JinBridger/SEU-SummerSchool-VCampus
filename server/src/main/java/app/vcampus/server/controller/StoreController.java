@@ -1,6 +1,7 @@
 package app.vcampus.server.controller;
 
 import app.vcampus.server.entity.*;
+import app.vcampus.server.enums.TransactionType;
 import app.vcampus.server.utility.*;
 import app.vcampus.server.utility.router.RouteMapping;
 import com.google.gson.Gson;
@@ -70,6 +71,8 @@ public class StoreController {
             cardTransaction.setAmount(totalPrice);
             cardTransaction.setTime(new Date());
             cardTransaction.setDescription("商店消费");
+            cardTransaction.setType(TransactionType.payment);
+            database.persist(cardTransaction);
 
             tx.commit();
 
@@ -185,11 +188,15 @@ public class StoreController {
         return Response.Common.ok();
     }
 
-    @RouteMapping(uri = "storeTransaction/getRecords", role = "admin")
+    @RouteMapping(uri = "storeTransaction/getRecords", role = "shop_staff")
     public Response getRecords(Request request, org.hibernate.Session database) {
         try {
             List<StoreTransaction> allRecords = Database.loadAllData(StoreTransaction.class, database);
-            Collections.sort(allRecords, (o1, o2) -> o2.getTime().compareTo(o1.getTime()));
+            allRecords = allRecords.stream().peek(w -> {
+                StoreItem storeItem = database.get(StoreItem.class, w.getItemUUID());
+                w.setItem(storeItem);
+            }).collect(Collectors.toList());
+            allRecords.sort((o1, o2) -> o2.getTime().compareTo(o1.getTime()));
             return Response.Common.ok(allRecords.stream().collect(Collectors.groupingBy(w -> DateUtility.fromDate(w.time))).entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getKey,
                     e -> e.getValue().stream().map(StoreTransaction::toJson).collect(Collectors.toList()))));

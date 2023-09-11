@@ -1,9 +1,6 @@
 package app.vcampus.server.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,6 +34,9 @@ public class StoreTransaction implements IEntity {
     public Date time;
 
     public String remark;
+
+    @Transient
+    public StoreItem item;
 
 //    public static StoreTransaction fromMap(Map<String, String> data) {
 //        try {

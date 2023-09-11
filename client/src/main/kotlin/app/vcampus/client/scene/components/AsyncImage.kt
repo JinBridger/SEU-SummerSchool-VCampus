@@ -45,5 +45,9 @@ fun <T> AsyncImage(
     }
 }
 
-fun loadImageBitmap(url: String): ImageBitmap =
-    URL(url).openStream().buffered().use(::loadImageBitmap)
+fun loadImageBitmap(url: String): ImageBitmap {
+    val urlConn = URL(url).openConnection()
+    urlConn.useCaches = true
+
+    return urlConn.getInputStream().buffered().use(::loadImageBitmap)
+}

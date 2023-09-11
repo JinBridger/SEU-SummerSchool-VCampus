@@ -27,9 +27,9 @@ import app.vcampus.server.entity.StoreTransaction
 
 @Composable
 fun shopTransactionListItem(
-    _StoreTransactions: StoreTransaction,
+    st: StoreTransaction,
 ) {
-    val subStoreItem = FakeRepository.getStoreItemByUuid(_StoreTransactions.itemUUID.toString())
+    val subStoreItem = st.item
     Column {
         Row(modifier = Modifier.fillMaxWidth().height(150.dp).padding(6.dp)) {
             Box(modifier = Modifier.aspectRatio(1F).fillMaxHeight().clip(
@@ -55,7 +55,7 @@ fun shopTransactionListItem(
                         RoundedCornerShape(8.dp)).height(30.dp).width(
                         30.dp),
                         contentAlignment = Alignment.Center) {
-                        Text(_StoreTransactions.amount.toString())
+                        Text(st.amount.toString())
                     }
                     Spacer(modifier = Modifier.width(6.dp))
                 }
@@ -68,7 +68,7 @@ fun shopTransactionListItem(
                         Text("￥", fontSize = 14.sp)
                         Spacer(modifier = Modifier.height(10.dp))
                     }
-                    Text(String.format("%.2f", subStoreItem.price / 100.0),
+                    Text(String.format("%.2f", st.itemPrice / 100.0),
                         fontWeight = FontWeight(700),
                         fontSize = 24.sp)
                     Spacer(modifier = Modifier.weight(1F))
