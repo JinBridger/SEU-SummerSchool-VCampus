@@ -14,8 +14,7 @@ import javafx.scene.Scene
 import javafx.scene.web.WebView
 import moe.tlaster.precompose.PreComposeWindow
 
-fun main(handler: NettyHandler) {
-    FakeRepository.setHandler(handler)
+fun main() {
     Platform.setImplicitExit(false)
     FakeRepository.initGptWebview()
 

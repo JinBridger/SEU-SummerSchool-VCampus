@@ -85,7 +85,7 @@ compose.desktop {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "app.vcampus.client.Application"
+        attributes["Main-Class"] = "app.vcampus.client.MainKt"
     }
 
     doFirst {

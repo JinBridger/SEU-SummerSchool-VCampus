@@ -58,7 +58,9 @@ fun StoreItem.copy(stock: Int = this.stock): StoreItem {
 }
 
 object FakeRepository {
-    private lateinit var handler: NettyHandler;
+    lateinit var handler: NettyHandler;
+    var isConnected = false
+
     lateinit var user: User;
     private val logger = KotlinLogging.logger {}
     lateinit var window: ComposeWindow
@@ -75,10 +77,6 @@ object FakeRepository {
                 view.engine.userStyleSheetLocation = "data:,body { font-family: 'Microsoft YaHei'; }"
             }
         }
-    }
-
-    fun setHandler(handler: NettyHandler) {
-        this.handler = handler
     }
 
     fun login(username: String, password: String): Boolean {

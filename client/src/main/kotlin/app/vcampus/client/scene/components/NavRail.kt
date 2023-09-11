@@ -34,6 +34,7 @@ fun NavRail(navigator: Navigator, currentPos: String) {
         NavigationRailItem(
                 selected = false,
                 onClick = {
+                    FakeRepository.isConnected = false
                     navigator.navigate("/login")
                 },
                 icon = { Icon(Icons.Default.ExitToApp, "") }

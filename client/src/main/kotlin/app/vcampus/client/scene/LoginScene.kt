@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.scene.components.shadowCustom
 import app.vcampus.client.viewmodel.LoginViewModel
@@ -28,7 +29,7 @@ import moe.tlaster.precompose.viewmodel.viewModel
 @ExperimentalMaterialApi
 @Composable
 fun LoginScene(
-        onLogin: () -> Unit,
+    onLogin: () -> Unit,
 ) {
     val viewModel = viewModel(LoginViewModel::class, listOf()) {
         LoginViewModel()
@@ -40,7 +41,7 @@ fun LoginScene(
     val loginState by viewModel.loginState
     val scope = rememberCoroutineScope()
     var showServerAddress by remember { mutableStateOf(false) }
-    var address by remember { mutableStateOf("127.0.0.1:9091") }
+    var address by viewModel.server
 
     when (loginState) {
         true -> onLogin()
@@ -53,124 +54,128 @@ fun LoginScene(
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Box(
-                Modifier.size(1064.dp, 600.dp).shadowCustom(
-                        blurRadius = 10.dp
-                ).background(Color.White)
+            Modifier.size(1064.dp, 600.dp).shadowCustom(
+                blurRadius = 10.dp
+            ).background(Color.White)
         ) {
             Row {
                 Image(
-                        painterResource("seu-side.png"),
-                        contentDescription = "SEU Sidebar",
-                        modifier = Modifier.width(600.dp).height(600.dp)
+                    painterResource("seu-side.png"),
+                    contentDescription = "SEU Sidebar",
+                    modifier = Modifier.width(600.dp).height(600.dp)
                 )
 
                 Row(
-                        modifier = Modifier
-                                .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Box(
-                            modifier = Modifier
-                                    .requiredWidth(328.dp)
-                                    .fillMaxHeight()
+                        modifier = Modifier
+                            .requiredWidth(328.dp)
+                            .fillMaxHeight()
                     ) {
                         Column(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.spacedBy(
-                                        16.dp, Alignment.CenterVertically
-                                )
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(
+                                16.dp, Alignment.CenterVertically
+                            )
                         ) {
                             Column {
                                 pageTitle("统一验证登录", "VCampus")
                             }
 
                             Column(
-                                    verticalArrangement = Arrangement.spacedBy(
-                                            8.dp, Alignment.CenterVertically
-                                    ),
-                                    modifier = Modifier.onPreviewKeyEvent { event: KeyEvent ->
+                                verticalArrangement = Arrangement.spacedBy(
+                                    8.dp, Alignment.CenterVertically
+                                ),
+                                modifier = Modifier.onPreviewKeyEvent { event: KeyEvent ->
+                                    if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
+                                        viewModel.login(username, password)
+                                        true
+                                    } else {
+                                        false
+                                    }
+                                }
+                            ) {
+                                OutlinedTextField(
+                                    value = username,
+                                    onValueChange = { username = it },
+                                    label = { Text("一卡通号") },
+                                    modifier = Modifier.fillMaxWidth().onPreviewKeyEvent { event: KeyEvent ->
                                         if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
-                                            viewModel.login(username, password)
+                                            viewModel.login(
+                                                username,
+                                                password
+                                            )
                                             true
                                         } else {
                                             false
                                         }
-                                    }
-                            ) {
+                                    },
+                                    singleLine = true
+                                )
+
                                 OutlinedTextField(
-                                        value = username,
-                                        onValueChange = { username = it },
-                                        label = { Text("一卡通号") },
+                                    value = password,
+                                    onValueChange = {
+                                        password = it
+                                    },
+                                    label = { Text("密码") },
+                                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                                    modifier = Modifier.fillMaxWidth(),
+                                    trailingIcon = {
+                                        val image = if (passwordVisible)
+                                            Icons.Filled.Visibility
+                                        else Icons.Filled.VisibilityOff
+
+                                        // Please provide localized description for accessibility services
+                                        val description = if (passwordVisible) "隐藏密码" else "显示密码"
+
+                                        IconButton(
+                                            onClick = { passwordVisible = !passwordVisible }) {
+                                            Icon(image, description)
+                                        }
+                                    },
+                                    singleLine = true
+                                )
+
+                                if (showServerAddress) {
+                                    OutlinedTextField(
+                                        value = address,
+                                        onValueChange = { address = it },
+                                        label = { Text("服务器地址") },
                                         modifier = Modifier.fillMaxWidth().onPreviewKeyEvent { event: KeyEvent ->
                                             if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
-                                                viewModel.login(username,
-                                                        password)
+                                                viewModel.login(
+                                                    username,
+                                                    password
+                                                )
                                                 true
                                             } else {
                                                 false
                                             }
                                         },
                                         singleLine = true
-                                )
-
-                                OutlinedTextField(
-                                        value = password,
-                                        onValueChange = {
-                                            password = it
-                                        },
-                                        label = { Text("密码") },
-                                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                        modifier = Modifier.fillMaxWidth(),
-                                        trailingIcon = {
-                                            val image = if (passwordVisible)
-                                                Icons.Filled.Visibility
-                                            else Icons.Filled.VisibilityOff
-
-                                            // Please provide localized description for accessibility services
-                                            val description = if (passwordVisible) "隐藏密码" else "显示密码"
-
-                                            IconButton(
-                                                    onClick = { passwordVisible = !passwordVisible }) {
-                                                Icon(image, description)
-                                            }
-                                        },
-                                        singleLine = true
-                                )
-
-                                if(showServerAddress) {
-                                    OutlinedTextField(
-                                            value = address,
-                                            onValueChange = { address = it },
-                                            label = { Text("服务器地址") },
-                                            modifier = Modifier.fillMaxWidth().onPreviewKeyEvent { event: KeyEvent ->
-                                                if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
-                                                    viewModel.login(username,
-                                                            password)
-                                                    true
-                                                } else {
-                                                    false
-                                                }
-                                            },
-                                            singleLine = true
                                     )
                                 }
                             }
 
                             Row(
-                                    modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth(),
                             ) {
                                 TextButton(
-                                        onClick = {
-                                            println("忘记密码")
-                                        }
+                                    onClick = {
+                                        println("忘记密码")
+                                    }
                                 ) {
                                     Text("忘记密码？")
                                 }
 
                                 TextButton(
-                                        onClick = {
-                                            showServerAddress = !showServerAddress
-                                        }
+                                    onClick = {
+                                        showServerAddress = !showServerAddress
+                                    }
                                 ) {
                                     Text("设置服务器地址")
                                 }
@@ -178,9 +183,9 @@ fun LoginScene(
                                 Spacer(Modifier.weight(1F))
 
                                 Button(
-                                        onClick = {
-                                            viewModel.login(username, password)
-                                        }
+                                    onClick = {
+                                        viewModel.login(username, password)
+                                    }
                                 ) {
                                     Text("登录")
                                 }
@@ -198,9 +203,15 @@ fun LoginScene(
                             Crossfade(viewModel.showMessage) {
                                 if (it.value) {
                                     scope.launch {
-                                        state.showSnackbar(
+                                        if (!FakeRepository.isConnected) {
+                                            state.showSnackbar(
+                                                "无法连接到服务器", "关闭"
+                                            )
+                                        } else {
+                                            state.showSnackbar(
                                                 "一卡通号或密码不正确", "关闭"
-                                        )
+                                            )
+                                        }
                                     }
 
                                     password = ""

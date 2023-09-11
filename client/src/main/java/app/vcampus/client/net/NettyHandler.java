@@ -10,12 +10,14 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+@Slf4j
 public class NettyHandler extends ChannelInboundHandlerAdapter {
     private final Gson gson = new Gson();
     private final Map<UUID, Consumer<Response>> callbacks = new HashMap<>();
@@ -23,11 +25,13 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
+        log.info("[{}] Connected", ctx.channel().id());
         this.ctx = ctx;
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
+        log.info("[{}] Disconnected", ctx.channel().id());
         this.ctx = null;
     }
 
@@ -41,8 +45,7 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
             }
             callbacks.get(response.getId()).accept(response);
         } catch (Exception e) {
-//            log.error("[{}] Exception: {}", ctx.channel().id(), e.getMessage());
-            e.printStackTrace();
+            log.error("[{}] Exception: {}", ctx.channel().id(), e.getMessage());
         } finally {
             ReferenceCountUtil.release(msg);
         }
