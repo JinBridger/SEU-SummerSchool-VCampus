@@ -13,23 +13,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.vcampus.client.scene.components.Select
 import app.vcampus.client.scene.components.pageTitle
+import app.vcampus.client.scene.components.roleChip
 import app.vcampus.client.scene.components.selectableChip
 import app.vcampus.client.viewmodel.AdminViewModel
+import app.vcampus.server.enums.Gender
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun addUserSubscene(viewModel: AdminViewModel) {
-    val selectedAdmin = remember { mutableStateOf(false) }
-    val selectedStudent = remember { mutableStateOf(false) }
-    val selectedTeacher = remember { mutableStateOf(false) }
-    val selectedTeachingAffair = remember { mutableStateOf(false) }
-    val selectedLibraryUser = remember { mutableStateOf(false) }
-    val selectedLibraryStaff = remember { mutableStateOf(false) }
-    val selectedShopUser = remember { mutableStateOf(false) }
-    val selectedShopStaff = remember { mutableStateOf(false) }
-    val selectedFinanceUser = remember { mutableStateOf(false) }
-    val selectedFinanceStaff = remember { mutableStateOf(false) }
+
 
     Row(horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
@@ -49,21 +42,54 @@ fun addUserSubscene(viewModel: AdminViewModel) {
                             value = "",
                             onValueChange = { },
                             label = { Text("输入一卡通号") },
-                            modifier = Modifier.padding(
-                                    0.dp, 0.dp, 16.dp,
-                                    0.dp
-                            ).weight(1F)
+                            modifier = Modifier.weight(1F)
                     )
+                    Spacer(Modifier.width(16.dp))
                     OutlinedTextField(
                             value = "",
                             onValueChange = { },
                             label = { Text("输入初始密码") },
-                            modifier = Modifier.padding(
-                                    0.dp, 0.dp, 0.dp,
-                                    0.dp
-                            ).weight(1F)
+                            modifier = Modifier.weight(1F)
                     )
                 }
+
+                Spacer(Modifier.height(20.dp))
+                Text("基本信息", fontWeight = FontWeight(700),
+                    fontSize = 20.sp)
+                Spacer(Modifier.height(10.dp))
+                Row(Modifier.fillMaxWidth()) {
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { },
+                        label = { Text("姓名") },
+                        modifier = Modifier.weight(1F)
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    Select(
+                        selectList = Gender.entries,
+                        label = {
+                            Text("性别")
+                        },
+                        value = Gender.unspecified,
+                        setValue = { },
+                        modifier = Modifier.weight(1F)
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { },
+                        label = { Text("电话") },
+                        modifier = Modifier.weight(1F)
+                    )
+                    Spacer(Modifier.width(16.dp))
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = { },
+                        label = { Text("邮件") },
+                        modifier = Modifier.weight(1F)
+                    )
+                }
+
                 Spacer(Modifier.height(20.dp))
                 Text("用户权限", fontWeight = FontWeight(700), fontSize = 20.sp)
                 Spacer(Modifier.height(10.dp))
@@ -72,26 +98,8 @@ fun addUserSubscene(viewModel: AdminViewModel) {
                         color = Color.LightGray,
                         shape = RoundedCornerShape(4.dp)
                 ).padding(10.dp)) {
-                    FlowRow(Modifier.fillMaxWidth()) {
-                        selectableChip(selectedAdmin, "管理员")
-                        Spacer(Modifier.width(10.dp))
-                        selectableChip(selectedStudent, "学生")
-                        Spacer(Modifier.width(10.dp))
-                        selectableChip(selectedTeacher, "教师")
-                        Spacer(Modifier.width(10.dp))
-                        selectableChip(selectedTeachingAffair, "教务")
-                        Spacer(Modifier.width(10.dp))
-                        selectableChip(selectedLibraryUser, "图书馆使用权限")
-                        Spacer(Modifier.width(10.dp))
-                        selectableChip(selectedLibraryStaff, "图书馆管理权限")
-                        Spacer(Modifier.width(10.dp))
-                        selectableChip(selectedShopUser, "商店使用权限")
-                        Spacer(Modifier.width(10.dp))
-                        selectableChip(selectedShopStaff, "商店管理权限")
-                        Spacer(Modifier.width(10.dp))
-                        selectableChip(selectedFinanceUser, "财务使用权限")
-                        Spacer(Modifier.width(10.dp))
-                        selectableChip(selectedFinanceStaff, "财务管理权限")
+                    roleChip {
+                        println(it)
                     }
                 }
                 Spacer(Modifier.height(10.dp))

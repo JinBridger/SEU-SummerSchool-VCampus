@@ -50,7 +50,8 @@ fun <T> Select(
     value: T? = null,
     basic: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
-    readOnly: Boolean = false
+    readOnly: Boolean = false,
+    modifier: Modifier = Modifier.fillMaxWidth()
 ) where T : Enum<T>, T : LabelledEnum {
     var dropExpand by remember { mutableStateOf(false) }
     var selected by remember { mutableStateOf(value ?: selectList[0]) }
@@ -65,7 +66,7 @@ fun <T> Select(
 
     val defaultTextFieldColors = TextFieldDefaults.textFieldColors()
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = modifier) {
         if (basic) {
             BasicTextField(
                 value = selected.label,

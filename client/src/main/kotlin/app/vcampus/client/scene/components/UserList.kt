@@ -20,17 +20,6 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun userListItem() {
-    val selectedAdmin = remember { mutableStateOf(false) }
-    val selectedStudent = remember { mutableStateOf(false) }
-    val selectedTeacher = remember { mutableStateOf(false) }
-    val selectedTeachingAffair = remember { mutableStateOf(false) }
-    val selectedLibraryUser = remember { mutableStateOf(false) }
-    val selectedLibraryStaff = remember { mutableStateOf(false) }
-    val selectedShopUser = remember { mutableStateOf(false) }
-    val selectedShopStaff = remember { mutableStateOf(false) }
-    val selectedFinanceUser = remember { mutableStateOf(false) }
-    val selectedFinanceStaff = remember { mutableStateOf(false) }
-
     val expanded = remember { mutableStateOf(false) }
     Surface(modifier = Modifier.fillMaxWidth().border(
             1.dp,
@@ -73,26 +62,8 @@ fun userListItem() {
                 }
                 Spacer(Modifier.height(10.dp))
                 Text("用户权限", fontWeight = FontWeight(700))
-                FlowRow(Modifier.fillMaxWidth()) {
-                    selectableChip(selectedAdmin, "管理员")
-                    Spacer(Modifier.width(10.dp))
-                    selectableChip(selectedStudent, "学生")
-                    Spacer(Modifier.width(10.dp))
-                    selectableChip(selectedTeacher, "教师")
-                    Spacer(Modifier.width(10.dp))
-                    selectableChip(selectedTeachingAffair, "教务")
-                    Spacer(Modifier.width(10.dp))
-                    selectableChip(selectedLibraryUser, "图书馆使用权限")
-                    Spacer(Modifier.width(10.dp))
-                    selectableChip(selectedLibraryStaff, "图书馆管理权限")
-                    Spacer(Modifier.width(10.dp))
-                    selectableChip(selectedShopUser, "商店使用权限")
-                    Spacer(Modifier.width(10.dp))
-                    selectableChip(selectedShopStaff, "商店管理权限")
-                    Spacer(Modifier.width(10.dp))
-                    selectableChip(selectedFinanceUser, "财务使用权限")
-                    Spacer(Modifier.width(10.dp))
-                    selectableChip(selectedFinanceStaff, "财务管理权限")
+                roleChip(listOf("admin")) {
+
                 }
                 Spacer(Modifier.height(10.dp))
                 Row(Modifier.fillMaxWidth()) {
