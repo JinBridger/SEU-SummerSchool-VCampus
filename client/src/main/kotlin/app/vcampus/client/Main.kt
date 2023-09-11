@@ -23,6 +23,7 @@ fun main(handler: NettyHandler) {
                 state = state,
                 undecorated = true,
         ) {
+            FakeRepository.window = window
             Column {
                 WindowDraggableArea {
                     TopBar("VCampus", { exitApplication() })

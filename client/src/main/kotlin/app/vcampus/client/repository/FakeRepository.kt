@@ -1,5 +1,6 @@
 package app.vcampus.client.repository
 
+import androidx.compose.ui.awt.ComposeWindow
 import app.vcampus.client.gateway.AdminClient
 import app.vcampus.client.gateway.AuthClient
 import app.vcampus.client.gateway.FinanceClient
@@ -56,6 +57,7 @@ object FakeRepository {
     private lateinit var handler: NettyHandler;
     lateinit var user: User;
     private val logger = KotlinLogging.logger {}
+    lateinit var window: ComposeWindow
 
     fun setHandler(handler: NettyHandler) {
         this.handler = handler

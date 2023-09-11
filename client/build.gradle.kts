@@ -7,6 +7,7 @@ plugins {
     id("org.jetbrains.compose") version "1.5.0"
     id("io.freefair.lombok") version "8.2.2"
     kotlin("plugin.lombok") version "1.9.0"
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 group = "app.vcampus"
@@ -98,4 +99,9 @@ tasks.withType<Jar> {
     isZip64 = true
 
     exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+}
+
+javafx {
+    version = "17"
+    modules = listOf("javafx.controls", "javafx.swing", "javafx.web", "javafx.graphics")
 }

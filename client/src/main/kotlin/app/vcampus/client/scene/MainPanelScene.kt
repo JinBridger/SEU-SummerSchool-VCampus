@@ -3,9 +3,7 @@ package app.vcampus.client.scene
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,17 +22,6 @@ fun MainPanelScene(
     val viewModel = viewModel(MainPanelViewModel::class, listOf()) {
         MainPanelViewModel()
     }
-    val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
-
-//    Scaffold(
-//        scaffoldState = scaffoldState,
-//        topBar = {
-//            TopBar("欢迎来到自助服务大厅！")
-//        }
-//    ) {
-//        Row {
-//            NavRail(navi, "/home")
 
     Box(Modifier.fillMaxSize()) {
         Box(Modifier.width(800.dp).align(Alignment.TopCenter)) {
@@ -47,6 +34,4 @@ fun MainPanelScene(
             }
         }
     }
-//        }
-//    }
 }
