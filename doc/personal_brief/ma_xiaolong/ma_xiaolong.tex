@@ -1,0 +1,45 @@
+\documentclass{article}
+\usepackage{ctex}
+\usepackage{makecell}
+\usepackage{geometry}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{longtable}
+
+\geometry{a4paper,left=25mm,right=20mm,top=25mm,bottom=25mm}
+
+\title{个人项目小结报告}
+\author{09021218~马晓龙}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{组内工作}
+
+在本次项目中的主要工作包括：
+
+\begin{itemize}
+    \item 完成了基于 \texttt{Netty} 的基础 Socket 通信框架的实现，并使用 \texttt{Gson} 作为传输序列化库
+    \item 构建了基于 \texttt{Hibernate} 的 ORM 层，实现高效的、面向对象的数据访问和操作
+    \item 编写和完善了各个模块的相关后端逻辑，实现了基于注解和反射的路由机制，并完成非侵入式的鉴权逻辑
+    \item 编写和完善了部分客户端页面与对接部分逻辑，通过协程等方式避免了 UI 线程阻塞等问题
+    \item 完成了项目的 CI/CD 配置文件的编写，实现自动化工作流
+\end{itemize}
+
+\section{任务完成情况总结}
+
+总体任务完成情况良好，基础框架可满足上层功能的实现需求，为相关业务逻辑提供了足够的灵活性。编写的客户端界面、服务端逻辑可完成相应需求，能够为使用者提供良好的用户体验。
+
+\section{工作小结与体会}
+
+\begin{itemize}
+    \item 团队协作、沟通和文档十分重要，否则即使已有基础框架，也难以规范地实现功能
+    \item 对于协作提交的代码需要及时 Review，及时找出实现中存在的问题并加以改进，而不是等使用时出现问题了再处理
+    \item 对 \texttt{Compose} 这类声明式、基于状态的 UI 框架有了更深入的了解，学习了如何以状态为中心构建应用程序
+    \item 对 \texttt{Java} 语言本身有了更深入的了解，学习了相关的设计范式和编码规范
+\end{itemize}
+
+\end{document}
