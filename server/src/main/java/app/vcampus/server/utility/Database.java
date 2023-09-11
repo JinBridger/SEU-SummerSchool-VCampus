@@ -25,6 +25,7 @@ public class Database {
                 .addAnnotatedClass(FinanceCard.class)
                 .addAnnotatedClass(CardTransaction.class)
                 .addAnnotatedClass(TeachingEvaluation.class)
+                .addAnnotatedClass(LibraryTransaction.class)
                 .buildSessionFactory();
     }
 

@@ -7,7 +7,7 @@ public enum LibraryAction implements LabelledEnum {
     borrow("借出"),
     returnBook("还书");
 
-    private String label;
+    private final String label;
 
     LibraryAction(String label) {
         this.label = label;

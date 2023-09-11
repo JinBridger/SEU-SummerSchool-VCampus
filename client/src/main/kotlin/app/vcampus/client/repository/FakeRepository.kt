@@ -11,6 +11,7 @@ import app.vcampus.server.entity.CardTransaction
 import app.vcampus.server.entity.Course
 import app.vcampus.server.entity.FinanceCard
 import app.vcampus.server.entity.LibraryBook
+import app.vcampus.server.entity.LibraryTransaction
 import app.vcampus.server.entity.StoreItem
 import app.vcampus.server.entity.StoreTransaction
 import app.vcampus.server.entity.Student
@@ -101,6 +102,18 @@ object FakeRepository {
 
     fun deleteBook(uuid: UUID): Boolean {
         return LibraryClient.deleteBook(handler, uuid)
+    }
+
+    fun borrowBook(bookUuid: String, cardNumber: String): Boolean {
+        return LibraryClient.borrowBook(handler, bookUuid, cardNumber)
+    }
+
+    fun getMyRecords(): List<LibraryTransaction> {
+        return LibraryClient.getMyRecords(handler)
+    }
+
+    fun userRenewBook(uuid: UUID): Boolean {
+        return LibraryClient.userRenewBook(handler, uuid)
     }
 
     fun searchStoreItem(keyword: String): Map<String, List<StoreItem>> {

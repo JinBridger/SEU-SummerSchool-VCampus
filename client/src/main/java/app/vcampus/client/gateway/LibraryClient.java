@@ -1,10 +1,7 @@
 package app.vcampus.client.gateway;
 
 import app.vcampus.client.net.NettyHandler;
-import app.vcampus.server.entity.IEntity;
-import app.vcampus.server.entity.LibraryBook;
-import app.vcampus.server.entity.Student;
-import app.vcampus.server.entity.User;
+import app.vcampus.server.entity.*;
 import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
@@ -79,25 +76,6 @@ public class LibraryClient {
         }
     }
 
-    public static LibraryBook getBookInfo(NettyHandler handler, UUID bookUuid){
-        Request request = new Request();
-        request.setUri("library/getBookInfo");
-        request.setParams(Map.of("uuid", bookUuid.toString()));
-
-        try {
-            Response response = BaseClient.sendRequest(handler, request);
-            if (response.getStatus().equals("success")) {
-                Map<String, String> data = (Map<String, String>) response.getData();
-                return LibraryBook.fromMap(data);
-            } else {
-                throw new RuntimeException("Failed to get book info");
-            }
-        } catch (InterruptedException e) {
-            log.warn("Fail to get book info", e);
-            return null;
-        }
-    }
-
     public static boolean updateBook(NettyHandler handler, LibraryBook book) {
         Request request = new Request();
         request.setUri("library/updateBook");
@@ -126,6 +104,57 @@ public class LibraryClient {
             return response.getStatus().equals("success");
         } catch (InterruptedException e) {
             log.warn("Fail to delete book", e);
+            return false;
+        }
+    }
+
+    public static boolean borrowBook(NettyHandler handler, String bookUuid, String cardNumber) {
+        Request request = new Request();
+        request.setUri("library/borrowBook");
+        request.setParams(Map.of(
+                "bookUuid", bookUuid,
+                "cardNumber", cardNumber
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to borrow book", e);
+            return false;
+        }
+    }
+
+    public static List<LibraryTransaction> getMyRecords(NettyHandler handler) {
+        Request request = new Request();
+        request.setUri("library/user/records");
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            if (response.getStatus().equals("success")) {
+                List<String> raw_data = (List<String>) response.getData();
+                return raw_data.stream().map(json -> IEntity.fromJson(json, LibraryTransaction.class)).toList();
+            } else {
+                throw new RuntimeException("Failed to get book info");
+            }
+        } catch (InterruptedException e) {
+            log.warn("Fail to get book info", e);
+            return null;
+        }
+    }
+
+    public static Boolean userRenewBook(NettyHandler handler, UUID uuid) {
+        Request request = new Request();
+        request.setUri("library/user/renew");
+        request.setParams(Map.of(
+                "uuid", uuid.toString()
+        ));
+
+        try {
+            Response response = BaseClient.sendRequest(handler, request);
+            return response.getStatus().equals("success");
+        } catch (InterruptedException e) {
+            log.warn("Fail to renew book", e);
             return false;
         }
     }

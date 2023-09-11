@@ -3,6 +3,9 @@ package app.vcampus.server.controller;
 import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.LibraryBook;
 import app.vcampus.server.entity.LibraryTransaction;
+import app.vcampus.server.entity.User;
+import app.vcampus.server.enums.BookStatus;
+import app.vcampus.server.enums.LibraryAction;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.Request;
@@ -17,6 +20,7 @@ import java.lang.reflect.Type;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,7 +28,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class LibraryBookController {
-
     @RouteMapping(uri = "library/addBook", role = "library_staff")
     public Response addBook(Request request, org.hibernate.Session database) {
         LibraryBook newBook = IEntity.fromJson(request.getParams().get("book"), LibraryBook.class);
@@ -62,6 +65,40 @@ public class LibraryBookController {
         tx.commit();
 
         return Response.Common.ok();
+    }
+
+    @RouteMapping(uri = "library/borrowBook", role = "library_staff")
+    public Response borrowBook(Request request, org.hibernate.Session database) {
+        try {
+            String bookUuid = request.getParams().get("bookUuid");
+            int cardNumber = Integer.parseInt(request.getParams().get("cardNumber"));
+            if (bookUuid == null || cardNumber == 0) return Response.Common.error("Book UUID or user UUID cannot be empty");
+
+            UUID uuid = UUID.fromString(bookUuid);
+            LibraryBook toBorrow = database.get(LibraryBook.class, uuid);
+            if (toBorrow == null) return Response.Common.error("No such book");
+            if (toBorrow.getBookStatus() != BookStatus.available) return Response.Common.error("Book is not available");
+
+            User user = database.get(User.class, cardNumber);
+            if (user == null) return Response.Common.error("No such user");
+
+            Transaction tx = database.beginTransaction();
+            toBorrow.setBookStatus(BookStatus.lend);
+            database.persist(toBorrow);
+
+            LibraryTransaction newRecord = new LibraryTransaction();
+            newRecord.setUuid(UUID.randomUUID());
+            newRecord.setUserId(cardNumber);
+            newRecord.setBookUuid(uuid);
+            newRecord.setBorrowTime(new Date());
+            newRecord.setDueTime(Date.from(newRecord.getBorrowTime().toInstant().plusSeconds(60 * 60 * 24 * 30)));
+            database.persist(newRecord);
+            tx.commit();
+
+            return Response.Common.ok();
+        } catch (Exception e) {
+            return Response.Common.error("Failed to borrow book");
+        }
     }
 
     @RouteMapping(uri = "library/updateBook", role = "library_staff")
@@ -136,46 +173,46 @@ public class LibraryBookController {
         }
     }
 
-//    @RouteMapping(uri="library/getBookInfo")
-//    public Response getBookInfo(Request request,org.hibernate.Session database){
-//        /*
-//        this method is used when user clicks the searched book to show the detailed book information
-//         */
-//        try {
-//            String id=request.getParams().get("uuid");
-//            if(id==null) return Response.Common.error("uuid cannot be empty");
-//
-//            UUID uuid=UUID.fromString(id);
-//            LibraryBook book=database.get(LibraryBook.class,uuid);
-//
-//            if(book==null){
-//                return Response.Common.error("missing book information");
-//            }
-//
-//            return Response.Common.ok(book.toMap());
-//        } catch (Exception e) {
-//            return Response.Common.error("Fail to get book information");
-//        }
-//    }
-
-
-    @RouteMapping(uri = "library/queryRecord", role = "library_staff")
-    public Response queryBookTransaction(Request request, org.hibernate.Session database) {
-        /*
-            this method is used when the administrator query a book's transaction records
-         */
+    @RouteMapping(uri = "library/user/records", role = "library_user")
+    public Response userRecords(Request request, org.hibernate.Session database) {
         try {
-            String keyword = request.getParams().get("keyword");
-            if (keyword == null) return Response.Common.error("Keyword cannot be empty");
-            List<LibraryTransaction> records = Database.likeQuery(LibraryTransaction.class, new String[]{"userId", "action", "time"}, keyword, database);
+            int cardNumber = request.getSession().getCardNum();
 
-            return Response.Common.ok(records.stream().collect(Collectors.groupingBy(w -> w.userId)).entrySet().stream().collect(Collectors.toMap(
-                    Map.Entry::getKey,
-                    e -> e.getValue().stream().map(LibraryTransaction::toJson).collect(Collectors.toList())
-            )));
+            List<LibraryTransaction> records = Database.getWhereString(LibraryTransaction.class, "userId", Integer.toString(cardNumber), database);
+            records = records.stream().peek(w -> w.setBook(database.get(LibraryBook.class, w.getBookUuid()))).collect(Collectors.toList());
+            records.sort((a, b) -> b.getBorrowTime().compareTo(a.getBorrowTime()));
+            return Response.Common.ok(records.stream().map(LibraryTransaction::toJson).collect(Collectors.toList()));
         } catch (Exception e) {
-            return Response.Common.error("Failed to query book transaction records");
+            return Response.Common.error("Failed to get user records");
         }
     }
 
+    @RouteMapping(uri = "library/user/renew", role = "library_user")
+    public Response renew(Request request, org.hibernate.Session database) {
+        try {
+            String uuid = request.getParams().get("uuid");
+            if (uuid == null) return Response.Common.error("UUID cannot be empty");
+
+            UUID bookUuid = UUID.fromString(uuid);
+            LibraryTransaction toRenew = database.get(LibraryTransaction.class, bookUuid);
+            if (toRenew == null) return Response.Common.error("No such record");
+
+            if (toRenew.getUserId() != request.getSession().getCardNum()) return Response.Common.error("You cannot renew this book");
+
+            LibraryBook book = database.get(LibraryBook.class, toRenew.getBookUuid());
+            if (book == null) return Response.Common.error("No such book");
+
+            if (toRenew.getReturnTime() != null) return Response.Common.error("Book has been returned");
+            if (toRenew.getDueTime().before(new Date())) return Response.Common.error("Book is overdue");
+
+            Transaction tx = database.beginTransaction();
+            toRenew.setDueTime(Date.from(toRenew.getDueTime().toInstant().plusSeconds(60 * 60 * 24 * 30)));
+            database.persist(toRenew);
+            tx.commit();
+
+            return Response.Common.ok();
+        } catch (Exception e) {
+            return Response.Common.error("Failed to renew book");
+        }
+    }
 }

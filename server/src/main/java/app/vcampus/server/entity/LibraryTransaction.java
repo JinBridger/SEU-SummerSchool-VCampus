@@ -1,23 +1,20 @@
 package app.vcampus.server.entity;
 
-import app.vcampus.server.enums.LibraryAction;
 import jakarta.persistence.*;
 import lombok.Data;
-import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.Date;
 import java.util.UUID;
 
 
 @Entity
 @Data
 @Slf4j
-@Table(name = "bookTransaction")
+@Table(name = "library_transaction")
 public class LibraryTransaction implements IEntity{
     @Id
-    public UUID uuid;
+    public UUID uuid = UUID.randomUUID();
 
     @Column(nullable = false)
     public UUID bookUuid;
@@ -25,36 +22,14 @@ public class LibraryTransaction implements IEntity{
     @Column(nullable = false)
     public Integer userId;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    public LibraryAction action;
+    public Date borrowTime;
 
     @Column(nullable = false)
-    public LocalDateTime time;
+    public Date dueTime;
 
+    public Date returnTime;
 
-    public static LibraryTransaction fromMap(Map<String, String> data) {
-        try {
-            LibraryTransaction tx = new LibraryTransaction();
-            tx.setUuid(UUID.fromString(data.get("UUID")));
-            tx.setBookUuid(UUID.fromString(data.get("bookUuid")));
-            tx.setAction(LibraryAction.valueOf(data.get("action")));
-            tx.setUserId(Integer.parseInt(data.get("userId")));
-            tx.setTime(LocalDateTime.parse(data.get("time")));
-            return tx;
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Map<String, String> toMap() {
-        return Map.ofEntries(
-                Map.entry("UUID", getUuid().toString()),
-                Map.entry("bookUuid", getBookUuid().toString()),
-                Map.entry("userId", getUserId().toString()),
-                Map.entry("action", getAction().toString()),
-                Map.entry("time", getTime().toString())
-        );
-    }
-
+    @Transient
+    public LibraryBook book;
 }

@@ -204,15 +204,22 @@ fun addShopItem(viewModel: ShopViewModel) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Spacer(Modifier.weight(1F))
                         Button(onClick = {
-                            val newItem = StoreItem()
-                            newItem.itemName = myName
-                            newItem.price = (myPrice.toDouble() * 100).toInt()
-                            newItem.stock = myStock.toInt()
-                            newItem.barcode = myBarcode
-                            newItem.pictureLink = myPictureLink
-                            newItem.description = myDescription
+                            try {
+                                val newItem = StoreItem()
+                                newItem.itemName = myName
+                                newItem.price = (myPrice.toDouble() * 100).toInt()
+                                newItem.stock = myStock.toInt()
+                                newItem.barcode = myBarcode
+                                newItem.pictureLink = myPictureLink
+                                newItem.description = myDescription
 
-                            viewModel.addStoreItem.addStoreItem(newItem)
+                                viewModel.addStoreItem.addStoreItem(newItem)
+                            } catch (
+                                e: Exception
+                            ) {
+                                println(e)
+                            }
+
                         }) {
                             Text("添加商品")
                         }

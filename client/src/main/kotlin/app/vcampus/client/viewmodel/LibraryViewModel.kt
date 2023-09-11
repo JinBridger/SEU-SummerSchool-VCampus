@@ -2,13 +2,12 @@ package app.vcampus.client.viewmodel
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.*
+import app.vcampus.client.gateway.LibraryClient
 import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.SideBarItem
 import app.vcampus.server.entity.LibraryBook
+import app.vcampus.server.entity.LibraryTransaction
 import app.vcampus.server.enums.BookStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -66,6 +65,7 @@ class LibraryViewModel : ViewModel() {
     val addBook = AddBook()
     val searchBook = SearchBook()
     val modifyBook = ModifyBook()
+    val myBook = MyBook()
 
     val sideBarContent = (if (identity.contains("library_user")) {
         listOf(SideBarItem(true, "查询", "", Icons.Default.Info, false))
@@ -121,6 +121,20 @@ class LibraryViewModel : ViewModel() {
 
 
     val librarySideBarItem = sideBarContent.toMutableStateList()
+
+    fun borrowBook(bookUuid: String, cardId: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                borrowBookInternal(bookUuid, cardId).collect {
+
+                }
+            }
+        }
+    }
+
+    private suspend fun borrowBookInternal(bookUuid: String, cardId: String) = flow {
+        emit(FakeRepository.borrowBook(bookUuid, cardId))
+    }
 
     class AddBook : ViewModel() {
         var showDetails = mutableStateOf(false)
@@ -223,6 +237,52 @@ class LibraryViewModel : ViewModel() {
 
         private suspend fun deleteBookInternal(uuid: UUID) = flow {
             emit(FakeRepository.deleteBook(uuid))
+        }
+    }
+
+    class MyBook : ViewModel() {
+        val transactions = mutableStateListOf<LibraryTransaction>()
+        val currentBorrowed = mutableStateListOf<LibraryTransaction>()
+
+        private var inited = false
+
+        fun init() {
+            if (inited) return
+            inited = true
+
+            getMyRecords()
+        }
+
+        fun getMyRecords() {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    getMyRecordsInternal().collect {
+                        transactions.clear()
+                        transactions.addAll(it)
+
+                        currentBorrowed.clear()
+                        currentBorrowed.addAll(it.filter { it.returnTime == null })
+                    }
+                }
+            }
+        }
+
+        private suspend fun getMyRecordsInternal() = flow {
+            emit(FakeRepository.getMyRecords())
+        }
+
+        fun renewBook(uuid: UUID) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    renewBookInternal(uuid).collect {
+                        getMyRecords()
+                    }
+                }
+            }
+        }
+
+        private suspend fun renewBookInternal(uuid: UUID) = flow {
+            emit(FakeRepository.userRenewBook(uuid))
         }
     }
 }

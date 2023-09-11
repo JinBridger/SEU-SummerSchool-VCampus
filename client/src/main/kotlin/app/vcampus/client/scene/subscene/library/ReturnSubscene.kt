@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.vcampus.client.scene.components.bookList
 import app.vcampus.client.scene.components.pageTitle
-import app.vcampus.client.scene.components.returnBookListItem
 import app.vcampus.client.viewmodel.LibraryViewModel
 
 @Composable
@@ -69,12 +69,13 @@ fun returnSubscene(viewModel: LibraryViewModel) {
                     Spacer(Modifier.height(8.dp))
                 }
 
-                (0..10).forEach {
-                    item {
-                        returnBookListItem()
-                        Spacer(Modifier.height(10.dp))
-                    }
-                }
+//                (0..10).forEach {
+//                    item {
+//                        bookList(viewModel.myBook.currentBorrowed[0],
+//                                viewModel.myBook::renewBook)
+//                        Spacer(Modifier.height(10.dp))
+//                    }
+//                }
             }
 
             item {
