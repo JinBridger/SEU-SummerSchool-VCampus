@@ -10,6 +10,11 @@ import app.vcampus.client.scene.components.evaluateResultListItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
+/**
+ * evaluate result subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun evaluateResultSubscene(viewModel: TeachingAffairsViewModel) {
     LaunchedEffect(Unit) {

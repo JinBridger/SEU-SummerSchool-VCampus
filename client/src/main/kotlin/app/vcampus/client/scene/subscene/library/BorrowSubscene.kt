@@ -12,6 +12,11 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.LibraryViewModel
 import kotlinx.coroutines.launch
 
+/**
+ * borrow subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun borrowSubscene(viewModel: LibraryViewModel) {
     var bookUuid by remember { mutableStateOf("") }

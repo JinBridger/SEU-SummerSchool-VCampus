@@ -17,6 +17,11 @@ import app.vcampus.client.scene.components.EditStoreItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.ShopViewModel
 
+/**
+ * modify item subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun modifyItemSubscene(viewModel: ShopViewModel) {
     var keyword by remember { mutableStateOf("") }
@@ -31,7 +36,6 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
                     Column {
                         Spacer(Modifier.height(80.dp))
                         pageTitle("修改商品", "修改商品信息")
-//                        EditStoreItem(true,viewModel.oneNewShopItem)}
                     }
                 }
                 item {

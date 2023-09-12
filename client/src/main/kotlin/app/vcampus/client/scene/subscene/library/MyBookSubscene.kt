@@ -2,7 +2,6 @@ package app.vcampus.client.scene.subscene.library
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,7 +12,11 @@ import app.vcampus.client.scene.components.bookList
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.LibraryViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
+/**
+ * my book subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun myBookSubscene(viewModel: LibraryViewModel) {
     LaunchedEffect(Unit) {
@@ -33,12 +36,6 @@ fun myBookSubscene(viewModel: LibraryViewModel) {
                 Spacer(Modifier.height(8.dp))
             }
 
-//            (0..10).forEach {
-//                item {
-//                    myBookList()
-//                    Spacer(Modifier.height(10.dp))
-//                }
-//            }
             viewModel.myBook.currentBorrowed.forEach {
                 item(it.uuid) {
                     bookList(it, viewModel.myBook::renewBook)

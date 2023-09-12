@@ -20,6 +20,11 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.scene.components.userListItem
 import app.vcampus.client.viewmodel.AdminViewModel
 
+/**
+ * modify user subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun modifyUserSubscene(viewModel: AdminViewModel) {
     var keyword by viewModel.modifyUser.keyword
@@ -72,14 +77,6 @@ fun modifyUserSubscene(viewModel: AdminViewModel) {
                 }
                 Spacer(Modifier.height(10.dp))
             }
-
-//            item {
-//                (0..2).forEach {
-//                    userListItem()
-//                    Spacer(Modifier.height(10.dp))
-//                }
-//            }
-
 
             viewModel.modifyUser.userList.forEach {
                 item(it.cardNum) {

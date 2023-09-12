@@ -21,6 +21,11 @@ import app.vcampus.client.scene.components.SearchStudentStatusItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.StudentStatusViewModel
 
+/**
+ * modify student status subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun modifyStudentStatusSubscene(viewModel: StudentStatusViewModel) {
     var keyword by viewModel.searchKeyword

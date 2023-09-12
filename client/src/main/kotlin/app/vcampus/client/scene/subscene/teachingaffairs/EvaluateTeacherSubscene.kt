@@ -12,6 +12,11 @@ import app.vcampus.client.scene.components.evaluateTeacherListItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
+/**
+ * evaluate teacher subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun evaluateTeacherSubscene(viewModel: TeachingAffairsViewModel) {
     LaunchedEffect(Unit) {

@@ -25,7 +25,11 @@ import app.vcampus.client.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.viewmodel.viewModel
 
-
+/**
+ * login scene
+ *
+ * @param onLogin function when login
+ */
 @ExperimentalMaterialApi
 @Composable
 fun LoginScene(
@@ -47,10 +51,6 @@ fun LoginScene(
         true -> onLogin()
         false -> {}
     }
-
-//    LaunchedEffect(Unit) {
-//        viewModel.login("123456", "123456")
-//    }
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Box(

@@ -17,7 +17,11 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.scene.components.searchBookListItem
 import app.vcampus.client.viewmodel.LibraryViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
+/**
+ * search book subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun searchBookSubscene(viewModel: LibraryViewModel) {
     var keyword by viewModel.searchBook.keyword

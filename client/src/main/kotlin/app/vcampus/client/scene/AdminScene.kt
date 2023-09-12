@@ -19,6 +19,11 @@ import app.vcampus.client.viewmodel.AdminViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
+/**
+ * admin scene, add / modify user information
+ *
+ * @param navi navigator
+ */
 @ExperimentalMaterialApi
 @Composable
 fun AdminScene(navi: Navigator) {

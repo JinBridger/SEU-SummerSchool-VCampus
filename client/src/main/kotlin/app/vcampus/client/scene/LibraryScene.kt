@@ -20,9 +20,20 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
-
+/**
+ * library scene
+ *
+ * @param navi navigator
+ */
+@ExperimentalMaterialApi
 @Composable
-fun LibraryStatusForUser(viewModel: LibraryViewModel) {
+fun LibraryScene(
+    navi: Navigator
+) {
+    val viewModel = viewModel(LibraryViewModel::class, listOf()) {
+        LibraryViewModel()
+    }
+
     val librarySideBarItem = viewModel.librarySideBarItem
     val currentSubscene = remember { mutableStateOf("") }
 
@@ -30,22 +41,22 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
         SideBar(librarySideBarItem) {
             (0..<librarySideBarItem.size).forEach { i ->
                 librarySideBarItem[i] = librarySideBarItem[i].copy(
-                    isChosen = false
+                        isChosen = false
                 )
             }
             librarySideBarItem[it] = librarySideBarItem[it].copy(
-                isChosen = true
+                    isChosen = true
             )
             currentSubscene.value = librarySideBarItem[it].heading
         }
         Box(
-            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
-                offsetX = 3.dp, blurRadius = 10.dp
-            )
-                .background(
-                    Color.White
+                modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                        offsetX = 3.dp, blurRadius = 10.dp
                 )
-                .padding(horizontal = 100.dp)
+                        .background(
+                                Color.White
+                        )
+                        .padding(horizontal = 100.dp)
         ) {
             Crossfade(currentSubscene.value) {
                 when (it) {
@@ -60,29 +71,4 @@ fun LibraryStatusForUser(viewModel: LibraryViewModel) {
             }
         }
     }
-}
-
-@ExperimentalMaterialApi
-@Composable
-fun LibraryScene(
-    navi: Navigator
-) {
-    val viewModel = viewModel(LibraryViewModel::class, listOf()) {
-        LibraryViewModel()
-    }
-    val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
-
-//    Scaffold(scaffoldState = scaffoldState, topBar = {
-//        TopBar("学籍管理")
-//    }) {
-//    Row {
-//        NavRail(navi, "/library")
-//            Box(Modifier.fillMaxSize()) {
-//                Box(Modifier.width(800.dp).align(Alignment.TopCenter)) {
-    LibraryStatusForUser(viewModel)
-//                }
-//            }
-//    }
-//    }
 }

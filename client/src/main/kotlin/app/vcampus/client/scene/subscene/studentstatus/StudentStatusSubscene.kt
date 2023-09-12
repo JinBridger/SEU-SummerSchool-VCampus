@@ -17,6 +17,11 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.StudentStatusViewModel
 
+/**
+ * student status subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun studentStatusSubscene(viewModel: StudentStatusViewModel) {
     var familyName by viewModel.student.value.familyName

@@ -23,7 +23,11 @@ import app.vcampus.client.scene.components.shopItemCard
 import app.vcampus.client.viewmodel.ShopViewModel
 import kotlinx.coroutines.launch
 
-
+/**
+ * select item subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun selectItemSubscene(viewModel: ShopViewModel) {
@@ -171,29 +175,6 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                 SnackbarHost(hostState = state)
                                 Button(onClick = {
                                     viewModel.selectItem.checkout()
-//                                        val cardNumber = FakeRepository.getMyCard()
-//                                        if(cardNumber.balance >= (viewModel.chosenItemsPrice.value/100.0)) {
-//                                            viewModel.chosenShopItems.forEach {
-//                                                if (it.stock != 0) {
-//                                                    val UUID = it.uuid.toString()
-//                                                    val myAmount = it.stock.toString()
-//                                                    FakeRepository.createTransaction(UUID, myAmount)
-//                                                }
-//                                                viewModel.manuallyUpdate()
-//                                            }
-//                                            FakeRepository.rechargeCard(cardNumber.cardNumber,-((viewModel.chosenItemsPrice.value/100.0).toInt()))
-//                                            scope.launch {
-//                                                state.showSnackbar(
-//                                                    "成功购买", "关闭"
-//                                                )
-//                                            }
-//                                        }else {
-//                                            scope.launch {
-//                                                state.showSnackbar(
-//                                                    "余额不足", "关闭"
-//                                                )
-//                                            }
-//                                        }
                                 }) {
                                     Text("立即支付")
                                 }

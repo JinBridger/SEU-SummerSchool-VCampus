@@ -10,6 +10,11 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.scene.components.selectClassListItem
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
+/**
+ * choose class subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun chooseClassSubscene(viewModel: TeachingAffairsViewModel) {
     LaunchedEffect(Unit) {

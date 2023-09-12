@@ -10,6 +10,11 @@ import app.vcampus.client.scene.components.GradeListItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
+/**
+ * my grade subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun myGradeSubscene(viewModel: TeachingAffairsViewModel) {
     LaunchedEffect(Unit) {
@@ -38,30 +43,6 @@ fun myGradeSubscene(viewModel: TeachingAffairsViewModel) {
             item {
                 Spacer(Modifier.height(80.dp))
             }
-//                viewModel.StudentGradeItems.forEach {
-//                    Surface(modifier = Modifier.fillMaxWidth().border(1.dp,
-//                        color = Color.LightGray,
-//                        shape = RoundedCornerShape(4.dp)
-//                    ).animateContentSize(
-//                        animationSpec = tween(
-//                            durationMillis = 300,
-//                            easing = LinearOutSlowInEasing
-//                        )
-//                    ).padding(10.dp)) {
-//                        GradeListItem(it, viewModel)
-//                    }
-//                    Spacer(Modifier.height(10.dp))
-//                }
         }
     }
 }
-//                Card(modifier = Modifier.fillMaxWidth().shadowCustom(
-//                    blurRadius = 3.dp,
-//                    shapeRadius = 3.dp)) {
-//                    Column(modifier = Modifier.fillMaxWidth()) {
-//                        viewModel.StudentGradeItems.forEach{
-//                            GradeListItem(it,viewModel)
-//                        }
-//                    }
-//                }
-//                Spacer(modifier = Modifier.height(80.dp))

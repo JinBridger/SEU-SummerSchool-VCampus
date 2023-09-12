@@ -11,6 +11,10 @@ import app.vcampus.client.scene.components.TopBar
 import javafx.application.Platform
 import moe.tlaster.precompose.PreComposeWindow
 
+/**
+ * where client app starts
+ *
+ */
 fun main() {
     Platform.setImplicitExit(false)
     FakeRepository.initGptWebview()

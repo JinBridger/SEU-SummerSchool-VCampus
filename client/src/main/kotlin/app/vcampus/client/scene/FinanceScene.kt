@@ -20,6 +20,11 @@ import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
 
+/**
+ * finance scene, modify balance in the card
+ *
+ * @param navi navigator
+ */
 @ExperimentalMaterialApi
 @Composable
 fun FinanceScene(navi: Navigator) {

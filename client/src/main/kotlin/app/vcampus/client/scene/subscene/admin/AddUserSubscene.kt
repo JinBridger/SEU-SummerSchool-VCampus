@@ -23,6 +23,11 @@ import app.vcampus.client.viewmodel.AdminViewModel
 import app.vcampus.server.entity.User
 import app.vcampus.server.enums.Gender
 
+/**
+ * add user subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun addUserSubscene(viewModel: AdminViewModel) {
     var cardNum by viewModel.addUser.cardNum

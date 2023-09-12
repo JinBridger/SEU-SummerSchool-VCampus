@@ -1,7 +1,6 @@
 package app.vcampus.client.scene
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
@@ -20,10 +19,18 @@ import app.vcampus.client.viewmodel.StudentStatusViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
-
-@OptIn(ExperimentalAnimationApi::class)
+/**
+ * student status scene
+ *
+ * @param navi navigator
+ */
+@ExperimentalMaterialApi
 @Composable
-fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
+fun StudentStatusScene(navi: Navigator) {
+    val viewModel = viewModel(StudentStatusViewModel::class, listOf()) {
+        StudentStatusViewModel()
+    }
+
     val studentStatusSideBarItem = viewModel.studentStatusSideBarItem
     val currentSubscene = remember { mutableStateOf("") }
 
@@ -31,20 +38,20 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
         SideBar(studentStatusSideBarItem) {
             (0..<studentStatusSideBarItem.size).forEach { i ->
                 studentStatusSideBarItem[i] = studentStatusSideBarItem[i].copy(
-                    isChosen = false
+                        isChosen = false
                 )
             }
             studentStatusSideBarItem[it] = studentStatusSideBarItem[it].copy(
-                isChosen = true
+                    isChosen = true
             )
             currentSubscene.value = studentStatusSideBarItem[it].heading
         }
         Box(
-            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
-                offsetX = 3.dp, blurRadius = 10.dp
-            ).background(
-                Color.White
-            ).padding(horizontal = 100.dp)
+                modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                        offsetX = 3.dp, blurRadius = 10.dp
+                ).background(
+                        Color.White
+                ).padding(horizontal = 100.dp)
         ) {
             Crossfade(currentSubscene.value) {
                 when (it) {
@@ -55,15 +62,4 @@ fun StudentStatusForStudent(viewModel: StudentStatusViewModel) {
             }
         }
     }
-}
-
-
-@ExperimentalMaterialApi
-@Composable
-fun StudentStatusScene(navi: Navigator) {
-    val viewModel = viewModel(StudentStatusViewModel::class, listOf()) {
-        StudentStatusViewModel()
-    }
-
-    StudentStatusForStudent(viewModel)
 }

@@ -1,6 +1,5 @@
 package app.vcampus.client
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.desktop.ui.tooling.preview.Preview
@@ -22,7 +21,11 @@ import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.navigation.transition.NavTransition
 
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+/**
+ * main app UI, navigation logic.
+ *
+ */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Preview
 fun App() {

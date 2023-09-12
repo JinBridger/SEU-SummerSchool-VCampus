@@ -9,6 +9,11 @@ import app.vcampus.client.scene.components.addShopItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.ShopViewModel
 
+/**
+ * add item subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun addItemSubscene(viewModel: ShopViewModel) {
 
@@ -23,7 +28,6 @@ fun addItemSubscene(viewModel: ShopViewModel) {
                     pageTitle("添加商品", "添加新的商品")
                     addShopItem(viewModel)
                 }
-
             }
         }
     }

@@ -10,6 +10,11 @@ import app.vcampus.client.scene.components.enterScoreListItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
+/**
+ * enter score subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun enterScoreSubscene(viewModel: TeachingAffairsViewModel) {
     LaunchedEffect(Unit) {
@@ -26,14 +31,6 @@ fun enterScoreSubscene(viewModel: TeachingAffairsViewModel) {
                 pageTitle("录入成绩", "录入课程成绩")
                 Spacer(Modifier.height(20.dp))
             }
-
-//            (0..3).forEach {
-//                item {
-//                    enterScoreListItem()
-//                    Spacer(Modifier.height(10.dp))
-//                }
-//            }
-
             viewModel.myTeachingClasses.myClasses.forEach {
                 item(it.uuid) {
                     enterScoreListItem(

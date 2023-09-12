@@ -11,6 +11,10 @@ data class NaviItem(
     val permission: List<String>
 )
 
+/**
+ * navi items on nav rail
+ * only users who have specific permission could see it
+ */
 val Navis = arrayListOf(
     NaviItem("主页", "/home", Icons.Default.Home, listOf("user")),
     NaviItem("学籍", "/student_status", Icons.Default.Person, listOf("student", "affairs_staff")),

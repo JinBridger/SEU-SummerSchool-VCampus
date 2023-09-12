@@ -20,6 +20,11 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.scene.components.searchBookListItem
 import app.vcampus.client.viewmodel.LibraryViewModel
 
+/**
+ * modify book subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun modifyBookSubscene(viewModel: LibraryViewModel) {
     var keyword by viewModel.modifyBook.keyword

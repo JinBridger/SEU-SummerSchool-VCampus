@@ -13,7 +13,11 @@ import app.vcampus.client.viewmodel.MainPanelViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
-
+/**
+ * main panel scene
+ *
+ * @param navi navigator
+ */
 @ExperimentalMaterialApi
 @Composable
 fun MainPanelScene(

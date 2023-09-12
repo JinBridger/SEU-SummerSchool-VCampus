@@ -20,6 +20,11 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.FinanceViewModel
 import app.vcampus.server.enums.CardStatus
 
+/**
+ * staff subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun staffSubscene(viewModel: FinanceViewModel) {
     var cardNumber by viewModel.staff.cardNumber

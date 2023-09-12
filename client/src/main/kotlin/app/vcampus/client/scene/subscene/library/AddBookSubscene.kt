@@ -17,6 +17,11 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 import app.vcampus.server.enums.BookStatus
 import kotlinx.coroutines.launch
 
+/**
+ * add book subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun addBookSubscene(viewModel: LibraryViewModel) {
     val showDetails by viewModel.addBook.showDetails

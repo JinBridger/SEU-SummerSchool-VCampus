@@ -7,11 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -23,9 +21,19 @@ import app.vcampus.client.viewmodel.ShopViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
 
-
+/**
+ * shop scene
+ *
+ * @param navi navigator
+ */
+@ExperimentalMaterialApi
 @Composable
-fun ShopStatusForUser(viewModel: ShopViewModel) {
+fun ShopScene(
+    navi: Navigator
+) {
+    val viewModel = viewModel(ShopViewModel::class, listOf()) {
+        ShopViewModel()
+    }
     val shopSideBarItem = viewModel.shopSideBarItem
     val currentSubscene = remember { mutableStateOf("") }
 
@@ -38,12 +46,12 @@ fun ShopStatusForUser(viewModel: ShopViewModel) {
             currentSubscene.value = shopSideBarItem[it].heading
         }
         Box(
-            modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
-                offsetX = 3.dp, blurRadius = 10.dp
-            )
-                .background(
-                    Color.White
+                modifier = Modifier.fillMaxHeight().fillMaxWidth().shadowCustom(
+                        offsetX = 3.dp, blurRadius = 10.dp
                 )
+                        .background(
+                                Color.White
+                        )
         ) {
             Crossfade(currentSubscene.value) {
                 when (it) {
@@ -57,29 +65,4 @@ fun ShopStatusForUser(viewModel: ShopViewModel) {
             }
         }
     }
-}
-
-@ExperimentalMaterialApi
-@Composable
-fun ShopScene(
-    navi: Navigator
-) {
-    val viewModel = viewModel(ShopViewModel::class, listOf()) {
-        ShopViewModel()
-    }
-    val coroutineScope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
-
-//    Scaffold(scaffoldState = scaffoldState, topBar = {
-//        TopBar("学籍管理")
-//    }) {
-//    Row {
-//        NavRail(navi, "/library")
-//            Box(Modifier.fillMaxSize()) {
-//                Box(Modifier.width(800.dp).align(Alignment.TopCenter)) {
-    ShopStatusForUser(viewModel)
-//                }
-//            }
-//    }
-//    }
 }

@@ -20,6 +20,11 @@ import app.vcampus.client.scene.components.bookList
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.LibraryViewModel
 
+/**
+ * return subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun returnSubscene(viewModel: LibraryViewModel) {
     var keyword by viewModel.returnBook.cardNumber
@@ -83,14 +88,6 @@ fun returnSubscene(viewModel: LibraryViewModel) {
                         Spacer(Modifier.height(10.dp))
                     }
                 }
-
-//                (0..10).forEach {
-//                    item {
-//                        bookList(viewModel.myBook.currentBorrowed[0],
-//                                viewModel.myBook::renewBook)
-//                        Spacer(Modifier.height(10.dp))
-//                    }
-//                }
             }
 
             item {

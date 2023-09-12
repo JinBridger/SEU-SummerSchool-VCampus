@@ -10,6 +10,11 @@ import app.vcampus.client.scene.components.classTable
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
+/**
+ * my schedule subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun myScheduleSubscene(viewModel: TeachingAffairsViewModel) {
     LaunchedEffect(Unit) {

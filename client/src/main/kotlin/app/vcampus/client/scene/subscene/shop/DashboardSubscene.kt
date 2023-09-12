@@ -13,6 +13,11 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.scene.components.shopItemSellListItem
 import app.vcampus.client.viewmodel.ShopViewModel
 
+/**
+ * dashboard subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun dashboardSubscene(viewModel: ShopViewModel) {
     LaunchedEffect(Unit) {
@@ -59,13 +64,6 @@ fun dashboardSubscene(viewModel: ShopViewModel) {
                     )
                     Spacer(Modifier.height(10.dp))
                 }
-
-//                (0..10).forEach {
-//                    item {
-//                        shopItemSellListItem(testItem, viewModel)
-//                        Spacer(Modifier.height(10.dp))
-//                    }
-//                }
                 viewModel.selectItem.totalShopItems.forEach {
                     item(it.uuid) {
                         shopItemSellListItem(it, viewModel)

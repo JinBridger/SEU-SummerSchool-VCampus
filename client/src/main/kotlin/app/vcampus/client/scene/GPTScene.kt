@@ -8,6 +8,11 @@ import app.vcampus.client.repository.FakeRepository
 import app.vcampus.client.scene.components.ComposeJFXPanel
 import moe.tlaster.precompose.navigation.Navigator
 
+/**
+ * GPT scene, implemented with webview
+ *
+ * @param navi navigator
+ */
 @Composable
 fun GPTScene(
     navi: Navigator,

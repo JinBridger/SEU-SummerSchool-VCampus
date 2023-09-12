@@ -10,6 +10,11 @@ import app.vcampus.client.scene.components.myClassListItem
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
+/**
+ * my class subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun myClassSubscene(viewModel: TeachingAffairsViewModel) {
     LaunchedEffect(Unit) {
@@ -26,13 +31,6 @@ fun myClassSubscene(viewModel: TeachingAffairsViewModel) {
                 pageTitle("我的课堂", "查看教学班信息")
                 Spacer(Modifier.height(20.dp))
             }
-
-//            (0..3).forEach {
-//                item {
-//                    myClassListItem()
-//                    Spacer(Modifier.height(10.dp))
-//                }
-//            }
 
             viewModel.myTeachingClasses.myClasses.forEach {
                 item(it.uuid) {

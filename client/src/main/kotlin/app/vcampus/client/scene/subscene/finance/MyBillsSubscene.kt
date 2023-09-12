@@ -16,6 +16,11 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.FinanceViewModel
 import app.vcampus.server.utility.DateUtility
 
+/**
+ * my bills subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun myBillsSubscene(viewModel: FinanceViewModel) {
     LaunchedEffect(Unit) {
@@ -37,7 +42,6 @@ fun myBillsSubscene(viewModel: FinanceViewModel) {
                 balanceCard(viewModel.mybills.myCard.value)
                 Spacer(Modifier.height(20.dp))
                 Text("账单", fontWeight = FontWeight(700), fontSize = 20.sp)
-//                Spacer(Modifier.height(10.dp))
             }
 
             val currentDate = mutableStateOf("")
@@ -49,7 +53,6 @@ fun myBillsSubscene(viewModel: FinanceViewModel) {
                         Row(Modifier.fillMaxWidth()) {
                             Text(DateUtility.fromDate(bill.time, "yyyy年MM月dd日"), fontWeight = FontWeight(700))
                             Spacer(Modifier.weight(1F))
-//                            Text("支出：999.00元   收入：0.00元", fontWeight = FontWeight(700))
                         }
                     }
                     currentDate.value = DateUtility.fromDate(bill.time)
@@ -59,22 +62,6 @@ fun myBillsSubscene(viewModel: FinanceViewModel) {
                     billCard(bill)
                 }
             }
-
-//            item {
-//                Row(Modifier.fillMaxWidth()) {
-//                    Text("2023年9月7日", fontWeight = FontWeight(700))
-//                    Spacer(Modifier.weight(1F))
-//                    Text("支出：999.00元   收入：0.00元", fontWeight = FontWeight(700))
-//                }
-//            }
-//
-//            (0..9).forEach {
-//                item {
-//                    Spacer(Modifier.height(10.dp))
-//                    billCard()
-//                }
-//            }
-
             item {
                 Spacer(Modifier.height(80.dp))
             }

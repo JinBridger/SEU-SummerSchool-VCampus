@@ -17,6 +17,11 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.scene.components.shopTransactionListItem
 import app.vcampus.client.viewmodel.ShopViewModel
 
+/**
+ * my order subscene
+ *
+ * @param viewModel viewmodel of parent scene
+ */
 @Composable
 fun myOrderSubscene(viewModel: ShopViewModel) {
     LaunchedEffect(Unit) {
@@ -80,64 +85,6 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                     }
 
                 }
-//                    if (currentDate != DateUtility.fromDate(it.time)) {
-//                        if (currentDate != "" && tempList.isNotEmpty()) {
-//                            item {
-//                                listOfTransactions(tempList)
-//                            }
-//                        }
-//
-//                        tempList.clear()
-//                        currentDate = DateUtility.fromDate(it.time)
-//
-//                        item {
-//                            Row(Modifier.fillMaxWidth()) {
-//                                Text(
-//                                    text = currentDate,
-//                                    fontSize = 18.sp,
-//                                    fontWeight = FontWeight(700)
-//                                )
-//                                Spacer(Modifier.weight(1F))
-//                                Text(
-//                                    text = "共 " + String.format(
-//                                        "%.2f",
-//                                        totalMap[currentDate]?.div(100.0) ?: 0
-//                                    ) + " 元",
-//                                    fontSize = 18.sp,
-//                                    fontWeight = FontWeight(700)
-//                                )
-//                            }
-//                            Spacer(Modifier.height(20.dp))
-//                        }
-//                    }
-//
-//                    tempList.add(it)
-//                    totalMap[currentDate] = totalMap[currentDate]!! + it.itemPrice * it.amount
-//                }
-//
-//                item {
-//                    if (currentDate != "" && tempList.isNotEmpty()) {
-//                        listOfTransactions(tempList)
-//                    }
-//                }
-
-//                item{
-//                    viewModel.searchTransaction.Transactions.forEach{
-//                        Spacer(Modifier.height(20.dp))
-//                        Card(modifier = Modifier.fillMaxWidth().border(1.dp,
-//                            color = Color.LightGray, shape = RoundedCornerShape(4.dp))) {
-//                            Column(modifier = Modifier.fillMaxWidth()) {
-//                                it.value.forEach {
-//                                    shopTransactionListItem(it,viewModel)
-//                                }
-//                            }
-//                        }
-//                    }
-//                    Spacer(Modifier.height(40.dp))
-//                }
-//                item {
-//                    Spacer(modifier = Modifier.height(80.dp))
-//                }
             }
         }
     }
