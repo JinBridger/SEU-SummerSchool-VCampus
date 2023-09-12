@@ -9,6 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * StoreItem类
+ * 记录商品的基本信息
+ * 用于商店模块，数据库中的每条商品记录都可以被展示、被购买
+ *
+ */
 @Entity
 @Data
 @Table(name = "store_item")
