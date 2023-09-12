@@ -32,10 +32,14 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
-      - name: Build with Gradle
+      - name: Build dokkaJavadocPartial
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: dokkaHtmlMultiModule
+          arguments: dokkaJavadocPartial
+      - name: Build dokkaJavadocCollector
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: dokkaJavadocCollector
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
@@ -49,7 +53,7 @@ jobs:
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: build/dokka/htmlMultiModule/
+          path: build/dokka/javadocCollector/
 
   deploy:
     environment:
