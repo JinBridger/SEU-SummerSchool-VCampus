@@ -1,15 +1,3 @@
-plugins {
-    id("java")
-    id("io.freefair.lombok") version "8.2.2"
-}
-
-group = "app.vcampus"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation("io.netty:netty-all:4.1.97.Final")
     implementation("com.google.code.gson:gson:2.10.1")
@@ -26,28 +14,13 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+
+    dokkaPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.0")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
-
-//tasks.register<Jar>("uberJar") {
-//    archiveClassifier.set("uber")
-//
-//    from(sourceSets.main.get().output)
-//
-//    dependsOn(configurations.runtimeClasspath)
-//    from({
-//        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-//    })
-//}
-//
-//tasks.withType<Jar> {
-//    manifest {
-//        attributes["Main-Class"] = "app.vcampus.server.Main"
-//    }
-//}
 
 tasks.withType<Jar> {
     manifest {
@@ -61,8 +34,4 @@ tasks.withType<Jar> {
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
-
-    isZip64 = true
-
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }

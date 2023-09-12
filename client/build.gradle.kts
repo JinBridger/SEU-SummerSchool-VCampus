@@ -2,21 +2,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("java")
-    kotlin("jvm") version "1.9.0"
     id("org.jetbrains.compose") version "1.5.0"
-    id("io.freefair.lombok") version "8.2.2"
-    kotlin("plugin.lombok") version "1.9.0"
     id("org.openjfx.javafxplugin") version "0.1.0"
-}
-
-group = "app.vcampus"
-version = "1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    google()
 }
 
 dependencies {
@@ -34,6 +21,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
     implementation("org.slf4j:slf4j-api:2.0.7")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+
+    dokkaPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.0")
 
     val precompose_version = "1.5.0"
     implementation(
@@ -96,10 +85,6 @@ tasks.withType<Jar> {
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
-
-    isZip64 = true
-
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }
 
 javafx {
