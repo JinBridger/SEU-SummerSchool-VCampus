@@ -19,36 +19,11 @@ import com.seanproctor.datatable.TableColumnWidth
 import com.seanproctor.datatable.material.DataTable
 
 
-//@Composable
-//fun GradeListItem(isEditable: Boolean = false,
-//                  item:_GradeItem,
-//                  viewModel: TeachingAffairsViewModel){
-//    var expended by remember { mutableStateOf(false) }
-//    Row(modifier = Modifier.fillMaxWidth().fillMaxHeight(), verticalAlignment = Alignment.CenterVertically){
-//        Text(
-//            text = item.courseName,
-//            fontWeight = FontWeight(700),
-//        )
-//        Spacer(modifier = Modifier.width(8.dp))
-//        Text(
-//            text = item.courseId,
-//            color = Color.DarkGray
-//        )
-//        Spacer(modifier = Modifier.width(8.dp))
-//        Text("学分:${
-//            String.format("%.2f",
-//                item.credit / 1.0)
-//        } ",
-//            color = Color.LightGray)
-//        Spacer(modifier = Modifier.weight(1F))
-//        Text(
-//            item.grade.toString() + " 分",
-//            fontWeight = FontWeight(700),
-////                    fontSize = 25.sp
-//        )
-//    }
-//}
-
+/**
+ * grade list item component, used in `MyGradeSubscene`
+ *
+ * @param item the teaching class
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GradeListItem(

@@ -16,6 +16,13 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.server.entity.TeachingClass
 import java.io.File
 
+/**
+ * enter score list item component, used in `EnterScoreSubscene`
+ *
+ * @param tc the teaching class
+ * @param exportTemplate the xlsx export function
+ * @param importScore the xlsx import function
+ */
 @Composable
 fun enterScoreListItem(
     tc: TeachingClass,

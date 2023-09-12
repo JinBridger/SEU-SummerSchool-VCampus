@@ -9,7 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterialApi::class)
+/**
+ * full screen dialog, however not used in the project
+ *
+ * @param onDismissRequest idk
+ * @param onConfirmed function when confirm
+ */
 @Composable
 fun FullScreenDialog(
     onDismissRequest: () -> Unit,

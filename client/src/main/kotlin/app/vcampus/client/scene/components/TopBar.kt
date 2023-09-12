@@ -12,6 +12,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
+/**
+ * top bar component, the bar on the top of UI
+ *
+ * @param heading the text in the bar
+ * @param onClose function when close
+ */
 @Composable
 fun TopBar(heading: String, onClose: () -> Unit) {
     TopAppBar(

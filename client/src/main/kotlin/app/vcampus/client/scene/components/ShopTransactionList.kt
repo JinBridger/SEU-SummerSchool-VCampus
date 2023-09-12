@@ -19,6 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.vcampus.server.entity.StoreTransaction
 
+/**
+ * shop transaction list item component, used in `MyOrderSubscene`
+ *
+ * @param st the store transaction
+ */
 @Composable
 fun shopTransactionListItem(
     st: StoreTransaction,

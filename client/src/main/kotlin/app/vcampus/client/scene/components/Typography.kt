@@ -12,6 +12,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * page title component, H1 and H2
+ *
+ * @param heading H1 content
+ * @param caption H2 content
+ */
 @Composable
 fun pageTitle(heading: String, caption: String) {
     Column {

@@ -18,7 +18,6 @@
        }
 */
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -40,8 +39,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-@OptIn(ExperimentalMaterialApi::class)
-@Preview
+/**
+ * date picker component, however never used in this project
+ * for its usage please refer to `DatePicker.kt`
+ *
+ * @param initDate the initial date when open date picker
+ * @param onDateSelect function when confirm the date
+ * @param onDismissRequest idk
+ * @param minYear the minimal year could be selected
+ * @param maxYear the maximum year could be selected
+ */
 @Composable
 fun DatePicker(
     initDate: Date = Date(),
@@ -120,7 +127,6 @@ fun DatePicker(
                         }
 
                         Header("日", "一", "二", "三", "四", "五", "六")
-//                        Divider(Modifier.fillMaxWidth().height(1.dp).background(MaterialTheme.colors.primary))
 
                         val startDay = GregorianCalendar(year, month, 1)
                             .apply {

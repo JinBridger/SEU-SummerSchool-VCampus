@@ -20,7 +20,9 @@ val sarasaUiSc = FontFamily(
     ),
 )
 
-
+/**
+ * the Sarasa UI SC font typography
+ */
 val sarasaTypography = Typography(
     defaultFontFamily = sarasaUiSc,
 )

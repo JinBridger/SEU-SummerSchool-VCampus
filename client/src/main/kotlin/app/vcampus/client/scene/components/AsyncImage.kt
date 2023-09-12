@@ -14,6 +14,16 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.URL
 
+/**
+ * load image asynchronously
+ *
+ * @param T
+ * @param load
+ * @param painterFor
+ * @param contentDescription
+ * @param modifier
+ * @param contentScale
+ */
 @Composable
 fun <T> AsyncImage(
     load: suspend () -> T,

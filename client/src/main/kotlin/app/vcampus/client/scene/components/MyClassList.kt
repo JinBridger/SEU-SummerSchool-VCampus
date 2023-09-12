@@ -4,7 +4,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -16,7 +15,12 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.server.entity.TeachingClass
 import java.io.File
 
-@OptIn(ExperimentalMaterialApi::class)
+/**
+ * my class list item component, used in `MyClassSubscene`
+ *
+ * @param tc the teaching class
+ * @param saveCallback function when save xlsx
+ */
 @Composable
 fun myClassListItem(tc: TeachingClass, saveCallback: (TeachingClass, File) -> Unit) {
     var showFileDialog by remember { mutableStateOf(false) }

@@ -33,6 +33,13 @@ import com.seanproctor.datatable.TableColumnWidth
 import com.seanproctor.datatable.material.DataTable
 import java.util.stream.Collectors
 
+/**
+ * search book list item component, used in `SearchBookSubscene`
+ *
+ * @param _bookList the list of books
+ * @param isEditable whether it could be edited
+ * @param onEdit function when edit the list
+ */
 @OptIn(ExperimentalMaterialApi::class, ExperimentalStdlibApi::class)
 @Composable
 fun searchBookListItem(

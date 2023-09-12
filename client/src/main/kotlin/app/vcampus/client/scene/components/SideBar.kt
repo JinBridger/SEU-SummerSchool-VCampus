@@ -23,6 +23,12 @@ data class SideBarItem(
 )
 
 
+/**
+ * the side bar item, the left part of UI
+ *
+ * @param sideBarItems the list of side bar items
+ * @param onClick function when click item
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SideBar(
@@ -83,14 +89,6 @@ fun SideBar(
                         Divider()
                     }
                 }
-//                (0..10).toList().forEach {
-//                    ListItem(secondaryText = {
-//                        Text("Text")
-//                    }, icon = { Icon(Icons.Default.TextFields, "") }) {
-//                        Text("TestText")
-//                    }
-//                    Divider()
-//                }
             }
         }
     }

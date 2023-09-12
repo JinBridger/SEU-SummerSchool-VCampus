@@ -15,6 +15,16 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.skia.FilterBlurMode
 import org.jetbrains.skia.MaskFilter
 
+/**
+ * custom shadow to replace original shadow of compose desktop
+ * supports specify offset, color and radius
+ *
+ * @param color the color of shadow
+ * @param offsetX the X offset of shadow
+ * @param offsetY the Y offset of shadow
+ * @param blurRadius the blur radius of shadow
+ * @param shapeRadius the shape radius of shadow
+ */
 fun Modifier.shadowCustom(
     color: Color = Color.Gray,
     offsetX: Dp = 0.dp,

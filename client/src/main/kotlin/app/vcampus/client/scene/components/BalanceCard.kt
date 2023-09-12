@@ -15,6 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.vcampus.server.entity.FinanceCard
 
+/**
+ * balance card component, used in `MyBillsSubscene`
+ *
+ * @param card finance card, stores the data of card
+ */
 @Composable
 fun balanceCard(card: FinanceCard) {
     Surface(

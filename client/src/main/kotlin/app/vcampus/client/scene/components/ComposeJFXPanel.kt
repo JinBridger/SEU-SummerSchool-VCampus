@@ -6,6 +6,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import javafx.embed.swing.JFXPanel
 
+/**
+ * compose JavaFX Panel, used it to embed the webview to show GPT
+ *
+ * @param panel the JFX Panel
+ */
 @Composable
 fun ComposeJFXPanel(panel: JFXPanel) {
     SwingPanel(

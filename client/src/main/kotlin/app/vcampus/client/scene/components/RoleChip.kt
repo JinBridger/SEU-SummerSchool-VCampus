@@ -1,6 +1,5 @@
 package app.vcampus.client.scene.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -8,7 +7,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
+/**
+ * role chip components, shows all role and could be selected
+ *
+ * @param roles original roles
+ * @param onChange when change the role
+ */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun roleChip(roles: List<String> = listOf(), onChange: (List<String>) -> Unit = {}) {
     val selectedAdmin = remember { mutableStateOf(roles.contains("admin")) }

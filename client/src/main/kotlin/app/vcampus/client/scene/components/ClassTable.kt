@@ -12,6 +12,13 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 import app.vcampus.server.entity.TeachingClass
 
+/**
+ * class item component, used in `ClassTable`
+ *
+ * @param className the name of class
+ * @param teacherName the name of teacher
+ * @param position the position of class
+ */
 @Composable
 fun classItem(className: String, teacherName: String, position: String) {
     val hashCode = (className + teacherName).hashCode().mod(6)
@@ -33,6 +40,14 @@ fun classItem(className: String, teacherName: String, position: String) {
     }
 }
 
+/**
+ * check if given position has a class
+ *
+ * @param allClass the list of all classes
+ * @param weekday which day
+ * @param section which section
+ * @return the class in this position, return `null` if there's no class
+ */
 fun isHereClass(
     allClass: MutableList<TeachingClass>, weekday: Int,
     section: Int
@@ -47,6 +62,12 @@ fun isHereClass(
     return null
 }
 
+/**
+ * class table component, used in `MyScheduleSubscene`
+ * draw the whole class table
+ *
+ * @param viewModel the viewmodel of the subscene
+ */
 @Composable
 fun classTable(viewModel: TeachingAffairsViewModel) {
     Box(Modifier.fillMaxWidth().height(700.dp)) {
@@ -143,7 +164,6 @@ fun classTable(viewModel: TeachingAffairsViewModel) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-//                        Text("aaa")
                     }
                 }
                 Divider(
@@ -159,7 +179,6 @@ fun classTable(viewModel: TeachingAffairsViewModel) {
                         color = Color.Transparent
                     )
                     Row(Modifier.weight(1F).fillMaxWidth()) {
-//                        Text("bbb")
                     }
                     var index = 1
                     while (index <= 13) {
@@ -194,20 +213,10 @@ fun classTable(viewModel: TeachingAffairsViewModel) {
                                 color = Color.Transparent
                             )
                             Row(Modifier.weight(1F).fillMaxWidth()) {
-//                                Text("ccc")
                             }
                             index += 1
                         }
                     }
-//                    (1..13).forEach {
-//                        Divider(Modifier.fillMaxWidth(), thickness = 1.dp,
-//                                color = Color.Transparent)
-//                        Row(Modifier.weight(1F).fillMaxWidth()) {
-//                            Text("ccc")
-//                        }
-//                    }
-//                    Divider(Modifier.fillMaxWidth(), thickness = 1.dp,
-//                            color = Color.Transparent)
                 }
             }
         }

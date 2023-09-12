@@ -5,6 +5,16 @@ import java.io.File
 
 enum class FileDialogMode { LOAD, SAVE }
 
+/**
+ * file dialog component, calls when save/load files
+ *
+ * @param title the title of window
+ * @param mode save or load
+ * @param saveFileName the name of file to be saved
+ * @param loadExtension load file extension filter
+ * @param onResult function when confirm
+ * @param onClose function when close
+ */
 @Composable
 fun FileDialog(
     title: String,

@@ -20,6 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.vcampus.server.entity.StoreItem
 
+/**
+ * edit store item component, used in `ModifyItemSubscene`
+ *
+ * @param storeItem StoreItem of the list item
+ * @param isEditable whether it could be edited
+ * @param onEdit function when edit the item
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EditStoreItem(
@@ -34,13 +41,6 @@ fun EditStoreItem(
     var myPictureLink by remember { mutableStateOf(storeItem.pictureLink) }
     var myDescription by remember { mutableStateOf(storeItem.description) }
 
-//    var modifiedItems = mutableListOf<Pair<MutableStoreItem, MutableState<Boolean>>>()
-
-//    storeItemList.forEach {
-//        val newItem = MutableStoreItem()
-//        newItem.fromStoreItem(it)
-//        modifiedItems.add(Pair(newItem, mutableStateOf(false)))
-//    }
     var expanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
     Surface(modifier = Modifier.fillMaxWidth().border(
@@ -103,7 +103,6 @@ fun EditStoreItem(
                             Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.2F),
-//                                    value = myPrice,
                                     value = String.format("%.2f", myPrice.toInt() / 100.0),
                                     onValueChange = { myPrice = it },
                                     label = { Text("商品价格(￥)") },
@@ -299,33 +298,6 @@ fun EditStoreItem(
                                 )
                             }
                             Spacer(modifier = Modifier.width(16.dp))
-//                            Row(
-//                                modifier = Modifier.fillMaxWidth(),
-//                                verticalAlignment = Alignment.CenterVertically
-//                            ) {
-//                                Spacer(Modifier.weight(1F))
-////                                Button(onClick = {
-////                                    isEditing = false
-////
-////                                }) {
-////                                    Row(verticalAlignment = Alignment.CenterVertically) {
-////                                        Icon(Icons.Default.Done, "")
-////                                        Spacer(Modifier.width(2.dp))
-////                                        Text("确认")
-////                                    }
-////                                }
-////                                Spacer(Modifier.width(8.dp))
-////                                Button(onClick = {
-////                                    isEditing = false
-////                                }) {
-////                                    Row(verticalAlignment = Alignment.CenterVertically) {
-////                                        Icon(Icons.Default.Close, "")
-////                                        Spacer(Modifier.width(2.dp))
-////                                        Text("取消")
-////                                    }
-////                                }
-//
-//                            }
                         }
                         if (isEditing) {
                             Spacer(Modifier.height(10.dp))
@@ -336,25 +308,6 @@ fun EditStoreItem(
                                 Spacer(Modifier.weight(1F))
                                 Button(
                                     onClick = {
-//                                        val i = modifiedItems.iterator()
-//
-//                                        while (i.hasNext()) {
-//                                            val pair = i.next()
-//
-//                                            pair.first.itemName.value = myName
-//                                            pair.first.stock.value = myStock.toInt()
-//                                            pair.first.barcode.value = myBarcode
-//                                            pair.first.description.value = myDescription
-//                                            pair.first.price.value = myPrice.toInt()
-//                                            pair.first.pictureLink.value = myPictureLink
-//
-//                                            onEdit(pair.first.toStoreItem(), pair.second.value)
-//
-//                                            if (pair.second.value) {
-//                                                i.remove()
-//                                            }
-//                                        }
-
                                         val modifiedStoreItem = StoreItem()
                                         modifiedStoreItem.uuid = storeItem.uuid
                                         modifiedStoreItem.barcode = myBarcode
@@ -365,7 +318,6 @@ fun EditStoreItem(
                                         modifiedStoreItem.pictureLink = myPictureLink
                                         onEdit(modifiedStoreItem)
 
-//                                        storeItemList = modifiedItems.map { it.first.toStoreItem() }
                                         isEditing = false
                                     }
                                 ) {
@@ -384,14 +336,6 @@ fun EditStoreItem(
                                     myDescription = storeItem.description
                                     myPrice = storeItem.price.toString()
                                     myPictureLink = storeItem.pictureLink.toString()
-
-//                                    modifiedItems = mutableListOf()
-
-//                                    storeItemList.forEach {
-//                                        val newItem = MutableStoreItem()
-//                                        newItem.fromStoreItem(it)
-//                                        modifiedItems.add(Pair(newItem, mutableStateOf(false)))
-//                                    }
 
                                     isEditing = false
                                 }) {

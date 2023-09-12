@@ -4,6 +4,11 @@ import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 
+/**
+ * enter animation, used in scene switching
+ *
+ * @param content the scene content
+ */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun enterAnimation(content: @Composable () -> Unit) {

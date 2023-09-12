@@ -21,6 +21,12 @@ import app.vcampus.client.repository.copy
 import app.vcampus.client.viewmodel.ShopViewModel
 import app.vcampus.server.entity.StoreItem
 
+/**
+ * shop item card component, used in `SelectItemSubscene`
+ *
+ * @param item the store item
+ * @param viewModel the viewmodel of subscene
+ */
 @Composable
 fun shopItemCard(item: StoreItem, viewModel: ShopViewModel) {
     Card(
@@ -38,9 +44,6 @@ fun shopItemCard(item: StoreItem, viewModel: ShopViewModel) {
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier.fillMaxSize()
                 )
-//                Image(painterResource("test_image.png"), "",
-//                        modifier = Modifier.fillMaxSize(),
-//                        contentScale = ContentScale.FillBounds)
             }
             Column(modifier = Modifier.fillMaxSize()) {
                 Row(

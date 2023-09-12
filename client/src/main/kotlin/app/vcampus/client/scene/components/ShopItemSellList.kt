@@ -20,6 +20,12 @@ import androidx.compose.ui.unit.sp
 import app.vcampus.client.viewmodel.ShopViewModel
 import app.vcampus.server.entity.StoreItem
 
+/**
+ * shop item sell list item, used in `DashboardSubscene`
+ *
+ * @param item the store item
+ * @param viewModel the viewmodel of subscene
+ */
 @Composable
 fun shopItemSellListItem(item: StoreItem, viewModel: ShopViewModel) {
     Surface(

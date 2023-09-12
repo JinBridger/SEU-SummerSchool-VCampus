@@ -5,6 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
 
+/**
+ * selectable chip component
+ *
+ * @param selected state of select
+ * @param text the text of chip
+ * @param onClick function when click
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun selectableChip(selected: MutableState<Boolean>, text: String, onClick: (() -> Unit)? = null) {

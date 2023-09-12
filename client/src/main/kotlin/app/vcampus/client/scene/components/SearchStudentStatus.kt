@@ -26,6 +26,13 @@ import app.vcampus.server.enums.Gender
 import app.vcampus.server.enums.PoliticalStatus
 import app.vcampus.server.enums.StudentStatus
 
+/**
+ * search student status item component, used in `ModifyStudentStatusSubscene`
+ *
+ * @param _student the student
+ * @param isEditable whether it could be edited
+ * @param onEdit function when edit
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchStudentStatusItem(
@@ -135,21 +142,6 @@ fun SearchStudentStatusItem(
                                 }
                             )
                             Spacer(Modifier.width(8.dp))
-//                                OutlinedTextField(
-//                                    modifier = Modifier.weight(0.25F),
-//                                    value = gender,
-//                                    onValueChange = { gender = it },
-//                                    label = { Text("性别") },
-//                                    isError = gender == "",
-//                                    readOnly = !isEditing,
-//                                    trailingIcon = {
-//                                        if (gender == "") Icon(
-//                                            Icons.Filled.Error,
-//                                            "error",
-//                                            tint = MaterialTheme.colors.error
-//                                        )
-//                                    }
-//                                )
                             Box(modifier = Modifier.weight(0.25F)) {
                                 Select(
                                     selectList = Gender.entries,

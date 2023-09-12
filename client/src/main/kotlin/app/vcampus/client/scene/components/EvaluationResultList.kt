@@ -20,7 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.vcampus.server.entity.TeachingClass
 
-
+/**
+ * rating result bar component, shows the ratio of ratings
+ *
+ * @param evaluateString the evaluation question
+ * @param result the ratio of rating results
+ */
 @Composable
 fun ratingResultBar(evaluateString: String, result: List<Int>) {
     val colors = listOf(
@@ -50,6 +55,11 @@ fun ratingResultBar(evaluateString: String, result: List<Int>) {
     }
 }
 
+/**
+ * evaluate result list item component, used in `EvaluateResultSubscene`
+ *
+ * @param result the teaching class of rating
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun evaluateResultListItem(result: TeachingClass) {

@@ -27,6 +27,12 @@ import app.vcampus.client.viewmodel.ShopViewModel
 import app.vcampus.server.entity.StoreItem
 
 
+/**
+ * shop check list item component, used in `SelectItemSubscene`
+ *
+ * @param item the store item
+ * @param viewModel the viewmodel of subscene
+ */
 @Composable
 fun shopCheckListItem(item: StoreItem, viewModel: ShopViewModel) {
     Column {
@@ -106,12 +112,6 @@ fun shopCheckListItem(item: StoreItem, viewModel: ShopViewModel) {
                     ) {
                         Icon(Icons.Default.Add, "")
                     }
-//
-//                    Button(onClick = {}, shape = CircleShape,
-//                            modifier = Modifier.height(20.dp).aspectRatio(1F),
-//                            contentPadding = PaddingValues(2.dp)) {
-//                        Icon(Icons.Default.Add, "")
-//                    }
                     Spacer(modifier = Modifier.width(6.dp))
                 }
                 Spacer(modifier = Modifier.weight(1F))
@@ -137,16 +137,3 @@ fun shopCheckListItem(item: StoreItem, viewModel: ShopViewModel) {
         )
     }
 }
-
-//@Composable
-//fun shopCheckList() {
-//    Card(modifier = Modifier.fillMaxWidth()) {
-//        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-//            (0..10).forEach {
-//                item {
-//                    shopCheckListItem()
-//                }
-//            }
-//        }
-//    }
-//}

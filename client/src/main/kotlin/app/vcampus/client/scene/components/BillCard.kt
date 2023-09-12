@@ -17,6 +17,11 @@ import androidx.compose.ui.unit.dp
 import app.vcampus.server.entity.CardTransaction
 import app.vcampus.server.utility.DateUtility
 
+/**
+ * bill card component, used in `MyBillsSubscene`
+ *
+ * @param bill card transaction, stores the information of transaction
+ */
 @Composable
 fun billCard(bill: CardTransaction) {
     Surface(

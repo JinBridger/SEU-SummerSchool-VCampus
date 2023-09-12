@@ -15,6 +15,13 @@ import app.vcampus.server.entity.LibraryTransaction
 import app.vcampus.server.utility.DateUtility
 import java.util.*
 
+/**
+ * book list component, used in `MyBookSubscene` and `ReturnSubscene`
+ *
+ * @param lt library transaction, stores the information of transaction
+ * @param renewBook renew book function
+ * @param returnBook return book function
+ */
 @Composable
 fun bookList(lt: LibraryTransaction, renewBook: (UUID) -> Unit, returnBook: ((UUID) -> Unit)? = null) {
     Surface(

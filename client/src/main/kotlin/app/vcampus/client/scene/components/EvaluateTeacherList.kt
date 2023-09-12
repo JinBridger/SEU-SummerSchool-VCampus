@@ -17,6 +17,9 @@ import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 import app.vcampus.server.entity.TeachingClass
 import app.vcampus.server.utility.Pair
 
+/**
+ * the evaluation items
+ */
 val evaluateItem = listOf(
     "注重理论与应用的结合，激发学生的学习兴趣和主动性",
     "讲课条理清楚，重点突出，详略得当",
@@ -24,6 +27,13 @@ val evaluateItem = listOf(
     "批改作业认真，课下指导、交流细致"
 )
 
+/**
+ * rating bar component, shows the checkboxes
+ *
+ * @param evaluateString the evaluate question
+ * @param ptList the list of rates
+ * @param inx the index position of bar
+ */
 @Composable
 fun ratingBar(
     evaluateString: String, ptList: List<MutableState<Boolean>>,
@@ -54,6 +64,12 @@ fun ratingBar(
     }
 }
 
+/**
+ * evaluation teacher list item component, used in `EvaluateTeacherSubscene`
+ *
+ * @param viewModel the viewmodel of subscene
+ * @param teachingClass the teaching class of the item
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun evaluateTeacherListItem(viewModel: TeachingAffairsViewModel, teachingClass: TeachingClass) {

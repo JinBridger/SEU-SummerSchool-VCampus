@@ -13,6 +13,12 @@ import app.vcampus.client.Navis
 import app.vcampus.client.repository.FakeRepository
 import moe.tlaster.precompose.navigation.Navigator
 
+/**
+ * nav rail component, the left part of UI
+ *
+ * @param navigator the navigator of whole app
+ * @param currentPos current position of navigator
+ */
 @Composable
 fun NavRail(navigator: Navigator, currentPos: String) {
     NavigationRail {

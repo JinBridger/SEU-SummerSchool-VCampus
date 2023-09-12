@@ -14,6 +14,11 @@ import app.vcampus.client.viewmodel.ShopViewModel
 import app.vcampus.server.entity.StoreItem
 import kotlinx.coroutines.launch
 
+/**
+ * add shop item component, used in `AddItemSubscene`
+ *
+ * @param viewModel the view model of the subscene
+ */
 @Composable
 fun addShopItem(viewModel: ShopViewModel) {
 
@@ -24,7 +29,6 @@ fun addShopItem(viewModel: ShopViewModel) {
     var myPictureLink by remember { mutableStateOf("") }
     var myDescription by remember { mutableStateOf("") }
 
-//    var myPrice by viewModel.addStoreItem.newStoreItem.value.price
     val scope = rememberCoroutineScope()
 
     Box(

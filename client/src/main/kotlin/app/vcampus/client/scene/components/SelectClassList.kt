@@ -52,6 +52,12 @@ fun getIsConflict(viewModel: TeachingAffairsViewModel, teachingClass: TeachingCl
     return false
 }
 
+/**
+ * teaching class card of select class list item
+ *
+ * @param viewModel the viewmodel of subscene
+ * @param teachingClass the teaching class
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun selectClassCard(
@@ -149,6 +155,12 @@ fun getIsChosenCourse(viewModel: TeachingAffairsViewModel, course: Course): Bool
 }
 
 
+/**
+ * select class list item component, used in `ChooseClassSubscene`
+ *
+ * @param viewModel the viewmodel of subscene
+ * @param course the course of list item
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun selectClassListItem(viewModel: TeachingAffairsViewModel, course: Course) {

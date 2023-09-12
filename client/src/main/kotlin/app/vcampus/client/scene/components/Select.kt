@@ -42,6 +42,19 @@ inline fun <reified T : Any, R> T.getPrivateProperty(name: String): R? =
         ?.apply { isAccessible = true }
         ?.get(this) as? R
 
+/**
+ * select component
+ *
+ * @param T the type of items that could be selected
+ * @param selectList the list of items that could be selected
+ * @param label the label of textfield
+ * @param setValue function when set the value
+ * @param value preset value
+ * @param basic whether it use basic or outlined
+ * @param textStyle the text style
+ * @param readOnly whether it is read only
+ * @param modifier the modifier of the component
+ */
 @Composable
 fun <T> Select(
     selectList: List<T>,

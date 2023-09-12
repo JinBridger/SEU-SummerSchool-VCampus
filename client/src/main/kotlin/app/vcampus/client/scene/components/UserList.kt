@@ -15,6 +15,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.vcampus.server.entity.User
 
+/**
+ * user list item component, used in `ModifyUserSubscene`
+ *
+ * @param user the user
+ * @param onEdit function when edit
+ */
 @Composable
 fun userListItem(user: User, onEdit: (Int, String, List<String>) -> Unit = { _, _, _ -> }) {
     val expanded = remember { mutableStateOf(false) }
