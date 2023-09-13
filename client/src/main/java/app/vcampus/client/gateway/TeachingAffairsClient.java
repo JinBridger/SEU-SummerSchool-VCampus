@@ -16,9 +16,10 @@ import java.util.UUID;
 @Slf4j
 public class TeachingAffairsClient {
     /**
-    Used to get selected classes information.
-    if response is success , return List<TeachingClass>
-    else throw an exception
+     * Used to get selected class.
+     * @param handler
+     * @return if the response is success,List<TeachingClass>,else throw exception.
+     * @throws Exception If an error occurs.
      */
     public static List<TeachingClass> getSelectedClasses(NettyHandler handler) {
         Request request = new Request();
@@ -41,9 +42,9 @@ public class TeachingAffairsClient {
 
     /**
      Used to get selected classes information.
-     @@param Pair evaluationResult
-     if response is success , return List<TeachingClass>
-     else throw an exception
+     @param evaluationResult
+     @return if response is success , return List<TeachingClass>
+     @throws Exception If an error occurs.
      */
     public static Boolean sendEvaluationResult(NettyHandler handler, Pair<UUID, Pair<List<Integer>, String>> evaluationResult) {
         Request request = new Request();
@@ -65,8 +66,8 @@ public class TeachingAffairsClient {
 
     /**
      This method is used to get selected classes information table.
-     if response is success , return List<Course>
-     else throw an exception.
+     @return List<Course>
+     @throws Exception If an error occurs.
      */
     public static List<Course> getSelectableCourses(NettyHandler handler) {
         Request request = new Request();
@@ -89,9 +90,9 @@ public class TeachingAffairsClient {
 
     /**
      Used to choose class.
-     @@param  class uuid -- class information.
-     if response is success , return success.
-     else throw an exception.
+     @param classUuid
+     @return if response is success , return success, else false.
+     @throws Exception If an error occurs.
      */
     public static Boolean chooseClass(NettyHandler handler, UUID classUuid) {
         Request request = new Request();
@@ -112,9 +113,10 @@ public class TeachingAffairsClient {
 
     /**
      Used to drop class.
-     @@param  class uuid -- class information.
-     if response is success , return success.
-     else throw an exception.
+     @param  classUuid
+     @return if response is success , return success, else false.
+
+     @throws Exception If an error occurs.
      */
     public static Boolean dropClass(NettyHandler handler, UUID classUuid) {
         Request request = new Request();
@@ -133,10 +135,12 @@ public class TeachingAffairsClient {
         }
     }
 
+
     /**
-     Used to get my teaching class.
-     if response is success , return List<TeachingClass>.
-     else throw an exception.
+     * Used to get my teaching classes for teachers.
+     * @param handler
+     * @return List<TeachingClass>
+     * @throws Exception If an error occurs.
      */
     public static List<TeachingClass> getMyTeachingClasses(NettyHandler handler) {
         Request request = new Request();
@@ -158,10 +162,11 @@ public class TeachingAffairsClient {
     }
 
     /**
-     Used to drop class.
-     @@param  class uuid -- class information.
-     if response is success , return student list.
-     else throw an exception.
+     * Used to drop class.
+     * @param handler
+     * @param classUuid
+     * @return String
+     * @throws Exception If an error occurs.
      */
     public static String exportStudentList(NettyHandler handler, UUID classUuid) {
         Request request = new Request();
@@ -185,10 +190,11 @@ public class TeachingAffairsClient {
     }
 
     /**
-     Used to export grade template.
-     @@param  class uuid -- class information.
-     if response is success , return grade template.
-     else throw an exception.
+     * Used to export grade template.
+     * @param handler
+     * @param classUuid
+     * @return String
+     * @throws Exception If an error occurs.
      */
     public static String exportGradeTemplate(NettyHandler handler, UUID classUuid) {
         Request request = new Request();
@@ -212,11 +218,12 @@ public class TeachingAffairsClient {
     }
 
     /**
-     Used to export grade template.
-     @@param  class uuid -- class information.
-     @@param  file -- file name
-     if response is success , return success.
-     else throw an exception.
+     * Used to export grade template.
+     * @param handler
+     * @param classUuid
+     * @param file The file name.
+     * @return true if success
+     * @throws Exception If an error occurs.
      */
     public static Boolean importGrade(NettyHandler handler, UUID classUuid, String file) {
         Request request = new Request();
