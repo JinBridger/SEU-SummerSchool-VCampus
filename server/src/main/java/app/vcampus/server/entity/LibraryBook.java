@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+
+/**
+ * library book entity class
+ */
+
 @Entity
 @Data
 @Slf4j
@@ -45,6 +50,13 @@ public class LibraryBook implements IEntity {
     @Column(nullable = false)
     public BookStatus bookStatus = BookStatus.available;
 
+
+    /**
+     * fromWeb method, parse book from web by its ISBN
+     *
+     * @param data the parsed book data
+     * @return  the parsed book object
+     */
     public static LibraryBook fromWeb(Map<String, Object> data) {
         try {
             LibraryBook book = new LibraryBook();
@@ -68,6 +80,12 @@ public class LibraryBook implements IEntity {
         }
     }
 
+
+    /**
+     * fromMap method, parse book object from map data, however not used
+     * @param data book info data as a map
+     * @return the parsed book object from map
+     */
     public static LibraryBook fromMap(Map<String, String> data) {
         try {
             LibraryBook book = new LibraryBook();
@@ -86,6 +104,10 @@ public class LibraryBook implements IEntity {
         }
     }
 
+    /**
+     * toMap method, turn a book object to map data,however not used
+     * @return the map data corresponding to the book object
+     */
     public Map<String, String> toMap() {
         return Map.ofEntries(
                 Map.entry("uuid", getUuid().toString()),
