@@ -12,6 +12,7 @@ import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.MainPanelViewModel
 import moe.tlaster.precompose.navigation.Navigator
 import moe.tlaster.precompose.viewmodel.viewModel
+import java.time.LocalTime
 
 /**
  * main panel scene
@@ -28,14 +29,14 @@ fun MainPanelScene(
     }
 
     Box(Modifier.fillMaxSize()) {
-        Box(Modifier.width(800.dp).align(Alignment.TopCenter)) {
+        Box(Modifier.width(800.dp).align(Alignment.Center)) {
             LazyColumn {
                 item {
-                    Spacer(Modifier.height(50.dp))
                     pageTitle(
-                        "晚上好，${FakeRepository.user.name}",
+                        "${viewModel.greetings}，${FakeRepository.user.name}！",
                         "今天想做些什么？"
                     )
+                    Spacer(Modifier.height(150.dp))
                 }
             }
         }
