@@ -130,13 +130,13 @@ fun selectClassCard(
                 if (isChosen.value) {
                     Button(onClick = {
                         viewModel.myClasses.dropClass(teachingClass.uuid)
-                    }) {
+                    }, enabled = teachingClass.selectRecord?.grade == null) {
                         Text("退选")
                     }
                 } else {
                     Button(onClick = {
                         viewModel.myClasses.chooseClass(teachingClass.uuid)
-                    }, enabled = !isConflict.value) {
+                    }, enabled = !(isConflict.value || teachingClass.selectedCount >= teachingClass.capacity)) {
                         Text("选择")
                     }
                 }

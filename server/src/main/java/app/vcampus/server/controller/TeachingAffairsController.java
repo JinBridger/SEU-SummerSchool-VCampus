@@ -89,6 +89,11 @@ public class TeachingAffairsController {
                 tc.setTeacherName(teacher.getName());
 
                 tc.setSelectedCount(Database.getWhereUuid(SelectRecord.class, "classUuid", tc.getUuid(), database).size());
+
+                SelectRecord selectRecord = Database.getWhereUuid(SelectRecord.class, "classUuid", tc.getUuid(), database).stream()
+                        .filter((SelectRecord sr) -> sr.getCardNumber().equals(request.getSession().getCardNum()))
+                        .findFirst().orElse(null);
+                tc.setSelectRecord(selectRecord);
             }).toList();
             course.setTeachingClasses(teachingClasses);
         }).toList();
