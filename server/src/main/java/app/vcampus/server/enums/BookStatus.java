@@ -2,6 +2,9 @@ package app.vcampus.server.enums;
 
 import lombok.Getter;
 
+/**
+ * book status enum, used to denote the book status
+ */
 @Getter
 public enum BookStatus implements LabelledEnum {
     available("可借", 0xff508e54),

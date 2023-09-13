@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Date;
 import java.util.UUID;
 
-
+/**
+ * LibraryTransaction class, used for record library transaction
+ */
 @Entity
 @Data
 @Slf4j

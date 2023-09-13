@@ -2,6 +2,9 @@ package app.vcampus.server.enums;
 
 import lombok.Getter;
 
+/**
+ * enums for library user status, however not used
+ */
 @Getter
 public enum LibraryUserStatus {
     nice("信誉合格"),
