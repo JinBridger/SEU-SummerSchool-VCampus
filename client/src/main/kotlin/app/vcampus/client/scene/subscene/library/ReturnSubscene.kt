@@ -27,17 +27,17 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 @Composable
 fun returnSubscene(viewModel: LibraryViewModel) {
     var keyword by viewModel.returnBook.cardNumber
-    var flag by remember { mutableStateOf(false) }
+    val flag by viewModel.returnBook.searched
 
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth().onPreviewKeyEvent {event:KeyEvent
-        ->
-            if(event.type== KeyEventType.KeyDown&&event.key== Key.Enter){
+        modifier = Modifier.fillMaxWidth().onPreviewKeyEvent { event: KeyEvent ->
+            if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
                 viewModel.returnBook.getRecords()
-                flag=true
                 true
-            }else{false}
+            } else {
+                false
+            }
         }
     ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -66,8 +66,7 @@ fun returnSubscene(viewModel: LibraryViewModel) {
                         Button(
                             onClick = {
                                 viewModel.returnBook.getRecords()
-                                flag=true
-                                      },
+                            },
                             modifier = Modifier.height(56.dp)
                         ) {
                             Icon(Icons.Default.Search, "")
@@ -98,11 +97,10 @@ fun returnSubscene(viewModel: LibraryViewModel) {
                         Spacer(Modifier.height(10.dp))
                     }
                 }
-            }else if(flag){
+            } else if (flag) {
                 item {
                     Text("未检索到此用户", fontSize = 14.sp)
                 }
-
             }
 
             item {

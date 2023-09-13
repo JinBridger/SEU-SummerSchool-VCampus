@@ -294,6 +294,8 @@ class LibraryViewModel : ViewModel() {
         val transactions = mutableStateListOf<LibraryTransaction>()
         val currentBorrowed = mutableStateListOf<LibraryTransaction>()
 
+        val searched = mutableStateOf(false)
+
         fun getRecords() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
@@ -303,6 +305,8 @@ class LibraryViewModel : ViewModel() {
 
                         currentBorrowed.clear()
                         currentBorrowed.addAll(it.filter { it.returnTime == null })
+
+                        searched.value = true
                     }
                 }
             }
