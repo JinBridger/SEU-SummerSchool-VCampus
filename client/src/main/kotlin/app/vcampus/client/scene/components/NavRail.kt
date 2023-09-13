@@ -25,7 +25,7 @@ fun NavRail(navigator: Navigator, currentPos: String) {
         Navis.forEach {
             if (it.permission.intersect(
                     FakeRepository.user.roles.toList()
-                ).isNotEmpty()
+                ).isNotEmpty() || it.permission.contains("user")
             )
                 NavigationRailItem(
                     selected = currentPos == it.path,
