@@ -10,9 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.UUID;
 
 /**
- * StoreItem类
- * 记录商品的基本信息
- * 用于商店模块，数据库中的每条商品记录都可以被展示、被购买
+ * Class StoreItem
+ * record basic information of store items
+ * for the store module, every record in the database can be shown and chosen
  *
  */
 @Entity

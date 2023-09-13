@@ -8,10 +8,10 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * StoreTransaction类
- * 记录交易商品时的基本信息
- * 用于商店模块，用户每选择购买一种商品，就产生一条交易记录
- * 在结算总消费金额和统计销售情况时使用
+ * Class StoreTransaction
+ * record store item's basic information during transaction
+ * for the store module, when user select one kind of store item, a store transaction is generated
+ * used for calculating the total expenditure and tracking sales statistics
  *
  */
 @Entity
