@@ -9,6 +9,10 @@ import org.hibernate.type.SqlTypes;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * SelectRecord class.
+ * Used to record basic information about students' selected courses.
+ */
 @Entity
 @Data
 @Slf4j

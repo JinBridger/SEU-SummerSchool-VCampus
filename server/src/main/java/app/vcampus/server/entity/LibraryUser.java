@@ -25,6 +25,11 @@ public class LibraryUser {
     @Column(nullable = false)
     public Integer maxBorrow;
 
+    /**
+     * The Map object conatins key-value pairs that represent the properties of user.
+     * @param data data of library user
+     * @return  return a user from the map.
+     */
     public static LibraryUser fromMap(Map<String, String> data) {
         try {
             LibraryUser user = new LibraryUser();
@@ -38,6 +43,11 @@ public class LibraryUser {
         }
     }
 
+    /**
+     * The Map object contains key-value pairs that represent the properties of library user
+     *  The method initializes the Map object with the following key-value pairs:
+     * @return  a Map object.
+     */
     public Map<String, String> toMap() {
         return Map.ofEntries(
                 Map.entry("cardNumber", getCardNumber().toString()),

@@ -12,6 +12,9 @@ import org.hibernate.type.SqlTypes;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * TeachingEvaluation class.
+ */
 @Entity
 @Data
 @Table(name = "teaching_evaluation")
