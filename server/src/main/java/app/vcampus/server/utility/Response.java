@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
 
+/**
+ * Response class.
+ */
 @Data
 @RequiredArgsConstructor
 public class Response {
@@ -16,6 +19,9 @@ public class Response {
     Object data;
     transient Session session = null;
 
+    /**
+     * Common responses.
+     */
     public static class Common {
         public static Response ok() {
             return new Response("success", "OK");

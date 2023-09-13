@@ -15,6 +15,9 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 
+/**
+ * NettyHandler class.
+ */
 @Slf4j
 public class NettyHandler extends ChannelInboundHandlerAdapter {
     private final Gson gson = new Gson();
@@ -27,17 +30,33 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
         this.database = database;
     }
 
+    /**
+     * Called when a new connection is made.
+     *
+     * @param ctx The channel handler context.
+     */
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         log.info("[{}] Client connected from {}", ctx.channel().id(), ctx.channel().remoteAddress());
         session = new Session();
     }
 
+    /**
+     * Called when a connection is closed.
+     *
+     * @param ctx The channel handler context.
+     */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         log.info("[{}] Client disconnected", ctx.channel().id());
     }
 
+    /**
+     * Called when a message is received.
+     *
+     * @param ctx The channel handler context.
+     * @param msg The message.
+     */
     @Override
     public void channelRead(@NonNull ChannelHandlerContext ctx, @NonNull Object msg) {
         ByteBuf in = (ByteBuf) msg;
@@ -72,14 +91,24 @@ public class NettyHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
+    /**
+     * Send a response to the client.
+     *
+     * @param ctx The channel handler context.
+     * @param response The response.
+     */
     private void sendResponse(ChannelHandlerContext ctx, Response response) {
         ctx.writeAndFlush(Unpooled.copiedBuffer(gson.toJson(response), CharsetUtil.UTF_8));
     }
 
+    /**
+     * Called when an exception is caught.
+     *
+     * @param ctx The channel handler context.
+     * @param cause The exception.
+     */
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) { // (4)
-        // Close the connection when an exception is raised.
-//        cause.printStackTrace();
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         log.error("[{}] Exception: {}", ctx.channel().id(), cause.getMessage());
         ctx.close();
     }

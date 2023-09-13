@@ -7,23 +7,21 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+/**
+ * Java Application class.
+ */
 public class Application {
     private static final ExecutorService executorService = java.util.concurrent.Executors.newCachedThreadPool();
 
-//    public static void main(String[] args) throws ExecutionException, InterruptedException {
-//        NettyClient client = new NettyClient("127.0.0.1", 9091);
-//        Future<NettyHandler> future = executorService.submit(client);
-//        NettyHandler handler = future.get();
-////
-////        Request request = new Request();
-////        request.setUri("heartbeat");
-////        handler.sendRequest(request, response -> {
-////            System.out.println(response.toString());
-////        });
-//
-//        MainKt.main(handler);
-//    }
-
+    /**
+     * Connect to a server.
+     *
+     * @param address The address of the server.
+     * @param port The port of the server.
+     * @return The netty handler.
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     public static NettyHandler connect(String address, int port) throws ExecutionException, InterruptedException {
         NettyClient client = new NettyClient(address, port);
         Future<NettyHandler> future = executorService.submit(client);

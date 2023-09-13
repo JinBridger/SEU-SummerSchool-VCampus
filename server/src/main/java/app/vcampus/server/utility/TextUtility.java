@@ -1,6 +1,9 @@
 package app.vcampus.server.utility;
 
-public class Text {
+/**
+ * Text utility class.
+ */
+public class TextUtility {
     public static String intToChineseWeek(Integer num) {
         return switch (num) {
             case 1 -> "一";

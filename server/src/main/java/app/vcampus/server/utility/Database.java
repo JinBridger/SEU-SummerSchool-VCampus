@@ -10,7 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Database utility class.
+ */
 public class Database {
+    /**
+     * Initialize the database SessionFactory.
+     *
+     * @return The SessionFactory.
+     */
     public static SessionFactory init() {
         Configuration configuration = new Configuration().configure();
         return configuration
@@ -29,6 +37,14 @@ public class Database {
                 .buildSessionFactory();
     }
 
+    /**
+     * Load all data of a type from the database.
+     *
+     * @param type The Entity of the data.
+     * @param session The database session.
+     * @return The list of data.
+     * @param <T> The type of the data.
+     */
     public static <T> List<T> loadAllData(Class<T> type, Session session) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<T> criteria = builder.createQuery(type);
@@ -36,6 +52,16 @@ public class Database {
         return session.createQuery(criteria).getResultList();
     }
 
+    /**
+     * Load all data of a type with a like condition from the database.
+     *
+     * @param type The Entity of the data.
+     * @param field The field to query.
+     * @param value The value to query.
+     * @param session The database session.
+     * @return The list of data.
+     * @param <T> The type of the data.
+     */
     public static <T> List<T> likeQuery(Class<T> type, String[] field, String value, Session session) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<T> criteria = builder.createQuery(type);
@@ -48,6 +74,16 @@ public class Database {
         return session.createQuery(criteria).getResultList();
     }
 
+    /**
+     * Load all data of a type with a String where condition from the database.
+     *
+     * @param type The Entity of the data.
+     * @param field The field to query.
+     * @param value The value to query.
+     * @param session The database session.
+     * @return The list of data.
+     * @param <T> The type of the data.
+     */
     public static <T> List<T> getWhereString(Class<T> type, String field, String value, Session session) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<T> criteria = builder.createQuery(type);
@@ -56,6 +92,16 @@ public class Database {
         return session.createQuery(criteria).getResultList();
     }
 
+    /**
+     * Load all data of a type with a UUID where condition from the database.
+     *
+     * @param type The Entity of the data.
+     * @param field The field to query.
+     * @param value The value to query.
+     * @param session The database session.
+     * @return The list of data.
+     * @param <T> The type of the data.
+     */
     public static <T> List<T> getWhereUuid(Class<T> type, String field, UUID value, Session session) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<T> criteria = builder.createQuery(type);
@@ -64,6 +110,16 @@ public class Database {
         return session.createQuery(criteria).getResultList();
     }
 
+    /**
+     * Update all data of a type with a String where condition in the database.
+     *
+     * @param type The Entity of the data.
+     * @param field The field to query.
+     * @param value The value to query.
+     * @param updates The updates to perform.
+     * @param session The database session.
+     * @param <T> The type of the data.
+     */
     public static <T> void updateWhere(Class<T> type, String field, String value, List<Pair<String, String>> updates, Session session) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaUpdate<T> criteria = builder.createCriteriaUpdate(type);

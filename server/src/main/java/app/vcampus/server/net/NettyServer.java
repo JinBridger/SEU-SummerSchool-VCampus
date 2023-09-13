@@ -13,6 +13,9 @@ import io.netty.handler.codec.json.JsonObjectDecoder;
 import lombok.NonNull;
 import org.hibernate.SessionFactory;
 
+/**
+ * NettyServer class.
+ */
 public class NettyServer {
     private final int port;
 
@@ -20,6 +23,13 @@ public class NettyServer {
         this.port = port;
     }
 
+    /**
+     * Run the server.
+     *
+     * @param router The router.
+     * @param session The session factory.
+     * @throws Exception If an error occurs.
+     */
     public void run(Router router, SessionFactory session) throws Exception {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();

@@ -6,7 +6,17 @@ import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.router.Router;
 import org.hibernate.SessionFactory;
 
+/**
+ * Main class of the server.
+ */
 public class Main {
+
+    /**
+     * Entry function of the server.
+     *
+     * @param args Command line arguments.
+     * @throws Exception Any exception that may occur.
+     */
     public static void main(String[] args) throws Exception {
         Router router = new Router();
         router.addController(AuthController.class);

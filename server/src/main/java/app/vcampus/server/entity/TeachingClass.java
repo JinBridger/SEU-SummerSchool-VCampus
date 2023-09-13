@@ -2,7 +2,7 @@ package app.vcampus.server.entity;
 
 
 import app.vcampus.server.utility.Pair;
-import app.vcampus.server.utility.Text;
+import app.vcampus.server.utility.TextUtility;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +59,7 @@ public class TeachingClass implements IEntity {
         StringBuilder content = new StringBuilder();
         for (Pair<Pair<Integer, Integer>, Pair<Integer, Pair<Integer, Integer>>> pair : schedule) {
             content.append(pair.getFirst().getFirst()).append("-").append(pair.getFirst().getSecond()).append(" 周，");
-            content.append("周").append(Text.intToChineseWeek(pair.getSecond().getFirst())).append(" ");
+            content.append("周").append(TextUtility.intToChineseWeek(pair.getSecond().getFirst())).append(" ");
             content.append(pair.getSecond().getSecond().getFirst()).append("-").append(pair.getSecond().getSecond().getSecond()).append(" 节");
         }
 

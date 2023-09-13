@@ -11,12 +11,20 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Router class. Used to route requests to controllers, annotation and reflection based.
+ */
 @Slf4j
 public class Router {
     private final Map<String, Object> controllerBeans = new HashMap<>();
     private final Map<String, Action> uri2Action = new HashMap<>();
     private final Map<String, String> uri2Role = new HashMap<>();
 
+    /**
+     * Add a controller to the router.
+     *
+     * @param cls The class of the controller.
+     */
     public void addController(Class<?> cls) {
         try {
             log.info("Router: addController: cls: {}", cls.getName());
@@ -44,14 +52,33 @@ public class Router {
         }
     }
 
+    /**
+     * Check if the router has a route.
+     *
+     * @param uri The uri to check.
+     * @return Whether the router has the route.
+     */
     public boolean hasRoute(String uri) {
         return uri2Action.containsKey(uri);
     }
 
+    /**
+     * Get the role of a route.
+     *
+     * @param uri The uri to check.
+     * @return The role of the route.
+     */
     public String getRole(String uri) {
         return uri2Role.get(uri);
     }
 
+    /**
+     * Invoke a route.
+     *
+     * @param request The request to invoke.
+     * @param database The database session.
+     * @return The response of the route.
+     */
     public Response invoke(Request request, Session database) {
         Action action = uri2Action.get(request.getUri());
         log.info("Router: invoke: action: {}", action);
@@ -62,6 +89,12 @@ public class Router {
         }
     }
 
+    /**
+     * Action class. Used to store the action of a route.
+     *
+     * @param object The controller to call.
+     * @param method The method to call.
+     */
     private record Action(Object object, Method method) {
 
         public Object call(Request request, Session database) {

@@ -13,6 +13,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Callable;
 
+/**
+ * NettyClient class.
+ */
 public class NettyClient implements Callable<NettyHandler> {
     private static final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private final String host;
@@ -23,15 +26,20 @@ public class NettyClient implements Callable<NettyHandler> {
         this.port = port;
     }
 
+    /**
+     * Connect to a server.
+     *
+     * @return The netty handler.
+     */
     @Override
     public NettyHandler call() {
         try {
             NettyHandler handler = new NettyHandler();
 
-            Bootstrap b = new Bootstrap(); // (1)
-            b.group(workerGroup); // (2)
-            b.channel(NioSocketChannel.class); // (3)
-            b.option(ChannelOption.SO_KEEPALIVE, true); // (4)
+            Bootstrap b = new Bootstrap();
+            b.group(workerGroup);
+            b.channel(NioSocketChannel.class);
+            b.option(ChannelOption.SO_KEEPALIVE, true);
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(@NotNull SocketChannel ch) throws Exception {
@@ -40,11 +48,11 @@ public class NettyClient implements Callable<NettyHandler> {
             });
 
             // Start the client.
-            ChannelFuture f = b.connect(host, port).syncUninterruptibly(); // (5)
+            ChannelFuture f = b.connect(host, port).syncUninterruptibly();
 
             return handler;
         } finally {
-//            workerGroup.shutdownGracefully();
+
         }
     }
 }
