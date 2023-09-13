@@ -27,6 +27,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class LibraryBookController {
+
+    /**
+     * deal with client request for book adding in library
+     * @param request from client with uri and role
+     * @param database database
+     * @return response, ok or bad request
+     */
     @RouteMapping(uri = "library/addBook", role = "library_staff")
     public Response addBook(Request request, org.hibernate.Session database) {
         LibraryBook newBook = IEntity.fromJson(request.getParams().get("book"), LibraryBook.class);
@@ -49,6 +56,12 @@ public class LibraryBookController {
         return Response.Common.ok();
     }
 
+    /**
+     * deal with client request of book delete in library, however not used
+     * @param request client request with uri and role
+     * @param database database
+     * @return response, ok or error
+     */
     @RouteMapping(uri = "library/deleteBook", role = "library_staff")
     public Response deleteBook(Request request, org.hibernate.Session database) {
         String id = request.getParams().get("uuid");
@@ -66,6 +79,12 @@ public class LibraryBookController {
         return Response.Common.ok();
     }
 
+    /**
+     * deal with client request of book borrow in library
+     * @param request client request with uri and role
+     * @param database database
+     * @return response, ok or error
+     */
     @RouteMapping(uri = "library/borrowBook", role = "library_staff")
     public Response borrowBook(Request request, org.hibernate.Session database) {
         try {
@@ -101,13 +120,14 @@ public class LibraryBookController {
         }
     }
 
+    /**
+     * deal with client request of book information update in library, the role is staff
+     * @param request client request with uri and role
+     * @param database database
+     * @return response, ok or bad request
+     */
     @RouteMapping(uri = "library/updateBook", role = "library_staff")
     public Response updateBook(Request request, org.hibernate.Session database) {
-        /*
-            when users borrow a book or the administrator update some books' information manually,
-            some book information will be updated with this method
-         */
-
         LibraryBook newBook = IEntity.fromJson(request.getParams().get("book"), LibraryBook.class);
         LibraryBook toUpdate = database.get(LibraryBook.class, newBook.getUuid());
         if (toUpdate == null) {
@@ -128,6 +148,13 @@ public class LibraryBookController {
         return Response.Common.ok();
     }
 
+    /**
+     * deal with client request of book search in library
+     *      use keyword params to do like query
+     * @param request from client with uri and role
+     * @param database database
+     * @return response, error or ok
+     */
     @RouteMapping(uri = "library/searchBook")
     public Response searchBook(Request request, org.hibernate.Session database) {
         try {
