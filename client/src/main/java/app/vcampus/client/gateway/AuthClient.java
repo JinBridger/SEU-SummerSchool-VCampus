@@ -1,6 +1,7 @@
 package app.vcampus.client.gateway;
 
 import app.vcampus.client.net.NettyHandler;
+import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.User;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
@@ -21,8 +22,8 @@ public class AuthClient {
         try {
             Response response = BaseClient.sendRequest(handler, request);
             if (response.getStatus().equals("success")) {
-                Map<String, String> data = (Map<String, String>) response.getData();
-                return User.fromMap(data);
+                String data = ((Map<String, String>) response.getData()).get("user");
+                return IEntity.fromJson(data, User.class);
             } else {
                 throw new RuntimeException("Failed to login");
             }

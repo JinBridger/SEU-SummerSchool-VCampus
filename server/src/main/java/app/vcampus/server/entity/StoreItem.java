@@ -44,38 +44,4 @@ public class StoreItem implements IEntity {
     @Column(columnDefinition = "TEXT")
     public String description;
 
-
-//    public static StoreItem fromMap(Map<String, String> data) {
-//        try {
-//            StoreItem storeItem = new StoreItem();
-//
-//            storeItem.setUuid(UUID.fromString(data.get("uuid")));
-//            storeItem.setItemName(data.get("itemName"));
-//            storeItem.setPrice(Integer.parseInt(data.get("price")));
-//            storeItem.setPictureLink(data.get("pictureLink"));
-//            storeItem.setBarcode(data.get("barcode"));
-//            storeItem.setStock(Integer.parseInt(data.get("stock")));
-//            storeItem.setSalesVolume(Integer.parseInt(data.get("salesVolume")));
-//            storeItem.setDescription(data.get("description"));
-//
-//            return storeItem;
-//        } catch (Exception e) {
-//            log.warn("Failed to parse storeitem from map:{}", data, e);
-//            return null;
-//        }
-//    }
-//
-//    public Map<String, String> toMap() {
-//        return Map.ofEntries(
-//                Map.entry("uuid", getUuid().toString()),
-//                Map.entry("itemName", getItemName()),
-//                Map.entry("price", getPrice().toString()),
-//                Map.entry("pictureLink",getPictureLink()),
-//                Map.entry("barcode", getBarcode()),
-//                Map.entry("stock", getStock().toString()),
-//                Map.entry("salesVolume",getSalesVolume().toString()),
-//                Map.entry("description", getDescription())
-//        );
-//    }
-
 }

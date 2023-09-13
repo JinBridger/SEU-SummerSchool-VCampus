@@ -79,8 +79,8 @@ public class StudentStatusClient {
         try {
             Response response = BaseClient.sendRequest(handler, request);
             if (response.getStatus().equals("success")) {
-                Map<String, String> data = (Map<String, String>) response.getData();
-                return Student.fromMap(data);
+                String data = ((Map<String, String>) response.getData()).get("student");
+                return IEntity.fromJson(data, Student.class);
             } else {
                 throw new RuntimeException("Failed to get self");
             }

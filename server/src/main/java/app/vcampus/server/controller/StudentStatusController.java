@@ -2,6 +2,7 @@ package app.vcampus.server.controller;
 
 import app.vcampus.server.entity.IEntity;
 import app.vcampus.server.entity.Student;
+import app.vcampus.server.entity.User;
 import app.vcampus.server.utility.Database;
 import app.vcampus.server.utility.Request;
 import app.vcampus.server.utility.Response;
@@ -35,7 +36,7 @@ public class StudentStatusController {
         database.merge(newStudent);
         tx.commit();
 
-        return Response.Common.ok(newStudent.toMap());
+        return Response.Common.ok(Map.of("student", newStudent.toJson()));
     }
 
     /**
@@ -53,12 +54,18 @@ public class StudentStatusController {
         Student student = database.get(Student.class, cardNumber);
 
         if (student == null) {
-            return Response.Common.error("no such card number");
+            if (request.getSession().permission("student")) {
+                User user = database.get(User.class, cardNumber);
+                student = Student.getStudent(user);
+                Transaction tx = database.beginTransaction();
+                database.persist(student);
+                tx.commit();
+            } else {
+                return Response.Common.error("no such card number");
+            }
         }
 
-        System.out.println(student.toMap());
-
-        return Response.Common.ok(student.toMap());
+        return Response.Common.ok(Map.of("student", student.toJson()));
     }
 
 

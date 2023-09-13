@@ -43,34 +43,4 @@ public class StoreTransaction implements IEntity {
     @Transient
     public StoreItem item;
 
-//    public static StoreTransaction fromMap(Map<String, String> data) {
-//        try {
-//            StoreTransaction storeTransaction = new StoreTransaction();
-//
-//            storeTransaction.setUuid(UUID.fromString(data.get("uuid")));
-//            storeTransaction.setItemUUID(UUID.fromString(data.get("itemUUID")));
-//            storeTransaction.setItemPrice(Integer.parseInt(data.get("itemPrice")));
-//            storeTransaction.setAmount(Integer.parseInt(data.get("amount")));
-//            storeTransaction.setCardNumber(Integer.parseInt("cardNumber"));
-//            storeTransaction.setTime(LocalDateTime.parse(data.get("time")));
-//            storeTransaction.setRemark(data.get("remark"));
-//
-//            return storeTransaction;
-//        } catch (Exception e) {
-//            log.warn("Failed to parse student from map:{}", data, e);
-//            return null;
-//        }
-//    }
-//
-//    public Map<String, String> toMap() {
-//        return Map.ofEntries(
-//                Map.entry("uuid", getUuid().toString()),
-//                Map.entry("itemUUID", getItemUUID().toString()),
-//                Map.entry("itemPrice", getItemPrice().toString()),
-//                Map.entry("amount", getAmount().toString()),
-//                Map.entry("cardNumber", getCardNumber().toString()),
-//                Map.entry("time", getTime().toString()),
-//                Map.entry("remark", getRemark())
-//        );
-//    }
 }

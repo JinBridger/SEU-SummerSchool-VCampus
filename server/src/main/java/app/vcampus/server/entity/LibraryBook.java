@@ -80,44 +80,4 @@ public class LibraryBook implements IEntity {
         }
     }
 
-
-    /**
-     * fromMap method, parse book object from map data, however not used
-     * @param data book info data as a map
-     * @return the parsed book object from map
-     */
-    public static LibraryBook fromMap(Map<String, String> data) {
-        try {
-            LibraryBook book = new LibraryBook();
-            book.setUuid(UUID.fromString(data.get("uuid")));
-            book.setName(data.get("name"));
-            book.setIsbn(data.get("isbn"));
-            book.setPlace(data.get("place"));
-            book.setPress(data.get("press"));
-            book.setDescription(data.get("description"));
-            book.setBookStatus(BookStatus.valueOf(data.get("bookStatus")));
-            book.setAuthor(data.get("author"));
-            return book;
-        } catch (Exception e) {
-            log.warn("fail to parse book from map");
-            return null;
-        }
-    }
-
-    /**
-     * toMap method, turn a book object to map data,however not used
-     * @return the map data corresponding to the book object
-     */
-    public Map<String, String> toMap() {
-        return Map.ofEntries(
-                Map.entry("uuid", getUuid().toString()),
-                Map.entry("name", getName()),
-                Map.entry("place", getName()),
-                Map.entry("press", getPress()),
-                Map.entry("isbn", getIsbn()),
-                Map.entry("description", getDescription()),
-                Map.entry("bookStatus", getBookStatus().toString()),
-                Map.entry("author", getAuthor())
-        );
-    }
 }
