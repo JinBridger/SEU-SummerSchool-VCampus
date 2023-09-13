@@ -1,10 +1,17 @@
 package app.vcampus.server;
 
 import app.vcampus.server.controller.*;
+import app.vcampus.server.entity.Course;
+import app.vcampus.server.entity.TeachingClass;
 import app.vcampus.server.net.NettyServer;
 import app.vcampus.server.utility.Database;
+import app.vcampus.server.utility.Pair;
 import app.vcampus.server.utility.router.Router;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Main class of the server.
@@ -45,7 +52,7 @@ public class Main {
 //        database.persist(user);
 //        tx.commit();
 
-//        Transaction tx = database.beginTransaction();
+        Transaction tx = database.beginTransaction();
 //        TeachingClass teachingClass = new TeachingClass();
 //        teachingClass.setUuid(UUID.randomUUID());
 //        teachingClass.setCourseUuid(UUID.randomUUID());
@@ -60,20 +67,20 @@ public class Main {
 //        Transaction tx = database.beginTransaction();
 //        Course course = new Course();
 //        course.setUuid(UUID.randomUUID());
-//        course.setCourseId("BJSL0123");
-//        course.setCourseName("Kotlin 101");
+//        course.setCourseId("BJSL0456");
+//        course.setCourseName("专业技能实训");
 //        course.setSchool("计算机科学与工程学院");
-//        course.setCredit(4);
+//        course.setCredit(3);
 //        database.persist(course);
 //        tx.commit();
 
 //        TeachingClass teachingClass = new TeachingClass();
 //        teachingClass.setUuid(UUID.randomUUID());
-//        teachingClass.setCourseUuid(UUID.fromString("b2a1bce1-a65d-407b-bcbe-08bf941ae144"));
-//        teachingClass.setSchedule(List.of(new Pair<>(new Pair<>(1, 16), new Pair<>(1, new Pair<>(1, 4)))));
+//        teachingClass.setCourseUuid(course.getUuid());
+//        teachingClass.setSchedule(List.of(new Pair<>(new Pair<>(1, 16), new Pair<>(2, new Pair<>(1, 4))), new Pair<>(new Pair<>(4, 8), new Pair<>(5, new Pair<>(6, 8)))));
 //        teachingClass.setTeacherId(123456);
-//        teachingClass.setPlace("教八 201");
-//        teachingClass.setCapacity(15);
+//        teachingClass.setPlace("金智楼");
+//        teachingClass.setCapacity(60);
 //        database.persist(teachingClass);
 
 //        SelectedClass selectedClass = new SelectedClass();

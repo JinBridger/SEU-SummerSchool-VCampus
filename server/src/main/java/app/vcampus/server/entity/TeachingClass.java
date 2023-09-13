@@ -57,10 +57,13 @@ public class TeachingClass implements IEntity {
 
     public String humanReadableSchedule() {
         StringBuilder content = new StringBuilder();
+        String currentSeparator = "";
         for (Pair<Pair<Integer, Integer>, Pair<Integer, Pair<Integer, Integer>>> pair : schedule) {
+            content.append(currentSeparator);
             content.append(pair.getFirst().getFirst()).append("-").append(pair.getFirst().getSecond()).append(" 周，");
             content.append("周").append(TextUtility.intToChineseWeek(pair.getSecond().getFirst())).append(" ");
             content.append(pair.getSecond().getSecond().getFirst()).append("-").append(pair.getSecond().getSecond().getSecond()).append(" 节");
+            currentSeparator = "\n";
         }
 
         return content.toString();
