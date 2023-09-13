@@ -78,6 +78,7 @@ fun modifyItemSubscene(viewModel: ShopViewModel) {
                         EditStoreItem(it, isEditable = true, onEdit = { storeItem ->
                             viewModel.modifyStoreItem.updateStoreItem(storeItem)
                         })
+                        Spacer(modifier = Modifier.height(10.dp))
                     }
                 }
             }
