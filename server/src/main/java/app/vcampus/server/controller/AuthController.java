@@ -8,6 +8,12 @@ import app.vcampus.server.utility.Session;
 import app.vcampus.server.utility.router.RouteMapping;
 
 public class AuthController {
+    /**
+     * for user to log in by cardNumber and password
+     * @param request  from client with role and uri
+     * @param database database
+     * @return return response which contains the cardNumber and roles
+     */
     @RouteMapping(uri = "auth/login")
     public Response login(Request request, org.hibernate.Session database) {
         String cardNum = request.getParams().get("cardNum");
@@ -37,6 +43,12 @@ public class AuthController {
         return response;
     }
 
+    /**
+     * for user to logout
+     * @param request  from client with role and uri
+     * @param database database
+     * @return response with OK or error
+     */
     @RouteMapping(uri = "auth/logout")
     public Response logout(Request request, org.hibernate.Session database) {
         Response response = Response.Common.ok();
@@ -50,3 +62,4 @@ public class AuthController {
         return Response.Common.ok();
     }
 }
+

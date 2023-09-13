@@ -30,6 +30,11 @@ public class Course implements IEntity {
     @Transient
     public List<TeachingClass> teachingClasses;
 
+    /**
+     * The Map object conatins key-value pairs that represent the properties of course.
+     * @param data data of course
+     * @return  return a course from the map.
+     */
     public static Course fromMap(Map<String, String> data) {
         try {
             Course course = new Course();
@@ -46,6 +51,12 @@ public class Course implements IEntity {
 
     }
 
+
+    /**
+     * The Map object contains key-value pairs that represent the properties of course
+     *  The method initializes the Map object with the following key-value pairs:
+     * @return  a Map object.
+     */
     public Map<String, String> toMap() {
         return Map.ofEntries(
                 Map.entry("uuid", getUuid().toString()),
@@ -57,3 +68,4 @@ public class Course implements IEntity {
     }
 
 }
+

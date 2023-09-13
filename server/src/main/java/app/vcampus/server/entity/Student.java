@@ -49,6 +49,10 @@ public class Student implements IEntity {
     @Column(nullable = false)
     public PoliticalStatus politicalStatus;
 
+
+    /*
+    Used by the administrator to add a new student
+     */
     public static Student getStudent(User user) {
         Student student = new Student();
         student.setCardNumber(user.getCardNum());
@@ -65,6 +69,10 @@ public class Student implements IEntity {
         return student;
     }
 
+    /*
+    creates a new Student object from a Map object.
+    The Map object contains key-value pairs that represent the properties of the Student object.
+     */
     public static Student fromMap(Map<String, String> data) {
         try {
             Student student = new Student();
@@ -85,7 +93,11 @@ public class Student implements IEntity {
             return null;
         }
     }
-
+    /*
+    returns a map object from a Map object.
+    The method initializes the Map object with the following key-value pairs:
+    The Map object contains key-value pairs that represent the properties of the Student object.
+    */
     public Map<String, String> toMap() {
         return Map.ofEntries(
                 Map.entry("cardNumber", getCardNumber().toString()),
@@ -102,3 +114,4 @@ public class Student implements IEntity {
         );
     }
 }
+

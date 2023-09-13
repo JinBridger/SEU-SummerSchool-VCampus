@@ -18,6 +18,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class FinanceController {
+    /**
+     *  solve client to get the user's financecard which contains cardNumber and balance
+     *   The constraint is the card != null
+     * @param request  from client with role and uri
+     * @param database datebase
+     * @return  it returns an “OK” response with a map containing a JSON string representing the finance card information
+     */
     @RouteMapping(uri = "finance/card/getSelf", role = "finance_user")
     public Response getSelfCard(Request request, org.hibernate.Session database) {
         Integer cardNumber = request.getSession().getCardNum();
@@ -36,6 +43,13 @@ public class FinanceController {
         return Response.Common.ok(Map.of("card", card.toJson()));
     }
 
+    /**
+     * solve client to get the user's financecard by cardNumber
+     * The constr
+     * @param request  from client with role and uri
+     * @param database datebase
+     * @return  it returns an “OK” response with a map containing a JSON string representing the finance card information
+     */
     @RouteMapping(uri = "finance/card/getByCardNumber", role = "finance_staff")
     public Response getByCardNumber(Request request, org.hibernate.Session database) {
         Integer cardNumber = Integer.parseInt(request.getParams().get("cardNumber"));
@@ -49,6 +63,12 @@ public class FinanceController {
         return Response.Common.ok(Map.of("card", card.toJson()));
     }
 
+    /**
+     * update the Financecard
+     * @param request  from client with role and uri
+     * @param database database
+     * @return  it returns an “OK” response with a map containing a JSON string representing the finance card information
+     */
     @RouteMapping(uri = "finance/card/update", role = "finance_staff")
     public Response updateCard(Request request, org.hibernate.Session database) {
         FinanceCard newCard = IEntity.fromJson(request.getParams().get("card"), FinanceCard.class);
@@ -64,6 +84,12 @@ public class FinanceController {
         return Response.Common.ok(Map.of("card", newCard.toJson()));
     }
 
+    /**
+     *  recharge the card with the request's cardNumber and amount
+     * @param request  from client with role and uri
+     * @param database database
+     * @return  it returns an “OK” response with a map containing a JSON string representing the finance card information
+     */
     @RouteMapping(uri = "finance/card/recharge", role = "finance_staff")
     public Response rechargeCard(Request request, org.hibernate.Session database) {
         Integer cardNumber = Integer.parseInt(request.getParams().get("cardNumber"));
@@ -91,6 +117,12 @@ public class FinanceController {
         return Response.Common.ok(Map.of("card", card.toJson()));
     }
 
+    /**
+     *
+     * @param request
+     * @param database
+     * @return
+     */
     @RouteMapping(uri = "finance/bills/getSelf", role = "finance_user")
     public Response getSelfBills(Request request, org.hibernate.Session database) {
         int cardNumber = request.getSession().getCardNum();
@@ -100,3 +132,4 @@ public class FinanceController {
         return Response.Common.ok(transactions.stream().map(CardTransaction::toJson).collect(Collectors.toList()));
     }
 }
+

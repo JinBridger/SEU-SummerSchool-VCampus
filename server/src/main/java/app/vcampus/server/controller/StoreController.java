@@ -16,6 +16,13 @@ import java.util.stream.Collectors;
 @Slf4j
 
 public class StoreController {
+    /**
+     * for shop_user to buy store item
+     * The constraints are buy's cardNumber != null, the item != null, the stock is enough,the balance is enough
+     * @param request  from client with role and uri
+     * @param database database
+     * @return the response with ok or error
+     */
     @RouteMapping(uri = "store/buy", role = "shop_user")
     public Response buy(Request request, org.hibernate.Session database) {
         try {
@@ -75,6 +82,12 @@ public class StoreController {
         }
     }
 
+    /**
+     * get all store transaction now
+     * @param request  from client with role and uri
+     * @param database database
+     * @return return list<StoreTransaction>
+     */
     @RouteMapping(uri = "store/user/getAllTransactions", role = "shop_user")
     public Response getAllTransactions(Request request, org.hibernate.Session database) {
         try {
@@ -86,6 +99,12 @@ public class StoreController {
         }
     }
 
+    /**
+     * for shop_staff to get todaySales
+     * @param request  from client with role and uri
+     * @param database database
+     * @returnit returns an “OK” response with a map containing a JSON string representing the salesVolume information
+     */
     @RouteMapping(uri = "store/staff/getTodaySales", role = "shop_staff")
     public Response getTodaySales(Request request, org.hibernate.Session database) {
         try {
@@ -103,6 +122,13 @@ public class StoreController {
         }
     }
 
+    /**
+     * for shop_staff to search store Item
+     * The constraints is the keyword != null
+     * @param request  from client with role and uri
+     * @param database database
+     * @return response with the searched Items
+     */
     @RouteMapping(uri = "storeItem/searchItem")
     public Response searchItem(Request request, org.hibernate.Session database) {
         try {
@@ -121,6 +147,13 @@ public class StoreController {
         }
     }
 
+    /**
+     * for shop_staff to search store Item by itemID
+     * The constraints is the uuid != null and storeItem != null
+     * @param request  from client with role and uri
+     * @param database database
+     * @return response with the searched Items
+     */
     @RouteMapping(uri = "storeItem/searchId")
     public Response searchId(Request request, org.hibernate.Session database) {
         try {
@@ -138,6 +171,12 @@ public class StoreController {
         }
     }
 
+    /**
+     * for shop_user to get all store items
+     * @param request  from client with role and uri
+     * @param database database
+     * @return response with the all items
+     */
     @RouteMapping(uri = "store/filter", role = "shop_user")
     public Response filter(Request request, org.hibernate.Session database) {
         try {
@@ -150,6 +189,13 @@ public class StoreController {
         }
     }
 
+    /**
+     * for shop_staff to add store item
+     * The constraints is the newStoreItem != null
+     * @param request  from client with role and uri
+     * @param database database
+     * @return  response with ok or error
+     */
     @RouteMapping(uri = "storeItem/addItem", role = "shop_staff")
     public Response addItem(Request request, org.hibernate.Session database) {
         StoreItem newStoreItem = IEntity.fromJson(request.getParams().get("item"), StoreItem.class);
@@ -178,6 +224,12 @@ public class StoreController {
         return Response.Common.ok();
     }
 
+    /**
+     * for shop_staff to get transaction records
+     * @param request  from client with role and uri
+     * @param database datebase
+     * @return   it returns an “OK” response with a map containing a list of JSON strings representing the transaction records grouped by date
+     */
     @RouteMapping(uri = "storeTransaction/getRecords", role = "shop_staff")
     public Response getRecords(Request request, org.hibernate.Session database) {
         try {
@@ -195,7 +247,12 @@ public class StoreController {
             return Response.Common.error("Failed to get transaction records");
         }
     }
-
+    /**
+     * for shop_staff to search store transaction
+     * @param request  from client with role and uri
+     * @param database database
+     * @return  it returns an “OK” response with a map containing a JSON string representing storeTransaction
+     */
     @RouteMapping(uri = "storeTransaction/searchTransaction")
     public Response searchTransaction(Request request, org.hibernate.Session database) {
         try {
@@ -213,6 +270,12 @@ public class StoreController {
         }
     }
 
+    /**
+     * for shop_staff to update store item
+     * @param request  from client with role and uri
+     * @param database database
+     * @return response with ok or error
+     */
     @RouteMapping(uri = "storeItem/updateItem", role = "shop_staff")
     public Response updateItem(Request request, org.hibernate.Session database) {
         StoreItem newItem = IEntity.fromJson(request.getParams().get("storeItem"), StoreItem.class);
@@ -224,3 +287,4 @@ public class StoreController {
         return Response.Common.ok();
     }
 }
+

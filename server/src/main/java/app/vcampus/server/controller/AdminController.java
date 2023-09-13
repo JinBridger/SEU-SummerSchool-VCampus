@@ -16,6 +16,14 @@ import java.util.List;
 
 @Slf4j
 public class AdminController {
+    /**
+     * Solve client to add a new user for admin
+     *     At the same time, If the user has a role of “student”,
+     *     it creates a new Student object using the Student.getStudent() method and persists it to the database as well.
+     * @param request  from client with role and uri
+     * @param database database
+     * @return a response which is ok or error
+     */
     @RouteMapping(uri = "admin/user/add", role = "admin")
     public Response addUser(Request request, org.hibernate.Session database) {
         try {
@@ -37,6 +45,16 @@ public class AdminController {
         }
     }
 
+
+    /**
+     * search the users in the database for admin
+     *     two parameters: a Request object and a Session object.
+     *     If the keyword is null or blank, it loads all user data using the loadAllData()
+     *     Otherwise, it performs a like query on the User class using the likeQuery() s with the specified search fields and keyword.
+     * @param request  from client with role and uri
+     * @param database database
+     * @return The method then returns an “OK” response with a list of JSON strings representing the matching users.
+     */
     @RouteMapping(uri = "admin/user/search", role = "admin")
     public Response searchUser(Request request, org.hibernate.Session database) {
         try {
@@ -54,6 +72,18 @@ public class AdminController {
         }
     }
 
+    /**
+     *     modify the user's roles for admin.
+     *     search by the user's cardNumber
+     *     If the user is not found,it returns an error response with a message “User not found”.
+     *     Otherwise, it updates the user’s password and roles based on the values of the password and roleStr parameters.
+     *     If password is not null or blank, it hashes the password using the Password.hash() method and sets it as the new password for the user.
+     *     If roleStr is not null or blank, it splits it into an array of roles using a comma as a delimiter and sets it as the new roles for the user.
+     *     If roleStr is null or blank, it sets an empty array as the new roles for the user.
+     * @param request  from client with role and uri
+     * @param database database
+     * @return a response which is ok or error
+     */
     @RouteMapping(uri = "admin/user/modify", role = "admin")
     public Response modifyUser(Request request, org.hibernate.Session database) {
         try {
@@ -86,3 +116,4 @@ public class AdminController {
         }
     }
 }
+

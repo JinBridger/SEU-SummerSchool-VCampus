@@ -12,6 +12,12 @@ import java.util.Map;
 
 @Slf4j
 public class StudentStatusClient {
+    /*
+    Used to search Student's information
+    @@param keyword -- search keyword
+    if response is success , return List<Student>
+    else throw an exception
+     */
     public static List<Student> searchInfo(NettyHandler handler,
                                            String keyword) {
         Request request = new Request();
@@ -35,6 +41,12 @@ public class StudentStatusClient {
         }
     }
 
+    /*
+    Used to update the information of an existing student
+    @param student -- the new student's information to update
+    if response is success , return true
+    else throw an exception
+    */
     public static boolean updateInfo(NettyHandler handler, Student student) {
         Request request = new Request();
         request.setUri("student/updateInfo");
@@ -55,6 +67,11 @@ public class StudentStatusClient {
         }
     }
 
+    /*
+    Used to get the information of the student who is now logged in
+    if response is success , return the Student , it will contain the student's information
+    else throw an exception
+    */
     public static Student getSelf(NettyHandler handler) {
         Request request = new Request();
         request.setUri("student/getSelf");
@@ -74,3 +91,4 @@ public class StudentStatusClient {
     }
 
 }
+

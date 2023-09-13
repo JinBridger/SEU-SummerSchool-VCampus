@@ -15,12 +15,14 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class StudentStatusController {
-    /*
-    Solve client to update student status information and update to the database
-    The constraints are cardNumber  != null and when no such student throw exception
-    Test passed on 2023/08/27
-    Test : {"uri":"student/updateInfo","params":{"cardNumber":"1000","studentNumber":"15","major":"2","school":"2"}}
-    */
+    /**
+     *    Solve client to update student status information and update to the database
+     *     The constraint is cardNumber  != null and when no such student throw exception
+     *     Test passed on 2023/08/27
+     * @param request  from client with role and uri
+     * @param database database
+     * @return  it returns an “OK” response with a map containing a JSON string representing the student information
+     */
     @RouteMapping(uri = "student/updateInfo", role = "affairs_staff")
     public Response updateInfo(Request request, org.hibernate.Session database) {
         Student newStudent = IEntity.fromJson(request.getParams().get("student"), Student.class);
@@ -36,6 +38,14 @@ public class StudentStatusController {
         return Response.Common.ok(newStudent.toMap());
     }
 
+    /**
+     * Solve client to get now student status information
+     *     The constraint are cardNumber  != null and when no such student throw exception
+     *     Test passed on 2023/08/27
+     * @param request  from client with role and uri
+     * @param database database
+     * @return  it returns an “OK” response with a map containing a JSON string representing the student information
+     */
     @RouteMapping(uri = "student/getSelf", role = "student")
     public Response getSelf(Request request, org.hibernate.Session database) {
         Integer cardNumber = request.getSession().getCardNum();
@@ -51,6 +61,14 @@ public class StudentStatusController {
         return Response.Common.ok(student.toMap());
     }
 
+
+    /**
+     *    Solve client to search student status information and update to the database
+     *     The constraint is that students obtained by keyword search are not empty
+     * @param request  from client with role and uri
+     * @param database database
+     * @return  it returns an “OK” response with a map list containing a JSON string representing the student information
+     */
     @RouteMapping(uri = "student/filter", role = "affairs_staff")
     public Response filter(Request request, org.hibernate.Session database) {
         try {
@@ -69,3 +87,4 @@ public class StudentStatusController {
         }
     }
 }
+
