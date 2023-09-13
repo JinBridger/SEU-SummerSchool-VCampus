@@ -50,12 +50,15 @@ fun classItem(className: String, teacherName: String, position: String) {
  */
 fun isHereClass(
     allClass: MutableList<TeachingClass>, weekday: Int,
-    section: Int
+    section: Int,
+    week: Int = 1
 ): TeachingClass? {
-    allClass.forEach {
-        if (it.schedule[0].second.first == weekday) {
-            if (it.schedule[0].second.second.first <= section && section <= it.schedule[0].second.second.second) {
-                return it
+    allClass.forEach { tc ->
+        tc.schedule.forEach {
+            if (week >= it.first.first && week <= it.first.second && it.second.first == weekday) {
+                if (it.second.second.first <= section && section <= it.second.second.second) {
+                    return tc
+                }
             }
         }
     }
@@ -69,7 +72,7 @@ fun isHereClass(
  * @param viewModel the viewmodel of the subscene
  */
 @Composable
-fun classTable(viewModel: TeachingAffairsViewModel) {
+fun classTable(viewModel: TeachingAffairsViewModel, currentWeek: Int = 1) {
     Box(Modifier.fillMaxWidth().height(700.dp)) {
         // TABLE
         Row(Modifier.fillMaxSize()) {
@@ -184,7 +187,7 @@ fun classTable(viewModel: TeachingAffairsViewModel) {
                     while (index <= 13) {
                         val classHere = isHereClass(
                             viewModel.myClasses.selected,
-                            weekday, index
+                            weekday, index, currentWeek
                         )
                         if (classHere != null) {
                             Box(
