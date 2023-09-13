@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.pageTitle
 import app.vcampus.client.viewmodel.LibraryViewModel
@@ -25,7 +26,15 @@ fun borrowSubscene(viewModel: LibraryViewModel) {
 
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().onPreviewKeyEvent {event:KeyEvent
+        ->
+            if(event.type== KeyEventType.KeyDown&&event.key== Key.Enter){
+                viewModel.borrowBook(bookUuid, cardId)
+                true
+            }else{
+                false
+            }
+        }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {

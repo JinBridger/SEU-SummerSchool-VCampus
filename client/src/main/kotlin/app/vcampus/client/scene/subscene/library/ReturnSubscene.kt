@@ -8,11 +8,10 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,10 +27,18 @@ import app.vcampus.client.viewmodel.LibraryViewModel
 @Composable
 fun returnSubscene(viewModel: LibraryViewModel) {
     var keyword by viewModel.returnBook.cardNumber
+    var flag by remember { mutableStateOf(false) }
 
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().onPreviewKeyEvent {event:KeyEvent
+        ->
+            if(event.type== KeyEventType.KeyDown&&event.key== Key.Enter){
+                viewModel.returnBook.getRecords()
+                flag=true
+                true
+            }else{false}
+        }
     ) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             item {
@@ -57,7 +64,10 @@ fun returnSubscene(viewModel: LibraryViewModel) {
                     Column {
                         Spacer(Modifier.height(8.dp))
                         Button(
-                            onClick = { viewModel.returnBook.getRecords() },
+                            onClick = {
+                                viewModel.returnBook.getRecords()
+                                flag=true
+                                      },
                             modifier = Modifier.height(56.dp)
                         ) {
                             Icon(Icons.Default.Search, "")
@@ -88,6 +98,11 @@ fun returnSubscene(viewModel: LibraryViewModel) {
                         Spacer(Modifier.height(10.dp))
                     }
                 }
+            }else if(flag){
+                item {
+                    Text("未检索到此用户", fontSize = 14.sp)
+                }
+
             }
 
             item {
