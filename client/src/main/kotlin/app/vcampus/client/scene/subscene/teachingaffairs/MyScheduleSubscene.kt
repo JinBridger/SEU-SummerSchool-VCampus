@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.vcampus.client.scene.components.classTable
 import app.vcampus.client.scene.components.pageTitle
+import app.vcampus.client.scene.components.sarasaUiSc
 import app.vcampus.client.viewmodel.TeachingAffairsViewModel
 
 /**
@@ -57,7 +58,7 @@ fun myScheduleSubscene(viewModel: TeachingAffairsViewModel) {
 
                     Spacer(Modifier.width(20.dp))
 
-                    Text("第 $currentWeek 周", fontSize = 20.sp)
+                    Text("第 $currentWeek 周", fontSize = 20.sp, fontFamily = sarasaUiSc)
 
                     Spacer(Modifier.width(20.dp))
 
