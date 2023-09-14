@@ -62,7 +62,7 @@
 }
 
     \vspace{0.5cm}
-    {\large 版本：\texttt{1.0.0-draft}}
+    {\large 版本：\texttt{1.0.0-release}}
 
     
 \vspace{0.5cm}
@@ -111,13 +111,13 @@
 为了实现对于用户的统一管理，我们设计了统一登录验证模块。实现对于用户的管理、登录、鉴权。
 
 \paragraph{学生学籍管理}
-为了实现学生学籍管理，我们设计了学籍管理模块，支持学生修改个人学籍信息以及教务员审核。
+为了实现学生学籍管理，我们设计了学籍管理模块，支持学生修改个人学籍信息以及教务老师审核。
 
 \paragraph{选课系统}
-为了实现选课系统，我们设计了教务管理模块，支持学生选课、教师导出名单、教务员修改课程排课等功能。
+为了实现选课系统，我们设计了教务管理模块，支持学生选课、教师导出名单、课程成绩导入等功能。
 
 \paragraph{图书馆}
-参照东南大学图书馆，我们设计了图书馆管理模块，支持预约借还书、查询书籍。并支持工作人员修改书籍信息以及添加新书。
+参照东南大学图书馆，我们设计了图书馆管理模块，支持查询馆藏书籍、查看用户已借书籍，同时支持工作人员修改书籍信息、添加新书以及办理借还书的登记业务。
 
 \paragraph{商店}
 为了实现商店功能，我们设计了商店模块，支持用户选购商品并线上结算支付。同时支持工作人员导入货物，修改信息等。
@@ -235,7 +235,7 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
                 \hline
                 1 & 登录 & \texttt{login} & 使用密码登录\\
                 2 & 登出 & \texttt{logout} & 退出登录\\
-                3 & 重置密码 & \texttt{resetPassword} & 验证后重置密码\\
+                % 3 & 重置密码 & \texttt{resetPassword} & 验证后重置密码\\
                 \hline
         \end{tabular}}
         \end{table}
@@ -250,7 +250,7 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
                 \hline
                 1 & 登录 & \texttt{login} & 使用密码登录\\
                 2 & 登出 & \texttt{logout} & 退出登录\\
-                3 & 重置密码 & \texttt{resetPassword} & 验证后重置密码\\
+                % 3 & 重置密码 & \texttt{resetPassword} & 验证后重置密码\\
                 \hline
         \end{tabular}}
         \end{table}
@@ -263,30 +263,31 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 \subsection{需求分析}
 
 \paragraph{学生端}
-学生可以通过该模块查看、更新、填写自己的学籍信息相关内容，比如一卡通号、学号、专业编号及名称、学院编号及名称、学籍状态、入学时间等。
+学生可以通过该模块查看自己的学籍信息相关内容，比如一卡通号、学号、专业名称、学院名称、学籍状态、入学时间、籍贯、政治面貌。
 
 \paragraph{教务端}
-教务管理人员可以通过该模块审核、管理、修改相关学生的学籍信息。在学生首次填写及后续更改自己的学籍信息后，教务负责审核该信息是否合法、正确。并且可以根据学院相关规章、要求对学生的信息进行后台更改。
+教务管理人员可以通过该模块查找、管理、修改相关学生的学籍信息。在学生首次填写自己的学籍信息后，教务端可以查询显示现有的所有学生的学籍信息，并且可以对学生的学籍信息进行更改。
 \begin{center}
-\includegraphics[width=0.8\textwidth]{fig/student-status-demand-flowchart.pdf}
+\includegraphics[width=\textwidth]{fig/studentStatus2.pdf}
 \end{center}
 \subsection{系统设计}
 \subsubsection{界面设计}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/profile-interface.pdf}}
+\shadowbox{\includegraphics[width=\textwidth]{fig/studentStatusFigure1.png}}
 \textbf{学生端操作界面}
 \end{center}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/profile-dashboard-interface.pdf}}
+\shadowbox{\includegraphics[width=\textwidth]{fig/studentStatus-teacher.png}}
 \textbf{教务端操作界面}
 \end{center}
 
 \subsubsection{模块流程图}
 \begin{center}
-\includegraphics[width=0.5\textwidth]{fig/student-status-flowchart.pdf}
+\includegraphics[width=0.5\textwidth]{fig/studentStatus (1).pdf}
 \end{center}
+
 \subsubsection{类分析}
 \begin{enumerate}
     \item 
@@ -295,55 +296,26 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
     学生类：\texttt{Student}
         \begin{table}[H]
         \centering
-            \setlength{\tabcolsep}{6mm}{
+            \setlength{\tabcolsep}{2mm}{
                 \begin{tabular}{ccccc}
                 \hline
                 序号&名称    & 类型 & 约束  & 备注\\
                 \hline
                 1&\texttt{cardNumber} & \texttt{Integer} & 9位数字 & 一卡通号\\
                 2&\texttt{studentNumber} & \texttt{String} & 8位数字 & 学号\\
-                3&\texttt{major}  & \texttt{Integer} & & 专业编号用于索引\\
-                4&\texttt{school} & \texttt{Integer} & & 学院编号用于索引\\
-                5&\texttt{status}  & \texttt{enum} &  & 学籍状态(在读/离职等)\\
-                6&\texttt{enrollment} &\texttt{calendar} & &入学日期(年/月/日)\\
+                3&\texttt{major}  & \texttt{Strirng} & & 专业名称\\
+                4&\texttt{school} & \texttt{String} & & 学院名称\\
+                5&\texttt{status}  & \texttt{enum} & 枚举类型 & 学籍状态(在籍/毕业/退学等)\\
+                6&\texttt{enrollment} &\texttt{calendar} &YYYY-MM-DD &入学日期(年/月/日)\\
                 7&\texttt{birthPlace}  &\texttt{String}  &  &籍贯\\
-                8&\texttt{politicalStat}    &\texttt{enum}  &    &政治面貌\\
+                8&\texttt{politicalStat}    &\texttt{enum}  & 枚举类型&政治面貌\\
+                9&\texttt{gender}    &\texttt{enum}  & 枚举类型&性别\\
+                10&\texttt{givenName}    &\texttt{String}  &    &名\\
+                11&\texttt{familyName}    &\texttt{String}  &    &姓\\
                 \hline
         \end{tabular}}
         \end{table}
 
-
-    专业类(存放专业编号及名称)：\texttt{Major}
-
-\begin{table}[H]
-  \centering
-  \setlength{\tabcolsep}{10mm}{
-    \begin{tabular}{ccccc}
-    \hline
-    序号&名称    & 类型 & 约束  & 备注\\
-    \hline
-    1&\texttt{majorNum} & \texttt{Integer} &  & 专业编号\\
-    2&\texttt{majorName} & \texttt{String} & & 专业名称\\
-    \hline
-    \end{tabular}}
-\end{table}
-
-
-学院类(存放学院编号及名称)：\texttt{School}
-
-\begin{table}[H]
-  \centering
-  \setlength{\tabcolsep}{10mm}{
-    \begin{tabular}{ccccc}
-    \hline
-    序号&名称    & 类型 & 约束  & 备注\\
-    \hline
-    1&\texttt{schoolNum} & \texttt{Integer} &  & 学院编号\\
-    2&\texttt{schoolName} & \texttt{String} & & 学院名称\\
-    \hline
-    \end{tabular}}
-\end{table}
-    \newpage
     \item \textbf{服务类}
 
     客户端：\texttt{StudentStatusClient}
@@ -354,28 +326,26 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
                 \hline
                 序号 & 名称    & 方法    & 备注\\
                 \hline
-                1 & 发送  &\texttt{stuInfoFetch}   &发request\\
-                2 & 添加  &\texttt{requestInfo}    &发送个人信息\\
-                3 & 更新  &\texttt{updataInfo}     &更新个人信息\\
-                4 & 修改  &\texttt{modifyInfo}     &修改个人信息\\
-                5 & 保存  &\texttt{saveInfo}       &保存个人信息\\
+                1 & 搜索学生学籍相关信息  &\texttt{searchInfo}   &搜索学生信息\\
+                2 & 发送请求更新  &\texttt{updateInfo}    &修改个人信息\\
+                3 & 发送获得请求  &\texttt{getSelf}     &得到个人信息\\
                 \hline
         \end{tabular}}
     \end{table}
 
+    \newpage
+
     服务器端：\texttt{StudentStatusController}
     \begin{table}[H]
         \centering
-            \setlength{\tabcolsep}{10mm}{
+            \setlength{\tabcolsep}{4mm}{
                 \begin{tabular}{cccc}
                 \hline
                 序号 & 名称    & 方法    & 备注\\
                 \hline
-                1 & 添加个人信息    & \texttt{addInfoHandle}  &添加个人信息\\
-                2 & 删除个人信息    & \texttt{deleteInfoHandle} &删除个人信息\\
-                3 & 更新个人信息    & \texttt{updateInfoHandle}  &更新个人信息\\
-                4 & 暂存个人信息    & \texttt{saveInfoHandle}     &暂存个人信息\\
-                5 & 修改个人信息    & \texttt{modifyInfoHandle}    &修改个人信息\\
+                1 & 得到当前学生学籍信息  &\texttt{getSelf}   &得到当前学生学籍信息\\
+                2 & 接受请求搜索学生信息  &\texttt{filter}    &搜索学生信息\\
+                3 & 接受请求更新学生信息  &\texttt{updateInfo}     &修改个人信息\\
                   \hline
         \end{tabular}}
     \end{table}
@@ -389,40 +359,71 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
   用于管理教务的相关信息。
 \subsection{需求分析}
 
-\paragraph{课程管理功能} 包括课程创建与编辑、课程计划以及课程信息发布功能。
+% \paragraph{课程管理功能} 包括课程创建与编辑、课程计划以及课程信息发布功能。
 
-·课程创建与编辑：教务管理员能够创建新的课程，指定课程名称、课程编号、学分、授课老师、开设学院等信息，并可以编辑课程信息。
+% ·课程创建与编辑：教务管理员能够创建新的课程，指定课程名称、课程编号、学分、授课老师、开设学院等信息，并可以编辑课程信息。
 
-·课程计划：管理员可以制定每学期的课程计划，安排各门课程的时间、地点和教师，确保课程表的合理性和平衡性。
+% ·课程计划：管理员可以制定每学期的课程计划，安排各门课程的时间、地点和教师，确保课程表的合理性和平衡性。
 
-·课程信息发布：将课程信息、教师信息、教室信息等发布给学生和教师，以便学生能够及时了解课程安排。
+% ·课程信息发布：将课程信息、教师信息、教室信息等发布给学生和教师，以便学生能够及时了解课程安排。
 
-\paragraph{排课功能}
-教务员能够根据不同专业的学生人数及课程相关信息，排出合理课程表，避免时间冲突。
+% \paragraph{排课功能}
+% 教务员能够根据不同专业的学生人数及课程相关信息，排出合理课程表，避免时间冲突。
 
 \paragraph{成绩管理功能}
 教师能够录入学生的考试成绩和平时成绩，并提供学生查询自己的成绩。
+
+\paragraph{评教功能}
+学生可以根据教学情况对老师的教学提出评价，包括对于授课各个方面的打分以及提出意见。
+
+\paragraph{成绩录入功能}
+老师或教务老师能够根据权限给学生添加成绩。
+
+\paragraph{选课和退课功能}
+学生根据意向选课或退课，当课容量已满时便不可以选课。
+
+\paragraph{错误和异常处理}
+当用户遇到异常情况时，模块都将给出相应的处理。
 
 \subsection{系统设计}
 \subsubsection{界面设计}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/affair-interface.pdf}}
-\textbf{学生端操作界面}
+\shadowbox{\includegraphics[width=\textwidth]{fig/TeachingAffairs_ClassTable.png}}
+\textbf{我的课表操作界面}
 \end{center}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/affair-teacher-interface.pdf}}
-\textbf{教师端操作界面}
+\shadowbox{\includegraphics[width=\textwidth]{fig/TeachingAffairs_myGrades.png}}
+\textbf{查看我的成绩界面操作界面}
 \end{center}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/affair-dashboard-interface.pdf}}
-\textbf{教务端操作界面}
+\shadowbox{\includegraphics[width=\textwidth]{fig/TeachingAffairs_myClass.png}}
+\textbf{查看教学班信息操作界面}
+\end{center}
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/TeachingAffairs_AcquireEvaluation.png}}
+\textbf{查看评教结果操作界面}
+\end{center}
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/TeachingAffairs_selectClass.png}}
+\textbf{查选课操作界面}
+\end{center}
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/TeachingArrairs_addEvaluation.png}}
+\textbf{添加评教操作界面}
+\end{center}
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/TeachingAffairs_recordGrade.png}}
+\textbf{录入成绩操作界面}
 \end{center}
 
 \subsubsection{模块流程图}
-
 \begin{center}
 \includegraphics[width=0.7\textwidth]{fig/affair-flowchart.pdf}
 \end{center}
@@ -443,8 +444,8 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
     \hline
     1&\texttt{cardNumber} & \texttt{Integer}   & 9位数字  & 学生一卡通号 \\
     2&\texttt{studentNumber} & \texttt{Integer}   & 8位数字  & 学号 \\
-    3&\texttt{major} & \texttt{Integer}   &  & 专业编号 \\
-    4&\texttt{school} & \texttt{Integer}   &  & 学院编号 \\
+    3&\texttt{major} & \texttt{String}   &  & 专业 \\
+    4&\texttt{school} & \texttt{String}   &  & 学院 \\
     5&\texttt{status} & \texttt{enum}   &  & 学籍状态 \\
     6&\texttt{enrollment} & \texttt{calendar}   &  & 入学日期 \\
     7&\texttt{birthPlace} & \texttt{String}   &  & 籍贯 \\
@@ -469,7 +470,7 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
     \end{tabular}%
 \end{table}%
 
-教学班的基本信息类：\texttt{Class}
+教学班的基本信息类：\texttt{TeachingClass}
 
 \begin{table}[H]
   \centering
@@ -478,17 +479,41 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
     序号&名称    & 类型    & 约束    & 备注 \\
     \hline
     1&\texttt{uuid}  & \texttt{UUID}  &       & 唯一标识符，用作主键 \\
-    2&\texttt{courseId} & \texttt{Integer}   &       & 课程编号 \\
+    2&\texttt{courseUuid} & \texttt{UUID}   &       & 课程标识符 \\
     3&\texttt{courseName} & \texttt{String} &       & 课程名 \\
-    4&\texttt{teacherId} & \texttt{Integer}   &       & 教师编号 \\
-    5&\texttt{schedule} & \texttt{String} &       & 上课信息 \\
-    6&\texttt{place} & \texttt{string} &  & 上课地点 \\
-    7&\texttt{capacity} & \texttt{String} &       & 上课信息 \\
+    4&\texttt{SelectRecord} & \texttt{selectRecord}   & 学生所选课程的基本信息类      &  \\
+    5&\texttt{teacherId} & \texttt{Integer} &       & 教师ID \\
+    6&\texttt{schedule} & \texttt{JSON} &  & 上课信息 \\
+    7&\texttt{place} & \texttt{String} &       & 上课地点 \\
+    8&\texttt{capacity} & \texttt{Integer} &       & 课容量 \\
+    9&\texttt{selectedCount} & \texttt{Integer} &       & 选课人数 \\
+    10&\texttt{isEvaluated} & \texttt{Boolean} &       & 是否评教 \\
+    11&\texttt{evaluationResult} & \texttt{Pair} &       & 评教结果 \\
     \hline
     \end{tabular}%
 \end{table}%
 
-学生所选课程的基本信息类：\texttt{SelectedClass}
+\newpage
+
+成绩的基本信息类：\texttt{Grades}
+\begin{table}[H]
+  \centering
+    \begin{tabular}{ccccc}
+    \hline
+    序号&名称    & 类型    & 约束    & 备注 \\
+    \hline
+    1&\texttt{general}  & \texttt{Integer}  &       & 平时成绩 \\
+    2&\texttt{midterm} & \texttt{Integer}   &  & 期中考试成绩 \\
+    3&\texttt{finalExam} & \texttt{Integer} &       & 期末考试 \\
+    4&\texttt{total} & \texttt{Integer} &       & 总成绩 \\
+    5&\texttt{classMax} & \texttt{Integer} &       & 最高分 \\
+    6&\texttt{classMin} & \texttt{Integer} &       & 最低分 \\
+    7&\texttt{classAvg} & \texttt{Double} &       & 平均成绩 \\
+    \hline
+    \end{tabular}%
+\end{table}%
+
+学生所选课程的基本信息类：\texttt{SelectedRecord}
 
 \begin{table}[H]
   \centering
@@ -498,42 +523,66 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
     \hline
     1&\texttt{uuid}  & \texttt{UUID}  &       & 唯一标识符，用作主键 \\
     2&\texttt{classUuid} & \texttt{UUID}  &       & 课程uuid \\
-    3&\texttt{studentId} & \texttt{Integer}   & 9位数字  & 学生一卡通号 \\
-    4&\texttt{selectTime} & \texttt{String} &       & 选课时间 \\
-    5&\texttt{grade} & \texttt{Integer}   & 不超过三位数字 & 学生的课程分数 \\
+    3&\texttt{cardNumber} & \texttt{Integer}   & 9位数字  & 学生一卡通号 \\
+    4&\texttt{grade} & \texttt{Grades} &       & 学生成绩 \\
+    5&\texttt{selectTime} & \texttt{Date}   &  & 选课时间 \\
+    6&\texttt{student} & \texttt{Student}   &  & 选课学生 \\
     \hline
     \end{tabular}%
 \end{table}
 
-\newpage
+学生对老师的评教信息类：\texttt{TeachingEvaluation}
+
+\begin{table}[H]
+  \centering
+    \begin{tabular}{ccccc}
+    \hline
+    序号&名称    & 类型    & 约束    & 备注 \\
+    \hline
+    1&\texttt{uuid}  & \texttt{UUID}  &       & 唯一标识符，用作主键 \\
+    2&\texttt{classUuid} & \texttt{UUID}  &       & 课程uuid \\
+    3&\texttt{studentId} & \texttt{Integer}   &  & 学生学号 \\
+    4&\texttt{result} & \texttt{List<Integer>} &       & 评教结果 \\
+    5&\texttt{comment} & \texttt{String}   &  & 评价内容 \\
+    \hline
+    \end{tabular}%
+\end{table}
 
 \item \textbf{服务类}
 
-{客户端：\texttt{TeachingAffairsClient}
+{服务端：\texttt{TeachingAffairsController}
     \begin{table}[H]
         \centering
-            \setlength{\tabcolsep}{6mm}{
+            \setlength{\tabcolsep}{2mm}{
                 \begin{tabular}{cccc}
                 \hline
                 序号    & 名称    & 方法    & 备注\\
                 \hline
-                1 & 获取课程信息 & \texttt{getCourseInfo} & 获取课程id，名称，上课地点，老师id等
+                1 & 获取课堂信息 & \texttt{getSelectedClasses} & 获取教学班id，名称，上课地点，老师id等
 \\
-                2 & 获取成绩 & \texttt{getGrade} & 获取课程成绩
+                2 & 提交评教 & \texttt{submitEvaluation} & 提交评教结果
 \\
-                3 & 添加课程 & \texttt{addCourse} & 创建新的课程
+                3 & 添加课程 & \texttt{getSelectableCourses} & 获取已选课程信息
 \\
-                4 & 在线排课 & \texttt{scheduleClass} & 排课
+                4 & 评教 & \texttt{evaluateClass} & 评教
 \\
-                5 & 录入学生成绩  & \texttt{enterGrades} & 录入学生成绩
+                5 & 选课  & \texttt{selectClass} & 学生选课
 \\
-                6 & 教学班信息获取  & \texttt{getClassInfo} & 查看课程班的学生
+                6 & 退课  & \texttt{dropClass} & 学生退课
+\\
+                7 & 获取教学班信息  & \texttt{getMyClasses} & 查看课程班的学生
+\\
+                8 & 导出名单  & \texttt{exportStudentList} & 导出学生名单
+\\
+                9 & 获取成绩  & \texttt{getGradeTemplate} & 获取学生成绩信息
+\\
+                10 & 导入成绩  & \texttt{importGrade} & 导入学生成绩
 \\
          \hline
         \end{tabular}}
         \end{table}
 
-        服务端：\texttt{TeachingAffairsController}
+        客户端：\texttt{TeachingAffairsClient}
     \begin{table}[H]
         \centering
             \setlength{\tabcolsep}{6mm}{
@@ -541,18 +590,25 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
                 \hline
                 序号    & 名称    & 方法    & 备注\\
                 \hline
-                1 & 获取课程信息 & \texttt{getCourseInfo} & 根据学号返回课程id，名称，上课地点等
+                1 & 获取已选课程信息 & \texttt{getSelectedClasses} & 
 \\
-                2 & 获取成绩 & \texttt{getGrade} & 根据学号返回课程成绩
+                2 & 发送评教信息 & \texttt{sendEvaluationResult} & 发送评教信息
 \\
-                3 & 添加课程 & \texttt{addCourse} & 创建新的课程
+                3 & 获取可选课程信息 & \texttt{getSelectableCourses} & 获取可选课程信息
 \\
-                4 & 在线排课 & \texttt{scheduleClass} & 排课
+                4 & 选课 & \texttt{chooseClass} & 学生选课
 \\
-                5 & 录入学生成绩  & \texttt{enterGrades} & 录入学生成绩
+                5 & 退课 & \texttt{dropClass} & 学生退课
 \\
-                6 & 教学班信息获取  & \texttt{getClassInfo} & 查看课程班的全部学生
+                6 & 教学班信息获取 & \texttt{getMyTeachingClasses} & 用于老师查看学生
 \\
+                7 & 学生信息获取 & \texttt{exportStudentList} & 导出学生名单
+\\
+                8 & 导出成绩信息 & \texttt{exportGradeTemplate} &  批量导出学生信息
+\\
+                9 & 导入成绩信息 & \texttt{exportGradeTemplate} &  导入学生信息
+\\
+
          \hline
         \end{tabular}}
         \end{table}}
@@ -560,7 +616,8 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 
 \section{图书馆模块设计说明}
 \subsection{模块背景}
-用于管理书籍数据信息，为学生提供借阅、查询等服务并记录图书馆书籍借阅状况.
+用于管理书籍数据信息，为学生提供借阅、查询等服务并记录图书馆书籍借阅状况，为管理员提供登记借还书，添加图书、修改图书等功能。
+
 \subsection{需求分析}
 
 \paragraph{书籍信息管理}
@@ -570,27 +627,42 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 用户在使用图书馆模块时，应该能够查询图书馆馆藏状态，查找到对应的图书信息，包括借阅状态、藏书地点等，需要提供相关接口实现还书、更改书籍状态，同时用户在图书馆模块的账户信息需要存储在数据库中。
 
 \paragraph{借阅记录}
-图书馆模块需要记录书籍的借阅记录以便查询和追踪，需要记录的信息包括借出书名、借书人、操作类型（借书/还书）以及操作时间等。
+图书馆模块需要记录书籍的借阅记录以便查询和追踪，需要记录的信息包括借出书名、借书人、操作类型（借书/还书）以及借书时间、应还时间等。
 
 \paragraph{错误及异常处理}
-当遇到用户所借书籍不存在或者已被借阅，用户逾期未还书以及其他异情况时，模块都应给出相应处理。
+当遇到用户所借书籍不存在或者已被借阅，用户逾期未还书以及其他异情况时，模块都应给出相应处理或提示。
 
 \subsection{系统设计}
 \subsubsection{界面设计}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/library-interface.pdf}}
+\shadowbox{\includegraphics[width=\textwidth]{fig/library-book-search.png}}
 \textbf{图书馆检索界面}
 \end{center}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/library-search-interface.pdf}}
-\textbf{检索结果页面}
+\shadowbox{\includegraphics[width=\textwidth]{fig/library-mybook.png}}
+\textbf{查看已借书籍页面}
 \end{center}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/library-dashboard-interface.pdf}}
-\textbf{图书馆管理页面}
+\shadowbox{\includegraphics[width=\textwidth]{fig/library-addbookScene.png}}
+\textbf{添加图书页面}
+\end{center}
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/library-updateBookScene.png}}
+\textbf{修改图书页面}
+\end{center}
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/library-returnBookScene.png}}
+\textbf{办理还书页面}
+\end{center}
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/library-borrowBookScene.png}}
+\textbf{办理借书页面}
 \end{center}
 
 \subsubsection{模块流程图}
@@ -598,7 +670,7 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
     \includegraphics[width=0.8\textwidth]{fig/library-flowchart.pdf}
 \end{center}
 
-\newpage
+% \newpage
 
 \subsubsection{类分析}
 \begin{enumerate}
@@ -615,7 +687,7 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
     \hline
   1& \texttt{uuid} & \texttt{UUID} & & 图书编号 \\
   2&  \texttt{name}  & \texttt{String} & &书名 \\
-  3&  \texttt{isbn}  & \texttt{String} &ISBN格式 &ISBN \\
+  3&  \texttt{isbn}  & \texttt{String} & ISBN 格式 &ISBN \\
   4&  \texttt{author} & \texttt{String} & &作者 \\
   5&  \texttt{press} & \texttt{String} & &出版社 \\
   6&  \texttt{description} & \texttt{String} & &简介 \\
@@ -644,12 +716,13 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
   \label{tab:addlabel}%
 \end{table}%
 
+\newpage
 
 图书借阅记录类：\texttt{LibraryTransaction}
 
 \begin{table}[H]
   \centering
-  \setlength{\tabcolsep}{4mm}{
+  \setlength{\tabcolsep}{2mm}{
     \begin{tabular}{ccccc}
     \hline
    序号& 名称    & 类型    & 约束&备注 \\
@@ -657,8 +730,9 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
     1& \texttt{uuid} &  \texttt{UUID}  & &表内唯一标识信息 \\
     2& \texttt{bookUuid} &  \texttt{UUID}  & &书UUID \\
     3& \texttt{userId} &  \texttt{Integer}   & 9位数字&借阅者一卡通 \\
-    4& \texttt{action} &  \texttt{enum}  & &借入/借出 \\
-    5& \texttt{time}  &  \texttt{LocalDateTime} & &操作时间 \\
+    4& \texttt{borrowTime} &  \texttt{Date}  & &借书时间 \\
+    5& \texttt{dueTime}  &  \texttt{Date} & 晚于借书时间一个月以上&到期时间 \\
+    6& \texttt{book} & \texttt{LibraryBook} & &所借书籍对象     \\
     \hline
     \end{tabular}}
 \end{table}%
@@ -669,37 +743,48 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 客户端：\texttt{LibraryClient}
     \begin{table}[H]
         \centering
-        \setlength{\tabcolsep}{6mm}{
+        \setlength{\tabcolsep}{2mm}{
         \begin{tabular}{cccc}
         \hline
         序号&名称&方法&备注  \\
         \hline
-        1&  检索图书 & \texttt{libFindBooks} & 用户检索书籍   \\
-        2& 选择书籍 &  \texttt{libSelectBook}& 用户检索界面选择书籍浏览信息\\
-        3& 预约借书 & \texttt{libBorrowBook} & 用户点击预约借书 \\
-        4& 预约还书 & \texttt{libReturnBook}  & 用户预约还书  \\
-        5& 图书入库 & \texttt{libAddBook} & 管理员采购书籍，图书入库\\
-        6& 信息修改 & \texttt{libModifyInfo} & 管理员修改图书信息\\
-        7& 查询借阅记录 & \texttt{libRecordQuery} & 管理员查询图书借阅记录    \\
+        1&  检索图书 & \texttt{searchBook} & 用户检索书籍   \\
+        2& 获取所借书籍 &  \texttt{getMyRecords}& 用户浏览所借书籍清单\\
+        3& 预约借书 & \texttt{borrowBook} & 用户点击预约借书 \\
+        4& 登记还书 & \texttt{returnBook}  & 管理员登记还书  \\
+        5& 预添加书籍 & \texttt{preAddBook} & 管理员输入ISBN，获取要添加图书的信息\\
+        6& 信息修改 & \texttt{updateBook} & 管理员修改图书信息\\
+        7& 删除图书 & \texttt{deleteBook} & 管理员删除图书   \\
+        8& 获取借出图书信息 & \texttt{staffGetRecords} & 管理员获取所有借出书籍   \\
+        9& 删除图书 & \texttt{deleteBook} & 管理员删除图书   \\
+        10& 用户续借 & \texttt{userRenewBook} & 用户续借图书   \\
+        11& 管理员续借 & \texttt{staffRenewBook} & 管理员续借图书   \\
         \hline
         \end{tabular}}
     \end{table}
 
-\newpage
+%\newpage
 
-服务器端：\texttt{LibraryController}
+服务器端：\texttt{LibraryBookController}
     \begin{table}[H]
         \centering
-        \setlength{\tabcolsep}{6mm}{
+        \setlength{\tabcolsep}{2mm}{
         \begin{tabular}{cccc}
         \hline
         序号&名称&方法&备注  \\
         \hline
-        1&  返回检索信息 & \texttt{libGetBooks} & 依据用户的检索词返回对应的图书信息   \\
-        2& 返回书籍信息 & \texttt{libGetBookInfo} & 根据用户选择返回对应的书籍具体信息 \\
-        3& 状态修改& \texttt{libStatusModify} & 根据用户操作修改图书状态 \\
-        4& 信息修改 & \texttt{libUpdateInfo} & 根据管理员修改的信息更新数据库\\
-        5& 记录展示 & \texttt{libRecordShow} & 展示近期图书借阅记录\\
+        1&  返回检索信息 & \texttt{isbn} & 依据管理员输入的ISBN一键获取对应的图书信息   \\
+        2& 搜索图书 & \texttt{searchBook} & 根据用户输入的关键词进行模糊搜索 \\
+        3& 用户记录& \texttt{userRecords} & 响应请求，返回用户借书记录 \\
+        4& 信息修改 & \texttt{updateBook} & 响应客户端修改图书请求\\
+        5& 新增图书 & \texttt{addBook} & 响应客户端新增图书请求   \\
+        6& 删除图书 & \texttt{deleteBook} & 响应客户端删除请求   \\
+        7& 借阅图书 & \texttt{borrowBook} & 响应客户端借书请求   \\
+        8& 续借图书 & \texttt{renew} & 响应客户端用户续借请求   \\
+        9& 续借图书 & \texttt{staffRenew} & 响应客户端管理员续借请求   \\
+        10& 借书记录展示 & \texttt{staffRecords} & 响应客户端管理员查询借出书籍的请求   \\
+        11& 登记归还 & \texttt{returnBook} & 响应客户端还书请求   \\
+        
         \hline
         \end{tabular}}
     \end{table}
@@ -707,6 +792,8 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 
 
 \end{enumerate}
+
+\newpage
 
 \section{商店模块设计说明}
 \subsection{模块背景}
@@ -717,7 +804,7 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 模块应支持不同的用户角色，如学生和商店管理员。不同角色应有不同的权限，例如学生可以浏览商品、下单购买，管理员可以管理用户、商品和订单。
 
 \paragraph{用户认证和安全性}
-用户需要登录账号后才能进入模块，确保信息安全。支付密码应该进行加密存储。同时，应该实施合适的安全措施，防止恶意攻击和数据泄露。
+用户需要登录账号后才能进入模块，确保信息安全。同时，应该实施合适的安全措施，防止恶意攻击和数据泄露。
 
 \paragraph{商品管理}
 管理员应该能够添加、编辑和删除商品，并统计商品的销售情况。每个商品应该有名称、价格、库存数量、条形码等属性。商品应该有简洁的描述，以便用户更了解商品信息。
@@ -726,7 +813,7 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 用户浏览商店，选择感兴趣的商品，并进行结算。结算应该能够显示商品交易金额、交易时间，并支持添加备注，然后进行线上支付。
 
 \paragraph{数据统计和分析}
-模块可以提供各种商品销量报告、热门商品统计、用户购买习惯等数据分析功能，帮助管理员做出更好的经营决策。
+模块可以提供各种商品销量报告等数据分析功能，帮助管理员做出更好的经营决策。
 
 \paragraph{用户界面和体验}
 用户界面应该友好、易用，并且能够突出商品特性和详细信息。响应式设计和良好的用户体验是至关重要的。
@@ -738,18 +825,28 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 \subsubsection{界面设计}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/store-interface.pdf}}
+\shadowbox{\includegraphics[width=\textwidth]{fig/shop-page.png}}
 \textbf{商店选购页面}
 \end{center}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/store-check-interface.pdf}}
-\textbf{商店结算页面}
+\shadowbox{\includegraphics[width=\textwidth]{fig/transactions-page.png}}
+\textbf{商店订单页面}
 \end{center}
 
 \begin{center}
-\shadowbox{\includegraphics[width=\textwidth]{fig/store-dashboard-interface.pdf}}
-\textbf{商店管理页面}
+\shadowbox{\includegraphics[width=\textwidth]{fig/add item-page.png}}
+\textbf{商店管理页面：添加商品}
+\end{center}
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/update item-page.png}}
+\textbf{商店管理页面：修改商品}
+\end{center}
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/sales report-page.png}}
+\textbf{商店管理页面：查看后台信息}
 \end{center}
 
 \subsubsection{模块流程图}
@@ -774,11 +871,13 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
                 序号    & 名称    & 类型    & 约束    & 备注\\
                 \hline
                 1 & \texttt{uuid} & \texttt{UUID}   &  & 商品编号\\
-                2 & \texttt{name} & \texttt{String} & 不超过100个字符 & 商品名称\\
+                2 & \texttt{itemName} & \texttt{String} & 不超过100个字符 & 商品名称\\
                 3 & \texttt{price}  & \texttt{Integer} & 非负数 & 商品金额\\
-                4 & \texttt{barcode}  & \texttt{String} & 13个字符 & 商品条形码\\
-                5  & \texttt{stock}   & \texttt{Integer} & 非负数 & 商品库存数量\\
-                6 &\texttt{description}  & \texttt{String} &  &商品信息描述\\
+                4 & \texttt{pictureLink}  & \texttt{String} &  & 商品图片链接\\
+                5 & \texttt{barcode}  & \texttt{String} & 13个字符 & 商品条形码\\
+                6  & \texttt{stock}   & \texttt{Integer} & 非负数 & 商品库存数量\\
+                7 & \texttt{salesVolume}  & \texttt{Integer} & 非负数 & 商品销量\\
+                8 &\texttt{description}  & \texttt{String} &  &商品信息描述\\
                 \hline
         \end{tabular}}
         \end{table}
@@ -799,6 +898,7 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
     5 & \texttt{cardNumber} & \texttt{Integer} & 9位数字 & 交易关联一卡通号\\
     6 & \texttt{time} & \texttt{LocalDateTime}   &  & 交易的时间\\
     7 & \texttt{remark} & \texttt{String} & & 交易的备注信息\\
+    8 & \texttt{item} & \texttt{StoreItem} & & 交易中的商品\\
     \hline
     \end{tabular}}
 \end{table}
@@ -807,43 +907,51 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 {客户端：\texttt{StoreClient}
     \begin{table}[H]
         \centering
-            \setlength{\tabcolsep}{6mm}{
+            \setlength{\tabcolsep}{4mm}{
                 \begin{tabular}{cccc}
                 \hline
                 序号    & 名称    & 方法    & 备注\\
                 \hline
-                1 & 查找 & \texttt{retrieveItem} & 查找要购买的商品\\
-                2 & 选择 & \texttt{selectItem} & 选择要购买的商品\\
-                3 & 移除 & \texttt{removeItem} & 从购物车中移除商品\\
-                4 & 结算  & \texttt{settle} & 结算选择的商品总金额\\
-                5 & 支付  & \texttt{pay} & 输入密码进行支付\\
-                6 & 新增商品   & \texttt{createItem} & 管理员添加新的商品\\
-                7 & 删除商品  & \texttt{deleteItem} & 管理员删除商品\\
-                8 & 更新信息  & \texttt{updateInfo} & 管理员更新商品信息（价格、库存等）\\
-                9 & 查看报告  & \texttt{getReport} & 管理员查看销售报告\\
+                1 & 查找 & \texttt{searchItem} & 查找含有关键词的商品\\
+                2 & 购买 & \texttt{buyItems} & 支付选择的商品总金额\\
+                3 & 获取商品 & \texttt{getAll} & 获取数据库中所有的商品信息\\
+                4 & 获取交易记录  & \texttt{getAllTransaction} & 获取数据库中所有的商品交易信息\\
+                5 & 获取销量  & \texttt{getTodaySalesVolume} & 获取商品到今日的累计销量\\
+                6 & 根据ID查找  & \texttt{searchId} & 查找某ID的商品\\
+                7 & 查找交易  & \texttt{serachTransaction} & 查找含有关键词的交易记录\\
+                8 & 获取每日销量  & \texttt{getTransaction} & 获取按照日期降序排列的交易记录\\
+                9 & 创建交易  & \texttt{createTransaction} & 创建新的交易记录\\
+                10 & 新增商品   & \texttt{addItem} & 管理员添加新的商品\\
+                11 & 删除商品  & \texttt{deleteItem} & 管理员删除商品\\
+                12 & 更新信息  & \texttt{updateItem} & 管理员更新商品信息（价格、库存等）\\
+                13 & 查看报告  & \texttt{getReport} & 管理员查看销售情况\\
                 \hline
         \end{tabular}}
         \end{table}
 
-\newpage
+% \newpage
         
 服务器端：\texttt{StoreController}
     \begin{table}[H]
         \centering
-            \setlength{\tabcolsep}{6mm}{
+            \setlength{\tabcolsep}{2mm}{
                 \begin{tabular}{cccc}
                 \hline
                 序号    & 名称    & 方法    & 备注\\
                 \hline
-                1 & 查找 & \texttt{getItem} & 根据关键词查找商品，并返回匹配的商品\\
-                2 & 记录 & \texttt{selectItem} & 记录选择的商品信息\\
-                3 & 移除 & \texttt{removeItem} & 从记录中移除某个商品\\
-                4 & 结算  & \texttt{settle} & 结算选择的商品总金额\\
-                5 & 支付  & \texttt{pay} & 根据账号和密码进行支付\\
-                6 & 新增商品   & \texttt{createItem} & 管理员添加新的商品\\
-                7 & 删除商品  & \texttt{deleteItem} & 管理员删除商品\\
-                8 & 更新信息  & \texttt{updateInfo} & 管理员更新商品信息（价格、库存等）\\
-                9 & 查看报告  & \texttt{getReport} & 生成销售报告\\
+                1 & 查找 & \texttt{searchItem} & 查找并返回含有关键词的商品\\
+                2 & 购买 & \texttt{buy} & 计算并支付选择的商品总金额\\
+                3 & 获取商品 & \texttt{filter} & 获取并返回数据库中所有的商品信息\\
+                4 & 获取交易记录  & \texttt{getAllTransactions} & 获并返回取数据库中所有的商品交易信息\\
+                5 & 获取销量  & \texttt{getTodaySales} & 计算商品到今日的累计销量\\
+                6 & 根据ID查找  & \texttt{searchId} & 查找并返回某ID的商品\\
+                7 & 查找交易  & \texttt{serachTransaction} & 查找含有关键词的交易记录\\
+                8 & 获取每日销量  & \texttt{getRecords} & 将交易记录按照日期降序排序并返回交易记录\\
+                9 & 创建交易  & \texttt{createTransaction} & 创建新的交易记录\\
+                10 & 新增商品   & \texttt{addItem} & 管理员添加新的商品\\
+                11 & 删除商品  & \texttt{deleteItem} & 管理员删除商品\\
+                12 & 更新信息  & \texttt{updateItem} & 管理员更新商品信息（价格、库存等）\\
+                13 & 查看报告  & \texttt{getReport} & 统计并返回销售情况\\
                 \hline
         \end{tabular}}
         \end{table}}
@@ -852,7 +960,18 @@ Jetpack Compose 是Google针对Android推出的新一代声明式UI工具包，�
 
 \end{enumerate}
 
-\section{\texttt{TODO:} 其他选做模块}
+\section{其他选做模块}
+
+\subsection{GPT聊天支持}
+
+为了展示本项目的强大可扩展性，我们尝试添加了 GPT 聊天支持模块。该模块主要由 WebView 驱动，支持多轮对话与逐字显示。
+
+我们采用 JFXPanel 的方式将 JavaFX 自带的 WebView 嵌入至 Compose 中。最终效果如下图：
+
+\begin{center}
+\shadowbox{\includegraphics[width=\textwidth]{fig/gpt.png}}
+\textbf{GPT}
+\end{center}
 
 \section{公共模块设计说明}
 \subsection{消息信息模型}
@@ -987,6 +1106,8 @@ try {
 }
 \end{lstlisting}
 
+\newpage
+
 \begin{lstlisting}
 @Override
 public void channelRead(@NonNull ChannelHandlerContext ctx, @NonNull Object msg) {
@@ -1036,7 +1157,7 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
 \section{数据库设计说明}
 \subsection{元数据}
 
-共有14个数据库，名称以及说明如下表：
+共有12个数据库，名称以及说明如下表：
 
 \begin{table}[H]
   \centering
@@ -1047,15 +1168,13 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     \hline
     \texttt{user}  & 存储用户信息 \\
     \texttt{student} & 存储学生学籍信息 \\
-    \texttt{major} & 存储专业查询表\\
-    \texttt{school} & 存储学院查询表 \\
-    \texttt{accounting} & 存储财务账户信息 \\
+    \texttt{finance\_card} & 存储财务账户信息 \\
     \texttt{card\_transaction} & 存储财务交易记录\\
     \texttt{course} & 存储课程信息\\
     \texttt{class} & 存储教学班信息\\
-    \texttt{selected\_class} & 存储选课信息\\
+    \texttt{select\_record} & 存储选课信息\\
+    \texttt{teaching\_evaluation} & 存储评教信息\\
     \texttt{library\_book} & 存储图书馆馆藏书目信息\\
-    \texttt{library\_user} & 存储图书馆用户信息\\
     \texttt{library\_transaction} & 存储图书馆借还书记录\\
     \texttt{store\_item} & 存储商品信息\\
     \texttt{store\_transaction} & 存储商店交易记录\\
@@ -1099,55 +1218,24 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     \hline
     字段    & 类型 &约束   & 说明\\
     \hline
-    \texttt{card\_number} & \texttt{INT} & 9位数字 & 存一卡通号\\
-    \texttt{student\_number} & \texttt{VARCHAR} & 8位数字 & 存学号 \\
-    \texttt{major} & \texttt{INT} &  & 专业编号 \\
-    \texttt{school} & \texttt{INT}  & & 学院编号 \\
+    \texttt{cardNumber} & \texttt{INT} & 9位数字 & 一卡通号\\
+    \texttt{birthDate} & \texttt{DATETIME} &  & 出生日期\\
+    \texttt{birthPlace} & \texttt{VARCHAR} &  & 籍贯\\
+    \texttt{familyName} & \texttt{VARCHAR} &  & 姓氏\\
+    \texttt{gender} & \texttt{ENUM} &  & 性别\\
+    \texttt{givenName} & \texttt{VARCHAR} &  & 名字\\
+    \texttt{major} & \texttt{VARCHAR} &  & 专业 \\
+    \texttt{politicalStatus} & \texttt{ENUM} &  & 政治面貌 \\
+    \texttt{school} & \texttt{VARCHAR}  & & 学院 \\
     \texttt{status} & \texttt{ENUM} & & 学籍状态 \\
-    \texttt{enrollment} & \texttt{DATE} & & 入学日期 \\
-    \texttt{birth\_place} & \texttt{VARCHAR} & & 籍贯 \\
-    \texttt{political\_status} & \texttt{ENUM} & & 政治面貌\\
+    \texttt{studentNumber} & \texttt{VARCHAR} & & 学号\\
     \hline
     \end{tabular}}
 \end{table}
 
-\subsubsection{\texttt{major}表}
+\subsubsection{\texttt{finance\_card}表}
 
-\texttt{major}表用于存储专业编号对应的专业名称。
-
-\begin{table}[H]
-  \centering
-  \setlength{\tabcolsep}{10mm}{
-    \begin{tabular}{cccc}
-    \hline
-    字段    & 类型 &约束   & 说明\\
-    \hline
-    \texttt{major\_number} & \texttt{INT}  & & 专业编号\\
-    \texttt{major\_name} & \texttt{VARCHAR} & & 对应名称\\
-    \hline
-    \end{tabular}}
-\end{table}
-
-\subsubsection{\texttt{school}表}
-
-\texttt{school}表用于存储学院编号对应的学院名称。
-
-\begin{table}[H]
-  \centering
-  \setlength{\tabcolsep}{10mm}{
-    \begin{tabular}{cccc}
-    \hline
-    字段    & 类型  &约束  & 说明\\
-    \hline
-    \texttt{school\_number} & \texttt{INT} &  & 学院编号\\
-    \texttt{school\_name} & \texttt{VARCHAR} & & 对应名称\\
-    \hline
-    \end{tabular}}
-\end{table}
-
-\subsubsection{\texttt{accounting}表}
-
-\texttt{accounting}表用于存储所有人一卡通的余额以及状态。
+\texttt{finance\_card}表用于存储所有人一卡通的余额以及状态。
 
 \begin{table}[H]
   \centering
@@ -1156,9 +1244,9 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     \hline
     字段    & 类型  & 约束  & 说明\\
     \hline
-    \texttt{card\_number} & \texttt{INT} & 9位数字 & 存一卡通号\\
-    \texttt{balance} & \texttt{INT}  & 非负数 & 存卡内余额（以分为单位） \\
-    \texttt{card\_status} & \texttt{ENUM} & & 存一卡通状态\\
+    \texttt{cardNumber} & \texttt{INT} & 9位数字 & 一卡通号\\
+    \texttt{balance} & \texttt{INT}  & 非负数 & 卡内余额（以分为单位） \\
+    \texttt{status} & \texttt{ENUM} & & 一卡通状态\\
     \hline
     \end{tabular}}
 \end{table}
@@ -1175,13 +1263,16 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     字段    & 类型 & 约束   & 说明 \\
     \hline
     \texttt{uuid}  & \texttt{UUID} & & 表内唯一标识信息，用作主键\\
-    \texttt{card\_number} & \texttt{INT}  & 9位数字 & 存一卡通号 \\
-    \texttt{amount} & \texttt{INT}  & 非负数 & 存交易金额（以分为单位、带符号） \\
-    \texttt{time}  & \texttt{DATETIME} &  & 存交易时间 \\
-    \texttt{remark} & \texttt{TEXT} & & 备注\\
+    \texttt{cardNumber} & \texttt{INT}  & 9位数字 & 一卡通号 \\
+    \texttt{amount} & \texttt{INT}  & 非负数 & 交易金额（以分为单位、带符号） \\
+    \texttt{time}  & \texttt{DATETIME} &  & 交易时间 \\
+    \texttt{type}  & \texttt{ENUM} &  & 交易类型 \\
+    \texttt{description} & \texttt{VARCHAR} & & 备注\\
     \hline
     \end{tabular}}
 \end{table}
+
+\newpage
 
 \subsubsection{\texttt{course}表}
 
@@ -1195,10 +1286,10 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     字段    & 类型 & 约束   & 说明\\
     \hline
     \texttt{uuid}  & \texttt{UUID} &  & 表内唯一标识信息，用作主键\\
-    \texttt{course\_id} & \texttt{VARCHAR} & & 课程编号 \\
-    \texttt{course\_name} & \texttt{VARCHAR} & & 课程名称 \\
-    \texttt{school} & \texttt{INT}  & & 开设学院编号 \\
-    \texttt{credit} & \texttt{DECIMAL} & & 存课程学分\\
+    \texttt{courseId} & \texttt{VARCHAR} & & 课程编号 \\
+    \texttt{courseName} & \texttt{VARCHAR} & & 课程名称 \\
+    \texttt{school} & \texttt{VARCHAR}  & & 开设学院 \\
+    \texttt{credit} & \texttt{FLOAT} & & 课程学分\\
     \hline
     \end{tabular}}
 \end{table}
@@ -1215,9 +1306,8 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     字段    & 类型 & 约束   & 说明\\
     \hline
     \texttt{uuid}  & \texttt{UUID} & & 表内唯一标识信息，用作主键\\
-    \texttt{course\_id} & \texttt{VARCHAR} & & 课程编号 \\
-    \texttt{course\_name} & \texttt{VARCHAR} & & 课程名称 \\
-    \texttt{teacher\_id} & \texttt{INT} & 9位数字 & 教师一卡通号 \\
+    \texttt{courseUuid} & \texttt{VARCHAR} & & 课程编号 \\
+    \texttt{teacherId} & \texttt{INT} & 9位数字 & 教师一卡通号 \\
     \texttt{schedule} & \texttt{JSON}&  & 上课信息 \\
     \texttt{place} & \texttt{VARCHAR}& & 上课地点 \\
     \texttt{capacity} & \texttt{INT} &  & 课容量\\
@@ -1225,11 +1315,9 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     \end{tabular}}
 \end{table}
 
-\newpage
+\subsubsection{\texttt{select\_record}表}
 
-\subsubsection{\texttt{selected\_class}表}
-
-\texttt{selected\_class}表用于存储学生选课以及成绩信息。
+\texttt{select\_record}表用于存储学生选课以及成绩信息。
 
 \begin{table}[H]
   \centering
@@ -1239,17 +1327,37 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     字段    & 类型 & 约束   & 说明\\
     \hline
     \texttt{uuid}  & \texttt{UUID} & & 表内唯一标识信息，用作主键\\
-    \texttt{class\_uuid} & \texttt{UUID}&  & 存储教学班\texttt{uuid} \\
-    \texttt{student\_id} & \texttt{INT}&  9位数字 & 学生一卡通号 \\
-    \texttt{select\_time} & \texttt{DATETIME}& & 选课时间 \\
-    \texttt{grade} & \texttt{INT}& 不超过三位数字 & 成绩 \\
+    \texttt{classUuid} & \texttt{UUID}&  & 存储教学班\texttt{uuid} \\
+    \texttt{cardNumber} & \texttt{INT}&  9位数字 & 学生一卡通号 \\
+    \texttt{selectTime} & \texttt{DATETIME}& & 选课时间 \\
+    \texttt{grade} & \texttt{JSON}&  & 成绩 \\
     \hline
     \end{tabular}}
 \end{table}
 
-\subsubsection{\texttt{library\_book}表}
+\subsubsection{\texttt{teaching\_evaluation}表}
 
-\texttt{library\_book}表用于存储图书馆馆藏书目信息。
+\texttt{teaching\_evaluation}表用于存储学生评教信息。
+
+\begin{table}[H]
+  \centering
+  \setlength{\tabcolsep}{4mm}{
+    \begin{tabular}{cccc}
+    \hline
+    字段    & 类型 & 约束   & 说明\\
+    \hline
+    \texttt{uuid}  & \texttt{UUID} & & 表内唯一标识信息，用作主键\\
+    \texttt{classUuid} & \texttt{UUID}&  & 存储教学班\texttt{uuid} \\
+    \texttt{comment} & \texttt{TEXT}&   & 评教评论 \\
+    \texttt{result} & \texttt{JSON}& & 评教打分 \\
+    \texttt{studentId} & \texttt{INT}&  & 学生一卡通号 \\
+    \hline
+    \end{tabular}}
+\end{table}
+
+\subsubsection{\texttt{book}表}
+
+\texttt{book}表用于存储图书馆馆藏书目信息。
 
 \begin{table}[H]
   \centering
@@ -1263,31 +1371,14 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     \texttt{isbn}  & \texttt{VARCHAR}& ISBN格式 & ISBN \\
     \texttt{author} & \texttt{VARCHAR}& & 作者 \\
     \texttt{press} &  \texttt{VARCHAR}& & 出版社 \\
-    \texttt{description} & \texttt{VARCHAR}& & 简介 \\
+    \texttt{description} & \texttt{TEXT}& & 简介 \\
     \texttt{place} & \texttt{VARCHAR}& & 存放地点 \\
-    \texttt{status} & \texttt{ENUM}&  & 出借状态 \\
+    \texttt{bookStatus} & \texttt{ENUM}&  & 出借状态 \\
+    \texttt{call\_number} & \texttt{VARCHAR}&  & 索书号 \\
+    \texttt{cover} & \texttt{VARCHAR}&  & 封面图片链接 \\
     \hline
     \end{tabular}}
 \end{table}%
-
-\subsubsection{\texttt{library\_user}表}
-
-\texttt{library\_user}表用于存储图书馆用户信息。
-
-\begin{table}[H]
-  \centering
-    \setlength{\tabcolsep}{10mm}{
-    \begin{tabular}{cccc}
-    \hline
-    字段    & 类型  & 约束 & 说明\\
-    \hline
-    \texttt{user\_id} & \texttt{INT} & 9位数字& 用户一卡通号\\
-    \texttt{user\_status} & \texttt{ENUM} & & 用户状态 \\
-    \texttt{borrowed} & \texttt{INT} & 非负数 & 已借数量 \\
-    \texttt{max\_borrow} & \texttt{INT} & 非负数 & 总共可借数量\\
-    \hline
-    \end{tabular}}
-\end{table}
 
 \subsubsection{\texttt{library\_transaction}表}
 
@@ -1301,15 +1392,15 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     字段    & 类型 & 约束   & 说明\\
     \hline
     \texttt{uuid}  & \texttt{UUID} & & 表内唯一标识信息，用作主键\\
-    \texttt{book\_uuid} & \texttt{UUID} & & 书\texttt{uuid} \\
-    \texttt{user\_id} & \texttt{INT}  & 9位数字 & 一卡通 \\
-    \texttt{action} & \texttt{ENUM} & & 借入/借出 \\
-    \texttt{time}  & \texttt{DATETIME} &  & 操作时间\\
+    \texttt{bookUuid} & \texttt{UUID} & & 书\texttt{UUID} \\
+    \texttt{userId} & \texttt{INT}  & 9 位数字 & 一卡通 \\
+    \texttt{borrowTime} & \texttt{DATETIME}  &  & 借书时间 \\
+    \texttt{returnTime} & \texttt{DATETIME}  &  & 归还时间 \\
+    \texttt{dueTime} & \texttt{DATETIME} & & 应还时间 \\
     \hline
     \end{tabular}}
 \end{table}
 
-\newpage
 
 \subsubsection{\texttt{store\_item}表}
 
@@ -1323,14 +1414,18 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     字段    & 类型 & 约束  & 说明 \\
     \hline
     \texttt{uuid}  & \texttt{UUID} & & 表内唯一标识信息，用作主键 \\
-    \texttt{name}  & \texttt{VARCHAR} & 不超过100个字符 & 商品名称 \\
+    \texttt{itemName}  & \texttt{VARCHAR} &  & 商品名称 \\
+    \texttt{pictureLink}  & \texttt{VARCHAR} & & 商品图片链接 \\
     \texttt{price} & \texttt{INT} & 不能为负数 & 商品价格（以分为单位） \\
     \texttt{barcode} & \texttt{VARCHAR} & 13个字符 & 商品条形码 \\
     \texttt{stock} & \texttt{INT} & 不能为负数 & 库存数量 \\
+    \texttt{salesVolume} & \texttt{INT} & 不能为负数 & 销量 \\
     \texttt{description} & \texttt{TEXT} &  & 商品描述 \\
     \hline
     \end{tabular}}
 \end{table}
+
+\newpage
 
 \subsubsection{\texttt{store\_transaction}表}
 
@@ -1344,19 +1439,14 @@ private void sendResponse(ChannelHandlerContext ctx, Response response) {
     字段    & 类型 & 约束   & 说明\\
     \hline
     \texttt{uuid}  & \texttt{UUID} &  & 表内唯一标识信息，用作主键 \\
-    \texttt{item\_uuid} & \texttt{UUID} & & 商品\texttt{uuid} \\
-    \texttt{item\_price} & \texttt{INT} & 不能为负数 & 商品交易时单价 \\
+    \texttt{itemUuid} & \texttt{UUID} & & 商品 \texttt{UUID} \\
+    \texttt{itemPrice} & \texttt{INT} & 不能为负数 & 商品交易时单价 \\
     \texttt{amount} & \texttt{INT}  & 不能为负数 & 存交易数量 \\
-    \texttt{card\_number}  & \texttt{INT} & 9位数字 & 交易关联一卡通号 \\
+    \texttt{cardNumber}  & \texttt{INT} & 9位数字 & 交易关联一卡通号 \\
     \texttt{time}  & \texttt{DATETIME} &  & 存交易时间 \\
     \texttt{remark} & \texttt{TEXT} & & 备注 \\
     \hline
     \end{tabular}}
 \end{table}
-
-
-\section{其他}
-
-早期版本，不代表最终成果。
 
 \end{document}
