@@ -34,7 +34,7 @@ fun EditStoreItem(
     isEditable: Boolean = false,
     onEdit: (StoreItem) -> (Unit) = { _: StoreItem -> }
 ) {
-    var myPrice by remember { mutableStateOf(storeItem.price.toString()) }
+    var myPrice by remember { mutableStateOf(String.format("%.2f", storeItem.price.toInt() / 100.0)) }
     var myStock by remember { mutableStateOf(storeItem.stock.toString()) }
     var myBarcode by remember { mutableStateOf(storeItem.barcode) }
     var myName by remember { mutableStateOf(storeItem.itemName) }
@@ -66,7 +66,7 @@ fun EditStoreItem(
                     )
                     Spacer(modifier = Modifier.weight(1F))
                     Text(
-                        "价格：${String.format("%.2f", myPrice.toInt() / 100.0)}￥ ",
+                        "价格：$myPrice￥ ",
                         fontWeight = FontWeight(700),
                         color = Color.Black
                     )
@@ -103,7 +103,7 @@ fun EditStoreItem(
                             Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.2F),
-                                    value = String.format("%.2f", myPrice.toInt() / 100.0),
+                                    value = myPrice,
                                     onValueChange = { myPrice = it },
                                     label = { Text("商品价格(￥)") },
                                     isError = myPrice == "",
@@ -220,7 +220,7 @@ fun EditStoreItem(
                             Row {
                                 OutlinedTextField(
                                     modifier = Modifier.weight(0.2F),
-                                    value = String.format("%.2f", myPrice.toInt() / 100.0),
+                                    value = myPrice,
                                     onValueChange = { myPrice = it },
                                     label = { Text("商品价格(￥)") },
                                     isError = myPrice == "",
@@ -314,11 +314,12 @@ fun EditStoreItem(
                                         modifiedStoreItem.itemName = myName
                                         modifiedStoreItem.stock = myStock.toInt()
                                         modifiedStoreItem.description = myDescription
-                                        modifiedStoreItem.price = myPrice.toInt()
+                                        modifiedStoreItem.price = (myPrice.toDouble() * 100).toInt()
                                         modifiedStoreItem.pictureLink = myPictureLink
                                         onEdit(modifiedStoreItem)
 
                                         isEditing = false
+                                        myPrice = String.format("%.2f", (myPrice.toDouble() * 100).toInt() / 100.0)
                                     }
                                 ) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -334,7 +335,7 @@ fun EditStoreItem(
                                     myStock = storeItem.stock.toString()
                                     myBarcode = storeItem.barcode
                                     myDescription = storeItem.description
-                                    myPrice = storeItem.price.toString()
+                                    myPrice = String.format("%.2f", myPrice.toInt() / 100.0)
                                     myPictureLink = storeItem.pictureLink.toString()
 
                                     isEditing = false
