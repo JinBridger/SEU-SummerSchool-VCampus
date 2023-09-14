@@ -37,10 +37,12 @@ public class NettyServer {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         public void initChannel(@NonNull SocketChannel ch) {
-                            ch.pipeline().addLast(new JsonObjectDecoder(10 * 1024 * 1024)).addLast(new NettyHandler(router, session));
+                            ch.pipeline()
+                                    .addLast(new JsonObjectDecoder(10 * 1024 * 1024))
+                                    .addLast(new NettyHandler(router, session));
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)

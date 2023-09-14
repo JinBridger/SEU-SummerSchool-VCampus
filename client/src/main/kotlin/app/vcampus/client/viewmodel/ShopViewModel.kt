@@ -145,6 +145,9 @@ class ShopViewModel() : ViewModel() {
         val totalShopItems = mutableStateListOf<StoreItem>()
         val chosenShopItems = mutableStateListOf<StoreItem>()
         val searchShopItems = mutableStateListOf<StoreItem>()
+
+        val searched = mutableStateOf(false)
+
         fun getAllItems() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
@@ -196,12 +199,18 @@ class ShopViewModel() : ViewModel() {
             }
         }
         fun searchStoreItemSelect(keyword: String) {
+            if (keyword == "") {
+                searched.value = false
+                return
+            }
+
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
                     searchStoreItemInternal(keyword).collect {
                         searchShopItems.clear()
                         searchShopItems.addAll(it)
 
+                        searched.value = true
                     }
                 }
             }

@@ -40,7 +40,8 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
     val coroutineScope = rememberCoroutineScope()
 
     val scope = rememberCoroutineScope()
-    var searched by remember { mutableStateOf(true) }
+    var searched by viewModel.selectItem.searched
+
     LaunchedEffect(Unit) {
         viewModel.selectItem.getAllItems()
     }
@@ -251,7 +252,6 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                 Spacer(Modifier.height(8.dp))
                                 Button(onClick = {
                                     viewModel.selectItem.searchStoreItemSelect(keyword)
-                                    searched = false
                                 }, modifier = Modifier.height(56.dp)) {
                                     Icon(Icons.Default.Search, "")
                                 }
@@ -259,14 +259,10 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
 
                         }
                     }
-                    if (!searched) {
-//                        item {
-//                            viewModel.selectItem.searchShopItems.forEach {
-//                                shopItemCard(it, viewModel)
-//                            }
-//                        }
+
+                    if (searched) {
                             (0..<viewModel.selectItem.searchShopItems.size.floorDiv(3)).forEach {
-                                item {
+                                item(it * 3) {
                                     Spacer(modifier = Modifier.height(20.dp))
                                     Row(modifier = Modifier.fillMaxWidth()) {
                                         Column {
@@ -294,7 +290,7 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                             }
 
                             if (viewModel.selectItem.searchShopItems.size.mod(3) == 2) {
-                                item {
+                                item(viewModel.selectItem.searchShopItems.size - 2) {
                                     Spacer(modifier = Modifier.height(20.dp))
                                     Row(modifier = Modifier.fillMaxWidth()) {
                                         Column {
@@ -319,7 +315,7 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                             }
 
                             if (viewModel.selectItem.searchShopItems.size.mod(3) == 1) {
-                                item {
+                                item(viewModel.selectItem.searchShopItems.size - 1) {
                                     Spacer(modifier = Modifier.height(20.dp))
                                     Row(modifier = Modifier.fillMaxWidth()) {
                                         Column {
@@ -344,7 +340,7 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                             item { Spacer(modifier = Modifier.height(80.dp)) }
                     } else {
                         (0..<viewModel.selectItem.totalShopItems.size.floorDiv(3)).forEach {
-                            item {
+                            item(it * 3) {
                                 Spacer(modifier = Modifier.height(20.dp))
                                 Row(modifier = Modifier.fillMaxWidth()) {
                                     Column {
@@ -372,7 +368,7 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                         }
 
                         if (viewModel.selectItem.totalShopItems.size.mod(3) == 2) {
-                            item {
+                            item(viewModel.selectItem.totalShopItems.size - 2) {
                                 Spacer(modifier = Modifier.height(20.dp))
                                 Row(modifier = Modifier.fillMaxWidth()) {
                                     Column {
@@ -397,7 +393,7 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                         }
 
                         if (viewModel.selectItem.totalShopItems.size.mod(3) == 1) {
-                            item {
+                            item(viewModel.selectItem.totalShopItems.size - 1) {
                                 Spacer(modifier = Modifier.height(20.dp))
                                 Row(modifier = Modifier.fillMaxWidth()) {
                                     Column {
