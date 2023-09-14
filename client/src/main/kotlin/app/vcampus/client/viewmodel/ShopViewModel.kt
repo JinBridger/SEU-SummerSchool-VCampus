@@ -143,8 +143,8 @@ class ShopViewModel() : ViewModel() {
 
     class SelectItem(private val parent: ShopViewModel) : ViewModel() {
         val totalShopItems = mutableStateListOf<StoreItem>()
-        val chosenShopItems = mutableListOf<StoreItem>()
-
+        val chosenShopItems = mutableStateListOf<StoreItem>()
+        val searchShopItems = mutableStateListOf<StoreItem>()
         fun getAllItems() {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
@@ -194,6 +194,21 @@ class ShopViewModel() : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+        fun searchStoreItemSelect(keyword: String) {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    searchStoreItemInternal(keyword).collect {
+                        searchShopItems.clear()
+                        searchShopItems.addAll(it)
+
+                    }
+                }
+            }
+        }
+
+        private suspend fun searchStoreItemInternal(keyword: String) = flow {
+            emit(FakeRepository.searchStoreItem(keyword))
         }
     }
 
