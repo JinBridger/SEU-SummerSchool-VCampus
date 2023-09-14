@@ -11,12 +11,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Paid
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.vcampus.client.scene.components.pageTitle
@@ -33,14 +31,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun selectItemSubscene(viewModel: ShopViewModel) {
-    var keyword by remember { mutableStateOf("") }
     val openState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
     val coroutineScope = rememberCoroutineScope()
 
     val scope = rememberCoroutineScope()
-    var searched by viewModel.selectItem.searched
 
     LaunchedEffect(Unit) {
         viewModel.selectItem.getAllItems()
@@ -205,6 +201,7 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                                 }
                             }
                         }
+
                         item {
                             Spacer(modifier = Modifier.height(80.dp))
                         }
@@ -225,198 +222,83 @@ fun selectItemSubscene(viewModel: ShopViewModel) {
                         pageTitle("购物", "选择商品")
                     }
 
-                    item {
-                        Spacer(Modifier.height(10.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth()
-                                .onPreviewKeyEvent { event: KeyEvent ->
-                                    if (event.type == KeyEventType.KeyDown && event.key == Key.Enter) {
-                                        viewModel.selectItem.searchStoreItemSelect(keyword)
-                                        true
-                                    } else {
-                                        false
-                                    }
-                                },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            OutlinedTextField(
-                                value = keyword,
-                                onValueChange = { keyword = it },
-                                label = { Text("搜索商品（支持模糊搜索）") },
-                                modifier = Modifier.padding(
-                                    0.dp, 0.dp, 16.dp,
-                                    0.dp
-                                ).weight(1F)
-                            )
-                            Column {
-                                Spacer(Modifier.height(8.dp))
-                                Button(onClick = {
-                                    viewModel.selectItem.searchStoreItemSelect(keyword)
-                                }, modifier = Modifier.height(56.dp)) {
-                                    Icon(Icons.Default.Search, "")
+                    (0..<viewModel.selectItem.totalShopItems.size.floorDiv(3)).forEach {
+                        item {
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Column {
+                                    shopItemCard(
+                                        viewModel.selectItem.totalShopItems[it * 3],
+                                        viewModel
+                                    )
+                                }
+                                Spacer(Modifier.weight(1F))
+                                Column {
+                                    shopItemCard(
+                                        viewModel.selectItem.totalShopItems[it * 3 + 1],
+                                        viewModel
+                                    )
+                                }
+                                Spacer(Modifier.weight(1F))
+                                Column {
+                                    shopItemCard(
+                                        viewModel.selectItem.totalShopItems[it * 3 + 2],
+                                        viewModel
+                                    )
                                 }
                             }
-
                         }
                     }
 
-                    if (searched) {
-                            (0..<viewModel.selectItem.searchShopItems.size.floorDiv(3)).forEach {
-                                item(it * 3) {
-                                    Spacer(modifier = Modifier.height(20.dp))
-                                    Row(modifier = Modifier.fillMaxWidth()) {
-                                        Column {
-                                            shopItemCard(
-                                                viewModel.selectItem.searchShopItems[it * 3],
-                                                viewModel
-                                            )
-                                        }
-                                        Spacer(Modifier.weight(1F))
-                                        Column {
-                                            shopItemCard(
-                                                viewModel.selectItem.searchShopItems[it * 3 + 1],
-                                                viewModel
-                                            )
-                                        }
-                                        Spacer(Modifier.weight(1F))
-                                        Column {
-                                            shopItemCard(
-                                                viewModel.selectItem.searchShopItems[it * 3 + 2],
-                                                viewModel
-                                            )
-                                        }
-                                    }
+                    if (viewModel.selectItem.totalShopItems.size.mod(3) == 2) {
+                        item {
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Column {
+                                    shopItemCard(
+                                        viewModel.selectItem.totalShopItems[viewModel.selectItem.totalShopItems.size - 2],
+                                        viewModel
+                                    )
                                 }
-                            }
-
-                            if (viewModel.selectItem.searchShopItems.size.mod(3) == 2) {
-                                item(viewModel.selectItem.searchShopItems.size - 2) {
-                                    Spacer(modifier = Modifier.height(20.dp))
-                                    Row(modifier = Modifier.fillMaxWidth()) {
-                                        Column {
-                                            shopItemCard(
-                                                viewModel.selectItem.searchShopItems[viewModel.selectItem.searchShopItems.size - 2],
-                                                viewModel
-                                            )
-                                        }
-                                        Spacer(Modifier.weight(1F))
-                                        Column {
-                                            shopItemCard(
-                                                viewModel.selectItem.searchShopItems[viewModel.selectItem.searchShopItems.size - 1],
-                                                viewModel
-                                            )
-                                        }
-                                        Spacer(Modifier.weight(1F))
-                                        Column {
-                                            Spacer(Modifier.width(250.dp))
-                                        }
-                                    }
+                                Spacer(Modifier.weight(1F))
+                                Column {
+                                    shopItemCard(
+                                        viewModel.selectItem.totalShopItems[viewModel.selectItem.totalShopItems.size - 1],
+                                        viewModel
+                                    )
                                 }
-                            }
-
-                            if (viewModel.selectItem.searchShopItems.size.mod(3) == 1) {
-                                item(viewModel.selectItem.searchShopItems.size - 1) {
-                                    Spacer(modifier = Modifier.height(20.dp))
-                                    Row(modifier = Modifier.fillMaxWidth()) {
-                                        Column {
-                                            shopItemCard(
-                                                viewModel.selectItem.searchShopItems[viewModel.selectItem.searchShopItems.size - 1],
-                                                viewModel
-                                            )
-                                        }
-                                        Spacer(Modifier.weight(1F))
-                                        Column {
-                                            Spacer(Modifier.width(250.dp))
-                                        }
-                                        Spacer(Modifier.weight(1F))
-                                        Column {
-                                            Spacer(Modifier.width(250.dp))
-                                        }
-                                    }
-                                }
-                            }
-
-
-                            item { Spacer(modifier = Modifier.height(80.dp)) }
-                    } else {
-                        (0..<viewModel.selectItem.totalShopItems.size.floorDiv(3)).forEach {
-                            item(it * 3) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                                Row(modifier = Modifier.fillMaxWidth()) {
-                                    Column {
-                                        shopItemCard(
-                                            viewModel.selectItem.totalShopItems[it * 3],
-                                            viewModel
-                                        )
-                                    }
-                                    Spacer(Modifier.weight(1F))
-                                    Column {
-                                        shopItemCard(
-                                            viewModel.selectItem.totalShopItems[it * 3 + 1],
-                                            viewModel
-                                        )
-                                    }
-                                    Spacer(Modifier.weight(1F))
-                                    Column {
-                                        shopItemCard(
-                                            viewModel.selectItem.totalShopItems[it * 3 + 2],
-                                            viewModel
-                                        )
-                                    }
+                                Spacer(Modifier.weight(1F))
+                                Column {
+                                    Spacer(Modifier.width(250.dp))
                                 }
                             }
                         }
-
-                        if (viewModel.selectItem.totalShopItems.size.mod(3) == 2) {
-                            item(viewModel.selectItem.totalShopItems.size - 2) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                                Row(modifier = Modifier.fillMaxWidth()) {
-                                    Column {
-                                        shopItemCard(
-                                            viewModel.selectItem.totalShopItems[viewModel.selectItem.totalShopItems.size - 2],
-                                            viewModel
-                                        )
-                                    }
-                                    Spacer(Modifier.weight(1F))
-                                    Column {
-                                        shopItemCard(
-                                            viewModel.selectItem.totalShopItems[viewModel.selectItem.totalShopItems.size - 1],
-                                            viewModel
-                                        )
-                                    }
-                                    Spacer(Modifier.weight(1F))
-                                    Column {
-                                        Spacer(Modifier.width(250.dp))
-                                    }
-                                }
-                            }
-                        }
-
-                        if (viewModel.selectItem.totalShopItems.size.mod(3) == 1) {
-                            item(viewModel.selectItem.totalShopItems.size - 1) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                                Row(modifier = Modifier.fillMaxWidth()) {
-                                    Column {
-                                        shopItemCard(
-                                            viewModel.selectItem.totalShopItems[viewModel.selectItem.totalShopItems.size - 1],
-                                            viewModel
-                                        )
-                                    }
-                                    Spacer(Modifier.weight(1F))
-                                    Column {
-                                        Spacer(Modifier.width(250.dp))
-                                    }
-                                    Spacer(Modifier.weight(1F))
-                                    Column {
-                                        Spacer(Modifier.width(250.dp))
-                                    }
-                                }
-                            }
-                        }
-
-
-                        item { Spacer(modifier = Modifier.height(80.dp)) }
                     }
+
+                    if (viewModel.selectItem.totalShopItems.size.mod(3) == 1) {
+                        item {
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Column {
+                                    shopItemCard(
+                                        viewModel.selectItem.totalShopItems[viewModel.selectItem.totalShopItems.size - 1],
+                                        viewModel
+                                    )
+                                }
+                                Spacer(Modifier.weight(1F))
+                                Column {
+                                    Spacer(Modifier.width(250.dp))
+                                }
+                                Spacer(Modifier.weight(1F))
+                                Column {
+                                    Spacer(Modifier.width(250.dp))
+                                }
+                            }
+                        }
+                    }
+
+
+                    item { Spacer(modifier = Modifier.height(80.dp)) }
                 }
             }
         }
