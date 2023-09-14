@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import app.vcampus.server.entity.StoreItem
 
@@ -62,19 +63,26 @@ fun EditStoreItem(
                     Text(
                         myName,
                         fontWeight = FontWeight(700),
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.weight(2.5F),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
-                    Spacer(modifier = Modifier.weight(1F))
+                    Spacer(modifier = Modifier.weight(0.1F))
                     Text(
                         "价格：$myPrice￥ ",
                         fontWeight = FontWeight(700),
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.weight(1F),
+                        maxLines = 1
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     Text(
                         "库存剩余：${myStock}个",
                         fontWeight = FontWeight(700),
-                        color = Color.DarkGray
+                        color = Color.DarkGray,
+                        modifier = Modifier.weight(1F),
+                        maxLines = 1
                     )
                 }
                 if (expanded) {
