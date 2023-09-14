@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -46,10 +47,40 @@ fun LoginScene(
     val scope = rememberCoroutineScope()
     var showServerAddress by remember { mutableStateOf(false) }
     var address by viewModel.server
+    val openForgetPasswordDialog = remember { mutableStateOf(false) }
 
     when (loginState) {
         true -> onLogin()
         false -> {}
+    }
+
+    if (openForgetPasswordDialog.value) {
+        AlertDialog(
+                onDismissRequest = {
+                    openForgetPasswordDialog.value = false
+                },
+                title = {
+                    Text(text = "重置密码", fontWeight = FontWeight(700))
+                },
+                text = {
+                    Text(
+                            "如需重置密码可发送邮件至webmaster@seu.edu.cn，或拨打网络与信息中心技术服务热线：025-83790808-893。"
+                    )
+                },
+                buttons = {
+                    Row(
+                            modifier = Modifier.padding(all = 8.dp).fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                    ) {
+                        Spacer(Modifier.weight(1F))
+                        TextButton(
+                                onClick = { openForgetPasswordDialog.value = false }
+                        ) {
+                            Text("确定")
+                        }
+                    }
+                }
+        )
     }
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -166,7 +197,7 @@ fun LoginScene(
                             ) {
                                 TextButton(
                                     onClick = {
-                                        println("忘记密码")
+                                        openForgetPasswordDialog.value = true
                                     }
                                 ) {
                                     Text("忘记密码？")
