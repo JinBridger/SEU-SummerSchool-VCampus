@@ -2,10 +2,12 @@ package app.vcampus.server.entity;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @RequiredArgsConstructor
 public class ExcelStudentGrade {
     @ExcelProperty("学号")
@@ -28,6 +30,4 @@ public class ExcelStudentGrade {
     @ExcelProperty("总评分")
     public Integer total;
 
-    public ExcelStudentGrade() {
-    }
 }

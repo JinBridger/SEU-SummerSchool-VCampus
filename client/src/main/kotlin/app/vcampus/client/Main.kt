@@ -32,7 +32,7 @@ fun main() {
             FakeRepository.window = window
             Column {
                 WindowDraggableArea {
-                    TopBar("VCampus", { exitApplication() })
+                    TopBar("VCampus") { exitApplication() }
                 }
                 App()
             }

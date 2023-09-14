@@ -235,7 +235,16 @@ public class TeachingAffairsController {
                     .sheet()
                     .doWrite(selectRecords.stream().map((SelectRecord sr) -> {
                         Student student = database.get(Student.class, sr.getCardNumber());
-                        return new ExcelStudentGrade(student.getStudentNumber(), student.getFamilyName() + student.getGivenName());
+                        ExcelStudentGrade e = new ExcelStudentGrade(student.getStudentNumber(), student.getFamilyName() + student.getGivenName());
+
+                        if (sr.getGrade() != null) {
+                            e.setGeneral(sr.getGrade().getGeneral());
+                            e.setMidterm(sr.getGrade().getMidterm());
+                            e.setFinalExam(sr.getGrade().getFinalExam());
+                            e.setTotal(sr.getGrade().getTotal());
+                        }
+
+                        return e;
                     }).toList());
 
             return Response.Common.ok(Map.of("file", Base64.getEncoder().encodeToString(Files.readAllBytes(tmpFile))));
