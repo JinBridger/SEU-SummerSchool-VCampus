@@ -25,7 +25,7 @@
 ## 📃 其他说明
 
 - 关于本项目的相关文档，请参见 `doc` 文件夹
-- 本项目 Java Doc 文档已部署至 [GitHub Pages](https://github.com/JinBridger/SEU-SummerSchool-VCampus)
+- 本项目 Java Doc 文档已部署至 [GitHub Pages](https://jinbridger.github.io/SEU-SummerSchool-VCampus/)
 
 ## 📸 运行截图
 
