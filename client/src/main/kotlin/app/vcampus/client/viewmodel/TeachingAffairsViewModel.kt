@@ -58,7 +58,7 @@ class TeachingAffairsViewModel() : ViewModel() {
             else -> emptyList()
         }
     } + (if (identity.contains("student") || identity.contains(
-            "affairs_staff"
+            "teacher"
         )
     ) {
         listOf(SideBarItem(true, "教务工具", "", Icons.Default.Info, false))
@@ -77,7 +77,7 @@ class TeachingAffairsViewModel() : ViewModel() {
                 )
             )
 
-            "affairs_staff" -> listOf(
+            "teacher" -> listOf(
 //                SideBarItem(
 //                    false, "排课", "进行排课",
 //                    Icons.Default.EditCalendar, false

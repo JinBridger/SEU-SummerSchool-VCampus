@@ -230,10 +230,11 @@ public class StoreController {
      * @param database datebase
      * @return   it returns an “OK” response with a map containing a list of JSON strings representing the transaction records grouped by date
      */
-    @RouteMapping(uri = "storeTransaction/getRecords", role = "shop_staff")
+    @RouteMapping(uri = "storeTransaction/getRecords", role = "shop_user")
     public Response getRecords(Request request, org.hibernate.Session database) {
         try {
-            List<StoreTransaction> allRecords = Database.loadAllData(StoreTransaction.class, database);
+//            List<StoreTransaction> allRecords = Database.loadAllData(StoreTransaction.class, database);
+            List<StoreTransaction> allRecords = Database.getWhereString(StoreTransaction.class, "cardNumber", Integer.toString(request.getSession().getCardNum()), database);
             allRecords = allRecords.stream().peek(w -> {
                 StoreItem storeItem = database.get(StoreItem.class, w.getItemUUID());
                 w.setItem(storeItem);
