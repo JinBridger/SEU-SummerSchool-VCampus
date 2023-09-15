@@ -113,7 +113,7 @@ fun LoginScene(
                             )
                         ) {
                             Column {
-                                pageTitle("统一验证登录", "VCampus")
+                                pageTitle("统一认证登录", "VCampus")
                             }
 
                             Column(

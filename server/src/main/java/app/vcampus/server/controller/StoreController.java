@@ -1,6 +1,7 @@
 package app.vcampus.server.controller;
 
 import app.vcampus.server.entity.*;
+import app.vcampus.server.enums.CardStatus;
 import app.vcampus.server.enums.TransactionType;
 import app.vcampus.server.utility.*;
 import app.vcampus.server.utility.router.RouteMapping;
@@ -29,6 +30,9 @@ public class StoreController {
             FinanceCard financeCard = database.get(FinanceCard.class, request.getSession().getCardNum());
             if (financeCard == null)
                 return Response.Common.error("No such finance card");
+
+            if (financeCard.status != CardStatus.normal)
+                return Response.Common.error("Card is not normal");
 
             Type type = new TypeToken<List<Pair<UUID, Integer>>>() {
             }.getType();

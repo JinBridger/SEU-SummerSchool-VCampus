@@ -34,22 +34,6 @@ public class User implements IEntity {
     @Column(name = "role")
     public String roleStr;
 
-    public static User fromMap(Map<String, String> data) {
-        try {
-            User user = new User();
-            user.setCardNum(Integer.parseInt(data.get("cardNum")));
-            user.setName(data.get("name"));
-            user.setGender(Gender.valueOf(data.get("gender")));
-            user.setPhone(data.get("phone"));
-            user.setEmail(data.get("email"));
-            user.setRoles(data.get("roles").split(","));
-            return user;
-        } catch (Exception e) {
-            log.warn("Failed to parse user from map: {}", data, e);
-            return null;
-        }
-    }
-
     public String[] getRoles() {
         return roleStr.split(",");
     }
@@ -58,14 +42,4 @@ public class User implements IEntity {
         this.roleStr = String.join(",", roles);
     }
 
-    public Map<String, String> toMap() {
-        return Map.of(
-                "cardNum", getCardNum().toString(),
-                "gender", getGender().toString(),
-                "name", getName(),
-                "phone", getPhone(),
-                "email", getEmail(),
-                "roles", getRoleStr()
-        );
-    }
 }

@@ -8,6 +8,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -77,7 +78,9 @@ fun myOrderSubscene(viewModel: ShopViewModel) {
                                 it.second.sortedByDescending {
                                     it.time
                                 }.forEach {
-                                    shopTransactionListItem(it)
+                                    key(it.uuid) {
+                                        shopTransactionListItem(it)
+                                    }
                                 }
                             }
                         }
